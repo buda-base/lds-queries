@@ -1,1 +1,1 @@
-This repository contains query used for updating BUDA rdf DB
+This repository contains query templates used for updating BUDA rdf DB
