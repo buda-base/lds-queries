@@ -1,0 +1,1 @@
+This repository contains query used for updating BUDA rdf DB
