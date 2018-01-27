@@ -2,21 +2,21 @@
 #QueryReturnType=Table
 #QueryResults=All the detailed info (name, events, students, teachers) about the person corresponding to the given ID
 #QueryParams=R_RES
-#QueryUrl=/lds-pdi/query?searchType=pdi_p_details&R_RES=P1583
+#QueryUrl=?searchType=pdi_p_details&R_RES=P1583
 
 
-select distinct 
+select distinct
 
-?ID  
+?ID
 (GROUP_CONCAT(DISTINCT ?preferredName;   SEPARATOR=" || ") AS ?pref_Names)
-?property_type 
-?property_value 
-?e_property_type 
-?e_property_value 
-?stud ?stud_name 
+?property_type
+?property_value
+?e_property_type
+?e_property_value
+?stud ?stud_name
 ?teach ?teach_name
 
-where { 
+where {
 	{
 	  	?ID skos:prefLabel ?preferredName ;
 	    Filter(?ID=?R_RES)
@@ -25,8 +25,8 @@ where {
 	  	OPTIONAL{ ?ID  :personName/rdfs:subClassOf* ?o }.
 	  	?o ?y ?property_value .
 	  	?o rdf:type ?property_type
-	  	Filter(?ID=?R_RES)  
-	  	Filter(isLiteral(?property_value)) 
+	  	Filter(?ID=?R_RES)
+	  	Filter(isLiteral(?property_value))
 	}
 	UNION
 	{
@@ -34,16 +34,16 @@ where {
     	OPTIONAL{ ?ID  :personEvent/rdfs:subClassOf* ?event }.
   		?event ?event_p ?e_property_value .
   		?event rdf:type ?e_property_type
-  		Filter(?ID=?R_RES)  
-  		Filter(isLiteral(?e_property_value)) 
+  		Filter(?ID=?R_RES)
+  		Filter(isLiteral(?e_property_value))
  	}
-	UNION 
+	UNION
 	{
 		OPTIONAL{ ?ID  :personStudentOf ?stud }.
     	?stud  skos:prefLabel ?stud_name.
     	Filter(?ID=?R_RES)
 	}
-  	UNION {	
+  	UNION {
     	OPTIONAL{ ?ID  :personTeacherOf ?teach }.
     	?teach  skos:prefLabel ?teach_name.
     	Filter(?ID=?R_RES)
