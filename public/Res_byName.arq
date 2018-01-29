@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing the Id and matching literal for the given query and language tag with the given limit
 #QueryParams=L_NAME,L_LANG,I_LIM
-#QueryUrl=?searchType=pdi_all_luceneLabel&L_NAME=("mkhan chen" AND ("'od zer" OR "ye shes"))&L_LANG=@bo-x-ewts&I_LIM=100
+#QueryUrl=?searchType=Res_byName&L_NAME=("mkhan chen" AND ("'od zer" OR "ye shes"))&L_LANG=@bo-x-ewts&I_LIM=100
 
 select distinct ?s ?lit
 WHERE {

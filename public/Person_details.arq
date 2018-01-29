@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=All the detailed info (name, events, students, teachers) about the person corresponding to the given ID
 #QueryParams=R_RES
-#QueryUrl=?searchType=pdi_p_details&R_RES=P1583
+#QueryUrl=?searchType=Person_details&R_RES=P1583
 
 
 select distinct

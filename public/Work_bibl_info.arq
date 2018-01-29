@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing bibliographic info of works whose name contains the NAME param value
 #QueryParams=L_NAME
-#QueryUrl=?searchType=pdi_w_bibli&L_NAME=rgyud bla ma
+#QueryUrl=?searchType=Work_bibl_info&L_NAME=rgyud bla ma
 
 SELECT DISTINCT ?ID ?Preferred_Name ?cat_Info ?note ?num_Vol ?access ?license ?status
 WHERE {

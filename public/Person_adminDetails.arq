@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=All the detailed admin info (notes, status, log entries) about the person data
 #QueryParams=R_RES
-#QueryUrl=?searchType=pdi_p_adminDetails&R_RES=P1583
+#QueryUrl=?searchType=Person_adminDetails&R_RES=P1583
 
 
 select distinct

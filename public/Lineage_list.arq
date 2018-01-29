@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=the list (Id, name) of all lineages
 #QueryParams=NONE
-#QueryUrl=?searchType=pdi_l_list
+#QueryUrl=?searchType=Lineage_list
 
 SELECT DISTINCT  ?lineage ?lineage_name
 

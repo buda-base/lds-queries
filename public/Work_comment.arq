@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing the Id, the name, the types of the commentaries of works whose name contains the NAME param value, along with the root text ID and preferred name
 #QueryParams=L_NAME
-#QueryUrl=?searchType=pdi_w_comment&L_NAME=rgyud bla ma
+#QueryUrl=?searchType=Work_comment&L_NAME=rgyud bla ma
 
 
 select ?comment (GROUP_CONCAT(DISTINCT ?comment_type;  SEPARATOR=" <> ") AS ?comment_types)  ?comment_name ?root ?root_name

@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing the detailed info of a place whose name contains the NAME param value
 #QueryParams=L_NAME
-#QueryUrl=?searchType=pdi_pl_details&L_NAME=dgon gsar
+#QueryUrl=?searchType=Place_details&L_NAME=dgon gsar
 
 SELECT DISTINCT *
 WHERE {
