@@ -1,0 +1,12 @@
+#QueryScope=Test
+#QueryReturnType=Table
+#QueryResults=A table containing the Resource ID, label type and literal for the given query and language tag with the given limit
+#QueryParams=L_NAME,L_LANG,I_LIM
+#QueryUrl=?searchType=Test_byLabelList&L_NAME=("mkhan chen" AND ("'od zer" OR "ye shes"))&L_LANG=@bo-x-ewts&I_LIM=100
+
+select distinct ?s ?type ?lit
+where {
+   (?b ?sc ?lit) text:query ( rdfs:label ?L_NAME?L_LANG ) .
+   ?s ?p ?b .
+   ?b a ?type .
+} limit ?I_LIM
