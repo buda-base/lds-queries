@@ -1,15 +1,15 @@
 #QueryScope=General
 #QueryReturnType=Table
 #QueryResults=A table containing the Id and matching literal for the given query and language tag with the given limit
-#QueryParams=L_NAME,L_LANG,I_LIM
-#QueryUrl=?searchType=BLMP&L_NAME="test"&L_LANG=@bo-x-ewts&I_LIM=100
+#QueryParams=L_NAME,I_LIM
+#QueryUrl=?searchType=BLMP&L_NAME=("mkhan chen" AND ("'od zer" OR "ye shes"))&LG_NAME=bo-x-ewts&I_LIM=100
 
 select distinct ?s ?lit
 WHERE {
-  { (?s ?sc ?lit) text:query ( skos:prefLabel ?L_NAME?L_LANG ) . }
+  { (?s ?sc ?lit) text:query ( skos:prefLabel ?L_NAME ) . }
   union
-  { (?s ?sc ?lit) text:query ( skos:altLabel ?L_NAME?L_LANG ) . }
+  { (?s ?sc ?lit) text:query ( skos:altLabel ?L_NAME ) . }
   union
-  { (?t ?sc ?lit) text:query ( rdfs:label ?L_NAME?L_LANG ) . ?s ?p ?t }
+  { (?t ?sc ?lit) text:query ( rdfs:label ?L_NAME ) . ?s ?p ?t }
 }
 limit ?I_LIM

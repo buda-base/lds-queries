@@ -6,11 +6,11 @@
 
 SELECT DISTINCT ?ID ?Preferred_Name ?cat_Info ?note ?num_Vol ?access ?license ?status
 WHERE {
-	?ID a :Work ;
-		skos:prefLabel ?Preferred_Name ;
-		adm:access ?access ;
-		adm:license ?license ;
-		adm:status ?status .
+	?ID a :Work .
+	?ID skos:prefLabel ?Preferred_Name.
+	?ID	adm:access ?access .
+	?ID	adm:license ?license .
+	?ID	adm:status ?status .
 	OPTIONAL { ?ID :workCatalogInfo ?cat_Info }
 	OPTIONAL { ?ID :workBiblioNote ?note }
 	OPTIONAL { ?ID :workNumberOfVolumes ?num_Vol }
