@@ -8,5 +8,6 @@ select distinct ?s ?lit
 WHERE {
   { (?s ?sc ?lit) text:query ( skos:prefLabel ?L_NAME ) . }
   union
-  { (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME ) . }
+  { (?b ?sc ?lit) text:query ( rdfs:label ?L_NAME ) . 
+    ?s ?t ?b . }
 } limit ?I_LIM
