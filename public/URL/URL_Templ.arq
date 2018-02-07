@@ -9,5 +9,5 @@ select distinct ?res ?Primary_Name
 WHERE
 {
 ?res a ?TYPE .
-(?res ?sc ?Primary_Name) text:query ( skos:prefLabel ?URL ) .
+(?res ?sc ?Primary_Name) text:query ( skos:prefLabel ?NAME ) .
 }limit 100
