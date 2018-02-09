@@ -1,0 +1,15 @@
+#QueryScope=Work
+#QueryReturnType=Table
+#QueryResults=Return the imagList and the legacy Image GroupRID for the given Work resource Id
+#QueryParams=R_RES
+#QueryUrl=?searchType=Work_ImgList&R_RES=W29329
+
+select ?work ?list ?grId where{
+  ?w a :Work .
+  ?w :workHasItemImageAsset ?work .
+  ?work :itemHasVolume ?v .
+  ?v :imageList ?list .
+  ?v adm:legacyImageGroupRID ?grId
+  FILTER (?w = ?R_RES)
+} 
+order by ?grId
