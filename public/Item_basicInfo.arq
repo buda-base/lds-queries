@@ -1,0 +1,14 @@
+#QueryScope=Item
+#QueryReturnType=Table
+#QueryResults=A table containing the item Id, the work it belongs to and its the access policy
+#QueryParams=R_RES
+#QueryUrl=?searchType=Item_basicInfo&R_RES=I29329_I001
+
+
+select distinct ?item ?work ?access where{
+  ?item a :Item ;
+  	:itemForWork ?work ;
+  	:itemHasVolume ?v .
+  ?work adm:access ?access  
+  FILTER (?item = ?R_RES)
+} 
