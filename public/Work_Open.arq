@@ -4,8 +4,6 @@
 #QueryParams=R_RES
 #QueryUrl=?searchType=Work_Open&R_RES=W29329
 
-select ((?a = bdr:AccessOpen) as ?v) where{
-  ?w a :Work .
-  ?w adm:access ?a  
-  FILTER (?w = ?R_RES)
+select ((?a = bdr:AccessOpen) as ?v) where{  
+  ?R_RES adm:access ?a
 } 

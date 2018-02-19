@@ -5,10 +5,8 @@
 #QueryUrl=?searchType=Item_basicInfo&R_RES=I29329_I001
 
 
-select distinct ?item ?work ?access where{
-  ?item a :Item ;
-  	:itemForWork ?work ;
-  	:itemHasVolume ?v .
-  ?work adm:access ?access  
-  FILTER (?item = ?R_RES)
-} 
+select distinct (?R_RES as ?item) ?work ?access where{
+	?R_RES :itemForWork ?work .
+	?R_RES :itemHasVolume ?v .
+	?work adm:access ?access
+}

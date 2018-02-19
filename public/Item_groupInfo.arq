@@ -4,13 +4,10 @@
 #QueryParams=R_RES,L_IMG
 #QueryUrl=?searchType=Item_groupInfo&R_RES=I29329_I001&L_IMG=I1KG150420003.jpg
 
-
-select distinct ?item ?work ?access ?group where{
-  ?item a :Item ;
-  	:itemForWork ?work ;
-  	:itemHasVolume ?v .
+select distinct (?R_RES as ?item) ?work ?access ?group where{
+  ?R_RES	:itemForWork ?work .
+  ?R_RES	:itemHasVolume ?v .
   ?v adm:legacyImageGroupRID ?group .
-  ?work adm:access ?access  
-  FILTER (?item = ?R_RES)
+  ?work adm:access ?access 
   FILTER (contains(?L_IMG,?group))
 } 

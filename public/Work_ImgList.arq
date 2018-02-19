@@ -4,12 +4,10 @@
 #QueryParams=R_RES
 #QueryUrl=?searchType=Work_ImgList&R_RES=W29329
 
-select ?work ?list ?grId where{
-  ?w a :Work .
-  ?w :workHasItemImageAsset ?work .
+select ?work ?list ?grId where{  
+  ?R_RES :workHasItemImageAsset ?work .
   ?work :itemHasVolume ?v .
   ?v :imageList ?list .
-  ?v adm:legacyImageGroupRID ?grId
-  FILTER (?w = ?R_RES)
+  ?v adm:legacyImageGroupRID ?grId  
 } 
 order by ?grId
