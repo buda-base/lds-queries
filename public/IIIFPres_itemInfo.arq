@@ -4,9 +4,10 @@
 #QueryParams=R_RES
 #QueryUrl=?searchType=IIIFPres_itemInfo&R_RES=I29329_I001
 
-select distinct ?work ?nbVolumes ?access ?license where {  
-  ?R_RES  :itemForWork ?work .
-  ?R_RES  :itemVolumes ?nbVolumes .
+select distinct ?work ?nbVolumes ?access ?license where {
+  ?R_RES a :ItemImageAsset ;
+    :itemForWork ?work ;
+    :itemVolumes ?nbVolumes .
   ?work adm:access ?access ;
     adm:license ?license .
 } 
