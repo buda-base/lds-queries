@@ -2,7 +2,7 @@
 #QueryReturnType=Value
 #QueryResults=Check if the given Work is open access or not
 #QueryParams=R_RES
-#QueryUrl=?searchType=Work_Open&R_RES=W29329
+#QueryUrl=?searchType=Work_Open&R_RES=bdr:W29329
 
 select ((?a = bdr:AccessOpen) as ?v) where{  
   ?R_RES adm:access ?a

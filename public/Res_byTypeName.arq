@@ -1,0 +1,12 @@
+#QueryScope=General
+#QueryReturnType=Table
+#QueryResults=A table containing the Id and the name of the work whose name contains the NAME param value
+#QueryParams=L_NAME,R_TYPE
+#QueryUrl=?searchType=Res_byTypeName&L_NAME="chos dbyings"&R_TYPE=http://purl.bdrc.io/ontology/core/Work
+
+select ?Work_ID ?Work_Name
+where {
+  ?Work_ID a ?R_TYPE.
+  (?Work_ID ?sc ?Work_Name) text:query ?L_NAME .
+  
+}

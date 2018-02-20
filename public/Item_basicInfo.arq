@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing the item Id, the work it belongs to and its the access policy
 #QueryParams=R_RES
-#QueryUrl=?searchType=Item_basicInfo&R_RES=I29329_I001
+#QueryUrl=?searchType=Item_basicInfo&R_RES=bdr:I29329_I001
 
 
 select distinct (?R_RES as ?item) ?work ?access where{

@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=Return the imagList and the legacy Image GroupRID for the given Work resource Id
 #QueryParams=R_RES
-#QueryUrl=?searchType=Work_ImgList&R_RES=W29329
+#QueryUrl=?searchType=Work_ImgList&R_RES=bdr:W29329
 
 select ?work ?list ?grId where{  
   ?R_RES :workHasItemImageAsset ?work .
