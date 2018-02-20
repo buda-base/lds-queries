@@ -12,5 +12,6 @@ WHERE {
   union
   { (?t ?sc ?lit) text:query ( rdfs:label ?L_NAME ) . ?s ?p ?t } .
   ?s a ?f  .
+  ?f rdfs:subClassOf :Entity
 }
 limit ?I_LIM
