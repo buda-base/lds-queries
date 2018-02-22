@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing the Resource ID, etext contents and score for the given query and language tag with the given limit
 #QueryParams=L_NAME,LG_NAME,I_LIM
-#QueryUrl=?searchType=Res_byLabel&L_NAME=("མཁན་ཆེན་" AND ("འོད་ཟེར་" OR "ཡེ་ཤེས་"))&LG_NAME=bo&I_LIM=100
+#QueryUrl=?searchType=Etexts_contents&L_NAME=("མཁན་ཆེན་" AND ("འོད་ཟེར་" OR "ཡེ་ཤེས་"))&LG_NAME=bo&I_LIM=10
 
 select ?txt ?lit ?score
 where {
