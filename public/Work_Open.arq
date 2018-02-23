@@ -4,6 +4,13 @@
 #QueryParams=R_RES
 #QueryUrl=?searchType=Work_Open&R_RES=bdr:W29329
 
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Work Resource ID
+#param.R_RES.desc=the ID of the work we are interested in
+
+#output.?v.type=boolean
+#output.?v.desc=true if the work is AccessOpen, false otherwise
+
 select ((?a = bdr:AccessOpen) as ?v) where{  
   ?R_RES adm:access ?a
 } 

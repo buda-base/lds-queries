@@ -4,6 +4,15 @@
 #QueryParams=L_NAME
 #QueryUrl=?searchType=Place_byName&L_NAME=dgon gsar
 
+#param.L_NAME.type=string
+#param.L_NAME.isLucene=false
+#param.L_NAME.example=dgon gsar
+
+#output.?Place_ID.type=URI
+#output.?Place_ID.desc=the resource ID of the place
+#output.?Place_Name.type=string
+#output.?Place_Name.desc=the pref. label of the place
+
 select ?Place_ID ?Place_Name
 where {
   ?Place_ID a :Place;

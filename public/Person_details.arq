@@ -4,6 +4,29 @@
 #QueryParams=R_RES
 #QueryUrl=?searchType=Person_details&R_RES=bdr:P1583
 
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the Person being investigated
+
+#output.?pref_Names.type=string
+#output.?pref_Names.desc=a list of all preferred names of the person (separator is '||')
+#output.?property_type.type=:PersonName
+#output.?property_type.desc=alternative name type for the person
+#output.?property_value.type=string
+#output.?e_property_type.type=:PersonEvent
+#output.?e_property_type.desc=the type of event associated with the person
+#output.?e_property_value.type=string or numeral
+#output.?e_property_value.desc=the data associated associated with the personEvent
+#output.?e_property_value.type=string or numeral
+#output.?e_property_value.desc=the data associated associated with the personEvent
+#output.?studof.type=URI
+#output.?studof.desc=the resource ID of a teacher of the person
+#output.?studof_name.type=string
+#output.?studof_name.desc=the pref. label of a teacher of the person
+#output.?teachof.type=URI
+#output.?teachof.desc=the resource ID of a student of the person
+#output.?teachof_name.type=string
+#output.?teachof_name.desc=the pref. label of a student of the person
 
 select distinct
 
@@ -13,8 +36,8 @@ select distinct
 ?property_value
 ?e_property_type
 ?e_property_value
-?stud ?stud_name
-?teach ?teach_name
+?studof ?studof_name
+?teachof ?teachof_name
 
 where {
 	{
@@ -36,13 +59,13 @@ where {
  	}
 	UNION
 	{
-		OPTIONAL{ ?R_RES  :personStudentOf ?stud }.
-    	?stud  skos:prefLabel ?stud_name.    	
+		OPTIONAL{ ?R_RES  :personStudentOf ?studof }.
+    	?studof  skos:prefLabel ?studof_name.    	
 	}
   	UNION {
-    	OPTIONAL{ ?R_RES  :personTeacherOf ?teach }.
-    	?teach  skos:prefLabel ?teach_name.    	
+    	OPTIONAL{ ?R_RES  :personTeacherOf ?teachof }.
+    	?teachof  skos:prefLabel ?teachof_name.    	
 	}
 }
-group by ?ID ?property_type ?property_value ?e_property_type ?e_property_value ?stud ?stud_name ?teach ?teach_name
-order by DESC(?property_type) desc(?e_property_type) desc(?stud)
+group by ?ID ?property_type ?property_value ?e_property_type ?e_property_value ?studof ?studof_name ?teachof ?teachof_name
+order by DESC(?property_type) desc(?e_property_type) desc(?studof)

@@ -4,6 +4,11 @@
 #QueryParams=NONE
 #QueryUrl=?searchType=Lineage_list
 
+#output.?lineage.type=URI
+#output.?lineage.desc=the resource ID of the lineage
+#output.?lineage_name.type=string
+#output.?lineage_name.desc=the pref. label of the lineage
+
 SELECT DISTINCT  ?lineage ?lineage_name
 
 WHERE   {

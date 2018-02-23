@@ -4,6 +4,19 @@
 #QueryParams=L_NAME,LG_NAME
 #QueryUrl=?searchType=PersonNames_byNameLang&L_NAME="'od zer"&LG_NAME=bo-x-ewts
 
+#param.L_NAME.type=string
+#param.L_NAME.langTag=LG_NAME
+#param.L_NAME.isLucene=true
+#param.L_NAME.example="'od zer"
+
+#output.?Person.type=URI
+#output.?Person.desc=the resource ID of the person
+#output.?Primary_Name.type=string
+#output.?Primary_Name.desc=the primary_Name of the person
+#output.?Name_Type.type=:PersonName
+#output.?Name_Type.desc=alternative name type for the person
+#output.?Name.type=string
+#output.?Name.desc=name value corresponding to the alternative name type
 
 select distinct ?Person ?Primary_Name ?Name_Type ?Name
 WHERE

@@ -4,6 +4,17 @@
 #QueryParams=L_NAME,LG_NAME,I_LIM
 #QueryUrl=?searchType=Nodes_byName&L_NAME=("mkhan chen" AND ("'od zer" OR "ye shes"))&LG_NAME=bo-x-ewts&I_LIM=100
 
+#param.L_NAME.type=string
+#param.L_NAME.langTag=LG_NAME
+#param.L_NAME.isLucene=true
+#param.L_NAME.example=("'od zer" OR "ye shes")
+#param.I_LIM.type=int
+#param.I_LIM.desc=the maximum number of results
+
+#output.?s.type=URI
+#output.?s.desc=the resource ID of the result
+#output.?lit.type=Literal
+#output.?lit.desc=the label/name of the resource
 
 select distinct ?s ?lit
 WHERE

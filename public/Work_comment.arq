@@ -4,6 +4,20 @@
 #QueryParams=L_NAME
 #QueryUrl=?searchType=Work_comment&L_NAME=rgyud bla ma
 
+#param.L_NAME.type=string
+#param.L_NAME.isLucene=false
+#param.L_NAME.example=rgyud bla ma
+
+#output.?comment.type=URI
+#output.?comment.desc=the resource URI of a commentary of a work whose name contains L_NAME
+#output.?comment_types.type=string
+#output.?comment_types.desc=the list of commentary type applicable to the commentary
+#output.?comment_name.type=string
+#output.?comment_name.desc=the name of the commentary
+#output.?root.type=URI
+#output.?root.desc=the resource URI of the root text, whose name contains L_NAME
+#output.?root_name.type=string
+#output.?root_name.desc=the name of the root text
 
 select ?comment (GROUP_CONCAT(DISTINCT ?comment_type;  SEPARATOR=" <> ") AS ?comment_types)  ?comment_name ?root ?root_name
 where {

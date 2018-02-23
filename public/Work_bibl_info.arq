@@ -4,6 +4,27 @@
 #QueryParams=L_NAME
 #QueryUrl=?searchType=Work_bibl_info&L_NAME=rgyud bla ma
 
+#param.L_NAME.type=string
+#param.L_NAME.isLucene=false
+#param.L_NAME.example=rgyud bla ma
+
+#output.?ID.type=URI
+#output.?ID.desc=the work URI
+#output.?Preferred_Name.type=string
+#output.?Preferred_Name.desc=the work pref. label
+#output.?cat_Info.type=string
+#output.?cat_Info.desc=the catalog info about this work
+#output.?note.type=string
+#output.?note.desc=a bibliographic note about this work
+#output.?num_Vol.type=int
+#output.?num_Vol.desc=the number of volumes of this work
+#output.?access.type=URI
+#output.?access.desc=the AccessType for this work
+#output.?license.type=URI
+#output.?license.desc=the LicenseType for this work
+#output.?status.type=URI
+#output.?status.desc=the StatusType for this work
+
 SELECT DISTINCT ?ID ?Preferred_Name ?cat_Info ?note ?num_Vol ?access ?license ?status
 WHERE {
 	?ID a :Work .

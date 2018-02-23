@@ -4,6 +4,18 @@
 #QueryParams=L_NAME
 #QueryUrl=?searchType=PersonEvent_byExactName&L_NAME='jigs med rgyal mtshan
 
+#param.L_NAME.type=string
+#param.L_NAME.isLucene=false
+#param.L_NAME.example='jigs med rgyal mtshan
+#output.?ID.type=URI
+#output.?ID.desc=the resource ID of the person
+#output.?Preferred_Name.type=string
+#output.?Preferred_Name.desc=the pref. Label/name of the person
+#output.?Event_Type.type=:EvenType
+#output.?Event_Type.desc=an event type associatied with the person
+#output.?Name.type=string or URI
+#output.?Name.desc=a description, a year or a resource URI associatied with the event type
+
 SELECT DISTINCT ?ID ?Preferred_Name ?Event_Type ?Name
 WHERE {
 	?ID a :Person ;

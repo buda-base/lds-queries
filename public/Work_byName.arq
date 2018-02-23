@@ -4,6 +4,15 @@
 #QueryParams=L_NAME
 #QueryUrl=?searchType=Work_byName&L_NAME="chos dbyings"
 
+#param.L_NAME.type=string
+#param.L_NAME.isLucene=true
+#param.L_NAME.example="chos dbyings"
+
+#output.?Work_ID.type=URI
+#output.?Work_ID.desc=the resource URI of a work
+#output.?Work_Name.type=string
+#output.?Work_Name.desc=the name of the work
+
 select ?Work_ID ?Work_Name
 where {
   ?Work_ID a :Work.

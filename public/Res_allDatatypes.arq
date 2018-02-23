@@ -1,8 +1,18 @@
 #QueryScope=General
 #QueryReturnType=Table
 #QueryResults=A table containing all matching datatypes for the given query and language tag with the given limit
-#QueryParams=L_NAME,I_LIM
+#QueryParams=L_NAME,LG_NAME,I_LIM
 #QueryUrl=?searchType=Res_allDatatypes&L_NAME=("mkhan chen" AND ("'od zer" OR "ye shes"))&LG_NAME=bo-x-ewts&I_LIM=100
+
+#param.L_NAME.type=string
+#param.L_NAME.langTag=LG_NAME
+#param.L_NAME.isLucene=true
+#param.L_NAME.example=("'od zer" OR "ye shes")
+#param.I_LIM.type=int
+#param.I_LIM.desc=the maximum number of results
+
+#output.?f.type=URI
+#output.?f.desc=the resource type of the resource whose any name contains L_NAME
 
 select distinct ?f
 WHERE {

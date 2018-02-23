@@ -4,6 +4,15 @@
 #QueryParams=L_NAME
 #QueryUrl=?searchType=Topic_byAllNames&L_NAME=rgyud
 
+#param.L_NAME.type=string
+#param.L_NAME.isLucene=false
+#param.L_NAME.example=rgyud
+
+#output.?ID.type=URI
+#output.?ID.desc=the resource URI
+#output.?topic_Names.type=string
+#output.?topic_Names.desc=a list of names for the topic (separated by '||')
+
 SELECT DISTINCT ?ID
 (GROUP_CONCAT(DISTINCT ?topic;   SEPARATOR=" || ") AS ?topic_Names)
 where{

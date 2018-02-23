@@ -4,9 +4,21 @@
 #QueryParams=L_NAME,R_TYPE
 #QueryUrl=?searchType=Res_byTypeName&L_NAME="chos dbyings"&R_TYPE=http://purl.bdrc.io/ontology/core/Work
 
-select ?Work_ID ?Work_Name
+#param.L_NAME.type=string
+#param.L_NAME.isLucene=true
+#param.L_NAME.example="chos dbyings"
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource Type (not an individual)
+#param.R_RES.desc=the resource Type we are interested in
+
+#output.?ID.type=URI
+#output.?ID.desc=the resource URI
+#output.?Name.type=string
+#output.?Name.desc=the label/pref. label of the resource
+
+select ?ID ?Name
 where {
-  ?Work_ID a ?R_TYPE.
-  (?Work_ID ?sc ?Work_Name) text:query ?L_NAME .
+  ?ID a ?R_TYPE.
+  (?ID ?sc ?Name) text:query ?L_NAME .
   
 }

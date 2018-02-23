@@ -4,6 +4,11 @@
 #QueryParams=NONE
 #QueryUrl=?searchType=Topic_list
 
+#output.?ID.type=URI
+#output.?ID.desc=the resource URI
+#output.?topic_Names.type=string
+#output.?topic_Names.desc=a list of names for the topic (separated by '||')
+
 SELECT DISTINCT ?ID
 (GROUP_CONCAT(DISTINCT ?topic;   SEPARATOR=" || ") AS ?topic_Names)
 where{
