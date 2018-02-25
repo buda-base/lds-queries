@@ -5,6 +5,8 @@
 #QueryUrl=?searchType=Work_outline&R_id=bdr:W12827
 
 #param.R_id.type=resource
+#param.R_id.subtype=Work Resource ID
+#param.R_id.desc=Work resource ID for the outline to be displayed
 #param.R_id.example=bdr:W12827
 
 #output.?part.type=URI
@@ -14,9 +16,9 @@
 #output.?title.type=string
 #output.?title.desc=title of the part
 
-select ?part ?pix ?lbl
+select ?part ?pix ?title
 where {
   ?R_id :workHasPart+ ?part .
   ?part :workPartTreeIndex ?pix ;
-        skos:prefLabel ?lbl .
+        skos:prefLabel ?title .
 } order by ?pix
