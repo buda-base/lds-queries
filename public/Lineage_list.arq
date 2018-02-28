@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=the list (Id, name) of all lineages
 #QueryParams=NONE
-#QueryUrl=?searchType=Lineage_list
+#QueryUrl=/Lineage_list
 
 #output.?lineage.type=URI
 #output.?lineage.desc=the resource ID of the lineage

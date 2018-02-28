@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=Info for the IIIF Presentation API
 #QueryParams=R_RES
-#QueryUrl=?searchType=IIIFPres_itemInfo&R_RES=bdr:I29329_I001
+#QueryUrl=/IIIFPres_itemInfo?R_RES=bdr:I29329_I001
 
 #output.?work.type=URI
 #output.?work.desc=the resource ID of the work this item belongs to

@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=the list (Id, topic names) of all topics
 #QueryParams=NONE
-#QueryUrl=?searchType=Topic_list
+#QueryUrl=/Topic_list
 
 #output.?ID.type=URI
 #output.?ID.desc=the resource URI

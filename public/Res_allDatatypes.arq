@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing all matching datatypes for the given query and language tag with the given limit
 #QueryParams=L_NAME,LG_NAME,I_LIM
-#QueryUrl=?searchType=Res_allDatatypes&L_NAME=("mkhan chen" AND ("'od zer" OR "ye shes"))&LG_NAME=bo-x-ewts&I_LIM=100
+#QueryUrl=/Res_allDatatypes?L_NAME=("mkhan chen" AND ("'od zer" OR "ye shes"))&LG_NAME=bo-x-ewts&I_LIM=100
 
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME
