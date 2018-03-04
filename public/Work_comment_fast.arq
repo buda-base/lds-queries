@@ -10,24 +10,23 @@
 #param.L_name.example="rgyud bla ma"
 
 #output.?comment.type=URI
-#output.?comment.desc=the resource URI of a commentary of a work whose name contains L_NAME
+#output.?comment.desc=the resource URI of a commentary of a work whose name contains L_name
 #output.?comment_types.type=string
 #output.?comment_types.desc=the list of commentary type applicable to the commentary
 #output.?comment_name.type=string
 #output.?comment_name.desc=the name of the commentary
 #output.?root.type=URI
-#output.?root.desc=the resource URI of the root text, whose name contains L_NAME
+#output.?root.desc=the resource URI of the root text, whose name contains L_name
 #output.?root_name.type=string
 #output.?root_name.desc=the name of the root text
 
 select ?comment (GROUP_CONCAT(DISTINCT ?comment_type;  SEPARATOR=" <> ") AS ?comment_types)  ?comment_name ?root ?root_name
 where {
-    (?comment ?score ?root_name) text:query ?L_name .
+    (?root ?score ?root_name) text:query ?L_name .
 	?comment :workIsAbout ?root;
              :workGenre ?g ;
   		     skos:prefLabel ?comment_name.
     ?g skos:prefLabel ?comment_type .
-  	?root  skos:prefLabel ?root_name .
     FILTER ((contains(?comment_type, "commentary" ))
          || (contains(?comment_type, "rnam bshad" ))
          || (contains(?comment_type, "'grel pa" ))
