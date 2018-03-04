@@ -2,11 +2,12 @@
 #QueryReturnType=Table
 #QueryResults=A table containing the Id and the name of the work whose name contains the NAME param value
 #QueryParams=L_NAME
-#QueryUrl=/Work_byName?L_NAME="chos dbyings"
+#QueryUrl=/Work_byName?L_name="chos dbyings"&LG_name=bo-x-ewts
 
-#param.L_NAME.type=string
-#param.L_NAME.isLucene=true
-#param.L_NAME.example="chos dbyings"
+#param.L_name.type=string
+#param.L_name.isLucene=true
+#param.L_name.langTag=LG_name
+#param.L_name.example="chos dbyings"
 
 #output.?Work_ID.type=URI
 #output.?Work_ID.desc=the resource URI of a work
@@ -15,7 +16,6 @@
 
 select ?Work_ID ?Work_Name
 where {
+  (?Work_ID ?sc ?Work_Name) text:query ?L_name .
   ?Work_ID a :Work.
-  (?Work_ID ?sc ?Work_Name) text:query ?L_NAME .
-  
 }
