@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing bibliographic info of works whose name contains the L_name param value
 #QueryParams=L_name
-#QueryUrl=/Work_bibl_info_fast&L_name=rgyud bla ma
+#QueryUrl=/Work_bibl_info_fast?L_name=rgyud bla ma
 
 #param.L_name.type=string
 #param.L_name.isLucene=true
