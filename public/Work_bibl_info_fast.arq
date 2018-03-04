@@ -1,11 +1,12 @@
 #QueryScope=Work
 #QueryReturnType=Table
 #QueryResults=A table containing bibliographic info of works whose name contains the L_name param value
-#QueryParams=L_name
-#QueryUrl=/Work_bibl_info_fast?L_name=rgyud bla ma
+#QueryParams=L_name,LG_name
+#QueryUrl=/Work_bibl_info_fast?L_name="rgyud bla ma"&LG_name=bo-x-ewts
 
 #param.L_name.type=string
 #param.L_name.isLucene=true
+#param.L_name.langTag=LG_name
 #param.L_name.example=rgyud bla ma
 
 #output.?id.type=URI
