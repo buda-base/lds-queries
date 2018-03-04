@@ -27,7 +27,7 @@
 
 select ?id ?pref_nm ?cat_Info ?note ?num_Vol ?access ?license ?status
 where {
-    (?id ?score ?pref_nm) text:query ?L_name
+    (?id ?score ?pref_nm) text:query ?L_name .
 	?id a :Work .
 	?id	adm:access ?access .
 	?id	adm:license ?license .
