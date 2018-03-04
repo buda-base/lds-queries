@@ -1,0 +1,38 @@
+#QueryScope=Work
+#QueryReturnType=Table
+#QueryResults=A table containing bibliographic info of works whose name contains the L_name param value
+#QueryParams=L_name
+#QueryUrl=?searchType=Work_bibl_info_fast&L_NAME=rgyud bla ma
+
+#param.L_name.type=string
+#param.L_name.isLucene=true
+#param.L_name.example=rgyud bla ma
+
+#output.?id.type=URI
+#output.?id.desc=the work URI
+#output.?pref_nm.type=string
+#output.?pref_nm.desc=the work prefLabel
+#output.?cat_Info.type=string
+#output.?cat_Info.desc=the catalog info about this work
+#output.?note.type=string
+#output.?note.desc=a bibliographic note about this work
+#output.?num_Vol.type=int
+#output.?num_Vol.desc=the number of volumes of this work
+#output.?access.type=URI
+#output.?access.desc=the AccessType for this work
+#output.?license.type=URI
+#output.?license.desc=the LicenseType for this work
+#output.?status.type=URI
+#output.?status.desc=the StatusType for this work
+
+select ?id ?pref_nm ?cat_Info ?note ?num_Vol ?access ?license ?status
+where {
+    (?id ?score ?pref_nm) text:query ?L_name
+	?id a :Work .
+	?id	adm:access ?access .
+	?id	adm:license ?license .
+	?id	adm:status ?status .
+	OPTIONAL { ?id :workCatalogInfo ?cat_Info }
+	OPTIONAL { ?id :workBiblioNote ?note }
+	OPTIONAL { ?id :workNumberOfVolumes ?num_Vol }
+}
