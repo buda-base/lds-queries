@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing the Id, primary_name, name_type and name_type value for people whose any name matches the NAME with the LANG tag
 #QueryParams=L_NAME,LG_NAME
-#QueryUrl=?searchType=PersonNames_byNameLang&L_NAME="'od zer"&LG_NAME=bo-x-ewts
+#QueryUrl=/PersonNames_byNameLang?L_NAME="'od zer"&LG_NAME=bo-x-ewts
 
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME

@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing the item Id, the work it belongs to, the access policy and the image groupId
 #QueryParams=R_RES,L_IMG
-#QueryUrl=?searchType=Item_groupInfo&R_RES=bdr:I29329_I001&L_IMG=I1KG150420003.jpg
+#QueryUrl=/Item_groupInfo?R_RES=bdr:I29329&L_IMG=I1KG150420003.jpg
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=a Resource ID

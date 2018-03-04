@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing the Id, primary_name, name_type and name_type value for people whose any name contains the NAME param value
 #QueryParams=L_NAME
-#QueryUrl=?searchType=PersonNames_byName&L_NAME='od zer
+#QueryUrl=/PersonNames_byName?L_NAME='od zer
 
 #param.L_NAME.type=string
 #param.L_NAME.isLucene=false

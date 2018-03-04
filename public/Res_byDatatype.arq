@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing the Id and matching literal for the given query and language tag with the given limit
 #QueryParams=L_NAME,LG_NAME,I_LIM,R_TYPE
-#QueryUrl=?searchType=Res_byDatatype&L_NAME=("mkhan chen" AND ("'od zer" OR "ye shes"))&LG_NAME=bo-x-ewts&I_LIM=100&R_TYPE=http://purl.bdrc.io/ontology/core/Work
+#QueryUrl=/Res_byDatatype?L_NAME=("mkhan chen" AND ("'od zer" OR "ye shes"))&LG_NAME=bo-x-ewts&I_LIM=100&R_TYPE=http://purl.bdrc.io/ontology/core/Work
 
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME

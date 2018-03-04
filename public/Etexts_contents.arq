@@ -1,7 +1,7 @@
 #QueryScope=Etexts
 #QueryReturnType=Table
 #QueryResults=A table containing the Resource ID, etext contents and score for the given query and language tag with the given limit
-#QueryUrl=?searchType=Etexts_contents&L_NAME=("མཁན་ཆེན་" AND ("འོད་ཟེར་" OR "ཡེ་ཤེས་"))&LG_NAME=bo&I_LIM=10
+#QueryUrl=/Etexts_contents?L_NAME=("མཁན་ཆེན་" AND ("འོད་ཟེར་" OR "ཡེ་ཤེས་"))&LG_NAME=bo&I_LIM=10
 #QueryParams=L_NAME,LG_NAME,I_LIM
 
 #output.?txt.type=URI

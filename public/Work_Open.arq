@@ -2,7 +2,7 @@
 #QueryReturnType=Value
 #QueryResults=Check if the given Work is open access or not
 #QueryParams=R_RES
-#QueryUrl=?searchType=Work_Open&R_RES=bdr:W29329
+#QueryUrl=/Work_Open?R_RES=bdr:W29329
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=a Work Resource ID

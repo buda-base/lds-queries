@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=Return the imagList and the legacy Image GroupRID for the given Work resource Id
 #QueryParams=R_RES
-#QueryUrl=?searchType=Work_ImgList&R_RES=bdr:W29329
+#QueryUrl=/Work_ImgList?R_RES=bdr:W29329
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=a Resource ID

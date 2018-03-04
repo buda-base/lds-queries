@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing the Id and the name of the work whose name contains the NAME param value
 #QueryParams=L_NAME
-#QueryUrl=?searchType=Work_byName&L_NAME="chos dbyings"
+#QueryUrl=/Work_byName?L_NAME="chos dbyings"
 
 #param.L_NAME.type=string
 #param.L_NAME.isLucene=true

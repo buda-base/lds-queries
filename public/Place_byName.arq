@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing the Id and the name of the place whose name contains the NAME param value
 #QueryParams=L_NAME
-#QueryUrl=?searchType=Place_byName&L_NAME=dgon gsar
+#QueryUrl=/Place_byName?L_NAME=dgon gsar
 
 #param.L_NAME.type=string
 #param.L_NAME.isLucene=false

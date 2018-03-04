@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=A table containing the Id, preferred name, teacher name and student name for people having their preferred name containing the NAME param value
 #QueryParams=L_NAME
-#QueryUrl=?searchType=Person_teach_stud&L_NAME=dri med 'od zer
+#QueryUrl=/Person_teach_stud?L_NAME=dri med 'od zer
 
 #param.L_NAME.type=string
 #param.L_NAME.isLucene=false
