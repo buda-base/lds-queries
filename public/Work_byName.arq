@@ -1,7 +1,7 @@
 #QueryScope=Work
 #QueryReturnType=Table
 #QueryResults=A table containing the Id and the name of the work whose name contains the NAME param value
-#QueryParams=L_NAME
+#QueryParams=L_name
 #QueryUrl=/Work_byName?L_name="chos dbyings"&LG_name=bo-x-ewts
 
 #param.L_name.type=string
