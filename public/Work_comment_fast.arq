@@ -1,0 +1,37 @@
+#QueryScope=Work
+#QueryReturnType=Table
+#QueryResults=A table containing the Id, the name, the types of the commentaries of works whose name contains the NAME param value, along with the root text ID and preferred name
+#QueryParams=L_name,LG_name
+#QueryUrl=/Work_comment_fast?L_name="rgyud bla ma"&LG_name=bo-x-ewts
+
+#param.L_name.type=string
+#param.L_name.isLucene=true
+#param.L_name.langTag=LG_name
+#param.L_name.example="rgyud bla ma"
+
+#output.?comment.type=URI
+#output.?comment.desc=the resource URI of a commentary of a work whose name contains L_NAME
+#output.?comment_types.type=string
+#output.?comment_types.desc=the list of commentary type applicable to the commentary
+#output.?comment_name.type=string
+#output.?comment_name.desc=the name of the commentary
+#output.?root.type=URI
+#output.?root.desc=the resource URI of the root text, whose name contains L_NAME
+#output.?root_name.type=string
+#output.?root_name.desc=the name of the root text
+
+select ?comment (GROUP_CONCAT(DISTINCT ?comment_type;  SEPARATOR=" <> ") AS ?comment_types)  ?comment_name ?root ?root_name
+where {
+    (?comment ?score ?root_name) text:query ?L_name .
+	?comment :workIsAbout ?root;
+             :workGenre ?g ;
+  		     skos:prefLabel ?comment_name.
+    ?g skos:prefLabel ?comment_type .
+  	?root  skos:prefLabel ?root_name .
+    FILTER ((contains(?comment_type, "commentary" ))
+         || (contains(?comment_type, "rnam bshad" ))
+         || (contains(?comment_type, "'grel pa" ))
+         || (contains(f:SankritFilter(?comment_type), "ṭīkā" ))
+         || (contains(f:SankritFilter(?comment_type), "vyākhyā" )))
+}
+group by ?comment ?comment_name ?root ?root_name
