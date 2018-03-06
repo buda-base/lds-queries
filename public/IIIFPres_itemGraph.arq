@@ -1,5 +1,5 @@
-#QueryScope=bdo:Item
-#QueryReturnType=Table
+#QueryScope=:Item
+#QueryReturnType=Graph
 #QueryResults=Info about an item for the IIIF Presentation API
 #QueryParams=R_RES
 #QueryUrl=/IIIFPres_itemGraph?R_RES=bdr:I22084
