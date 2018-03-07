@@ -29,7 +29,7 @@ where {
     ?g skos:prefLabel ?comment_type .
     FILTER ((contains(?comment_type, "commentary" ))
          || (contains(?comment_type, "rnam bshad" ))
-         || (contains(?comment_type, "'grel pa" ))
+         || (contains(?comment_type, "'grel" ))
          || (contains(f:SankritFilter(?comment_type), "ṭīkā" ))
          || (contains(f:SankritFilter(?comment_type), "vyākhyā" )))
 }
