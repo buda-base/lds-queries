@@ -10,4 +10,6 @@
  PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
  PREFIX text: <http://jena.apache.org/text#>
+ PREFIX owl: <http://www.w3.org/2002/07/owl#>
+ PREFIX dcterms: <http://purl.org/dc/terms/>
  PREFIX f: <java:io.bdrc.ldspdi.sparql.functions.>
