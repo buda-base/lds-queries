@@ -1,4 +1,4 @@
-#QueryScope=:Item
+#QueryScope=Item
 #QueryReturnType=Graph
 #QueryResults=Info about an item for the IIIF Presentation API
 #QueryParams=R_RES
