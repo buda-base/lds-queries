@@ -16,7 +16,7 @@
 #output.?access.desc=The URI of the AccessType of this work
 
 select ?asset ?work ?access where{
-	?asset bdo:itemHasVolume ?R_RES .
-	?asset bdo:itemImageAssetForWork ?work .
+	?asset :itemHasVolume ?R_RES .
+	?asset :itemImageAssetForWork ?work .
 	?work adm:access ?access .
 }
