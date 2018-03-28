@@ -17,8 +17,9 @@
 #param.R_RES.subtype=:Volume
 #param.R_RES.desc=the URI of the ItemImageAsset being investigated
 
-select distinct ?workId ?itemId ?access ?license where {
-  ?R_RES a :VolumeImageAsset .
+select distinct ?workId ?itemId ?access ?license ?imageGroup where {
+  ?R_RES a :VolumeImageAsset ;
+      adm:legacyImageGroupRID ?imageGroup .
   ?itemId :itemForWork ?workId ;
       :itemHasVolume ?R_RES .
   ?workId adm:access ?access ;
