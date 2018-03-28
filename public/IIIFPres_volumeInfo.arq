@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=Basic info about a volume for the IIIF Presentation API
 #QueryParams=R_RES
-#QueryUrl=/IIIFPres_volumeInfo?R_RES=bdr:V22084_0886
+#QueryUrl=/IIIFPres_volumeInfo?R_RES=bdr:V22084_I0886
 
 #output.?workId.type=URI
 #output.?workId.desc=the work/collection expressed by this volume
