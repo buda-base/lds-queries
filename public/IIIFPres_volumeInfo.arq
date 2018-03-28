@@ -18,9 +18,9 @@
 #param.R_RES.desc=the URI of the ItemImageAsset being investigated
 
 select distinct ?workId ?itemId ?access ?license where {
-  ?R_RES a :VolumeImageAsset ;
-    :volumeOf ?itemId .
-  ?itemId :itemForWork ?work .
+  ?R_RES a :VolumeImageAsset .
+  ?itemId :itemForWork ?work ;
+      :itemHasVolume ?R_RES .
   ?work adm:access ?access ;
     adm:license ?license .
-} 
+}
