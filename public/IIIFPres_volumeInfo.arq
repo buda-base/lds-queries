@@ -19,8 +19,8 @@
 
 select distinct ?workId ?itemId ?access ?license where {
   ?R_RES a :VolumeImageAsset .
-  ?itemId :itemForWork ?work ;
+  ?itemId :itemForWork ?workId ;
       :itemHasVolume ?R_RES .
-  ?work adm:access ?access ;
+  ?workId adm:access ?access ;
     adm:license ?license .
 }
