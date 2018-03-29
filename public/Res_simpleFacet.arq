@@ -1,8 +1,8 @@
 #QueryScope=General
 #QueryReturnType=Table
-#QueryResults=A table containing the Id and matching literal for the given query and language tag with the given limit
-#QueryParams=L_NAME,LG_NAME,I_LIM
-#QueryUrl=/Res_allTypes_withCount?L_NAME="'od zer"&LG_NAME=bo-x-ewts&I_LIM=1000
+#QueryResults=A table containing the property vlue and number of occurence among the specified kind of entity for the given property
+#QueryParams=L_NAME,LG_NAME,I_LIM,R_PROP
+#QueryUrl=/Res_simpleFacet?L_NAME="'od zer"&LG_NAME=bo-x-ewts&I_LIM=1000&R_PROP=bdo:workObjectType
 
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME
@@ -10,14 +10,19 @@
 #param.L_NAME.example=("'od zer" OR "ye shes")
 #param.I_LIM.type=int
 #param.I_LIM.desc=the maximum number of results
+#param.R_PROP.type=resource
+#param.R_PROP.subtype=a property
+#param.R_PROP.desc=the property we want to focus on
 
-#output.?f.type=URI
-#output.?f.desc=possible type
+#output.?f.value=URI
+#output.?f.desc=a possible value of the property
 #output.?cid.type=int
-#output.?cid.desc=number of occurrence of type
+#output.?cid.desc=number of occurences of this value
 
-select ?f (count(distinct ?s) as ?cid)
+select ?val (count(distinct ?s) as ?cid)
 WHERE {
+   { ?s ?R_PROP ?val }
+   .
     {
       { ?s :personName ?t }
       union
@@ -45,8 +50,7 @@ WHERE {
       #union
       #{ (?s ?sc ?lit) text:query ( rdfs:comment ?L_NAME ) }
     }
-    .
-    { ?s a ?f }
+    { ?s a ?f . ?f rdfs:subClassOf bdo:Entity }
 }
-group by ?f
+group by ?val
 limit ?I_LIM
