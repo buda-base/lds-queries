@@ -19,7 +19,7 @@
 #output.?cid.type=int
 #output.?cid.desc=number of occurences of this value
 
-select ?val (count(distinct ?s) as ?cid)
+select ?val (count(?s) as ?cid)
 WHERE {
    { ?s ?R_PROP ?val }
    .

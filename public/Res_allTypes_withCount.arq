@@ -16,7 +16,7 @@
 #output.?cid.type=int
 #output.?cid.desc=number of occurrence of type
 
-select ?f (count(distinct ?s) as ?cid)
+select ?f (count(?s) as ?cid)
 WHERE {
     {
       { ?s :personName ?t }
