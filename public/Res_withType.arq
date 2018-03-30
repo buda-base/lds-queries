@@ -18,7 +18,7 @@
 #output.?lit.type=string
 #output.?lit.desc=the label/pref. label of the resource
 
-select distinct ?s ?f ?lit
+select distinct ?s ?f
 WHERE {
     {
       { ?s :personName ?t }

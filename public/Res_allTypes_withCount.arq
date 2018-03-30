@@ -46,7 +46,7 @@ WHERE {
       #{ (?s ?sc ?lit) text:query ( rdfs:comment ?L_NAME ) }
     }
     .
-    { ?s a ?f }
+    { ?s a ?f . ?f rdfs:subClassOf bdo:Entity }
 }
 group by ?f
 limit ?I_LIM

@@ -22,7 +22,7 @@
 #output.?cid.type=int
 #output.?cid.desc=number of occurences of this value
 
-select distinct ?s ?f
+select distinct ?s ?f ?lit
 WHERE {
    { ?s ?R_PROP1 ?R_VAL1 }
    .
