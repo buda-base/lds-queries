@@ -12,8 +12,10 @@
 CONSTRUCT 
   { 
     ?TT ?type ?lit .
+    ?TT ?x ?p .
   }
-WHERE {   
+WHERE { 
+  BIND(<http://purl.bdrc.io/ontology/core/tmp/prop> as ?x)
   {
     (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME ). 
     optional{?TT ?p ?s.}
