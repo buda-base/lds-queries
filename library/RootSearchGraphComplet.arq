@@ -26,6 +26,7 @@ CONSTRUCT
     ?TT a ?type .    
     ?TT ?pp ?lit .
     ?TT skos:prefLabel ?l.
+    ?TT skos:altLabel ?lit.
   }
 WHERE { 
   BIND(<http://purl.bdrc.io/ontology/core/tmp/prop> as ?x)
@@ -39,7 +40,8 @@ WHERE {
   union
   { (?TT ?sc ?lit) text:query ( skos:altLabel ?L_NAME ). 
     ?TT rdf:type ?type .
-    ?TT skos:prefLabel ?l.      
+    ?TT skos:prefLabel ?l. 
+    ?TT skos:altLabel ?lit     
   }
   union
   { (?TT ?sc ?lit) text:query ( skos:prefLabel ?L_NAME ). 
