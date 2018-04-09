@@ -1,0 +1,40 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All core resources whose various names contain the given L_NAME parameter value
+#QueryParams=L_NAME,LG_NAME
+#QueryUrl=/RootSearchGraph?L_NAME="'od zer"&LG_NAME=bo-x-ewts
+
+#param.L_NAME.type=string
+#param.L_NAME.langTag=LG_NAME
+#param.L_NAME.isLucene=true
+#param.L_NAME.example="ye shes"
+
+
+CONSTRUCT 
+  { 
+       
+    ?res ?pp ?lit .
+    ?res skos:prefLabel ?l.
+    ?res :personGender ?g.
+  }
+WHERE {
+  
+  {
+    (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME ). 
+    ?res ?p ?s.
+    ?res :personGender ?g.
+    ?s rdf:type ?pp .
+    OPTIONAL{?res skos:prefLabel ?l}.
+    } 
+  union
+  { (?res ?sc ?lit) text:query ( skos:altLabel ?L_NAME ).     
+    ?res skos:prefLabel ?l.
+    ?res :personGender ?g.
+  }
+  union
+  { (?res ?sc ?lit) text:query ( skos:prefLabel ?L_NAME ).     
+    ?res skos:prefLabel ?l.
+    ?res :personGender ?g.
+  }
+  ?res a :Person
+}
