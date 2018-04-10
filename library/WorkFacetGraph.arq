@@ -1,0 +1,56 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All works whose various literals contain the given L_NAME parameter value, along with their LICENSE + ACCESS + LANGSCRIPT + STATUS facets.
+#QueryParams=L_NAME,LG_NAME
+#QueryUrl=/lib/workSearchGraph?L_NAME="'od zer"&LG_NAME=bo-x-ewts
+
+#param.L_NAME.type=string
+#param.L_NAME.langTag=LG_NAME
+#param.L_NAME.isLucene=true
+#param.L_NAME.example="ye shes"
+
+
+CONSTRUCT 
+  { 
+    ?res adm:license ?lic .  
+    ?res adm:status ?st .
+    ?res adm:access ?acc .
+    ?res bdo:workLangScript ?wl .
+    ?res ?pp ?lit .
+    ?res skos:prefLabel ?l.
+  }
+WHERE {
+  
+  {
+    (?s ?sc ?lit) text:query ( rdfs:label "\"'od zer\""@bo-x-ewts ). 
+    ?res ?p ?s.
+    ?s rdf:type ?pp .
+    ?res adm:license ?lic.
+    ?res adm:status ?st .
+    ?res adm:access ?acc .
+    ?res bdo:workLangScript ?ls.
+    ?ls rdfs:label ?wl.
+    OPTIONAL{?res skos:prefLabel ?l}.
+    } 
+  union
+  { (?res ?sc ?lit) text:query ( skos:altLabel "\"'od zer\""@bo-x-ewts ). 
+    ?res bdo:workPartOf+ ?po .
+    ?po adm:license ?lic .
+    ?po adm:access ?acc .
+    ?res adm:status ?st .
+    ?po bdo:workLangScript ?ls.
+    ?ls rdfs:label ?wl.
+    ?res skos:prefLabel ?l.
+  }
+  union
+  { (?res ?sc ?lit) text:query ( skos:prefLabel "\"'od zer\""@bo-x-ewts ). 
+    ?res bdo:workPartOf+ ?po .
+    ?po adm:license ?lic .
+    ?po adm:access ?acc .
+    ?po adm:status ?st .
+    ?po bdo:workLangScript ?ls.
+    ?ls rdfs:label ?wl.
+    ?res skos:prefLabel ?l.
+  }
+  ?res a :Work
+}
