@@ -22,7 +22,7 @@ CONSTRUCT
 WHERE {
   
   {
-    (?s ?sc ?lit) text:query ( rdfs:label "\"'od zer\""@bo-x-ewts ). 
+    (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME ). 
     ?res ?p ?s.
     ?s rdf:type ?pp .
     ?res adm:license ?lic.
@@ -33,7 +33,7 @@ WHERE {
     OPTIONAL{?res skos:prefLabel ?l}.
     } 
   union
-  { (?res ?sc ?lit) text:query ( skos:altLabel "\"'od zer\""@bo-x-ewts ). 
+  { (?res ?sc ?lit) text:query ( skos:altLabel ?L_NAME ). 
     ?res bdo:workPartOf+ ?po .
     ?po adm:license ?lic .
     ?po adm:access ?acc .
@@ -43,7 +43,7 @@ WHERE {
     ?res skos:prefLabel ?l.
   }
   union
-  { (?res ?sc ?lit) text:query ( skos:prefLabel "\"'od zer\""@bo-x-ewts ). 
+  { (?res ?sc ?lit) text:query ( skos:prefLabel ?L_NAME ). 
     ?res bdo:workPartOf+ ?po .
     ?po adm:license ?lic .
     ?po adm:access ?acc .
