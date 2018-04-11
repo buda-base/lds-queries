@@ -17,10 +17,10 @@ CONSTRUCT
     ?res adm:access ?acc .
     ?res bdo:workLangScript ?wl .
     ?res ?pp ?lit .
-    ?res skos:prefLabel ?l.
+    ?res skos:prefLabel ?l. 
+    ?res <http://purl.bdrc.io/ontology/core/labelMatch> ?match
   }
 WHERE {
-  
   {
     (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME ). 
     ?res ?p ?s.
@@ -29,10 +29,12 @@ WHERE {
     ?res adm:status ?st .
     ?res adm:access ?acc .
     ?res bdo:workLangScript ?ls.
-    ?ls rdfs:label ?wl.
-    OPTIONAL{?res skos:prefLabel ?l}.
+    ?ls rdfs:label ?wl.    
+    OPTIONAL {?res skos:prefLabel ?match.
+      Filter(str(?match)=str(?lit))}
     } 
   union
+  
   { (?res ?sc ?lit) text:query ( skos:altLabel ?L_NAME ). 
     ?res bdo:workPartOf+ ?po .
     ?po adm:license ?lic .
@@ -40,7 +42,8 @@ WHERE {
     ?res adm:status ?st .
     ?po bdo:workLangScript ?ls.
     ?ls rdfs:label ?wl.
-    ?res skos:prefLabel ?l.
+    OPTIONAL {?res skos:prefLabel ?match.
+      Filter(str(?match)=str(?lit))}
   }
   union
   { (?res ?sc ?lit) text:query ( skos:prefLabel ?L_NAME ). 
@@ -49,8 +52,10 @@ WHERE {
     ?po adm:access ?acc .
     ?po adm:status ?st .
     ?po bdo:workLangScript ?ls.
-    ?ls rdfs:label ?wl.
-    ?res skos:prefLabel ?l.
-  }
+    ?ls rdfs:label ?wl.    
+    OPTIONAL {?res skos:prefLabel ?match.
+      Filter(str(?match)=str(?lit))}
+  }  
+  ?res skos:prefLabel ?l.
   ?res a :Work
 }
