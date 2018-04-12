@@ -20,7 +20,7 @@ CONSTRUCT
     ?res skos:prefLabel ?l.
     ?res bdo:workGenre ?g .
     ?res <http://purl.bdrc.io/ontology/core/labelMatch> ?match.
-    ?res <http://purl.bdrc.io/ontology/core/taxonomy> ?root
+    
   }
 WHERE {
   {
