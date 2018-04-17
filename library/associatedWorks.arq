@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=All works related to the given Work, along with their LICENSE + ACCESS + LANGSCRIPT + STATUS facets.
 #QueryParams=R_RES
-#QueryUrl=/lib/workSearchGraph?L_NAME="'od zer"&LG_NAME=bo-x-ewts
+#QueryUrl=/lib/associatedWorks?R_RES=W22003
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=a Resource ID

@@ -1,0 +1,29 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All person related to the given Work.
+#QueryParams=R_RES
+#QueryUrl=/lib/workAssocPersons?R_RES=bdr:W30497
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced Work
+
+construct 
+{
+  ?o <http://purl.bdrc.io/ontology/tmp/creatorType> ?p .
+  ?o bdo:personGender ?g .
+  ?o ?Name_Type ?Name .
+  ?o skos:prefLabel ?l .
+}
+where {
+  ?R_RES ?p ?o .  
+  ?p rdfs:subPropertyOf :workCreator .
+  ?o bdo:personGender ?g .
+  ?o :personName ?p_name .
+  ?o skos:prefLabel ?l .
+  ?p_name rdf:type ?Name_Type .
+  OPTIONAL {?p_name ?title ?Name} .
+  FILTER (?Name_Type != :PersonName)
+  FILTER (isLiteral(?Name))
+  FILTER (?p != :workCreator)
+}
