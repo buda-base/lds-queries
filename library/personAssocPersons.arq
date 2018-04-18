@@ -1,6 +1,6 @@
 #QueryScope=General
 #QueryReturnType=Graph
-#QueryResults=All person related to the given Person.
+#QueryResults=All people related to the given Person.
 #QueryParams=R_RES
 #QueryUrl=/lib/personAssocPersons?R_RES=bdr:P1583
 

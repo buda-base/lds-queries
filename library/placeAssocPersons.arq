@@ -1,0 +1,28 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All people related to the given Place.
+#QueryParams=R_RES
+#QueryUrl=/lib/placeAssocPersons?R_RES=bdr:G7
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced Place
+
+construct 
+{
+  	?s <http://purl.bdrc.io/ontology/tmp/relationType> ?pl .
+  	?s bdo:personGender ?g .
+    ?s skos:prefLabel ?l .
+  	?s ?Name_Type ?Name .
+}
+
+where {  
+  	?s bdo:personEvent ?e .
+  	?e rdf:type ?pl .
+  	?e bdo:personEventPlace ?R_RES.
+  	?s :personName ?p_name .
+  	?s skos:prefLabel ?l .
+  	?p_name rdf:type ?Name_Type .
+  	OPTIONAL {?p_name ?title ?Name} .
+  	OPTIONAL{?s bdo:personGender ?g} .
+}
