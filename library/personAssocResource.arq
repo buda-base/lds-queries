@@ -1,0 +1,34 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All resources preflabel related to the given Person.
+#QueryParams=R_RES
+#QueryUrl=/lib/personAssocResource?R_RES=bdr:P1583
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced Person
+
+
+construct 
+{ 
+  ?o ?p ?l.   
+  ?pl ?type ?lab 
+ }
+
+where {
+  {
+  	?R_RES ?p ?o.
+  	?o skos:prefLabel ?l .
+  }
+  #for person models
+  union
+  {
+    ?R_RES ?p ?o.
+    ?o bdo:noteWork ?nt .
+    optional{bdr:P1583 bdo:personEvent ?p1 .
+    ?p1 bdo:personEventPlace ?pl .
+    ?p1 rdf:type ?type .
+    ?pl skos:prefLabel ?lab}.
+  }
+ 
+}

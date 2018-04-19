@@ -15,6 +15,7 @@ CONSTRUCT
        
     ?res ?pp ?lit .
     ?res skos:prefLabel ?l.
+    ?res <http://purl.bdrc.io/ontology/tmp/prefLabelMatch> ?lit1.
     ?res :personGender ?g.
   }
 WHERE {
@@ -32,8 +33,8 @@ WHERE {
     ?res :personGender ?g.
   }
   union
-  { (?res ?sc ?lit) text:query ( skos:prefLabel ?L_NAME ).     
-    ?res skos:prefLabel ?l.
+  { (?res ?sc ?lit1) text:query ( skos:prefLabel ?L_NAME ).     
+    ?res skos:prefLabel ?lit1.
     ?res :personGender ?g.
   }
   ?res a :Person
