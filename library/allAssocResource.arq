@@ -9,16 +9,16 @@
 #param.R_RES.desc=the unique resource ID of the referenced Person
 
 
-construct 
-{ 
+construct { 
   ?o ?p ?l.   
-  ?pl ?type ?lab 
- }
+  ?pl ?type ?lab .
+  ?ev1 ?pp ?ll
+}
 
 where {
   {
-  	?R_RES ?p ?o.
-  	?o skos:prefLabel ?l .
+  ?R_RES ?p ?o.
+  ?o skos:prefLabel ?l .
   }
   #for person models
   union
@@ -29,6 +29,12 @@ where {
     ?p1 bdo:personEventPlace ?pl .
     ?p1 rdf:type ?type .
     ?pl skos:prefLabel ?lab}.
+    }
+  #for place models
+  union{
+  	?R_RES bdo:placeEvent ?ev .
+  	?ev ?pp ?ev1 .
+  	?ev1 skos:prefLabel ?ll
   }
  
 }
