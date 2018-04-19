@@ -31,20 +31,20 @@ CONSTRUCT
 WHERE { 
   BIND(<http://purl.bdrc.io/ontology/core/tmp/prop> as ?x)
   {
-    (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME ). 
+    (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ). 
     ?TT ?p ?s.
     ?s rdf:type ?pp .
     ?TT rdf:type ?type .
     OPTIONAL{?TT skos:prefLabel ?l}.
     } 
   union
-  { (?TT ?sc ?lit) text:query ( skos:altLabel ?L_NAME ). 
+  { (?TT ?sc ?lit) text:query ( skos:altLabel ?L_NAME "highlight:" ). 
     ?TT rdf:type ?type .
     ?TT skos:prefLabel ?l. 
     ?TT skos:altLabel ?lit     
   }
   union
-  { (?TT ?sc ?lit) text:query ( skos:prefLabel ?L_NAME ). 
+  { (?TT ?sc ?lit) text:query ( skos:prefLabel ?L_NAME "highlight:"). 
     ?TT rdf:type ?type .
     ?TT skos:prefLabel ?l.      
   }
