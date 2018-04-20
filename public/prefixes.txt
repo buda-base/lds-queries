@@ -1,8 +1,8 @@
 prefix :      <http://purl.bdrc.io/ontology/core/>
 prefix adm:   <http://purl.bdrc.io/ontology/admin/>
-prefix bdd:   <http://purl.bdrc.io/data/> .
+prefix bdd:   <http://purl.bdrc.io/data/>
 prefix bdo:   <http://purl.bdrc.io/ontology/core/>
-prefix bdr:   <http://purl.bdrc.io/resource/> .
+prefix bdr:   <http://purl.bdrc.io/resource/>
 prefix bf:    <http://id.loc.gov/ontologies/bibframe/>
 prefix dcterms: <http://purl.org/dc/terms/>
 prefix foaf:  <http://xmlns.com/foaf/0.1/>
