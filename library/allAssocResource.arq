@@ -15,7 +15,8 @@ construct {
   ?ev1 ?pp ?ll .
   ?lwk ?ppp ?lll .
   ?who ?pr ?whol .
-  ?rcn ?ppr ?rcl
+  ?rcn ?ppr ?rcl .
+  ?tp skos:prefLabel ?tpl
 }
 
 where {
@@ -23,7 +24,7 @@ where {
   ?R_RES ?p ?o.
   ?o skos:prefLabel ?l .
   }
-  #for person models
+  #for Person models
   union
   {
     ?R_RES ?p ?o.
@@ -33,13 +34,13 @@ where {
     ?p1 rdf:type ?type .
     ?pl skos:prefLabel ?lab}.
     }
-  #for place models
+  #for Place models
   union{
   	?R_RES bdo:placeEvent ?ev .
   	?ev ?pp ?ev1 .
   	?ev1 skos:prefLabel ?ll
   }
-   #for Lineage models
+  #for Lineage models
   union{
   	?R_RES bdo:workLocation ?wl .
   	?wl ?ppp ?lwk .
@@ -52,6 +53,11 @@ where {
   	?hold bdo:lineageReceived ?rc .
   	?rc ?ppr ?rcn .
   	?rcn skos:prefLabel ?rcl .
+  }
+  #for Topic models
+  union{
+  	?R_RES rdfs:seeAlso ?tp .
+  	?tp skos:prefLabel ?tpl
   }
  
 }
