@@ -26,7 +26,8 @@ CONSTRUCT
     ?TT a ?type .    
     ?TT ?pp ?lit .
     ?TT skos:prefLabel ?l.
-    ?TT skos:altLabel ?lit.
+    ?TT <http://purl.bdrc.io/ontology/tmp/prefLabelMatch> ?lit1.
+    ?TT <http://purl.bdrc.io/ontology/tmp/altLabelMatch> ?lit2.
   }
 WHERE { 
   BIND(<http://purl.bdrc.io/ontology/core/tmp/prop> as ?x)
@@ -38,13 +39,14 @@ WHERE {
     OPTIONAL{?TT skos:prefLabel ?l}.
     } 
   union
-  { (?TT ?sc ?lit) text:query ( skos:altLabel ?L_NAME "highlight:" ). 
+  { 
+    (?TT ?sc ?lit2) text:query ( skos:altLabel ?L_NAME "highlight:" ). 
     ?TT rdf:type ?type .
-    ?TT skos:prefLabel ?l. 
-    ?TT skos:altLabel ?lit     
+    ?TT skos:prefLabel ?l.
+         
   }
   union
-  { (?TT ?sc ?lit) text:query ( skos:prefLabel ?L_NAME "highlight:"). 
+  { (?TT ?sc ?lit1) text:query ( skos:prefLabel ?L_NAME "highlight:"). 
     ?TT rdf:type ?type .
     ?TT skos:prefLabel ?l.      
   }

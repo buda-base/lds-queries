@@ -19,6 +19,7 @@ construct
   ?x bdo:personGender ?xg
 }
 where {
+
   ?R_RES bdo:workPartOf* ?w .
   ?w ?p ?o .  
   OPTIONAL{?p rdfs:subPropertyOf :workCreator} .
