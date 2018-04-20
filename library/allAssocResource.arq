@@ -12,7 +12,10 @@
 construct { 
   ?o ?p ?l.   
   ?pl ?type ?lab .
-  ?ev1 ?pp ?ll
+  ?ev1 ?pp ?ll .
+  ?lwk ?ppp ?lll .
+  ?who ?pr ?whol .
+  ?rcn ?ppr ?rcl
 }
 
 where {
@@ -35,6 +38,20 @@ where {
   	?R_RES bdo:placeEvent ?ev .
   	?ev ?pp ?ev1 .
   	?ev1 skos:prefLabel ?ll
+  }
+   #for Lineage models
+  union{
+  	?R_RES bdo:workLocation ?wl .
+  	?wl ?ppp ?lwk .
+  	?lwk skos:prefLabel ?lll .
+  	?R_RES bdo:lineageHolder ?hold .
+  	?hold ?pr ?who .
+  	?hold rdf:type ?type .
+  	?who rdf:type ?tt .
+  	?who skos:prefLabel ?whol .
+  	?hold bdo:lineageReceived ?rc .
+  	?rc ?ppr ?rcn .
+  	?rcn skos:prefLabel ?rcl .
   }
  
 }
