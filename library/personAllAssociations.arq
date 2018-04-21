@@ -35,7 +35,7 @@ construct
     ?lin a :Lineage .
   	?lin skos:prefLabel ?linl .
     ?lin ?pr ?R_RES .
-    ?lin ?ppr ?R_RES
+    
 }
 
 where { 
@@ -72,16 +72,8 @@ where {
   #Associated Lineages
   union
   {
-    {
     ?lin bdo:lineageHolder ?hold .
   	?hold ?pr ?R_RES .
-    ?lin skos:prefLabel ?linl
-  }
-  union{
-    ?lin bdo:lineageHolder ?hold .
-    ?hold bdo:lineageReceived ?rc .
-    ?rc ?ppr ?R_RES .
-    ?lin skos:prefLabel ?linl
-  }
+    ?lin skos:prefLabel ?linl  
   }
 }
