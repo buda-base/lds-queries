@@ -1,0 +1,87 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All resources associated with the given Person.
+#QueryParams=R_RES
+#QueryUrl=/lib/personAllAssociations?R_RES=P360
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced Person
+
+
+construct 
+{
+  	#Associated people	
+  	?o <http://purl.bdrc.io/ontology/tmp/relationType> ?p .
+    ?o a :Person .
+  	?o bdo:personGender ?g .
+    ?o skos:prefLabel ?l .
+  	?o ?Name_Type ?Name .
+    
+  	#Associated works
+  	?w ?p ?R_RES .
+  	?w a :Work .
+    ?w skos:prefLabel ?ll.
+    ?w1 a :Work .
+  	?w1 bdo:workIsAbout ?R_RES .
+    ?w1 skos:prefLabel ?wl .
+  
+  	#Associated places
+    ?place ?relation ?R_RES .
+ 	?place a :Place .
+  	?place skos:prefLabel ?plabel.
+  
+    #Associated Lineages
+    ?lin a :Lineage .
+  	?lin skos:prefLabel ?linl .
+    ?lin ?pr ?R_RES .
+    ?lin ?ppr ?R_RES
+}
+
+where { 
+  #Associated people
+  {
+    ?R_RES ?p ?o .
+  	?o a :Person .
+  	?o :personName ?p_name .
+  	?o skos:prefLabel ?l .
+  	?p_name rdf:type ?Name_Type .
+  	OPTIONAL {?p_name ?title ?Name} .
+  	OPTIONAL{?o bdo:personGender ?g} .
+  }
+  #Associated works
+  union{
+  	?w ?p ?R_RES .  
+    ?p rdfs:subPropertyOf :workCreator.
+    ?w skos:prefLabel ?ll
+  }
+  union
+  {
+  	?w1 bdo:workIsAbout ?R_RES .    
+  	?w1 skos:prefLabel ?wl    
+  }
+  #Associated places
+  union
+  {
+    ?R_RES bdo:personEvent ?e.  
+    ?e ?p ?relation .
+    ?e :personEventPlace ?place .
+    ?place skos:prefLabel ?plabel
+    Filter(?p = rdf:type)
+  }
+  #Associated Lineages
+  union
+  {
+    {
+    ?lin bdo:lineageHolder ?hold .
+  	?hold ?pr ?R_RES .
+    ?lin skos:prefLabel ?linl
+  }
+  union{
+    ?lin bdo:lineageHolder ?hold .
+    ?hold bdo:lineageReceived ?rc .
+    ?rc ?ppr ?R_RES .
+    ?lin skos:prefLabel ?linl
+  }
+  }
+}
