@@ -1,0 +1,43 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All resources associated with the given Topic.
+#QueryParams=R_RES
+#QueryUrl=/lib/topicAllAssociations?R_RES=T132
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced Person
+
+construct {
+
+	#associated Works
+	?w a :Work .
+    ?w skos:prefLabel ?l .
+  	?w adm:license ?lic.
+  	?w adm:status ?st .
+  	?w adm:access ?acc .
+  	?w bdo:workLangScript ?ls.
+
+  	#associated Lineages
+  	?lin a :Lineage .
+    ?lin skos:prefLabel ?ll
+}
+where {
+
+    #associated Works
+	{
+  		?w :workGenre ?R_RES .
+    	?w skos:prefLabel ?l .
+  		?w adm:license ?lic.
+  		?w adm:status ?st .
+  		?w adm:access ?acc .
+  		?w bdo:workLangScript ?ls.
+	}
+
+	#associated Lineages
+	union
+	{
+		?lin bdo:lineageObject ?R_RES .
+    	?lin skos:prefLabel ?ll
+	}
+}
