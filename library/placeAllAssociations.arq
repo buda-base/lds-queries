@@ -1,0 +1,84 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All Resources associated to the given Place.
+#QueryParams=R_RES
+#QueryUrl=/lib/placeAllAssociations?R_RES=bdr:G37
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced Place
+
+construct 
+{
+  	#Associated People
+    ?s <http://purl.bdrc.io/ontology/tmp/relationType> ?pl .
+  	?s bdo:personGender ?g .
+    ?s skos:prefLabel ?l .
+  	?s ?Name_Type ?Name .
+    ?s a :Person .
+  
+  #Associated places
+    ?plc a :Place .
+    ?plc <http://purl.bdrc.io/ontology/tmp/isContainedBy> ?R_RES .
+    ?plc skos:prefLabel ?ll .
+    ?plc1 a :Place .
+    ?plc1 skos:prefLabel ?ll1 .
+    ?plc1 bdo:placeContains ?R_RES .
+    
+  
+  #Associated literary production
+    ?w a <http://purl.bdrc.io/ontology/tmp/WorkPrinted> .
+    ?w bdo:workHasSourcePrintery ?R_RES .
+    ?w skos:prefLabel ?wl .
+  
+  #Associated Works
+    ?aw a :Work .
+    ?aw ?p ?R_RES .
+    ?aw skos:prefLabel ?awl .
+    ?aw adm:license ?lic.
+  	?aw adm:status ?st .
+  	?aw adm:access ?acc .
+  	?aw bdo:workLangScript ?ls.
+}
+
+where { 
+  #Associated People
+  {
+  	?s bdo:personEvent ?e .
+  	?e rdf:type ?pl .
+  	?e bdo:personEventPlace ?R_RES.
+  	?s :personName ?p_name .
+  	?s skos:prefLabel ?l .
+  	?p_name rdf:type ?Name_Type .
+  	OPTIONAL {?p_name ?title ?Name} .
+  	OPTIONAL{?s bdo:personGender ?g} .
+  }
+  #Associated Places
+  union
+  {
+    ?R_RES bdo:placeContains ?plc .
+    ?plc skos:prefLabel ?ll .
+    ?plc1 bdo:placeContains ?R_RES .
+    ?plc1 skos:prefLabel ?ll1 .    
+  }
+  #Associated literary production
+  union
+  {
+    ?w bdo:workHasSourcePrintery ?R_RES .
+    ?w skos:prefLabel ?wl
+  }
+  #Associated Works
+  union
+  {
+  	?aw a :Work .
+  	?aw ?p ?o .
+    ?aw skos:prefLabel ?awl .
+    ?aw bdo:workPartOf* ?aw1 .
+    ?aw1 adm:license ?lic.
+  	?aw1 adm:status ?st .
+  	?aw1 adm:access ?acc .
+  	?aw1 bdo:workLangScript ?ls.
+  	Filter(?o = ?R_RES)
+  	Filter(?p != :workHasSourcePrintery)
+  }
+}
