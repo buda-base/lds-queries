@@ -10,8 +10,9 @@
 
 
 construct { 
-  ?o ?p ?l.   
-  ?pl ?type ?lab .
+  ?o ?p ?l. 
+  ?nt skos:prefLabel ?ntl .
+  ?pl ?type ?lab .  
   ?ev1 ?pp ?ll .
   ?lwk ?ppp ?lll .
   ?who ?pr ?whol .
@@ -22,14 +23,15 @@ construct {
 where {
   {
   ?R_RES ?p ?o.
-  ?o skos:prefLabel ?l .
+    Optional{?o skos:prefLabel ?l} .
   }
   #for Person models
   union
   {
     ?R_RES ?p ?o.
-    ?o bdo:noteWork ?nt .
-    optional{bdr:P1583 bdo:personEvent ?p1 .
+    optional{?o bdo:noteWork ?nt .
+      ?nt skos:prefLabel ?ntl} .
+    optional{?R_RES bdo:personEvent ?p1 .
     ?p1 bdo:personEventPlace ?pl .
     ?p1 rdf:type ?type .
     ?pl skos:prefLabel ?lab}.
