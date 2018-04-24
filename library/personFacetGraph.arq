@@ -10,30 +10,30 @@
 #param.L_NAME.example="ye shes"
 
 
-CONSTRUCT 
-  { 
-       
+CONSTRUCT
+  {
+
     ?res ?pp ?lit .
     ?res skos:prefLabel ?l.
     ?res <http://purl.bdrc.io/ontology/tmp/prefLabelMatch> ?lit1.
     ?res :personGender ?g.
   }
 WHERE {
-  
+
   {
-    (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME ). 
+    (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ).
     ?res ?p ?s.
     ?res :personGender ?g.
     ?s rdf:type ?pp .
     OPTIONAL{?res skos:prefLabel ?l}.
-    } 
+    }
   union
-  { (?res ?sc ?lit) text:query ( skos:altLabel ?L_NAME ).     
+  { (?res ?sc ?lit) text:query ( skos:altLabel ?L_NAME "highlight:" ).
     ?res skos:prefLabel ?l.
     ?res :personGender ?g.
   }
   union
-  { (?res ?sc ?lit1) text:query ( skos:prefLabel ?L_NAME ).     
+  { (?res ?sc ?lit1) text:query ( skos:prefLabel ?L_NAME "highlight:" ).
     ?res skos:prefLabel ?lit1.
     ?res :personGender ?g.
   }
