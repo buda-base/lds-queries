@@ -1,0 +1,25 @@
+#QueryScope=Work
+#QueryReturnType=Table
+#QueryResults=A table containing the works printed at the given place
+#QueryParams=L_NAME,LG_NAME
+#QueryUrl=/WorkPrintedByPlaceName?L_NAME="chos gling"&LG_name=bo-x-ewts
+
+#param.L_NAME.type=string
+#param.L_NAME.isLucene=false
+#param.L_NAME.example="tsa 'dra"
+
+#output.?work.type=URI
+#output.?work.desc=the work URI
+#output.?prefLabel.type=string
+#output.?PrefLabel.desc=the work pref. label
+#output.?place.type=URI
+#output.?place.desc=the place URI
+#output.?placeName.type=string
+#output.?placeName.desc=the place preferred label
+
+select ?place ?placeName ?work ?prefLabel where {
+    ?work bdo:workHasSourcePrintery ?place .
+    #?place skos:prefLabel ?placeName .
+    ?work skos:prefLabel ?prefLabel .
+    (?place ?sc ?placeName) text:query (skos:prefLabel  ?L_NAME).
+}
