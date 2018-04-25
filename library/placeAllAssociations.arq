@@ -27,7 +27,7 @@ construct
     
   
   #Associated literary production
-    ?w a <http://purl.bdrc.io/ontology/tmp/WorkPrinted> .
+    ?w a :Work .
     ?w bdo:workHasSourcePrintery ?R_RES .
     ?w skos:prefLabel ?wl .
   
