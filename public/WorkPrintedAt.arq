@@ -1,0 +1,19 @@
+#QueryScope=Work
+#QueryReturnType=Table
+#QueryResults=A table containing the works printed at the given place
+#QueryParams=R_RES
+#QueryUrl=/WorkPrintedAt?R_RES=bdr:G37
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced Place
+
+#output.?work.type=URI
+#output.?work.desc=the work URI
+#output.?prefLabel.type=string
+#output.?PrefLabel.desc=the work pref. label
+
+select * where {
+    ?work bdo:workHasSourcePrintery ?R_RES .
+    ?work skos:prefLabel ?prefLabel
+}
