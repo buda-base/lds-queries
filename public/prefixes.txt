@@ -5,6 +5,7 @@ prefix bdo:   <http://purl.bdrc.io/ontology/core/>
 prefix bdr:   <http://purl.bdrc.io/resource/>
 prefix bf:    <http://id.loc.gov/ontologies/bibframe/>
 prefix dcterms: <http://purl.org/dc/terms/>
+prefix f:     <java:io.bdrc.ldspdi.sparql.functions.>
 prefix foaf:  <http://xmlns.com/foaf/0.1/>
 prefix iiif2: <http://iiif.io/api/presentation/2#>
 prefix iiif3: <http://iiif.io/api/presentation/3#>
