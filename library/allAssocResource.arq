@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=All resources preflabel related to the given Person.
 #QueryParams=R_RES
-#QueryUrl=/lib/personAssocResource?R_RES=bdr:P1583
+#QueryUrl=/lib/allAssocResource?R_RES=bdr:P1583
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=a Resource ID

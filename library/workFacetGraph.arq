@@ -58,8 +58,9 @@ WHERE {
   }
 
   optional{?res bdo:workGenre ?g .
-  ?g :taxSubclassOf+ ?tx .
-  FILTER EXISTS {?tx :taxSubclassOf bdr:O9TAXTBRC201605}
+  ?g a :Topic
+  #?g :taxSubclassOf+ ?tx .
+  #FILTER EXISTS {?tx :taxSubclassOf bdr:O9TAXTBRC201605}
   }
   ?res skos:prefLabel ?l.
   ?res a :Work
