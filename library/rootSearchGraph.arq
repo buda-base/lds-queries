@@ -21,33 +21,76 @@
 #param.L_NAME.example="ye shes"
 
 
-CONSTRUCT 
-  { 
-    ?TT a ?type .    
+CONSTRUCT
+  {
+    ?TT a ?type .
     ?TT ?pp ?lit .
     ?TT skos:prefLabel ?l.
     ?TT <http://purl.bdrc.io/ontology/tmp/prefLabelMatch> ?lit1.
     ?TT <http://purl.bdrc.io/ontology/tmp/altLabelMatch> ?lit2.
+    ?TT bdo:workType ?wT.
+    ?TT bdo:workExpressionOf ?wE.
+    ?TT <http://purl.bdrc.io/ontology/tmp/prefLabelExpressionOf> ?litE.
+    #?TT <http://purl.bdrc.io/ontology/tmp/prefLabelExpressionOfMatch> ?litEH.
+    ?TT bdo:workHasExpression ?wH.
+    ?TT <http://purl.bdrc.io/ontology/tmp/prefLabelHasExpression> ?litH.
+    #?TT <http://purl.bdrc.io/ontology/tmp/prefLabelHasExpressionMatch> ?litHH.
+
+    #?TT bdo:workTranslationOf ?wTr.
+    #?TT bdo:workHasTranslation ?wHTr.
   }
-WHERE { 
+WHERE {
+{
   BIND(<http://purl.bdrc.io/ontology/core/tmp/prop> as ?x)
   {
-    (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ). 
+    (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ).
     ?TT ?p ?s.
     ?s rdf:type ?pp .
     ?TT rdf:type ?type .
-    OPTIONAL{?TT skos:prefLabel ?l}.
-    } 
+    OPTIONAL{?TT skos:prefLabel ?l.}.
+  }
   union
-  { 
-    (?TT ?sc ?lit2) text:query ( skos:altLabel ?L_NAME "highlight:" ). 
+  {
+    (?TT ?sc ?lit2) text:query ( skos:altLabel ?L_NAME "highlight:" ).
     ?TT rdf:type ?type .
     ?TT skos:prefLabel ?l.
-         
+
   }
   union
-  { (?TT ?sc ?lit1) text:query ( skos:prefLabel ?L_NAME "highlight:"). 
+  { (?TT ?sc ?lit1) text:query ( skos:prefLabel ?L_NAME "highlight:").
     ?TT rdf:type ?type .
-    ?TT skos:prefLabel ?l.      
+    ?TT skos:prefLabel ?l.
   }
+}
+
+  OPTIONAL{?TT bdo:workType ?wT. ?TT bdo:workType bdr:WorkTypeAbstractWork.}.
+  OPTIONAL{
+    ?TT bdo:workExpressionOf ?wE.
+    ?wE skos:prefLabel ?litE.
+    #OPTIONAL{
+    #  (?wE ?scE ?litEH) text:query ( skos:prefLabel ?L_NAME "highlight:").
+    #}
+   }.
+  OPTIONAL{
+    ?TT bdo:workHasExpression ?wH.
+    ?wH skos:prefLabel ?litH.
+    #OPTIONAL{
+    #   (?wH ?scH ?litHH) text:query ( skos:prefLabel ?L_NAME "highlight:").
+    #}
+  }.
+ # Good idea but translation property is totally unused... yet ?
+ # OPTIONAL{
+ #   ?TT bdo:workTranslationOf ?wTr.
+ #   ?wTr skos:prefLabel ?litTr.
+ #   OPTIONAL{
+ #     (?wTr ?scTr ?litTrH) text:query ( skos:prefLabel ?L_NAME "highlight:").
+ #   }
+ #  }.
+ #  OPTIONAL{
+ #   ?TT bdo:workHasTranslation ?wHTr.
+ #   ?wHTr skos:prefLabel ?litHTr.
+ #   OPTIONAL{
+ #     (?wHTr ?scHTr ?litHTrH) text:query ( skos:prefLabel ?L_NAME "highlight:").
+ #   }
+ # }.
 }

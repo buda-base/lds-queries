@@ -22,8 +22,15 @@ CONSTRUCT
     ?res <http://purl.bdrc.io/ontology/core/rootTax> ?tx.
     ?res <http://purl.bdrc.io/ontology/core/labelMatch> ?match.
 
+    ?res bdo:workType ?wT.
+    ?res bdo:workExpressionOf ?wE.
+    ?res <http://purl.bdrc.io/ontology/tmp/prefLabelExpressionOf> ?litE.
+    ?res bdo:workHasExpression ?wH.
+    ?res <http://purl.bdrc.io/ontology/tmp/prefLabelHasExpression> ?litH.
+
   }
 WHERE {
+{
   {
     (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ).
     ?res ?p ?s.
@@ -33,7 +40,8 @@ WHERE {
     ?res adm:access ?acc .
     ?res bdo:workLangScript ?ls.
     OPTIONAL {?res skos:prefLabel ?match.
-      Filter(str(?match)=str(?lit))}
+      Filter(str(?match)=str(?lit))
+      }
     }
   union
 
@@ -47,7 +55,7 @@ WHERE {
       Filter(str(?match)=str(?lit))}
   }
   union
-  { (?res ?sc ?lit) text:query ( skos:prefLabel ?L_NAME "highlight:" ). 
+  { (?res ?sc ?lit) text:query ( skos:prefLabel ?L_NAME "highlight:" ).
     ?res bdo:workPartOf+ ?po .
     ?po adm:license ?lic .
     ?po adm:access ?acc .
@@ -55,6 +63,18 @@ WHERE {
     ?po bdo:workLangScript ?ls.
     OPTIONAL {?res skos:prefLabel ?match.
       Filter(str(?match)=str(?lit))}
+  }
+
+}
+
+  OPTIONAL{?res bdo:workType ?wT. ?res bdo:workType bdr:WorkTypeAbstractWork.}.
+  OPTIONAL{
+    ?res bdo:workExpressionOf ?wE.
+    ?wE skos:prefLabel ?litE.
+   }.
+  OPTIONAL{
+    ?res bdo:workHasExpression ?wH.
+    ?wH skos:prefLabel ?litH.
   }
 
   optional{?res bdo:workGenre ?g .
