@@ -10,6 +10,23 @@
 #param.L_NAME.example="ye shes"
 
 
+PREFIX  :     <http://purl.bdrc.io/ontology/core/>
+PREFIX  bf:   <http://id.loc.gov/ontologies/bibframe/>
+PREFIX  tbr:  <http://purl.bdrc.io/ontology/toberemoved/>
+PREFIX  owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX  f:    <java:io.bdrc.ldspdi.sparql.functions.>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  adm:  <http://purl.bdrc.io/ontology/admin/>
+PREFIX  vcard: <http://www.w3.org/2006/vcard/ns#>
+PREFIX  bdo:  <http://purl.bdrc.io/ontology/core/>
+PREFIX  bdr:  <http://purl.bdrc.io/resource/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  dcterms: <http://purl.org/dc/terms/>
+PREFIX  text: <http://jena.apache.org/text#>
+PREFIX  foaf: <http://xmlns.com/foaf/0.1/>
+
 CONSTRUCT
   {
     ?res adm:license ?lic .
@@ -35,10 +52,10 @@ WHERE {
     (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ).
     ?res ?p ?s.
     ?s rdf:type ?pp .
-    ?res adm:license ?lic.
+    optional{?res adm:license ?lic.
     ?res adm:status ?st .
     ?res adm:access ?acc .
-    ?res bdo:workLangScript ?ls.
+        ?res bdo:workLangScript ?ls.}
     OPTIONAL {?res skos:prefLabel ?match.
       Filter(str(?match)=str(?lit))
       }
@@ -46,21 +63,21 @@ WHERE {
   union
 
   { (?res ?sc ?lit) text:query ( skos:altLabel ?L_NAME "highlight:" ).
-    ?res bdo:workPartOf+ ?po .
+    optional{?res bdo:workPartOf+ ?po .
     ?po adm:license ?lic .
     ?po adm:access ?acc .
     ?res adm:status ?st .
-    ?po bdo:workLangScript ?ls.
+        ?po bdo:workLangScript ?ls.}
     OPTIONAL {?res skos:prefLabel ?match.
       Filter(str(?match)=str(?lit))}
   }
   union
   { (?res ?sc ?lit) text:query ( skos:prefLabel ?L_NAME "highlight:" ).
-    ?res bdo:workPartOf+ ?po .
+    optional{?res bdo:workPartOf+ ?po .
     ?po adm:license ?lic .
     ?po adm:access ?acc .
     ?po adm:status ?st .
-    ?po bdo:workLangScript ?ls.
+        ?po bdo:workLangScript ?ls.}
     OPTIONAL {?res skos:prefLabel ?match.
       Filter(str(?match)=str(?lit))}
   }
@@ -76,11 +93,8 @@ WHERE {
     ?res bdo:workHasExpression ?wH.
     ?wH skos:prefLabel ?litH.
   }
-
   optional{?res bdo:workGenre ?g .
-  ?g a :Topic
-  #?g :taxSubclassOf+ ?tx .
-  #FILTER EXISTS {?tx :taxSubclassOf bdr:O9TAXTBRC201605}
+  ?g a :Topic  
   }
   ?res skos:prefLabel ?l.
   ?res a :Work
