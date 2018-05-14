@@ -32,7 +32,7 @@ where {
     optional{?o bdo:noteWork ?nt .
       ?nt skos:prefLabel ?ntl} .
     optional{?R_RES bdo:personEvent ?p1 .
-    ?p1 bdo:personEventPlace ?pl .
+    ?p1 bdo:eventWhere ?pl .
     ?p1 rdf:type ?type .
     ?pl skos:prefLabel ?lab}.
     }
