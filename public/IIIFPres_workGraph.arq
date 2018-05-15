@@ -17,19 +17,11 @@ where {
     BIND (?R_RES as ?s)
     FILTER (!isBlank(?o) || ?p = :workLocation)
   } union {
-    ?R_RES :workTitle/rdfs:label ?o .
-    BIND (?R_RES as ?s)
-    BIND (skos:altLabel as ?p)
-  } union {
     ?R_RES :workCreator/skos:prefLabel ?o .
     BIND (?R_RES as ?s)
     BIND (tmp:workCreatorLit as ?p)
   } union {
-    bdr:W22084 :workLocation ?s .
+    ?R_RES :workLocation ?s .
     ?s ?p ?o .
-  } union {
-    GRAPH ?o { ?R_RES adm:gitRevision ?nb . } .
-    BIND (?R_RES as ?s)
-    BIND (tmp:hasRootPart as ?p)
   }
 }
