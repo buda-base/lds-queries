@@ -8,7 +8,7 @@
 #param.R_RES.subtype=a Resource ID
 #param.R_RES.desc=the unique resource ID of the referenced Place
 
-construct 
+construct
 {
   	#Associated People
     ?s <http://purl.bdrc.io/ontology/tmp/relationType> ?pl .
@@ -16,7 +16,12 @@ construct
     ?s skos:prefLabel ?l .
   	?s ?Name_Type ?Name .
     ?s a :Person .
-  
+
+    ?pEw a :Person .
+    ?pEw skos:prefLabel ?pEl .
+    ?pEw <http://purl.bdrc.io/ontology/tmp/relationType> ?pEa .
+  	 ?pEw bdo:personGender ?pEg .
+
   #Associated places
     ?plc a :Place .
     ?plc <http://purl.bdrc.io/ontology/tmp/isContainedBy> ?R_RES .
@@ -24,13 +29,13 @@ construct
     ?plc1 a :Place .
     ?plc1 skos:prefLabel ?ll1 .
     ?plc1 bdo:placeContains ?R_RES .
-    
-  
+
+
   #Associated literary production
     ?w a :Work .
     ?w bdo:workHasSourcePrintery ?R_RES .
     ?w skos:prefLabel ?wl .
-  
+
   #Associated Works
     ?aw a :Work .
     ?aw ?p ?R_RES .
@@ -41,7 +46,7 @@ construct
   	?aw bdo:workLangScript ?ls.
 }
 
-where { 
+where {
   #Associated People
   {
   	?s bdo:personEvent ?e .
@@ -53,13 +58,20 @@ where {
   	OPTIONAL {?p_name ?title ?Name} .
   	OPTIONAL{?s bdo:personGender ?g} .
   }
+  union {
+   ?R_RES bdo:placeEvent ?pE .
+   ?pE a ?pEa .
+   ?pE bdo:eventWho ?pEw .
+   ?pEw skos:prefLabel ?pEl .
+   OPTIONAL { ?pEw bdo:personGender ?pEg . }
+  }
   #Associated Places
   union
   {
     ?R_RES bdo:placeContains ?plc .
     ?plc skos:prefLabel ?ll .
     ?plc1 bdo:placeContains ?R_RES .
-    ?plc1 skos:prefLabel ?ll1 .    
+    ?plc1 skos:prefLabel ?ll1 .
   }
   #Associated literary production
   union

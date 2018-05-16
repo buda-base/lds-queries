@@ -9,36 +9,44 @@
 #param.R_RES.desc=the unique resource ID of the referenced Person
 
 
-construct 
+construct
 {
-  	#Associated people	
+  	#Associated people
   	?o <http://purl.bdrc.io/ontology/tmp/relationType> ?p .
     ?o a :Person .
   	?o bdo:personGender ?g .
     ?o skos:prefLabel ?l .
   	?o ?Name_Type ?Name .
-    
+
   	#Associated works
   	?w ?p ?R_RES .
   	?w a :Work .
-    ?w skos:prefLabel ?ll.
-    ?w1 a :Work .
+   ?w skos:prefLabel ?ll.
+   ?w1 a :Work .
   	?w1 bdo:workIsAbout ?R_RES .
-    ?w1 skos:prefLabel ?wl .
-  
+   ?w1 skos:prefLabel ?wl .
+   ?w adm:license ?lic.
+   ?w adm:status ?st .
+   ?w adm:access ?acc .
+   ?w bdo:workLangScript ?ls.
+   ?w1 adm:license ?lic1.
+   ?w1 adm:status ?st1 .
+   ?w1 adm:access ?acc1 .
+   ?w1 bdo:workLangScript ?ls1.
+
   	#Associated places
     ?place ?relation ?R_RES .
  	?place a :Place .
   	?place skos:prefLabel ?plabel.
-  
+
     #Associated Lineages
     ?lin a :Lineage .
   	?lin skos:prefLabel ?linl .
     ?lin ?pr ?R_RES .
-    
+
 }
 
-where { 
+where {
   #Associated people
   {
     ?R_RES ?p ?o .
@@ -51,19 +59,31 @@ where {
   }
   #Associated works
   union{
-  	?w ?p ?R_RES .  
+  	?w ?p ?R_RES .
     ?p rdfs:subPropertyOf :workCreator.
-    ?w skos:prefLabel ?ll
+    ?w skos:prefLabel ?ll.
+    OPTIONAL{
+      ?w adm:license ?lic.
+      ?w adm:status ?st .
+      ?w adm:access ?acc .
+      ?w bdo:workLangScript ?ls.
+   }
   }
   union
   {
-  	?w1 bdo:workIsAbout ?R_RES .    
-  	?w1 skos:prefLabel ?wl    
+  	?w1 bdo:workIsAbout ?R_RES .
+  	?w1 skos:prefLabel ?wl.
+   OPTIONAL{
+      ?w1 adm:license ?lic1.
+      ?w1 adm:status ?st1 .
+      ?w1 adm:access ?acc1 .
+      ?w1 bdo:workLangScript ?ls1.
+   }
   }
   #Associated places
   union
   {
-    ?R_RES bdo:personEvent ?e.  
+    ?R_RES bdo:personEvent ?e.
     ?e ?p ?relation .
     ?e :personEventPlace ?place .
     ?place skos:prefLabel ?plabel
@@ -74,6 +94,6 @@ where {
   {
     ?lin bdo:lineageHolder ?hold .
   	?hold ?pr ?R_RES .
-    ?lin skos:prefLabel ?linl  
+    ?lin skos:prefLabel ?linl
   }
 }
