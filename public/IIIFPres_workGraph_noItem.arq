@@ -27,5 +27,9 @@ where {
     ?R_RES :workLocation/:workLocationWork/:workHasItemImageAsset ?o .
     BIND (?R_RES as ?s)
     BIND (tmp:inItem as ?p)
+  } union {
+    ?R_RES :workHasPart ?s .
+    ?s ?p ?o .
+    FILTER (!isBlank(?o))
   }
 }
