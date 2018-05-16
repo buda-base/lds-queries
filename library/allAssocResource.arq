@@ -9,15 +9,16 @@
 #param.R_RES.desc=the unique resource ID of the referenced Person
 
 
-construct { 
-  ?o ?p ?l. 
+construct {
+  ?o ?p ?l.
   ?nt skos:prefLabel ?ntl .
-  ?pl ?type ?lab .  
+  ?pl ?type ?lab .
   ?ev1 ?pp ?ll .
   ?lwk ?ppp ?lll .
   ?who ?pr ?whol .
   ?rcn ?ppr ?rcl .
-  ?tp skos:prefLabel ?tpl
+  ?tp skos:prefLabel ?tpl .
+  ?imA bdo:itemHasVolume ?iV .
 }
 
 where {
@@ -61,5 +62,9 @@ where {
   	?R_RES rdfs:seeAlso ?tp .
   	?tp skos:prefLabel ?tpl
   }
- 
+  #for Work
+  union {
+      ?R_RES bdo:workHasItemImageAsset ?imA .
+      ?imA bdo:itemHasVolume ?iV .
+  }
 }
