@@ -17,12 +17,15 @@
 #param.R_RES.subtype=:Volume
 #param.R_RES.desc=the URI of the ItemImageAsset being investigated
 
-select distinct ?workId ?itemId ?access ?license ?imageGroup ?volumeNumber ?volumeLabel where {
+select distinct ?workId ?itemId ?access ?license ?imageGroup ?volumeNumber ?volumeLabel ?iiifManifest where {
   ?R_RES a :VolumeImageAsset ;
       adm:legacyImageGroupRID ?imageGroup ;
       :volumeNumber ?volumeNumber .
   optional {
     ?R_RES skos:prefLabel ?volumeLabel .
+  }
+  optional {
+    ?R_RES :hasIIIFManifest ?iiifManifest .
   }
   ?itemId :itemForWork ?workId ;
       :itemHasVolume ?R_RES .
