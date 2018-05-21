@@ -12,21 +12,23 @@
 #output.?access.desc=the access policy of the work/collection
 #output.?license.type=URI
 #output.?license.desc=the license of the work/collection
+#output.?imageGroup.type=string
+#output.?imageGroup.desc=the image group (internal BDRC data)
+#output.?volumeNumber.type=int
+#output.?volumeNumber.desc=the volume number
+#output.?iiifManifest.type=URI
+#output.?iiifManifest.desc=the (external) manifest URI
 
 #param.R_RES.type=URI
 #param.R_RES.subtype=:Volume
 #param.R_RES.desc=the URI of the ItemImageAsset being investigated
 
 select distinct ?workId ?itemId ?access ?license ?imageGroup ?volumeNumber ?volumeLabel ?iiifManifest where {
-  ?R_RES a :VolumeImageAsset ;
-      adm:legacyImageGroupRID ?imageGroup ;
-      :volumeNumber ?volumeNumber .
-  optional {
-    ?R_RES skos:prefLabel ?volumeLabel .
-  }
-  optional {
-    ?R_RES :hasIIIFManifest ?iiifManifest .
-  }
+  ?R_RES a :VolumeImageAsset .
+  optional { ?R_RES adm:legacyImageGroupRID ?imageGroup . }
+  optional { ?R_RES :volumeNumber ?volumeNumber . }
+  optional { ?R_RES skos:prefLabel ?volumeLabel . }
+  optional { ?R_RES :hasIIIFManifest ?iiifManifest . }
   ?itemId :itemForWork ?workId ;
       :itemHasVolume ?R_RES .
   ?workId adm:access ?access ;
