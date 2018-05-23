@@ -18,6 +18,13 @@ construct {
   	?w adm:access ?acc .
   	?w bdo:workLangScript ?ls.
 
+    ?w bdo:workType ?wT.
+    ?w bdo:workExpressionOf ?wE.
+    ?w <http://purl.bdrc.io/ontology/tmp/prefLabelExpressionOf> ?litE.
+    ?w bdo:workHasExpression ?wH.
+    ?w <http://purl.bdrc.io/ontology/tmp/prefLabelHasExpression> ?litH.
+
+
   	#associated Lineages
   	?lin a :Lineage .
     ?lin skos:prefLabel ?ll
@@ -26,12 +33,24 @@ where {
 
     #associated Works
 	{
-  		?w :workGenre ?R_RES .
+  		{ ?w :workGenre ?R_RES . }
+      union
+      { ?w :workIsAbout ?R_RES . } .
     	?w skos:prefLabel ?l .
   		?w adm:license ?lic.
   		?w adm:status ?st .
   		?w adm:access ?acc .
   		?w bdo:workLangScript ?ls.
+
+      OPTIONAL{?w bdo:workType ?wT. ?w bdo:workType bdr:WorkTypeAbstractWork.}.
+      OPTIONAL{
+        ?w bdo:workExpressionOf ?wE.
+        ?wE skos:prefLabel ?litE.
+       }.
+      OPTIONAL{
+        ?w bdo:workHasExpression ?wH.
+        ?wH skos:prefLabel ?litH.
+      }
 	}
 
 	#associated Lineages
