@@ -20,11 +20,15 @@ construct {
   ?tp skos:prefLabel ?tpl .
   ?imA bdo:itemHasVolume ?iV .
   ?hEx bdo:workPartOf ?hExWlab .
+  ?rev ?pp  ?R_RES.
+  ?rev skos:prefLabel ?revl
 }
 
 where {
   {
   ?R_RES ?p ?o.
+  optional{?rev ?pp  ?R_RES .
+    ?rev skos:prefLabel ?revl }
     Optional{?o skos:prefLabel ?l} .
   }
   #for Person models
