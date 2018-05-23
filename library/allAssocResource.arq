@@ -19,6 +19,7 @@ construct {
   ?rcn ?ppr ?rcl .
   ?tp skos:prefLabel ?tpl .
   ?imA bdo:itemHasVolume ?iV .
+  ?hEx bdo:workPartOf ?hExWlab .
 }
 
 where {
@@ -64,7 +65,14 @@ where {
   }
   #for Work
   union {
-      ?R_RES bdo:workHasItemImageAsset ?imA .
-      ?imA bdo:itemHasVolume ?iV .
-  }
+      Optional {
+         ?R_RES bdo:workHasItemImageAsset ?imA .
+         ?imA bdo:itemHasVolume ?iV .
+      }.
+      Optional {
+         ?R_RES bdo:workHasExpression ?hEx .
+         ?hEx bdo:workPartOf+ ?hExW .
+         ?hExW skos:prefLabel ?hExWlab .
+      }.
+   }
 }
