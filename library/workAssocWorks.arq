@@ -30,10 +30,10 @@ where {
 	?R_RES ?p ?w .
     ?w skos:prefLabel ?l.
   	optional{?w bdo:workPartOf* ?po .
-    ?po adm:license ?lic .
-    ?po adm:access ?acc .
-    ?po adm:status ?st .
-    ?po bdo:workLangScript ?ls. 
+        ?po adm:license ?lic .
+        ?po adm:access ?acc .
+        ?po adm:status ?st .
+        ?po bdo:workLangScript ?ls. 
     }
     optional{
     	?w bdo:workGenre ?g .
