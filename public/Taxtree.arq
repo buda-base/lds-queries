@@ -1,0 +1,17 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=The tree of BDRC topics Taxonomy
+#QueryParams=NONE
+#QueryUrl=/Taxtree
+
+
+construct {
+  ?s bdo:taxHasSubClass ?o.
+  ?o skos:prefLabel ?ol.
+  ?s skos:prefLabel ?sl
+}
+where{
+  ?s bdo:taxHasSubClass ?o.
+  ?o skos:prefLabel ?ol.
+  ?s skos:prefLabel ?sl
+}
