@@ -19,9 +19,9 @@ construct {
   ?rcn ?ppr ?rcl .
   ?tp skos:prefLabel ?tpl .
   ?imA bdo:itemHasVolume ?iV .
-  ?hEx tmp:workRootWork ?hExW .
+  ?hEx bdo:workHasRoot ?hExW .
   ?hExW skos:prefLabel ?hExO .
-  ?R_RES tmp:workRootWork ?rw .
+  ?R_RES bdo:workHasRoot ?rw .
   ?rw skos:prefLabel ?rwO .
   ?wp bdo:workPartIndex ?wpPi .
   ?wp bdo:workPartType ?wpPt .
@@ -29,7 +29,7 @@ construct {
 
 where {
   {
-    ?R_RES ?p ?o.
+    ?R_RES ?p ?o .
     ?o skos:prefLabel ?l .
   }
   union
