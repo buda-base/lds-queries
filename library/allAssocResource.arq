@@ -25,6 +25,7 @@ construct {
   ?R_RES tmp:test ?rwP .
   ?rw skos:prefLabel ?rwO .
   ?wp bdo:workPartIndex ?wpPi .
+  ?wp bdo:workPartType ?wpPt .
 }
 
 where {
@@ -68,6 +69,7 @@ where {
   {
     ?R_RES bdo:workHasPart ?wp .
     ?wp bdo:workPartIndex ?wpPi .
+    ?wp bdo:workPartType ?wpPt .
   }
   union
   {
