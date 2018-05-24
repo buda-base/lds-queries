@@ -1,29 +1,26 @@
 #QueryScope=General
 #QueryReturnType=Graph
-#QueryResults=All resources preflabel related to the given Person.
+#QueryResults=All resources preflabel related to the given Resource
 #QueryParams=R_RES
 #QueryUrl=/lib/allAssocResource?R_RES=bdr:P1583
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=a Resource ID
-#param.R_RES.desc=the unique resource ID of the referenced Person
+#param.R_RES.desc=the resource we want labels of associates of
 
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 construct {
   ?o skos:prefLabel ?l.
-  ?nt skos:prefLabel ?ntl .
-  ?pl ?type ?lab .
-  ?ev1 ?pp ?ll .
-  ?lwk ?ppp ?lll .
+  ?rev ?pp  ?R_RES .
+  ?rev skos:prefLabel ?revl .
+  ?bno skos:prefLabel ?bnol .
   ?who ?pr ?whol .
   ?rcn ?ppr ?rcl .
   ?tp skos:prefLabel ?tpl .
   ?imA bdo:itemHasVolume ?iV .
   ?hEx tmp:workRootWork ?hExW .
   ?hExW skos:prefLabel ?hExO .
-  ?rev ?pp  ?R_RES .
-  ?rev skos:prefLabel ?revl .
   ?R_RES tmp:workRootWork ?rw .
   ?R_RES tmp:test ?rwP .
   ?rw skos:prefLabel ?rwO .
@@ -33,34 +30,24 @@ construct {
 where {
   {
     ?R_RES ?p ?o.
-    optional{
-      ?rev ?pp  ?R_RES .
-      ?rev skos:prefLabel ?revl .
-    }
-    optional{?o skos:prefLabel ?l} .
+    ?o skos:prefLabel ?l .
   }
-  #for Person models
   union
   {
-    ?R_RES ?p ?o.
-    optional{?o bdo:noteWork ?nt .
-      ?nt skos:prefLabel ?ntl} .
-    optional{?R_RES bdo:personEvent ?p1 .
-    ?p1 bdo:eventWhere ?pl .
-    ?p1 rdf:type ?type .
-    ?pl skos:prefLabel ?lab}.
+    ?rev ?pp  ?R_RES .
+    ?rev skos:prefLabel ?revl .
   }
-  #for Place models
-  union{
-    ?R_RES bdo:placeEvent ?ev .
-    ?ev ?pp ?ev1 .
-    ?ev1 skos:prefLabel ?ll
+  union 
+  {
+    # blank nodes
+    ?R_RES ?tmpP ?bn .
+    FILTER (isBlank(?bn))
+    ?bn ?bnp ?bno .
+    ?bno skos:prefLabel ?bnol .
   }
   #for Lineage models
-  union{
-    ?R_RES bdo:workLocation ?wl .
-    ?wl ?ppp ?lwk .
-    ?lwk skos:prefLabel ?lll .
+  union
+  {
     ?R_RES bdo:lineageHolder ?hold .
     ?hold ?pr ?who .
     ?hold rdf:type ?type .
@@ -71,34 +58,37 @@ where {
     ?rcn skos:prefLabel ?rcl .
   }
   #for Topic models
-  union{
+  union
+  {
     ?R_RES rdfs:seeAlso ?tp .
     ?tp skos:prefLabel ?tpl
   }
   #for Work
-  union {
-      optional {
-        ?R_RES bdo:workHasPart ?wp .
-        ?wp bdo:workPartIndex ?wpPi .
-      }
-      optional {
-        # root work is a parent with no parent
-        ?R_RES bdo:workPartOf+ ?rw .
-        optional { ?rw bdo:workPartOf ?rwP }
-        FILTER (!bound(?rwP))
-        ?rw skos:prefLabel ?rwO .
-      }
-      optional {
-        ?R_RES bdo:workHasItemImageAsset ?imA .
-        ?imA bdo:itemHasVolume ?iV .
-      }
-      optional {
-        ?R_RES bdo:workHasExpression ?hEx .
-        # same as above, root work is a parent with no parent
-        ?hEx bdo:workPartOf+ ?hExW .
-        optional { ?hExW bdo:workPartOf ?hExWP }
-        FILTER (!bound(?hExWP))
-        ?hExW skos:prefLabel ?hExO .
-      }
-   }
+  union
+  {
+    ?R_RES bdo:workHasPart ?wp .
+    ?wp bdo:workPartIndex ?wpPi .
+  }
+  union
+  {
+    # root work is a parent with no parent
+    ?R_RES bdo:workPartOf+ ?rw .
+    optional { ?rw bdo:workPartOf ?rwP }
+    FILTER (!bound(?rwP))
+    ?rw skos:prefLabel ?rwO .
+  }
+  union
+  {
+    ?R_RES bdo:workHasItemImageAsset ?imA .
+    ?imA bdo:itemHasVolume ?iV .
+  }
+  union
+  {
+    ?R_RES bdo:workHasExpression ?hEx .
+    # same as above, root work is a parent with no parent
+    ?hEx bdo:workPartOf+ ?hExW .
+    optional { ?hExW bdo:workPartOf ?hExWP }
+    FILTER (!bound(?hExWP))
+    ?hExW skos:prefLabel ?hExO .
+  }
 }
