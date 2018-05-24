@@ -22,7 +22,6 @@ construct {
   ?hEx tmp:workRootWork ?hExW .
   ?hExW skos:prefLabel ?hExO .
   ?R_RES tmp:workRootWork ?rw .
-  ?R_RES tmp:test ?rwP .
   ?rw skos:prefLabel ?rwO .
   ?wp bdo:workPartIndex ?wpPi .
   ?wp bdo:workPartType ?wpPt .
