@@ -18,14 +18,14 @@ construct {
   ?w adm:status ?st .
   ?w adm:access ?acc .
   ?w bdo:workLangScript ?ls.
+  ?w bdo:workType ?wT .
+  ?w bdo:workGenre ?wG .
 
   ?w adm:license ?rwlic.
   ?w adm:status ?rwst .
   ?w adm:access ?rwacc .
   ?w bdo:workLangScript ?rwls.
   ?w bdo:workHasRoot ?rw .
-  ?w bdo:workType ?wT .
-  ?w bdo:workGenre ?wG .
   ?w tmp:relationType ?rel .
 
   ?w bdo:workType ?wT.

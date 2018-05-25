@@ -8,92 +8,96 @@
 #param.R_RES.subtype=a Resource ID
 #param.R_RES.desc=the unique resource ID of the referenced Person
 
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 construct
 {
-  	#Associated people
-  	?o <http://purl.bdrc.io/ontology/tmp/relationType> ?p .
-    ?o a :Person .
-  	?o bdo:personGender ?g .
-    ?o skos:prefLabel ?l .
-  	?o ?Name_Type ?Name .
+  #Associated people
+  ?o tmp:relationType ?peoplerel .
+  ?o a :Person .
+  ?o bdo:personGender ?g .
+  ?o skos:prefLabel ?l .
 
-  	#Associated works
-  	?w ?p ?R_RES .
-  	?w a :Work .
-   ?w skos:prefLabel ?ll.
-   ?w1 a :Work .
-  	?w1 bdo:workIsAbout ?R_RES .
-   ?w1 skos:prefLabel ?wl .
-   ?w adm:license ?lic.
-   ?w adm:status ?st .
-   ?w adm:access ?acc .
-   ?w bdo:workLangScript ?ls.
-   ?w1 adm:license ?lic1.
-   ?w1 adm:status ?st1 .
-   ?w1 adm:access ?acc1 .
-   ?w1 bdo:workLangScript ?ls1.
+  #Associated works
+  #?w ?wrel ?R_RES .
+  ?w tmp:relationType ?wrel .
+  ?w a :Work .
+  ?w skos:prefLabel ?ll.
+  ?w adm:license ?lic.
+  ?w adm:status ?st .
+  ?w adm:access ?acc .
+  ?w bdo:workLangScript ?ls.
 
-  	#Associated places
-    ?place ?relation ?R_RES .
- 	?place a :Place .
-  	?place skos:prefLabel ?plabel.
+  ?w adm:license ?rwlic.
+  ?w adm:status ?rwst .
+  ?w adm:access ?rwacc .
+  ?w bdo:workLangScript ?rwls.
+  ?w bdo:workHasRoot ?rw .
+  ?w tmp:rootPrefLabel ?rwO .
 
-    #Associated Lineages
-    ?lin a :Lineage .
-  	?lin skos:prefLabel ?linl .
-    ?lin ?pr ?R_RES .
+  #Associated places
+  ?place a :Place .
+  ?place tmp:relationType ?plrel .
+  ?place skos:prefLabel ?plabel .
 
+  #Associated Lineages
+  ?lin a :Lineage .
+  ?lin skos:prefLabel ?linl .
+  ?lin ?pr ?R_RES .
 }
 
 where {
   #Associated people
   {
-    ?R_RES ?p ?o .
-  	?o a :Person .
-  	?o :personName ?p_name .
-  	?o skos:prefLabel ?l .
-  	?p_name rdf:type ?Name_Type .
-  	OPTIONAL {?p_name ?title ?Name} .
-  	OPTIONAL{?o bdo:personGender ?g} .
+    ?R_RES ?peoplerel ?o .
+    ?o a :Person .
+    ?o skos:prefLabel ?l .
+    OPTIONAL{ ?o bdo:personGender ?g } .
   }
   #Associated works
-  union{
-  	?w ?p ?R_RES .
-    ?p rdfs:subPropertyOf :workCreator.
-    ?w skos:prefLabel ?ll.
-    OPTIONAL{
-      ?w adm:license ?lic.
-      ?w adm:status ?st .
-      ?w adm:access ?acc .
-      ?w bdo:workLangScript ?ls.
-   }
-  }
   union
   {
-  	?w1 bdo:workIsAbout ?R_RES .
-  	?w1 skos:prefLabel ?wl.
-   OPTIONAL{
-      ?w1 adm:license ?lic1.
-      ?w1 adm:status ?st1 .
-      ?w1 adm:access ?acc1 .
-      ?w1 bdo:workLangScript ?ls1.
-   }
+    ?w ?wrel ?R_RES .
+    ?w skos:prefLabel ?ll .
+    optional {?w adm:license ?lic .}
+    optional {?w adm:status ?st .}
+    optional {?w adm:access ?acc .}
+    optional {?w bdo:workLangScript ?ls .}
+    optional {?w bdo:workType ?wT .}
+    optional {?w bdo:workGenre ?wG .}
+    optional {
+      ?w bdo:workPartOf+ ?rw .
+      optional { ?rw bdo:workPartOf ?rwP }
+      FILTER (!bound(?rwP))
+      ?rw skos:prefLabel ?rwO .
+      optional {?rw adm:license ?rwlic .}
+      optional {?rw adm:status ?rwst .}
+      optional {?rw adm:access ?rwacc .}
+      optional {?rw bdo:workLangScript ?rwls .}
+    }
   }
   #Associated places
+  # in the person events
   union
   {
     ?R_RES bdo:personEvent ?e.
-    ?e ?p ?relation .
-    ?e :personEventPlace ?place .
-    ?place skos:prefLabel ?plabel
-    Filter(?p = rdf:type)
+    ?e a ?plrel .
+    ?e :eventWhere ?place .
+    ?place skos:prefLabel ?plabel .
+  }
+  # in other events
+  union 
+  {
+    ?e :eventWho ?R_RES .
+    ?a a ?plrel .
+    ?e :eventWhere ?place .
+    ?place skos:prefLabel ?plabel .
   }
   #Associated Lineages
   union
   {
     ?lin bdo:lineageHolder ?hold .
-  	?hold ?pr ?R_RES .
+    ?hold ?pr ?R_RES .
     ?lin skos:prefLabel ?linl
   }
 }
