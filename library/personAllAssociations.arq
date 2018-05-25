@@ -58,6 +58,7 @@ where {
   union
   {
     ?w ?wrel ?R_RES .
+    ?w a :Work .
     ?w skos:prefLabel ?ll .
     optional {?w adm:license ?lic .}
     optional {?w adm:status ?st .}
