@@ -28,19 +28,19 @@ construct {
   ?w bdo:workGenre ?wG .
   ?w tmp:relationType ?rel .
 
-  ?w tmp:creationNotBefore ?wenb .
-  ?w tmp:creationNotAfter ?wena .
-
   ?w bdo:workType ?wT.
   ?w bdo:workHasRoot ?rw .
   ?w tmp:rootPrefLabel ?rwO .
+
+  #associated Lineages
+  ?lin a :Lineage .
+  ?lin skos:prefLabel ?ll
 }
 where {
     #associated Works
   {
       ?w :workIsAbout ?R_RES .
       BIND(:workIsAbout as ?rel)
-      ?w tmp:relationType :workIsAbout .
       # we don't want expressions, just the most abstract
       OPTIONAL{
         ?w bdo:workExpressionOf ?wE .
@@ -53,13 +53,15 @@ where {
       optional {?w bdo:workLangScript ?ls .}
       optional {?w bdo:workType ?wT .}
       optional {?w bdo:workGenre ?wG .}
-      optional {
-        ?w bdo:workEvent ?we .
-        ?we a ?wet .
-        FILTER (?wet = bdo:CompletedEvent || ?wet = bdo:TranslatedEvent)
-        ?wet :notAfter ?wena .
-        ?wet :notBefore ?wenb .
-      }
+      # we could fetch dates, but our data is almost only publishing date, which is not that interesting
+      #optional {
+      #  ?w bdo:workEvent ?we .
+      #  ?we a ?wet .
+      #  FILTER (?wet = bdo:CompletedEvent || ?wet = bdo:TranslatedEvent || ?rwet = bdo:PublishedEvent)
+      #  optional { ?we :notAfter ?wena . }
+      #  optional { ?we :notBefore ?wenb . }
+      #  optional { ?we :onYear ?wenoy . }
+      #}
 
       optional {
         ?w bdo:workPartOf+ ?rw .
@@ -72,7 +74,6 @@ where {
         optional {?rw bdo:workLangScript ?rwls .}
       }
   }
-
   #associated Lineages
   union
   {
