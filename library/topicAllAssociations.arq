@@ -6,57 +6,67 @@
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=a Resource ID
-#param.R_RES.desc=the unique resource ID of the referenced Person
+#param.R_RES.desc=the unique resource ID of the referenced topic
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 construct {
 
-	#associated Works
-	?w a :Work .
+  #associated Works
+  ?w a :Work .
     ?w skos:prefLabel ?l .
-  	?w adm:license ?lic.
-  	?w adm:status ?st .
-  	?w adm:access ?acc .
-  	?w bdo:workLangScript ?ls.
+    ?w adm:license ?lic.
+    ?w adm:status ?st .
+    ?w adm:access ?acc .
+    ?w bdo:workLangScript ?ls.
+
+    ?w adm:license ?rwlic.
+    ?w adm:status ?rwst .
+    ?w adm:access ?rwacc .
+    ?w bdo:workLangScript ?rwls.
 
     ?w bdo:workType ?wT.
-    ?w bdo:workExpressionOf ?wE.
-    ?w <http://purl.bdrc.io/ontology/tmp/prefLabelExpressionOf> ?litE.
-    ?w bdo:workHasExpression ?wH.
-    ?w <http://purl.bdrc.io/ontology/tmp/prefLabelHasExpression> ?litH.
+    ?w bdo:workHasRoot ?rw .
+    ?w tmp:rootPrefLabel ?rwO .
 
-
-  	#associated Lineages
-  	?lin a :Lineage .
+    #associated Lineages
+    ?lin a :Lineage .
     ?lin skos:prefLabel ?ll
 }
 where {
-
     #associated Works
-	{
-  		{ ?w :workGenre ?R_RES . }
+  {
+      { ?w :workGenre ?R_RES . }
       union
       { ?w :workIsAbout ?R_RES . } .
-    	?w skos:prefLabel ?l .
-  		?w adm:license ?lic.
-  		?w adm:status ?st .
-  		?w adm:access ?acc .
-  		?w bdo:workLangScript ?ls.
-
-      OPTIONAL{?w bdo:workType ?wT. ?w bdo:workType bdr:WorkTypeAbstractWork.}.
+      # we don't want expressions, just the most abstract
       OPTIONAL{
-        ?w bdo:workExpressionOf ?wE.
-        ?wE skos:prefLabel ?litE.
-       }.
-      OPTIONAL{
-        ?w bdo:workHasExpression ?wH.
-        ?wH skos:prefLabel ?litH.
+        ?w bdo:workExpressionOf ?wE .
       }
-	}
+      FILTER (!bound(?wE))
+      ?w skos:prefLabel ?l .
+      optional {?w adm:license ?lic .}
+      optional {?w adm:status ?st .}
+      optional {?w adm:access ?acc .}
+      optional {?w bdo:workLangScript ?ls .}
+      optional {?w bdo:workType ?wT .}
 
-	#associated Lineages
-	union
-	{
-		?lin bdo:lineageObject ?R_RES .
-    	?lin skos:prefLabel ?ll
-	}
+      optional {
+        ?w bdo:workPartOf+ ?rw .
+        optional { ?rw bdo:workPartOf ?rwP }
+        FILTER (!bound(?rwP))
+        ?rw skos:prefLabel ?rwO .
+        optional {?rw adm:license ?rwlic .}
+        optional {?rw adm:status ?rwst .}
+        optional {?rw adm:access ?rwacc .}
+        optional {?rw bdo:workLangScript ?rwls .}
+      }
+  }
+
+  #associated Lineages
+  union
+  {
+    ?lin bdo:lineageObject ?R_RES .
+    ?lin skos:prefLabel ?ll
+  }
 }

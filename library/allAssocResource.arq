@@ -8,8 +8,6 @@
 #param.R_RES.subtype=a Resource ID
 #param.R_RES.desc=the resource we want labels of associates of
 
-PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
-
 construct {
   ?o skos:prefLabel ?l.
   ?rev ?pp  ?R_RES .
