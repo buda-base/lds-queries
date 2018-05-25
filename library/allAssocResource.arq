@@ -66,7 +66,7 @@ where {
   {
     ?R_RES bdo:workHasPart ?wp .
     ?wp bdo:workPartIndex ?wpPi .
-    ?wp bdo:workPartType ?wpPt .
+    optional {?wp bdo:workPartType ?wpPt . }
   }
   union
   {
