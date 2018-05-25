@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=All resources associated with the given Work.
 #QueryParams=R_RES
-#QueryUrl=/lib/topicAllAssociations?R_RES=W19740
+#QueryUrl=/lib/workAllAssociations?R_RES=W19740
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=a Resource ID
