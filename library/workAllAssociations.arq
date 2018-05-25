@@ -1,12 +1,12 @@
 #QueryScope=General
 #QueryReturnType=Graph
-#QueryResults=All resources associated with the given Topic.
+#QueryResults=All resources associated with the given Work.
 #QueryParams=R_RES
-#QueryUrl=/lib/topicAllAssociations?R_RES=T132
+#QueryUrl=/lib/topicAllAssociations?R_RES=W19740
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=a Resource ID
-#param.R_RES.desc=the unique resource ID of the referenced topic
+#param.R_RES.desc=the unique resource ID of the referenced work
 
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
@@ -23,21 +23,24 @@ construct {
   ?w adm:status ?rwst .
   ?w adm:access ?rwacc .
   ?w bdo:workLangScript ?rwls.
+  ?w bdo:workHasRoot ?rw .
+  ?w bdo:workType ?wT .
+  ?w bdo:workGenre ?wG .
+  ?w tmp:relationType ?rel .
+
+  ?w tmp:creationNotBefore ?wenb .
+  ?w tmp:creationNotAfter ?wena .
 
   ?w bdo:workType ?wT.
   ?w bdo:workHasRoot ?rw .
   ?w tmp:rootPrefLabel ?rwO .
-
-  #associated Lineages
-  ?lin a :Lineage .
-  ?lin skos:prefLabel ?ll
 }
 where {
     #associated Works
   {
-      { ?w :workGenre ?R_RES . }
-      union
-      { ?w :workIsAbout ?R_RES . } .
+      ?w :workIsAbout ?R_RES .
+      BIND(:workIsAbout as ?rel)
+      ?w tmp:relationType :workIsAbout .
       # we don't want expressions, just the most abstract
       OPTIONAL{
         ?w bdo:workExpressionOf ?wE .
@@ -49,6 +52,14 @@ where {
       optional {?w adm:access ?acc .}
       optional {?w bdo:workLangScript ?ls .}
       optional {?w bdo:workType ?wT .}
+      optional {?w bdo:workGenre ?wG .}
+      optional {
+        ?w bdo:workEvent ?we .
+        ?we a ?wet .
+        FILTER (?wet = bdo:CompletedEvent || ?wet = bdo:TranslatedEvent)
+        ?wet :notAfter ?wena .
+        ?wet :notBefore ?wenb .
+      }
 
       optional {
         ?w bdo:workPartOf+ ?rw .
