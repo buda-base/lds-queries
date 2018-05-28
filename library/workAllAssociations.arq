@@ -12,50 +12,47 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 construct {
   #associated Works
-  ?w a :Work .
-  ?w skos:prefLabel ?l .
-  ?w adm:license ?lic.
-  ?w adm:status ?st .
-  ?w adm:access ?acc .
-  ?w bdo:workLangScript ?ls.
-  ?w bdo:workType ?wT .
-  ?w bdo:workGenre ?wG .
+  ?work a :Work .
+  ?work skos:prefLabel ?worklabel .
+  ?work adm:license ?worklicense.
+  ?work adm:status ?workstatus .
+  ?work adm:access ?workaccess .
+  ?work bdo:workLangScript ?workscript.
+  ?work bdo:workType ?worktype .
+  ?work bdo:workGenre ?workgenre .
 
-  ?w adm:license ?rwlic.
-  ?w adm:status ?rwst .
-  ?w adm:access ?rwacc .
-  ?w bdo:workLangScript ?rwls.
-  ?w bdo:workHasRoot ?rw .
-  ?w tmp:relationType ?rel .
-
-  ?w bdo:workType ?wT.
-  ?w bdo:workHasRoot ?rw .
-  ?w tmp:rootPrefLabel ?rwO .
+  ?work adm:license ?rootWorkLicence.
+  ?work adm:status ?rootWorkStatus .
+  ?work adm:access ?rootWorkAccess .
+  ?work bdo:workLangScript ?rootWorkScript.
+  ?work bdo:workHasRoot ?rootWork .
+  ?work tmp:relationType ?relationType .
+  ?work tmp:rootPrefLabel ?rootWorkPrefLabel .
 
   #associated Lineages
-  ?lin a :Lineage .
-  ?lin skos:prefLabel ?ll
+  ?lineage a :Lineage .
+  ?lineage skos:prefLabel ?lineagePrefLabel
 }
 where {
     #associated Works
   {
-      ?w :workIsAbout ?R_RES .
-      BIND(:workIsAbout as ?rel)
+      ?work :workIsAbout ?R_RES .
+      BIND(:workIsAbout as ?relationType)
       # we don't want expressions, just the most abstract
       OPTIONAL{
-        ?w bdo:workExpressionOf ?wE .
+        ?work bdo:workExpressionOf ?workExpressed .
       }
-      FILTER (!bound(?wE))
-      ?w skos:prefLabel ?l .
-      optional {?w adm:license ?lic .}
-      optional {?w adm:status ?st .}
-      optional {?w adm:access ?acc .}
-      optional {?w bdo:workLangScript ?ls .}
-      optional {?w bdo:workType ?wT .}
-      optional {?w bdo:workGenre ?wG .}
+      FILTER (!bound(?workExpressed))
+      ?work skos:prefLabel ?worklabel .
+      optional {?work adm:license ?worklicense .}
+      optional {?work adm:status ?workstatus .}
+      optional {?work adm:access ?workaccess .}
+      optional {?work bdo:workLangScript ?workscript .}
+      optional {?work bdo:workType ?worktype .}
+      optional {?work bdo:workGenre ?workgenre .}
       # we could fetch dates, but our data is almost only publishing date, which is not that interesting
       #optional {
-      #  ?w bdo:workEvent ?we .
+      #  ?work bdo:workEvent ?we .
       #  ?we a ?wet .
       #  FILTER (?wet = bdo:CompletedEvent || ?wet = bdo:TranslatedEvent || ?rwet = bdo:PublishedEvent)
       #  optional { ?we :notAfter ?wena . }
@@ -64,20 +61,20 @@ where {
       #}
 
       optional {
-        ?w bdo:workPartOf+ ?rw .
-        optional { ?rw bdo:workPartOf ?rwP }
-        FILTER (!bound(?rwP))
-        ?rw skos:prefLabel ?rwO .
-        optional {?rw adm:license ?rwlic .}
-        optional {?rw adm:status ?rwst .}
-        optional {?rw adm:access ?rwacc .}
-        optional {?rw bdo:workLangScript ?rwls .}
+        ?work bdo:workPartOf+ ?rootWork .
+        optional { ?rootWork bdo:workPartOf ?parentWork }
+        FILTER (!bound(?parentWork))
+        ?rootWork skos:prefLabel ?rootWorkPrefLabel .
+        optional {?rootWork adm:license ?rootWorkLicence .}
+        optional {?rootWork adm:status ?rootWorkStatus .}
+        optional {?rootWork adm:access ?rootWorkAccess .}
+        optional {?rootWork bdo:workLangScript ?rootWorkScript .}
       }
   }
   #associated Lineages
   union
   {
-    ?lin bdo:lineageObject ?R_RES .
-    ?lin skos:prefLabel ?ll
+    ?lineage bdo:lineageObject ?R_RES .
+    ?lineage skos:prefLabel ?lineagePrefLabel
   }
 }
