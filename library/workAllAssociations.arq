@@ -31,7 +31,8 @@ construct {
 
   #associated Lineages
   ?lineage a :Lineage .
-  ?lineage skos:prefLabel ?lineagePrefLabel
+  ?lineage skos:prefLabel ?lineagePrefLabel . 
+  ?lineage tmp:relationType bdo:lineageObject .
 }
 where {
     #associated Works
