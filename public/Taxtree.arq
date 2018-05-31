@@ -4,16 +4,19 @@
 #QueryParams=R_RES
 #QueryUrl=/Taxtree?R_RES=bdr:O9TAXTBRC201605_2741
 
-
 construct {
-  ?R_RES bdo:taxHasSubClass ?r .
-  ?s bdo:taxHasSubClass ?o.
-  ?o skos:prefLabel ?ol.
-  ?s skos:prefLabel ?sl
+  ?super bdo:taxHasSubClass ?sub .
+  ?sub skos:prefLabel ?subl .
 }
 where{
-  ?R_RES bdo:taxHasSubClass ?r .
-  ?s bdo:taxHasSubClass ?o.
-  ?o skos:prefLabel ?ol.
-  ?s skos:prefLabel ?sl
+  {
+    ?R_RES bdo:taxHasSubClass+ ?sub .
+    ?super bdo:taxHasSubClass ?sub .
+    ?sub skos:prefLabel ?subl .
+  }
+  union
+  {
+    ?R_RES skos:prefLabel ?subl .
+    BIND(?R_RES as ?sub)
+  }
 }
