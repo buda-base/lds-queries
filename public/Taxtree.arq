@@ -1,18 +1,18 @@
 #QueryScope=General
 #QueryReturnType=Graph
 #QueryResults=The tree of BDRC topics Taxonomy
-#QueryParams=NONE
-#QueryUrl=/Taxtree
+#QueryParams=R_RES
+#QueryUrl=/Taxtree?R_RES=bdr:O9TAXTBRC201605_2741
 
 
 construct {
-  bdr:O9TAXTBRC201605 bdo:taxHasSubClass ?r .
+  ?R_RES bdo:taxHasSubClass ?r .
   ?s bdo:taxHasSubClass ?o.
   ?o skos:prefLabel ?ol.
   ?s skos:prefLabel ?sl
 }
 where{
-  bdr:O9TAXTBRC201605 bdo:taxHasSubClass ?r .
+  ?R_RES bdo:taxHasSubClass ?r .
   ?s bdo:taxHasSubClass ?o.
   ?o skos:prefLabel ?ol.
   ?s skos:prefLabel ?sl
