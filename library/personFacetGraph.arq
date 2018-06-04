@@ -23,7 +23,7 @@ WHERE {
   {
     (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ).
     ?res ?p ?s.
-    ?res :personGender ?g.
+    OPTIONAL{?res :personGender ?g}.
     ?s rdf:type ?pp .
     OPTIONAL{?res skos:prefLabel ?l}.
     }
