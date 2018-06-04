@@ -1,0 +1,34 @@
+#QueryScope=Etexts
+#QueryReturnType=Table
+#QueryResults=A table containing the chunks contents and sequence number within the given limits for the given Resource
+#QueryParams=R_RES,I_SEQ,I_LIM
+#QueryUrl=/Chunks?R_RES=bdr:UT29307_008_0000&I_LIM=9&I_SEQ=1
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the Etext being searched
+
+#param.I_SEQ.type=int
+#param.I_SEQ.desc=the index (sequence number) of the first chunk to be fetched
+
+#param.I_LIM.type=int
+#param.I_LIM.desc=the maximum number of chunks returned
+
+#output.?res.type=URI
+#output.?res.desc=the resource ID of the Etext
+#output.?res.type=resource
+#output.?seqNum.type=int
+#output.?seqNum.desc=the sequence number of the chunk
+#output.?content.type=string
+#output.?content.desc=the content of the chunk
+
+select ?res ?seqNum ?content where {
+	?res  bdo:eTextHasChunk ?chunk .
+    ?chunk bdo:seqNum ?seqNum .
+    ?chunk bdo:chunkContents ?content .
+    BIND((?I_SEQ + ?I_LIM) AS ?max).
+    filter (?seqNum>=?I_SEQ && ?seqNum<?max)
+    filter(?res=?R_RES)
+
+}
+order by ?seqNum
