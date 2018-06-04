@@ -14,6 +14,7 @@ construct {
   #associated Works
   ?work a :Work .
   ?work skos:prefLabel ?worklabel .
+  ?work bdo:workIsAbout ?workAbout .
   ?work adm:license ?worklicense.
   ?work adm:status ?workstatus .
   ?work adm:access ?workaccess .
@@ -45,6 +46,8 @@ where {
       }
       FILTER (!bound(?workExpressed))
       ?work skos:prefLabel ?worklabel .
+      optional {?work bdo:workIsAbout ?workAbout .
+      ?workAbout a bdo:Topic .}
       optional {?work adm:license ?worklicense .}
       optional {?work adm:status ?workstatus .}
       optional {?work adm:access ?workaccess .}
