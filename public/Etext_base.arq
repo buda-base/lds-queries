@@ -1,0 +1,26 @@
+#QueryScope=Etext
+#QueryReturnType=Graph
+#QueryResults=Basic Info about an etext
+#QueryParams=R_RES
+#QueryUrl=/Etext_base?R_RES=bdr:UT29307_008_0000
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=bdo:Etext
+#param.R_RES.desc=the etext on which info is needed
+
+construct { ?s ?p ?o }
+where {
+  { 
+    ?R_RES ?p ?o .
+    BIND (?R_RES as ?s)
+    FILTER (!isBlank(?o))
+  } union {
+    ?R_RES bdo:eTextInItem  ?s .
+    ?s ?p ?o .
+    FILTER (!isBlank(?o))
+  } union {
+    ?R_RES bdo:eTextInItem/bdo:itemForWork  ?s .
+    ?s skos:prefLabel ?o .
+    BIND (skos:prefLabel as ?p)
+  }
+}
