@@ -16,6 +16,7 @@ construct{
   ?w adm:status ?st .  
   ?w bdo:workLangScript ?ls.
   ?w bdo:workGenre ?g .
+  ?w bdo:workIsAbout ?gb .
   ?w1 a :Work .
   ?w1 skos:prefLabel ?l1.
   ?w1 adm:license ?lic1 .
@@ -23,6 +24,7 @@ construct{
   ?w1 adm:status ?st1 .
   ?w1 bdo:workLangScript ?ls1.
   ?w1 bdo:workGenre ?g1 .
+  ?w1 bdo:workIsAbout ?gb1 .
   ?w1 ?p1 ?R_RES .
 }
 where {
@@ -37,7 +39,9 @@ where {
     }
     optional{
     	?w bdo:workGenre ?g .
-  		?g a :Topic
+      ?w bdo:workIsAbout ?gb .
+  		?g a :Topic .
+      ?gb a :Topic
   	}
     ?w a :Work.
   }
@@ -52,7 +56,9 @@ where {
     }
     optional{
     	?w1 bdo:workGenre ?g1 .
-  		?g1 a :Topic
+      ?w1 bdo:workIsAbout ?gb1 .
+  		?g1 a :Topic .
+      ?gb1 a :Topic
   	}
   	?w1 a :Work .
   }

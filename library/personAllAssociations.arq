@@ -27,6 +27,8 @@ construct
   ?w adm:status ?st .
   ?w adm:access ?acc .
   ?w bdo:workLangScript ?ls.
+  ?w bdo:workGenre ?wG .
+  ?w bdo:workIsAbout ?wAB .
 
   ?w adm:license ?rwlic.
   ?w adm:status ?rwst .
@@ -65,7 +67,10 @@ where {
     optional {?w adm:access ?acc .}
     optional {?w bdo:workLangScript ?ls .}
     optional {?w bdo:workType ?wT .}
-    optional {?w bdo:workGenre ?wG .}
+    optional {?w bdo:workGenre ?wG .
+    ?wG a :Topic .}
+    optional {?w bdo:workIsAbout ?wAB .
+    ?wAB a :Topic .}
     optional {
       ?w bdo:workPartOf+ ?rw .
       optional { ?rw bdo:workPartOf ?rwP }
