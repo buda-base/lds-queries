@@ -30,11 +30,12 @@ construct
     ?plc1 skos:prefLabel ?ll1 .
     ?plc1 bdo:placeContains ?R_RES .
 
-
   #Associated literary production
     ?w a :Work .
     ?w bdo:workHasSourcePrintery ?R_RES .
     ?w skos:prefLabel ?wl .
+    ?w bdo:workGenre ?wG .
+    ?w bdo:workIsAbout ?wAB .
 
   #Associated Works
     ?aw a :Work .
@@ -44,6 +45,8 @@ construct
   	?aw adm:status ?st .
   	?aw adm:access ?acc .
   	?aw bdo:workLangScript ?ls.
+    ?aw bdo:workGenre ?awG .
+    ?aw bdo:workIsAbout ?awAB .
 }
 
 where {
@@ -78,6 +81,10 @@ where {
   {
     ?w bdo:workHasSourcePrintery ?R_RES .
     ?w skos:prefLabel ?wl
+    optional {?w bdo:workGenre ?wG .
+      ?wG a :Topic .}
+    optional {?w bdo:workIsAbout ?wAB .
+      ?wAB a :Topic .}
   }
   #Associated Works
   union
@@ -86,6 +93,10 @@ where {
   	?aw ?p ?o .
     ?aw skos:prefLabel ?awl .
     ?aw bdo:workPartOf* ?aw1 .
+    optional {?aw bdo:workGenre ?awG .
+      ?awG a :Topic .}
+    optional {?aw bdo:workIsAbout ?awAB .
+      ?awAB a :Topic .}
     ?aw1 adm:license ?lic.
   	?aw1 adm:status ?st .
   	?aw1 adm:access ?acc .
