@@ -40,6 +40,8 @@ CONSTRUCT
     ?res <http://purl.bdrc.io/ontology/core/labelMatch> ?match.
 
     ?res bdo:workType ?wT.
+    ?res bdo:workPartType ?wPT.
+    ?res bdo:workHasPart ?wHP.
     ?res bdo:workExpressionOf ?wE.
     ?res <http://purl.bdrc.io/ontology/tmp/prefLabelExpressionOf> ?litE.
     ?res bdo:workHasExpression ?wH.
@@ -84,7 +86,9 @@ WHERE {
 
 }
 
-  OPTIONAL{?res bdo:workType ?wT. ?res bdo:workType bdr:WorkTypeAbstractWork.}.
+  OPTIONAL{?res bdo:workHasPart ?wHP . } .
+  OPTIONAL{?res bdo:workPartType ?wPT . } .
+  OPTIONAL{?res bdo:workType ?wT . } .
   OPTIONAL{
     ?res bdo:workExpressionOf ?wE.
     ?wE skos:prefLabel ?litE.
@@ -94,7 +98,7 @@ WHERE {
     ?wH skos:prefLabel ?litH.
   }
   optional{?res bdo:workGenre ?g .
-  ?g a :Topic  
+  ?g a :Topic
   }
   ?res skos:prefLabel ?l.
   ?res a :Work

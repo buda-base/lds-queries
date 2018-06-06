@@ -29,6 +29,13 @@ construct
   ?w bdo:workLangScript ?ls.
   ?w bdo:workGenre ?wG .
   ?w bdo:workIsAbout ?wAB .
+   ?w bdo:workType ?wT.
+   ?w bdo:workPartType ?wPT.
+   ?w bdo:workHasPart ?wHP.
+   ?w bdo:workExpressionOf ?wE.
+   ?w <http://purl.bdrc.io/ontology/tmp/prefLabelExpressionOf> ?litE.
+   ?w bdo:workHasExpression ?wH.
+   ?w <http://purl.bdrc.io/ontology/tmp/prefLabelHasExpression> ?litH.
 
   ?w adm:license ?rwlic.
   ?w adm:status ?rwst .
@@ -71,6 +78,19 @@ where {
     ?wG a :Topic .}
     optional {?w bdo:workIsAbout ?wAB .
     ?wAB a :Topic .}
+
+      OPTIONAL{?w bdo:workHasPart ?wHP . } .
+      OPTIONAL{?w bdo:workPartType ?wPT . } .
+      OPTIONAL{?w bdo:workType ?wT . } .
+      OPTIONAL{
+        ?w bdo:workExpressionOf ?wE.
+        ?wE skos:prefLabel ?litE.
+       }.
+      OPTIONAL{
+        ?w bdo:workHasExpression ?wH.
+        ?wH skos:prefLabel ?litH.
+      }
+
     optional {
       ?w bdo:workPartOf+ ?rw .
       optional { ?rw bdo:workPartOf ?rwP }
@@ -92,7 +112,7 @@ where {
     ?place skos:prefLabel ?plabel .
   }
   # in other events
-  union 
+  union
   {
     ?e :eventWho ?R_RES .
     ?a a ?plrel .
