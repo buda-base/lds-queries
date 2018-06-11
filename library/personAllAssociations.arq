@@ -32,6 +32,7 @@ construct
    ?w bdo:workType ?wT.
    ?w bdo:workPartType ?wPT.
    ?w bdo:workHasPart ?wHP.
+   ?w bdo:workPartOf ?wPO.
    ?w bdo:workExpressionOf ?wE.
    ?w <http://purl.bdrc.io/ontology/tmp/prefLabelExpressionOf> ?litE.
    ?w bdo:workHasExpression ?wH.
@@ -79,6 +80,7 @@ where {
     optional {?w bdo:workIsAbout ?wAB .
     ?wAB a :Topic .}
 
+      OPTIONAL{?w bdo:workPartOf ?wPO . } .
       OPTIONAL{?w bdo:workHasPart ?wHP . } .
       OPTIONAL{?w bdo:workPartType ?wPT . } .
       OPTIONAL{?w bdo:workType ?wT . } .
