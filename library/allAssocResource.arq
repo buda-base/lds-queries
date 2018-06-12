@@ -23,19 +23,26 @@ construct {
   ?rw skos:prefLabel ?rwO .
   ?wp bdo:workPartIndex ?wpPi .
   ?wp bdo:workPartType ?wpPt .
+  ?o bdo:originalRecord ?ori .
+  ?o bdo:contentProvider ?provL
 }
 
 where {
   {
     ?R_RES ?p ?o .
     ?o skos:prefLabel ?l .
+    optional {
+      ?o bdo:contentProvider ?prov .
+      ?prov skos:prefLabel ?provL .
+      ?o bdo:originalRecord ?ori .
+    }
   }
   union
   {
     ?rev ?pp  ?R_RES .
     ?rev skos:prefLabel ?revl .
   }
-  union 
+  union
   {
     # blank nodes
     ?R_RES ?tmpP ?bn .
@@ -66,7 +73,7 @@ where {
   {
     ?R_RES bdo:workHasPart ?wp .
     ?wp bdo:workPartIndex ?wpPi .
-    optional {?wp bdo:workPartType ?wpPt . }
+    optional {?wp bdo:workPartType ?wpPt . } .
   }
   union
   {

@@ -1,7 +1,7 @@
 #QueryScope=General
 #QueryReturnType=Table
 #QueryResults=A table containing the property vlue and number of occurence among the specified kind of entity for the given property
-#QueryParams=L_NAME,LG_NAME,I_LIM,R_PROP
+#QueryParams=L_NAME,LG_NAME,I_LIM,R_PROP1,R_VAL1
 #QueryUrl=/Res_simpleFacet_1value?L_NAME="'od zer"&LG_NAME=bo-x-ewts&I_LIM=1000&R_PROP1=bdo:personGender&R_VAL1=bdr:GenderFemale
 
 #param.L_NAME.type=string

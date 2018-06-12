@@ -53,7 +53,7 @@ where {
       optional {?work adm:access ?workaccess .}
       optional {?work bdo:workLangScript ?workscript .}
       optional {?work bdo:workType ?worktype .}
-      optional {?work bdo:workGenre ?workgenre .}
+      optional {?work bdo:workGenre ?workgenre .}      
       # we could fetch dates, but our data is almost only publishing date, which is not that interesting
       #optional {
       #  ?work bdo:workEvent ?we .

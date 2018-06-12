@@ -27,6 +27,8 @@ construct {
   ?w bdo:workType ?wT.
   ?w bdo:workHasRoot ?rw .
   ?w tmp:rootPrefLabel ?rwO .
+  ?w bdo:workGenre ?wG .
+  ?w bdo:workIsAbout ?wAB .
 
   #associated Lineages
   ?lin a :Lineage .
@@ -49,7 +51,10 @@ where {
       optional {?w adm:access ?acc .}
       optional {?w bdo:workLangScript ?ls .}
       optional {?w bdo:workType ?wT .}
-
+      optional {?w bdo:workGenre ?wG .
+      ?wG a :Topic .}
+      optional {?w bdo:workIsAbout ?wAB .
+      ?wAB a :Topic .}
       optional {
         ?w bdo:workPartOf+ ?rw .
         optional { ?rw bdo:workPartOf ?rwP }
