@@ -1,8 +1,8 @@
 #QueryScope=General
 #QueryReturnType=Graph
 #QueryResults=All works having etext whose chunks contain the given L_NAME parameter value, along with Topic and WorkMainAuthor facets
-#QueryParams=L_NAME,LG_NAME
-#QueryUrl=/lib/etextFacetGraph="mkhan chen"&LG_NAME=bo-x-ewts
+#QueryParams=L_NAME,LG_NAME,I_LIM
+#QueryUrl=/lib/etextFacetGraph="mkhan chen"&LG_NAME=bo-x-ewts&I_LIM=1000
 
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME
@@ -59,4 +59,4 @@ where
   ?author skos:prefLabel ?author_name}
 }
 order by desc(?score)
-limit 700
+limit ?I_LIM
