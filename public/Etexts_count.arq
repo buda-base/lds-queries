@@ -1,7 +1,7 @@
 #QueryScope=Etexts
 #QueryReturnType=Table
 #QueryResults=A table containing number of etext chunks containing the given expression
-#QueryUrl=/Etexts_count?L_NAME=("མཁན་ཆེན་" AND ("འོད་ཟེར་" OR "ཡེ་ཤེས་"))&LG_NAME=bo&I_LIM=10
+#QueryUrl=/Etexts_count?L_NAME=("མཁན་ཆེན་" AND ("འོད་ཟེར་" OR "ཡེ་ཤེས་"))&LG_NAME=bo
 #QueryParams=L_NAME,LG_NAME
 
 #output.?c.type=Integer
