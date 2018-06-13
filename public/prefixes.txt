@@ -17,3 +17,4 @@ prefix tbr:   <http://purl.bdrc.io/ontology/toberemoved/>
 prefix vcard: <http://www.w3.org/2006/vcard/ns#>
 prefix xsd:   <http://www.w3.org/2001/XMLSchema#>
 prefix text: <http://jena.apache.org/text#>
+prefix tmp: <http://purl.bdrc.io/ontology/tmp/>
