@@ -1,17 +1,13 @@
 #QueryScope=Etexts
 #QueryReturnType=Graph
 #QueryResults=All works having etext whose chunks contain the given L_NAME parameter value, along with Topic and WorkMainAuthor facets
-#QueryParams=R_RES,L_NAME,LG_NAME
-#QueryUrl=/lib/chunkByEtextGraph?R_RES=bdr:UT1PD90129_014_0029&L_NAME="de bzhin gshegs pa'i snying po"&LG_NAME=bo-x-ewts
+#QueryParams=L_NAME,LG_NAME,I_LIM
+#QueryUrl=/chunksFacetGraph?L_NAME="de bzhin gshegs"&LG_NAME=bo-x-ewts&I_LIM=1000
 
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME
 #param.L_NAME.isLucene=true
 #param.L_NAME.example="ye shes"
-
-#param.R_RES.type=URI
-#param.R_RES.subtype=bdo:Etext
-#param.R_RES.desc=the Etext on which info is needed
 
 
 PREFIX  :     <http://purl.bdrc.io/ontology/core/>
@@ -32,26 +28,25 @@ PREFIX  text: <http://jena.apache.org/text#>
 PREFIX  foaf: <http://xmlns.com/foaf/0.1/>
 
 construct{
-  ?etext tmp:forWork ?s .
-  ?etext tmp:hasChunk ?chunk.
-  ?etext bdo:creatorMainAuthor ?author.
-  ?etext tmp:authorName ?author_name .
-  ?etext bdo:workIsAbout ?about .
-  ?etext bdo:workGenre ?workgenre .
-  ?etext tmp:workLabel ?workLabel .
-  ?etext a :Etext .
-  ?etext bdo:eTextTitle ?etextTitle .
-  ?etext bdo:eTextVolumeIndex ?volIndex .
-  ?etext bdo:eTextIsVolume ?isVolume .
+  
   ?chunk a :EtextChunk .
   ?chunk :eTextHasChunk ?lit .
   ?chunk bdo:seqNum ?seqNum . 
   ?chunk bdo:sliceStartChunk ?startChunk .
-  ?chunk bdo:sliceEndChunk ?endChunk
+  ?chunk bdo:sliceEndChunk ?endChunk .
+  ?chunk tmp:forEtext ?etext .
+  ?chunk tmp:forWork ?s .
+  ?chunk tmp:workLabel ?workLabel .
+  ?chunk bdo:creatorMainAuthor ?author.
+  ?chunk tmp:authorName ?author_name .
+  ?chunk tmp:etextAbout ?about .
+  ?chunk tmp:etextGenre ?genre .
+  ?chunk bdo:eTextTitle ?etextTitle .
+  ?chunk bdo:eTextVolumeIndex ?volIndex .
+  ?chunk bdo:eTextIsVolume ?isVolume .
 }
 where
 {
-  BIND (?R_RES AS ?etext)
   (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:") .
   ?etext :eTextHasChunk ?chunk .
   ?chunk bdo:seqNum ?seqNum .
@@ -71,3 +66,4 @@ where
   
 }
 order by desc(?score)
+limit ?I_LIM
