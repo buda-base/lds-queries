@@ -54,10 +54,24 @@ where {
       ?ann oa:hasBody ?annb .
       ?annb ?annbp ?annbo .
       optional {
-        ?annbo ?annbop ?annboo .
+        ?annb :supportedByLocation ?annbloc .
+        ?annbloc ?annblocp ?annbloco .
+        ?annbloc :workLocationWork ?annblocWork .
+        ?annblocWork skos:prefLabel ?annblocWorkLabel .
+      }
+      optional {
+        ?annb :supportedByAssertion ?annba .
+        ?annba ?annbap ?annbao .
+        optional {
+           ?annba :workLocation ?annbaloc .
+           ?annbaloc ?annbalocp ?annbaloco .
+           ?annbaloc :workLocationWork ?annbalocWork .
+           ?annbalocWork skos:prefLabel ?annbalocWorkLabel .
+        }
       }
     }
   }
+
   union
   {
     ?rev ?pp  ?R_RES .
