@@ -30,7 +30,11 @@ construct {
   ?rs ?rsp ?rso .
   ?ann ?annp ?anno .
   ?annb ?annbp ?annbo .
-  ?annbo ?annbop ?annboo .
+  ?annbloc ?annblocp ?annbloco .
+  ?annblocWork skos:prefLabel ?annblocWorkLabel .
+  ?annba ?annbap ?annbao .
+  ?annbaloc ?annbalocp ?annbaloco .
+  ?annbalocWork skos:prefLabel ?annbalocWorkLabel .
 }
 
 where {
