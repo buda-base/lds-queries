@@ -8,6 +8,8 @@
 #param.R_RES.subtype=a Resource ID
 #param.R_RES.desc=the resource we want labels of associates of
 
+prefix oa:     <http://www.w3.org/ns/oa#>
+
 construct {
   ?o skos:prefLabel ?l.
   ?rev ?pp  ?R_RES .
