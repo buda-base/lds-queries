@@ -1,8 +1,8 @@
-#QueryScope=General
+#QueryScope=Etexts
 #QueryReturnType=Graph
 #QueryResults=All works having etext whose chunks contain the given L_NAME parameter value, along with Topic and WorkMainAuthor facets
 #QueryParams=L_NAME,LG_NAME,I_LIM
-#QueryUrl=/lib/etextFacetGraph="de bzhin gshegs pa'i snying po"&LG_NAME=bo-x-ewts&I_LIM=1000
+#QueryUrl=/chunksFacetGraph?L_NAME="de bzhin gshegs"&LG_NAME=bo-x-ewts&I_LIM=1000
 
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME
@@ -28,22 +28,30 @@ PREFIX  text: <http://jena.apache.org/text#>
 PREFIX  foaf: <http://xmlns.com/foaf/0.1/>
 
 construct{
-  ?etext tmp:forWork ?s .  
-  ?etext bdo:creatorMainAuthor ?author.
-  ?etext tmp:authorName ?author_name .
-  ?etext bdo:workIsAbout ?about .
-  ?etext bdo:workGenre ?workgenre .
-  ?etext tmp:workLabel ?workLabel .
-  ?etext a :Etext .
-  ?etext bdo:eTextTitle ?etextTitle .
-  ?etext bdo:eTextVolumeIndex ?volIndex .
-  ?etext bdo:eTextIsVolume ?isVolume .
   
+  ?chunk a :EtextChunk .
+  ?chunk :eTextHasChunk ?lit .
+  ?chunk bdo:seqNum ?seqNum . 
+  ?chunk bdo:sliceStartChunk ?startChunk .
+  ?chunk bdo:sliceEndChunk ?endChunk .
+  ?chunk tmp:forEtext ?etext .
+  ?chunk tmp:forWork ?s .
+  ?chunk tmp:workLabel ?workLabel .
+  ?chunk bdo:creatorMainAuthor ?author.
+  ?chunk tmp:authorName ?author_name .
+  ?chunk tmp:etextAbout ?about .
+  ?chunk tmp:etextGenre ?genre .
+  ?chunk bdo:eTextTitle ?etextTitle .
+  ?chunk bdo:eTextVolumeIndex ?volIndex .
+  ?chunk bdo:eTextIsVolume ?isVolume .
 }
 where
 {
   (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:") .
   ?etext :eTextHasChunk ?chunk .
+  ?chunk bdo:seqNum ?seqNum .
+  ?chunk bdo:sliceStartChunk ?startChunk .
+  ?chunk bdo:sliceEndChunk ?endChunk .
   ?s :workHasItemEtext/bdo:itemHasVolume/bdo:volumeHasEtext/bdo:eTextResource  ?etext.
   ?etext bdo:eTextTitle ?etextTitle .
   optional{?etext bdo:eTextIsVolume ?isVolume .}
@@ -54,7 +62,8 @@ where
   ?workgenre a :Topic} 
   optional{?s skos:prefLabel ?workLabel .}
   Optional{ ?s bdo:creatorMainAuthor ?author .
-  ?author skos:prefLabel ?author_name}
+  ?author skos:prefLabel ?author_name }.
+  
 }
 order by desc(?score)
 limit ?I_LIM
