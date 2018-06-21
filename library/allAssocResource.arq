@@ -8,7 +8,7 @@
 #param.R_RES.subtype=a Resource ID
 #param.R_RES.desc=the resource we want labels of associates of
 
-#prefix oa:     <http://www.w3.org/ns/oa#>
+prefix oa:     <http://www.w3.org/ns/oa#>
 
 construct {
   ?o skos:prefLabel ?l.
@@ -43,21 +43,21 @@ where {
       ?o bdo:originalRecord ?ori .
     }
   }
-#  union
-#  {
-#    # reifications related to the main resource (this does not currently fetch the reified statements related to subresources)
-#    ?rs rdf:subject ?R_RES ;
-#        ?rsp ?rso .
-#    ?ann oa:hasTarget ?rs ;
-#        ?annp ?anno .
-#    optional {
-#      ?ann oa:hasBody ?annb .
-#      ?annb ?annbp ?annbo .
-#      optional {
-#        ?annbo ?annbop ?annboo .
-#      }
-#    }
-#  }
+  union
+  {
+    # reifications related to the main resource (this does not currently fetch the reified statements related to subresources)
+    ?rs rdf:subject ?R_RES ;
+        ?rsp ?rso .
+    ?ann oa:hasTarget ?rs ;
+        ?annp ?anno .
+    optional {
+      ?ann oa:hasBody ?annb .
+      ?annb ?annbp ?annbo .
+      optional {
+        ?annbo ?annbop ?annboo .
+      }
+    }
+  }
   union
   {
     ?rev ?pp  ?R_RES .
