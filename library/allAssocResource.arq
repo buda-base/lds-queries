@@ -24,7 +24,11 @@ construct {
   ?wp bdo:workPartIndex ?wpPi .
   ?wp bdo:workPartType ?wpPt .
   ?o bdo:originalRecord ?ori .
-  ?o bdo:contentProvider ?provL
+  ?o bdo:contentProvider ?provL .
+  ?rs ?rsp ?rso .
+  ?ann ?annp ?anno .
+  ?annb ?annbp ?annbo .
+  ?annbo ?annbop ?annboo .
 }
 
 where {
@@ -35,6 +39,21 @@ where {
       ?o bdo:contentProvider ?prov .
       ?prov skos:prefLabel ?provL .
       ?o bdo:originalRecord ?ori .
+    }
+  }
+  union
+  {
+    # reifications related to the main resource (this does not currently fetch the reified statements related to subresources)
+    ?rs rdf:subject ?R_RES ;
+        ?rsp ?rso .
+    ?ann oa:hasTarget ?rs ;
+        ?annp ?anno .
+    optional {
+      ?ann oa:hasBody ?annb .
+      ?annb ?annbp ?annbo .
+      optional {
+        ?annbo ?annbop ?annboo .
+      }
     }
   }
   union
