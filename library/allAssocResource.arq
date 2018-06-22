@@ -58,13 +58,15 @@ where {
       ?ann oa:hasBody ?annb .
       ?annb ?annbp ?annbo .
       optional {
-        ?annb :supportedByLocation ?annbloc .
+        ?annbo a :WorkLocation ;
+        BIND(?annbo as ?annbloc )
         ?annbloc ?annblocp ?annbloco .
         ?annbloc :workLocationWork ?annblocWork .
         ?annblocWork skos:prefLabel ?annblocWorkLabel .
       }
       optional {
-        ?annb :supportedByAssertion ?annba .
+        ?annbo a adm:Assertion ;
+        BIND(?annbo as ?annba )
         ?annba ?annbap ?annbao .
         optional {
            ?annba :workLocation ?annbaloc .
