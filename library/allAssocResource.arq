@@ -35,8 +35,9 @@ construct {
   ?annba ?annbap ?annbao .
   ?annbaloc ?annbalocp ?annbaloco .
   ?annbalocWork skos:prefLabel ?annbalocWorkLabel .
-}
+  ?ivol bdo:volumeNumber ?ivolnum .
 
+}
 where {
   {
     ?R_RES ?p ?o .
@@ -128,6 +129,11 @@ where {
   {
     ?R_RES bdo:workHasItemImageAsset ?imA .
     ?imA bdo:itemHasVolume ?iV .
+  }
+  union
+  {
+   ?R_RES bdo:itemHasVolume ?ivol .
+   ?ivol bdo:volumeNumber ?ivolnum .
   }
   union
   {
