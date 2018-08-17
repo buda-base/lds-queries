@@ -19,3 +19,5 @@ prefix xsd:   <http://www.w3.org/2001/XMLSchema#>
 prefix text: <http://jena.apache.org/text#>
 prefix tmp: <http://purl.bdrc.io/ontology/tmp/>
 prefix oa:	   <http://www.w3.org/ns/oa#>
+prefix aut:   <http://purl.bdrc.io/ontology/ext/auth/>
+prefix adr:   <http://purl.bdrc.io/resource-auth/>
