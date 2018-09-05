@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=Info about a work for the IIIF Presentation API
 #QueryParams=R_RES
-#QueryUrl=/IIIFPres_workGraph?R_RES=bdr:W22084
+#QueryUrl=/IIIFPres_workGraph_noItem?R_RES=bdr:W22084
 
 #param.R_RES.type=URI
 #param.R_RES.subtype=bdo:Work
@@ -10,7 +10,11 @@
 
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
-construct { ?s ?p ?o }
+construct { 
+  ?s ?p ?o .
+  ?R_RES tmp:rootAccess ?access .
+  ?R_RES tmp:inItem ?item .  
+}
 where {
   { 
     ?R_RES ?p ?o .
@@ -24,9 +28,12 @@ where {
     ?R_RES :workLocation ?s .
     ?s ?p ?o .
   } union {
-    ?R_RES :workLocation/:workLocationWork/:workHasItemImageAsset ?o .
-    BIND (?R_RES as ?s)
-    BIND (tmp:inItem as ?p)
+    # root work is a parent with no parent
+    ?R_RES bdo:workPartOf+ ?rw .
+    optional { ?rw bdo:workPartOf ?rwP }
+    FILTER (!bound(?rwP))
+    ?rw :workHasItemImageAsset ?item .
+    ?rw adm:access ?access
   } union {
     ?R_RES :workHasPart ?s .
     ?s ?p ?o .
