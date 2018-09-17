@@ -1,0 +1,19 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All Resources associated to the given Role.
+#QueryParams=R_RES
+#QueryUrl=/lib/roleAllAssociations?R_RES=bdr:R39
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced Role
+
+CONSTRUCT
+{
+   ?p a bdr:Person .
+}
+WHERE {
+
+  	#Associated People
+   ?p :personEvent ?pE . ?pE :personEventRole ?R_RES .
+}
