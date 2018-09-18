@@ -37,6 +37,7 @@ construct {
   ?annbalocWork skos:prefLabel ?annbalocWorkLabel .
   ?ivol bdo:volumeNumber ?ivolnum .
 
+  ?pRole skos:prefLabel ?pRoleLab .
 }
 where {
   {
@@ -47,6 +48,11 @@ where {
       ?prov skos:prefLabel ?provL .
       ?o bdo:originalRecord ?ori .
     }
+  }
+  union
+  {
+   ?pRole :personEvent/:personEventRole ?R_RES .
+   ?pRole skos:prefLabel ?pRoleLab
   }
   union
   {
