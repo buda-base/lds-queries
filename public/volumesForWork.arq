@@ -1,4 +1,4 @@
-#QueryScope=Works
+#QueryScope=Work
 #QueryReturnType=Table
 #QueryResults=The volume ID and number associated with a Work, by ascending volume number
 #QueryParams=R_RES
