@@ -1,0 +1,29 @@
+#QueryScope=Annotation Collection
+#QueryReturnType=Graph
+#QueryResults=All the collections associated with a resource, in the minimal profile
+#QueryParams=R_RES
+#QueryUrl=/query/AnnCollection-forResource?R_RES=bdr:WCBC2237
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource IRI
+#param.R_RES.desc=the URI of the resource
+
+CONSTRUCT {
+    ?annc ?p ?o .
+    ?o ?p1 ?o1 .
+    ?anncs as:totalItems ?nbAnnotations .
+} where {
+    {
+        ?annc :layerForResource ?R_RES .
+        ?annc ?p ?o .
+        optional {
+            FILTER(isBlank(?o))
+            ?o1 ?p1 ?o1 .
+        }
+    } union {
+        SELECT ?anncs (count(?ann) AS ?nbAnnotations) WHERE {
+            ?anncs :layerForResource ?R_RES .
+            ?ann :annInLayer ?annc .
+        } group by ?anncs
+    }
+}
