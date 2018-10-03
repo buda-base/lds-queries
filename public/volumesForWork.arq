@@ -8,7 +8,8 @@
 #param.R_RES.subtype=bdo:Work
 #param.R_RES.desc=the Work on which info is needed
 
-select ?volnum ?volid where {
+select ?volnum ?volid ?imgList where {
   ?R_RES :workHasItemImageAsset/:itemHasVolume ?volid .
-  ?volid :volumeNumber ?volnum .
+  ?volid :volumeNumber ?volnum ;
+         :imageList ?imgList .
 } order by asc(?volnum)
