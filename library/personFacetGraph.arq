@@ -33,9 +33,8 @@ WHERE {
     ?res :personGender ?g.
   }
   union
-  { (?res ?sc ?lit1) text:query ( skos:prefLabel ?L_NAME "highlight:" ).
-    ?res skos:prefLabel ?lit1.
-    ?res :personGender ?g.
+  { (?res ?sc ?lit1) text:query ( skos:prefLabel ?L_NAME "highlight:" ).    
+    OPTIONAL{?res :personGender ?g.}
   }
   ?res a :Person
 }
