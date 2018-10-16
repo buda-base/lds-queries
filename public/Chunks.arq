@@ -20,9 +20,6 @@ construct {
   ?R_RES :eTextHasPage ?page .
   ?page ?pageP ?pageO .
   ?line ?lineP ?lineO .
-  # annotations on these chunks
-  ?R_RES tmp:hasAnno ?anno .
-  ?R_RES tmp:hasAnnoAnno ?aAnno .
 }
 where {
   {
@@ -52,36 +49,5 @@ where {
       ?page :pageHasLine ?line .
       ?line ?lineP ?lineO .
     }
-  } union {
-      # annotations that targets... this etext
-      ?R_RES :etextForVolume/:volumeOf/:itemEtextForWork ?aWork .
-      ?anno oa:hasTarget/:workLocationWork ?aWork .
-      # ... this volume
-      ?aWork :workHasItemEtext/:itemHasVolume ?iVol .
-      ?iVol :volumeHasEtext ?R_RES .
-      ?iVol :volumeNumber ?aVol .
-      ?anno oa:hasTarget/:workLocationVolume ?aVol .
-      # ... one of these chunks
-      ?anno oa:hasTarget/:workLocationChar ?aStartC .
-      ?anno oa:hasTarget/:workLocationEndChar ?aEndC .
-      {
-         # subquery to get character range of current chunks (inspired from above)
-         select (min(?cStartC) as ?minC) (max(?cEndC) as ?maxC)
-         where {
-           ?R_RES bdo:eTextHasChunk ?chunksub .
-           ?chunksub bdo:seqNum ?seqNum .
-           BIND((?I_SEQ + ?I_LIM) AS ?max).
-           filter (?seqNum >= ?I_SEQ && ?seqNum < ?max) .
-           ?chunksub
-               :sliceStartChar ?cStartC ;
-               :sliceEndChar ?cEndC .
-         }
-      }
-      filter( ( ?aStartC >= ?minC && ?aStartC <= ?maxC ) || ( ?aEndC >= ?minC && ?aEndC <= ?maxC ) )
-
-      # (annotations that targets)+ these annotations
-      optional {
-         ?aAnno oa:hasTarget+ ?anno
-      }
   }
 }
