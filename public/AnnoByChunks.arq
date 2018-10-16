@@ -1,0 +1,61 @@
+#QueryScope=Etexts
+#QueryReturnType=Graph
+#QueryResults=A graph containing the annotations within the given limits for the given Resource
+#QueryParams=R_RES,R_COL,I_SEQ,I_LIM
+#QueryUrl=/AnnoByChunks?R_RES=bdr%3AUTDEMO_01&I_SEQ=1&I_LIM=5&R_COL=bdac:ANCUTDEMO_NER001
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the Etext being searched
+
+#param.R_COL.type=resource
+#param.R_COL.subtype=a Resource ID
+#param.R_COL.desc=the unique resource ID of the collection to get annotation from (tmp:any for all collections)
+
+#param.I_SEQ.type=int
+#param.I_SEQ.desc=the index (sequence number) of the first chunk to be fetched
+
+#param.I_LIM.type=int
+#param.I_LIM.desc=the maximum number of chunks returned
+
+construct {
+   # annotations on these chunks
+   ?R_RES tmp:hasAnno ?anno .
+   ?R_RES tmp:hasAnnoAnno ?aAnno .
+}
+where {
+    # annotations that targets... this etext
+    ?R_RES :etextForVolume/:volumeOf/:itemEtextForWork ?aWork .
+    ?anno oa:hasTarget/:workLocationWork ?aWork .
+    # ... of the given collection if specified
+    { ?anno :annInLayer ?R_COL . }
+    union
+    { filter( ?R_COL = tmp:any ) . }
+    # ... this volume
+    ?aWork :workHasItemEtext/:itemHasVolume ?iVol .
+    ?iVol :volumeHasEtext ?R_RES .
+    ?iVol :volumeNumber ?aVol .
+    ?anno oa:hasTarget/:workLocationVolume ?aVol .
+    # ... one of these chunks
+    ?anno oa:hasTarget/:workLocationChar ?aStartC .
+    ?anno oa:hasTarget/:workLocationEndChar ?aEndC .
+    {
+       # subquery to get character range of current chunks (inspired from above)
+       select (min(?cStartC) as ?minC) (max(?cEndC) as ?maxC)
+       where {
+         ?R_RES bdo:eTextHasChunk ?chunksub .
+         ?chunksub bdo:seqNum ?seqNum .
+         BIND((?I_SEQ + ?I_LIM) AS ?max).
+         filter (?seqNum >= ?I_SEQ && ?seqNum < ?max) .
+         ?chunksub
+             :sliceStartChar ?cStartC ;
+             :sliceEndChar ?cEndC .
+       }
+    }
+    filter( ( ?aStartC >= ?minC && ?aStartC <= ?maxC ) || ( ?aEndC >= ?minC && ?aEndC <= ?maxC ) )
+
+    # (annotations that targets)+ these annotations
+    optional {
+       ?aAnno oa:hasTarget+ ?anno
+    }
+}
