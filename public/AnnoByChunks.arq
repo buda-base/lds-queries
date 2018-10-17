@@ -22,6 +22,17 @@ construct {
    # annotations on these chunks
    ?R_RES tmp:hasAnno ?anno .
    ?R_RES tmp:hasAnnoAnno ?aAnno .
+   ?anno :workLocationChar ?startC .
+   ?anno :workLocationEndChar ?endC .
+   ?anno oa:motivatedBy ?aMotiv .
+   ?anno oa:identifying ?aIdent .
+   ?aIdent rdfs:label ?aIdentLab .
+   ?anno :workLocationPage ?aWorkP .
+   ?anno :workLocationLine ?aWorkL .
+
+   ?aAnno oa:hasTarget ?tAnno .
+   ?aAnno oa:motivatedBy ?aAMotiv .
+   ?aAnno rdfs:comment ?aAComm .
 }
 where {
     # annotations that targets... this etext
@@ -54,8 +65,25 @@ where {
     }
     filter( ( ?aStartC >= ?minC && ?aStartC <= ?maxC ) || ( ?aEndC >= ?minC && ?aEndC <= ?maxC ) )
 
+    # annotation content
+    ?anno oa:hasTarget/:workLocationChar ?startC .
+    ?anno oa:hasTarget/:workLocationEndChar ?endC .
+    ?anno oa:motivatedBy ?aMotiv .
+    optional {
+      ?anno oa:motivatedBy oa:identifying ;	oa:hasBody ?aIdent .
+      ?aIdent skos:prefLabel|skos:altLabel ?aIdentLab .
+    }
+    optional {
+      ?anno oa:motivatedBy :LineMapping ;
+         oa:hasBody/:workLocationPage ?aWorkP ;
+         oa:hasBody/:workLocationLine ?aWorkL .
+    }
+
     # (annotations that targets)+ these annotations
     optional {
-       ?aAnno oa:hasTarget+ ?anno
+      ?aAnno oa:hasTarget+ ?anno .
+      ?aAnno oa:hasTarget ?tAnno ; oa:motivatedBy ?aAMotiv .
+      ?aAnno oa:hasBody/rdfs:comment ?aAComm .
     }
+
 }
