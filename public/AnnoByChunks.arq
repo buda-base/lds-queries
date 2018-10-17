@@ -27,8 +27,9 @@ construct {
    ?anno oa:motivatedBy ?aMotiv .
    ?anno oa:identifying ?aIdent .
    ?aIdent rdfs:label ?aIdentLab .
-   ?anno :workLocationPage ?aWorkP .
-   ?anno :workLocationLine ?aWorkL .
+   ?anno :lineMapsToPage ?aWorkP .
+   ?anno :lineMapsToLine ?aWorkL .
+   ?anno :pageMapsToWork [ :workLocationWork ?aWorkPageW ; :workLocationPage ?aWorkPageP ; :workLocationVolume ?aWorkPageV  ] .
 
    ?aAnno oa:hasTarget ?tAnno .
    ?aAnno oa:motivatedBy ?aAMotiv .
@@ -77,6 +78,12 @@ where {
       ?anno oa:motivatedBy :LineMapping ;
          oa:hasBody/:workLocationPage ?aWorkP ;
          oa:hasBody/:workLocationLine ?aWorkL .
+    }
+    optional {
+      ?anno oa:motivatedBy :PageMapping ;
+         oa:hasBody/:workLocationWork ?aWorkPageW ;
+         oa:hasBody/:workLocationPage ?aWorkPageP ;
+         oa:hasBody/:workLocationVolume ?aWorkPageV .
     }
 
     # (annotations that targets)+ these annotations
