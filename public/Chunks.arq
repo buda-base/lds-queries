@@ -14,7 +14,7 @@
 #param.I_LIM.type=int
 #param.I_LIM.desc=the maximum number of chunks returned
 
-construct { 
+construct {
   ?R_RES bdo:eTextHasChunk ?chunk .
   ?chunk ?p ?o .
   ?R_RES :eTextHasPage ?page .
@@ -38,7 +38,7 @@ where {
         ?chunksub bdo:seqNum ?seqNumsub .
         BIND((?I_SEQ + ?I_LIM) AS ?max).
         filter (?seqNumsub >= ?I_SEQ && ?seqNumsub < ?max)
-        ?chunksub 
+        ?chunksub
          :sliceStartChunk ?startChunksub ;
          :sliceEndChunk ?endChunksub .
       }
