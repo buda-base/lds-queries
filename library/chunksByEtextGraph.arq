@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=All works having etext whose chunks contain the given L_NAME parameter value, along with Topic and WorkMainAuthor facets
 #QueryParams=R_RES,L_NAME,LG_NAME
-#QueryUrl=/lib/chunkByEtextGraph?R_RES=bdr:UT1PD96682_I1PD96847_0000&L_NAME="de bzhin gshegs"&LG_NAME=bo-x-ewts
+#QueryUrl=/lib/chunksByEtextGraph?R_RES=bdr:UT1PD96682_I1PD96847_0000&L_NAME="de bzhin gshegs"&LG_NAME=bo-x-ewts
 
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME
