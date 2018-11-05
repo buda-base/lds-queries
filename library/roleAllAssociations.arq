@@ -11,9 +11,11 @@
 CONSTRUCT
 {
    ?p a bdr:Person .
+   ?p skos:prefLabel ?pLab .
 }
 WHERE {
 
   	#Associated People
    ?p :personEvent ?pE . ?pE :personEventRole ?R_RES .
+   ?p skos:prefLabel ?pLab .
 }
