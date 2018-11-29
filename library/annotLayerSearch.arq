@@ -1,0 +1,47 @@
+
+#QueryScope=Annotation Collection
+#QueryReturnType=Graph
+#QueryResults=A graph of annotion associated with a given layer
+#QueryParams=R_RES,I_SUBRANGEFIRST,I_SUBRANGELAST
+#QueryUrl=/lib/annotLayerSearch?R_RES=bdac:ANCUTDEMO_NER001&I_SUBRANGEFIRST=1&I_SUBRANGELAST=500
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource IRI
+#param.R_RES.desc=the URI of the annotation collection
+
+#param.I_SUBRANGEFIRST.type=int
+#param.I_SUBRANGEFIRST.subtype=the first index of the range
+#param.I_SUBRANGEFIRST.desc=the first index of the range
+
+#param.I_SUBRANGELAST.type=int
+#param.I_SUBRANGELAST.subtype=the last index of the range
+#param.I_SUBRANGELAST.desc=the last index of the range
+
+CONSTRUCT {
+  ?s bdo:annInLayer ?R_RES .
+  ?s rdf:type ?ty .
+  ?s oa:hasBody ?b.
+  ?s oa:motivatedBy ?m .  
+  ?s oa:hasTarget ?tgt.
+  ?b ?bp ?bo .
+  ?tgt ?tp ?to .
+}
+where {
+  ?s bdo:annInLayer ?R_RES .
+  ?s rdf:type ?ty .
+  ?s oa:hasBody ?b.
+  ?s oa:motivatedBy ?m .
+  ?b rdf:type ?typ.
+  ?s oa:hasTarget ?tgt
+  optional {
+      FILTER(isBlank(?b))
+      ?b ?bp ?bo .
+  }
+  optional {
+      FILTER(isBlank(?tgt))
+      ?tgt ?tp ?to .
+      ?tgt bdo:workLocationChar ?start ;
+           bdo:workLocationEndChar   ?end .
+      FILTER (?start <= ?I_SUBRANGEFIRST && ?end >= ?I_SUBRANGELAST) 
+  }
+}
