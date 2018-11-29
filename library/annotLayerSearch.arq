@@ -24,13 +24,18 @@ CONSTRUCT {
   ?s oa:motivatedBy ?m .  
   ?s oa:hasTarget ?tgt.
   ?b ?bp ?bo .
+  ?b ?BPP ?bOO.
   ?tgt ?tp ?to .
 }
 where {
   ?s bdo:annInLayer ?R_RES .
   ?s rdf:type ?ty .
   ?s oa:hasBody ?b.
-  ?s oa:motivatedBy ?m .
+  optional {
+  ?b ?BPP ?bOO.
+  }
+  optional {
+    ?s oa:motivatedBy ?m .}
   ?b rdf:type ?typ.
   ?s oa:hasTarget ?tgt
   optional {
