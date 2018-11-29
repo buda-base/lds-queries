@@ -40,8 +40,9 @@ where {
   optional {
       FILTER(isBlank(?tgt))
       ?tgt ?tp ?to .
-      ?tgt bdo:workLocationChar ?start ;
-           bdo:workLocationEndChar   ?end .
-      FILTER (?start <= ?I_SUBRANGEFIRST && ?end >= ?I_SUBRANGELAST) 
+       
   }
+  ?tgt bdo:workLocationChar ?start ;
+           bdo:workLocationEndChar ?end .
+      FILTER (?start >= ?I_SUBRANGEFIRST && ?end <= ?I_SUBRANGELAST)
 }
