@@ -20,34 +20,27 @@
 CONSTRUCT {
   ?s bdo:annInLayer ?R_RES .
   ?s rdf:type ?ty .
-  ?s oa:hasBody ?b.
-  ?s oa:motivatedBy ?m .  
+  ?s oa:motivatedBy ?m .
+  ?s oa:hasBody ?b. 
   ?s oa:hasTarget ?tgt.
-  ?b ?bp ?bo .
-  ?b ?BPP ?bOO.
   ?tgt ?tp ?to .
+  ?b ?BPP ?bOO.  
 }
 where {
   ?s bdo:annInLayer ?R_RES .
   ?s rdf:type ?ty .
   ?s oa:hasBody ?b.
-  optional {
-  ?b ?BPP ?bOO.
-  }
+  ?s oa:hasTarget ?tgt.
   optional {
     ?s oa:motivatedBy ?m .}
-  ?b rdf:type ?typ.
-  ?s oa:hasTarget ?tgt
   optional {
-      FILTER(isBlank(?b))
-      ?b ?bp ?bo .
+    ?b ?BPP ?bOO.    
   }
   optional {
       FILTER(isBlank(?tgt))
       ?tgt ?tp ?to .
-       
+      ?tgt bdo:workLocationChar ?start ;
+           bdo:workLocationEndChar   ?end .
+      FILTER (?start >= ?I_SUBRANGEFIRST && ?end <= ?I_SUBRANGELAST) 
   }
-  ?tgt bdo:workLocationChar ?start ;
-           bdo:workLocationEndChar ?end .
-      FILTER (?start >= ?I_SUBRANGEFIRST && ?end <= ?I_SUBRANGELAST)
 }
