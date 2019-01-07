@@ -41,6 +41,6 @@ where {
       ?tgt ?tp ?to .
       ?tgt bdo:workLocationChar ?start ;
            bdo:workLocationEndChar   ?end .
-      FILTER (?start >= ?I_SUBRANGEFIRST && ?end <= ?I_SUBRANGELAST) 
-  }
+  }  
+  FILTER (?start >= ?I_SUBRANGEFIRST && ?end <= ?I_SUBRANGELAST) 
 }
