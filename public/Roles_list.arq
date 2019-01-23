@@ -18,5 +18,5 @@ select ?URI (group_concat(?name) as ?names)
 where {
   ?URI a :Role;
      skos:prefLabel ?name .
-  FILTER (lang(?name) = "?L_LANG")
+  FILTER (lang(?name) = ?L_LANG)
 } group by ?URI 
