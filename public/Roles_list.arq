@@ -1,13 +1,13 @@
 #QueryScope=Roles
 #QueryReturnType=Table
 #QueryResults=The liist of BDRC Roles
-#QueryParams=LANG
-#QueryUrl=/Roles_list?LANG=en
+#QueryParams=L_LANG
+#QueryUrl=/Roles_list?L_LANG=en
 
-#param.LANG.type=string
-#param.LANG.isLucene=false
-#param.LANG.desc=lang tag filter for the results
-#param.LANG.example=en
+#param.L_LANG.type=string
+#param.L_LANG.isLucene=false
+#param.L_LANG.desc=lang tag filter for the results
+#param.L_LANG.example=en
 
 #output.?URI.type=URI
 #output.?URI.desc=the resource ID of the place
@@ -18,5 +18,5 @@ select ?URI (group_concat(?name) as ?names)
 where {
   ?URI a :Role;
      skos:prefLabel ?name .
-  FILTER (lang(?name) = "?LANG")
+  FILTER (lang(?name) = "?L_LANG")
 } group by ?URI 
