@@ -4,10 +4,10 @@
 #QueryParams=LANG
 #QueryUrl=/Roles_list?LANG=en
 
-#param.L_NAME.type=string
-#param.L_NAME.isLucene=false
-#param.L_NAME.desc=lang tag filter for the results
-#param.L_NAME.example=en
+#param.LANG.type=string
+#param.LANG.isLucene=false
+#param.LANG.desc=lang tag filter for the results
+#param.LANG.example=en
 
 #output.?URI.type=URI
 #output.?URI.desc=the resource ID of the place
