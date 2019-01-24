@@ -31,7 +31,7 @@
 
 #param.R_RES.type=URI
 #param.R_RES.subtype=:Volume
-#param.R_RES.desc=the URI of the ItemImageAsset being investigated
+#param.R_RES.desc=the URI of the volume being investigated
 
 select distinct ?workId ?itemId ?access ?license ?imageGroup ?imageList ?totalPages ?pagesText ?pagesIntroTbrc ?pagesIntro ?volumeNumber ?volumeLabel ?iiifManifest where {
   ?R_RES a :VolumeImageAsset .

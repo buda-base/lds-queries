@@ -1,0 +1,47 @@
+#QueryScope=Volume
+#QueryReturnType=Graph
+#QueryResults=Outline of a volume for IIIF presentation API
+#QueryParams=R_RES
+#QueryUrl=/IIIFPres_volumeOutline?R_RES=bdr:V22084_I0886
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=:Volume
+#param.R_RES.desc=the URI of the volume being investigated
+
+construct { 
+  ?R_RES ?p ?o .
+  ?item :itemImageAssetForWork ?work .
+  ?work adm:license ?wl .
+  ?work adm:access ?wa .
+  #?part ?pp ?op .
+  ?ascPart ?pap ?oap .
+  ?loc ?pl ?ol .
+}
+where {
+  {
+    ?R_RES ?p ?o .
+    ?R_RES :volumeOf ?item .
+    ?item :itemImageAssetForWork ?work .
+    ?work adm:license ?wl .
+    ?work adm:access ?wa .
+    ?loc :workLocationWork ?work .
+    ?R_RES :volumeNumber ?volnum .
+    ?loc :workLocationVolume ?bvol ;
+         :workLocationEndVolume ?evol .
+    FILTER (?evol >= ?volnum && ?bvol <= ?volnum)
+  } union {
+    ?R_RES ?p ?o .
+    ?R_RES :volumeOf ?item .
+    ?item :itemImageAssetForWork ?work .
+    ?loc :workLocationWork ?work .
+    ?R_RES :volumeNumber ?volnum .
+    ?loc :workLocationVolume ?volnum .
+  }
+  ?loc ?pl ?ol .
+  ?part :workLocation ?loc .
+  #?part ?pp ?op .
+  ?part :workPartOf* ?ascPart .
+  optional {?ascPart :workPartOf ?wpo}
+  filter (bound(?wpo))
+  ?ascPart ?pap ?oap .
+}
