@@ -13,6 +13,7 @@ construct {
   ?item :itemImageAssetForWork ?work .
   ?work adm:license ?wl .
   ?work adm:access ?wa .
+  ?work :workHasPart ?wp .
   #?part ?pp ?op .
   ?ascPart ?pap ?oap .
   ?loc ?pl ?ol .
@@ -24,6 +25,7 @@ where {
     ?item :itemImageAssetForWork ?work .
     ?work adm:license ?wl .
     ?work adm:access ?wa .
+    ?work :workHasPart ?wp .
     ?loc :workLocationWork ?work .
     ?R_RES :volumeNumber ?volnum .
     ?loc :workLocationVolume ?bvol ;
