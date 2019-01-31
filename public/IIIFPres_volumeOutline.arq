@@ -23,9 +23,6 @@ where {
     ?R_RES ?p ?o .
     ?R_RES :volumeOf ?item .
     ?item :itemImageAssetForWork ?work .
-    ?work adm:license ?wl .
-    ?work adm:access ?wa .
-    ?work :workHasPart ?wp .
     ?loc :workLocationWork ?work .
     ?R_RES :volumeNumber ?volnum .
     ?loc :workLocationVolume ?bvol ;
@@ -39,6 +36,9 @@ where {
     ?R_RES :volumeNumber ?volnum .
     ?loc :workLocationVolume ?volnum .
   }
+  ?work adm:license ?wl .
+  ?work adm:access ?wa .
+  ?work :workHasPart ?wp .
   ?loc ?pl ?ol .
   ?part :workLocation ?loc .
   #?part ?pp ?op .
