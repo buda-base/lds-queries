@@ -8,6 +8,8 @@
 #param.R_RES.subtype=:Volume
 #param.R_RES.desc=the URI of the volume being investigated
 
+
+
 construct { 
   ?R_RES ?p ?o .
   ?item :itemImageAssetForWork ?work .
@@ -20,30 +22,30 @@ construct {
 }
 where {
   {
-    ?R_RES ?p ?o .
-    ?R_RES :volumeOf ?item .
-    ?item :itemImageAssetForWork ?work .
-    ?loc :workLocationWork ?work .
-    ?R_RES :volumeNumber ?volnum .
-    ?loc :workLocationVolume ?bvol ;
-         :workLocationEndVolume ?evol .
-    FILTER (?evol >= ?volnum && ?bvol <= ?volnum)
+    {
+      ?R_RES :volumeOf/:itemImageAssetForWork ?work ;
+             :volumeNumber ?volnum .
+      ?loc :workLocationWork ?work .
+      ?loc :workLocationVolume ?bvol .
+      # see https://lists.apache.org/thread.html/ec4c7fb703748e7d0d70d8e3baa1c2fbb04842b7494c9097df7dfd0f@%3Cusers.jena.apache.org%3E
+      FILTER ((?bvol <= ?volnum && NOT EXISTS {?loc :workLocationEndVolume ?evol}) || (?bvol <= ?volnum  && EXISTS {?loc :workLocationEndVolume ?evol FILTER (?evol <= ?volnum)}))
+    }
+    ?work :workHasPart ?wp .
+    ?loc ?pl ?ol .
+    ?part :workLocation ?loc .
+    #?part ?pp ?op .
+    ?part :workPartOf* ?ascPart .
+    optional {?ascPart :workPartOf ?wpo}
+    filter (bound(?wpo))
+    ?ascPart ?pap ?oap .
   } union {
-    ?R_RES ?p ?o .
     ?R_RES :volumeOf ?item .
+    ?R_RES ?p ?o .
     ?item :itemImageAssetForWork ?work .
-    ?loc :workLocationWork ?work .
-    ?R_RES :volumeNumber ?volnum .
-    ?loc :workLocationVolume ?volnum .
+    ?work adm:license ?wl .
+    ?work adm:access ?wa .
   }
-  ?work adm:license ?wl .
-  ?work adm:access ?wa .
-  ?work :workHasPart ?wp .
-  ?loc ?pl ?ol .
-  ?part :workLocation ?loc .
-  #?part ?pp ?op .
-  ?part :workPartOf* ?ascPart .
-  optional {?ascPart :workPartOf ?wpo}
-  filter (bound(?wpo))
-  ?ascPart ?pap ?oap .
 }
+
+
+
