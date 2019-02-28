@@ -47,7 +47,7 @@ construct{
 }
 where
 {
-  (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:") .
+  (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME ?I_LIM "highlight:") .
   ?etext :eTextHasChunk ?chunk .
   ?chunk bdo:seqNum ?seqNum .
   ?chunk bdo:sliceStartChunk ?startChunk .
@@ -66,4 +66,3 @@ where
   
 }
 order by desc(?score)
-limit ?I_LIM
