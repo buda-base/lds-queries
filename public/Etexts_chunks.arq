@@ -1,7 +1,7 @@
 #QueryScope=Etexts
 #QueryReturnType=Table
 #QueryResults=etext chunks containing the given expression
-#QueryUrl=/Etexts_chunks?L_NAME=("མཁན་ཆེན་" AND ("འོད་ཟེར་" OR "ཡེ་ཤེས་"))&LG_NAME=bo
+#QueryUrl=/Etexts_chunks?L_NAME=("མཁན་ཆེན་" AND ("འོད་ཟེར་" OR "ཡེ་ཤེས་"))&LG_NAME=bo&I_LIM=30
 #QueryParams=L_NAME,LG_NAME
 
 #output.?c.type=Integer
@@ -16,8 +16,9 @@
 #param.I_LIM.type=int
 #param.I_LIM.desc=the maximum number of results
 
-select ?txt ?chunk
+select ?txt ?seq ?lit
 where {
-   (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:") .
+   (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME ?I_LIM "highlight:") .
    ?txt :eTextHasChunk ?chunk .
+   ?chunk :seqNum ?seq .
 } 
