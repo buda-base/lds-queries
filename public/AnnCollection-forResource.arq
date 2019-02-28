@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=All the collections associated with a resource, in the minimal profile
 #QueryParams=R_RES
-#QueryUrl=/graph/AnnCollection-forResource?R_RES=bdr:WCBC2237
+#QueryUrl=/AnnCollection-forResource?R_RES=bdr:WCBC2237
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=a Resource IRI
