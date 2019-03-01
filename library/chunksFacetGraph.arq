@@ -9,24 +9,6 @@
 #param.L_NAME.isLucene=true
 #param.L_NAME.example="ye shes"
 
-
-PREFIX  :     <http://purl.bdrc.io/ontology/core/>
-PREFIX  bf:   <http://id.loc.gov/ontologies/bibframe/>
-PREFIX  tbr:  <http://purl.bdrc.io/ontology/toberemoved/>
-PREFIX  owl:  <http://www.w3.org/2002/07/owl#>
-PREFIX  f:    <java:io.bdrc.ldspdi.sparql.functions.>
-PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
-PREFIX  skos: <http://www.w3.org/2004/02/skos/core#>
-PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX  adm:  <http://purl.bdrc.io/ontology/admin/>
-PREFIX  vcard: <http://www.w3.org/2006/vcard/ns#>
-PREFIX  bdo:  <http://purl.bdrc.io/ontology/core/>
-PREFIX  bdr:  <http://purl.bdrc.io/resource/>
-PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX  dcterms: <http://purl.org/dc/terms/>
-PREFIX  text: <http://jena.apache.org/text#>
-PREFIX  foaf: <http://xmlns.com/foaf/0.1/>
-
 construct{
   
   ?chunk a :EtextChunk .
