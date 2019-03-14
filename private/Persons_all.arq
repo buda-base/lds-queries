@@ -32,6 +32,8 @@
 #output.?noteLocation.type=string
 #output.?noteLocation.desc=note location statement
 
+prefix dila:  <http://authority.dila.edu.tw/person/?fromInner=>
+
 select ?RID ?prefNm ?nmType ?nameStr ?student ?teacher ?eventType ?notBefore ?notAfter ?onYear ?eventPlace ?noteText ?noteWork ?noteLocation
 where {
   ?RID a :Person .
@@ -54,6 +56,6 @@ where {
   union
   { ?RID  :note ?nt .
     optional { ?nt :noteText ?noteText . }
-    optional { ?nt :noteWork ?ntWrk . }
+    optional { ?nt :noteWork ?noteWork . }
     optional { ?nt :noteLocationStatement ?noteLocation . } }
 } order by ?RID
