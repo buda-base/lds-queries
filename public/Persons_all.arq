@@ -3,57 +3,57 @@
 #QueryResults=A table containing the Id, names, events, student, teachers, and notes for all Persons
 #QueryUrl=/Persons_all
 
-#output.?s.type=URI
-#output.?s.desc=Person URI
-#output.?lbl1.type=string
-#output.?lbl1.desc=preferred name
+#output.?RID.type=URI
+#output.?RID.desc=Person URI
+#output.?prefNm.type=string
+#output.?prefNm.desc=preferred name
 #output.?nmType.type=URI
 #output.?nmType.desc=name type
-#output.?lbl2.type=string
-#output.?lbl2.desc=name type
+#output.?nameStr.type=string
+#output.?nameStr.desc=name type
 #output.?student.type=URI
 #output.?student.desc=student
 #output.?teacher.type=URI
 #output.?teacher.desc=teacher
-#output.?evType.type=URI
-#output.?evType.desc=event type
-#output.?evNotB.type=int
-#output.?evNotB.desc=not before
-#output.?evNotA.type=int
-#output.?evNotA.desc=not after
-#output.?evYr.type=int
-#output.?evYr.desc=on year
-#output.?evPlc.type=URI
-#output.?evPlc.desc=event place
-#output.?ntTxt.type=string
-#output.?ntTxt.desc=note text
-#output.?ntWork.type=URI
-#output.?ntWork.desc=note work
-#output.?ntLoc.type=string
-#output.?ntLoc.desc=note location statement
+#output.?eventType.type=URI
+#output.?eventType.desc=event type
+#output.?notBefore.type=int
+#output.?notBefore.desc=not before
+#output.?notAfter.type=int
+#output.?notAfter.desc=not after
+#output.?onYear.type=int
+#output.?onYear.desc=on year
+#output.?eventPlace.type=URI
+#output.?eventPlace.desc=event place
+#output.?noteText.type=string
+#output.?noteText.desc=note text
+#output.?noteWork.type=URI
+#output.?noteWork.desc=note work
+#output.?noteLocation.type=string
+#output.?noteLocation.desc=note location statement
 
-select ?s ?lbl1 ?nmType ?lbl2 ?student ?teacher ?evType ?evNotB ?evNotA ?evYr ?evPlc ?ntTxt ?ntWork ?ntLoc
+select ?RID ?prefNm ?nmType ?nameStr ?student ?teacher ?eventType ?notBefore ?notAfter ?onYear ?eventPlace ?noteText ?noteWork ?noteLocation
 where {
-  ?s a :Person .
-  { ?s skos:prefLabel ?lbl1 . }
+  ?RID a :Person .
+  { ?RID skos:prefLabel ?prefNm . }
   union
-  { ?s :personName ?bnm .
+  { ?RID :personName ?bnm .
     ?bnm rdf:type ?nmType .
-    ?bnm rdfs:label ?lbl2 . }
+    ?bnm rdfs:label ?nameStr . }
   union
-  { ?s :personTeacherOf ?student . }
+  { ?RID :personTeacherOf ?student . }
   union
-  { ?s :personStudentOf ?teacher . }
+  { ?RID :personStudentOf ?teacher . }
   union
-  { ?s  :personEvent ?ev . 
-    ?ev rdf:type ?evType . 
-    optional { ?ev :notBefore ?evNotB . }
-    optional { ?ev :notAfter ?evNotA . }
-    optional { ?ev :onYear ?evYr . }
-    optional { ?ev :eventWhere ?evPlc . } }
+  { ?RID  :personEvent ?ev . 
+    ?ev rdf:type ?eventType . 
+    optional { ?ev :notBefore ?notBefore . }
+    optional { ?ev :notAfter ?notAfter . }
+    optional { ?ev :onYear ?onYear . }
+    optional { ?ev :eventWhere ?eventPlace . } }
   union
-  { ?s  :note ?nt .
-    optional { ?nt :noteText ?ntTxt . }
+  { ?RID  :note ?nt .
+    optional { ?nt :noteText ?noteText . }
     optional { ?nt :noteWork ?ntWrk . }
-    optional { ?nt :noteLocationStatement ?ntLoc . } }
-} order by ?s
+    optional { ?nt :noteLocationStatement ?noteLocation . } }
+} order by ?RID
