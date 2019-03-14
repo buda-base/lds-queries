@@ -1,0 +1,59 @@
+#QueryScope=Person
+#QueryReturnType=Table
+#QueryResults=A table containing the Id, names, events, student, teachers, and notes for all Persons
+#QueryUrl=/Persons_all
+
+#output.?s.type=URI
+#output.?s.desc=Person URI
+#output.?lbl1.type=string
+#output.?lbl1.desc=preferred name
+#output.?nmType.type=URI
+#output.?nmType.desc=name type
+#output.?lbl2.type=string
+#output.?lbl2.desc=name type
+#output.?student.type=URI
+#output.?student.desc=student
+#output.?teacher.type=URI
+#output.?teacher.desc=teacher
+#output.?evType.type=URI
+#output.?evType.desc=event type
+#output.?evNotB.type=int
+#output.?evNotB.desc=not before
+#output.?evNotA.type=int
+#output.?evNotA.desc=not after
+#output.?evYr.type=int
+#output.?evYr.desc=on year
+#output.?evPlc.type=URI
+#output.?evPlc.desc=event place
+#output.?ntTxt.type=string
+#output.?ntTxt.desc=note text
+#output.?ntWork.type=URI
+#output.?ntWork.desc=note work
+#output.?ntLoc.type=string
+#output.?ntLoc.desc=note location statement
+
+select ?s ?lbl1 ?nmType ?lbl2 ?student ?teacher ?evType ?evNotB ?evNotA ?evYr ?evPlc ?ntTxt ?ntWork ?ntLoc
+where {
+  ?s a :Person .
+  { ?s skos:prefLabel ?lbl1 . }
+  union
+  { ?s :personName ?bnm .
+    ?bnm rdf:type ?nmType .
+    ?bnm rdfs:label ?lbl2 . }
+  union
+  { ?s :personTeacherOf ?student . }
+  union
+  { ?s :personStudentOf ?teacher . }
+  union
+  { ?s  :personEvent ?ev . 
+    ?ev rdf:type ?evType . 
+    optional { ?ev :notBefore ?evNotB . }
+    optional { ?ev :notAfter ?evNotA . }
+    optional { ?ev :onYear ?evYr . }
+    optional { ?ev :eventWhere ?evPlc . } }
+  union
+  { ?s  :note ?nt .
+    optional { ?nt :noteText ?ntTxt . }
+    optional { ?nt :noteWork ?ntWrk . }
+    optional { ?nt :noteLocationStatement ?ntLoc . } }
+} order by ?s
