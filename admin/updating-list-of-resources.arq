@@ -1,0 +1,12 @@
+#needs work to actually create a useful template but illustrates a pattern
+
+@prefix :   <http://purl.bdrc.io/ontology/core/>
+@prefix bdr:   <http://purl.bdrc.io/resource/>
+
+delete { graph ?item { ?vol :volumePagesTbrcIntro 2 } }
+insert { graph ?item { ?vol :volumePagesTbrcIntro 0 } }
+where {
+    values ?work { bdr:W23445 bdr:W23468 }
+    ?work :workHasItem ?item .
+    ?item :itemHasVolume ?vol .
+}
