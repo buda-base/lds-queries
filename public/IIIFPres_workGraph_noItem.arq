@@ -22,30 +22,28 @@ where {
     ?R_RES ?p ?o .
     BIND (?R_RES as ?s)
     FILTER (!isBlank(?o) || ?p = :workLocation)
+  } union { 
+    ?R_RES :workLinkTo ?s .
+    ?s ?p ?o .
+    FILTER (!isBlank(?o) || ?p = :workLocation)
   } union {
-    ?R_RES :workCreator/skos:prefLabel ?o .
+    ?R_RES :workLinkTo?/:workCreator/skos:prefLabel ?o .
     BIND (?R_RES as ?s)
     BIND (tmp:workCreatorLit as ?p)
   } union {
-    ?R_RES :workLocation ?s .
+    ?R_RES :workLinkTo?/:workLocation ?s .
     ?s ?p ?o .
   } union {
-    # root work is a parent with no parent
-    ?R_RES bdo:workPartOf+ ?rw .
-    optional { ?rw bdo:workPartOf ?rwP }
-    FILTER (!bound(?rwP))
+    ?R_RES :workLinkTo?/bdo:workPartOf* ?rw .
     ?rw :workHasItemImageAsset ?item .
     ?rw adm:access ?access
   } union {
-    ?R_RES :workHasPart ?s .
+    ?R_RES :workLinkTo?/:workHasPart ?s .
     ?s ?p ?o .
     FILTER (!isBlank(?o))
   } union {
     ?R_RES :workHasPart ?s .
     ?s :workLinkTo ?o .
     ?o a ?ot .
-  } union {
-    ?R_RES :workLinkTo ?lt .
-    ?lt a ?ltt .
   }
 }
