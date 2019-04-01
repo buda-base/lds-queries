@@ -1,0 +1,40 @@
+#QueryScope=Volume
+#QueryReturnType=Table
+#QueryResults=Basic info about a work for the IIIF view route
+#QueryParams=R_RES
+#QueryUrl=/IIIFPres_volumeInfo?R_RES=bdr:W22084
+
+#output.?hasParts.type=boolean
+#output.?hasParts.desc=if the work has parts
+
+#output.?nbVolumes.type=integer
+#output.?nbVolumes.desc=the number of volumes (in case the work doesn't have parts)
+
+#output.?firstVolume.type=URI
+#output.?firstVolume.desc=the URI of the first volume
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=:Work
+#param.R_RES.desc=the URI of the work being investigated
+
+select distinct ?hasParts ?nbVolumes where {
+  ?R_RES a :Work .
+  BIND(EXISTS{?R_RES :workLinkTo?/:workHasPart ?part} AS ?hasParts)
+  optional {
+    ?R_RES :workLinkTo?/:workLocation ?loc .
+    FILTER( NOT EXISTS {?loc :workLocationEndVolume ?evol} )
+    BIND(1 as ?nbVolumes)
+  }
+  optional {
+    ?R_RES :workLinkTo?/:workLocation ?loc .
+    ?loc :workLocationVolume ?bvol ;
+         :workLocationEndVolume ?evol .
+    BIND((?evol - ?bvol) as ?nbVolumes)
+  }
+  optional {
+    ?R_RES :workLinkTo?/:workPartOf* ?rw .
+    ?rw :workHasItemImageAsset ?item .
+    ?item :itemVolumes ?nbVolumes .
+    FILTER ( NOT EXISTS{?R_RES :workLinkTo?/:workHasPart ?part} )
+  }
+}
