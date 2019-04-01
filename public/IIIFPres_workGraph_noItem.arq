@@ -13,6 +13,7 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 construct { 
   ?s ?p ?o .
   ?o a ?ot .
+  ?lt a ?ltt .
   ?R_RES tmp:rootAccess ?access .
   ?R_RES tmp:inItem ?item .  
 }
@@ -43,5 +44,8 @@ where {
     ?R_RES :workHasPart ?s .
     ?s :workLinkTo ?o .
     ?o a ?ot .
+  } union {
+    ?R_RES :workLinkTo ?lt .
+    ?lt a ?ltt .
   }
 }
