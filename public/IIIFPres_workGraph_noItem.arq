@@ -15,7 +15,8 @@ construct {
   ?o a ?ot .
   ?lt a ?ltt .
   ?R_RES tmp:rootAccess ?access .
-  ?R_RES tmp:inItem ?item .  
+  ?R_RES tmp:inItem ?item .
+  ?R_RES tmp:firstVolume ?vol .
 }
 where {
   { 
@@ -37,6 +38,19 @@ where {
     ?R_RES :workLinkTo?/bdo:workPartOf* ?rw .
     ?rw :workHasItemImageAsset ?item .
     ?rw adm:access ?access
+  } union {
+    # info on volume when a location is present
+    ?R_RES :workLinkTo?/bdo:workPartOf* ?rw .
+    ?rw :workHasItemImageAsset ?item .
+    ?R_RES :workLocation ?loc .
+    ?loc :workLocationVolume ?bvol .
+    ?item :itemHasVolume ?vol .
+    ?vol :volumeNumber ?bvol .
+  } union {
+    # info on volume in the case of a root work
+    ?R_RES :workLinkTo?/:workHasItemImageAsset ?item .
+    ?item :itemHasVolume ?vol .
+    ?vol :volumeNumber 1 . # default volume is 1
   } union {
     ?R_RES :workLinkTo?/:workHasPart ?s .
     ?s ?p ?o .
