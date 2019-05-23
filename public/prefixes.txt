@@ -28,3 +28,5 @@ prefix as:    <http://www.w3.org/ns/activitystreams#>
 prefix ldp:   <http://www.w3.org/ns/ldp#>
 prefix sh: <http://www.w3.org/ns/shacl#>
 prefix rsh: <http://purl.bdrc.io/shacl/core/shape/>
+prefix bdg:   <http://purl.bdrc.io/graph/>
+prefix bda:   <http://purl.bdrc.io/admindata/>
