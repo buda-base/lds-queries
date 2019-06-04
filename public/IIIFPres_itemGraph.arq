@@ -8,8 +8,10 @@
 #param.R_RES.subtype=bdo:Item
 #param.R_RES.desc=the item on which info is needed
 
-construct { ?s ?p ?o }
-where {
+construct {
+   ?s ?p ?o .
+   ?cl ?clp ?clo .
+} where {
   { 
     ?R_RES ?p ?o .
     BIND (?R_RES as ?s)
@@ -19,8 +21,13 @@ where {
     ?s ?p ?o .
     FILTER (sameTerm(?p, adm:access) || sameTerm(?p, adm:license) || sameTerm(?p, skos:prefLabel))
   } union {
+    ?s adm:adminAbout ?R_RES .
+    ?s ?p ?o .
+    ?s adm:contentLegal ?cl .
+    ?cl ?clp ?clo .
+  } union {
     ?R_RES :itemHasVolume ?s .
     ?s ?p ?o .
-    FILTER (sameTerm(?p, adm:access) || sameTerm(?p, adm:license) || sameTerm(?p, :volumeNumber) || sameTerm(?p, skos:prefLabel) || sameTerm(?p, :hasIIIFManifest))
+    FILTER (sameTerm(?p, :volumeNumber) || sameTerm(?p, skos:prefLabel) || sameTerm(?p, :hasIIIFManifest))
   }
 }
