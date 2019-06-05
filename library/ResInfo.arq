@@ -8,4 +8,16 @@
 #param.R_RES.subtype=a Resource ID
 #param.R_RES.desc=the unique resource ID of the chosen resource
 
-Describe ?R_RES
+construct {
+ ?R_RES ?rp ?ro .
+ ?ro2 ?ro2p ?ro2o .
+} where {
+  {
+    ?R_RES ?rp ?ro .
+  } union {
+    ?R_RES ?rp2 ?ro2 .
+    ?ro2 a ?ro2type .
+    ?ro2type rdfs:subClassOf+ :Facet .
+    ?ro2 ?ro2p ?ro2o .
+  }
+}
