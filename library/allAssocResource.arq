@@ -94,7 +94,15 @@ where {
   {
     # blank nodes
     ?R_RES ?tmpP ?bn .
-    FILTER (isBlank(?bn))
+    ?tmpP rdfs:subClassOf+ :Facet .
+    ?bn ?bnp ?bno .
+    ?bno skos:prefLabel ?bnol .
+  }
+  union
+  {
+    # blank nodes
+    ?R_RES ?tmpP ?bn .
+    ?tmpP rdfs:subClassOf+ :Event .
     ?bn ?bnp ?bno .
     ?bno skos:prefLabel ?bnol .
   }
