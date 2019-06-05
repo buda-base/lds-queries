@@ -8,12 +8,14 @@
 #param.R_RES.subtype=:Volume
 #param.R_RES.desc=the URI of the volume being investigated
 
-
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 construct { 
   ?R_RES ?p ?o .
-  ?item :itemImageAssetForWork ?work .
-  ?work adm:license ?wl .
+  ?item :itemForWork ?work .
+  ?R_RES tmp:rootAccess ?access .
+  ?R_RES tmp:rootRestrictedInChina ?ric .
+  ?R_RES tmp:rootLicense ?license .
   ?work adm:access ?wa .
   ?work :workHasPart ?wp .
   #?part ?pp ?op .
@@ -41,11 +43,10 @@ where {
   } union {
     ?R_RES :volumeOf ?item .
     ?R_RES ?p ?o .
-    ?item :itemImageAssetForWork ?work .
-    ?work adm:license ?wl .
-    ?work adm:access ?wa .
+    ?item :itemForWork ?work .
+    ?admItem adm:adminAbout/?item .
+    ?admItem adm:access ?access .
+    ?admItem adm:restrictedInChina ?ric .
+    ?admItem adm:contentLegal/adm:license ?license .
   }
 }
-
-
-
