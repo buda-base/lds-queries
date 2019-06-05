@@ -36,7 +36,6 @@ construct {
   ?annbaloc ?annbalocp ?annbaloco .
   ?annbalocWork skos:prefLabel ?annbalocWorkLabel .
   ?ivol bdo:volumeNumber ?ivolnum .
-
   ?pRole skos:prefLabel ?pRoleLab .
 }
 where {
@@ -92,7 +91,7 @@ where {
   }
   union
   {
-    # blank nodes
+    # facets
     ?R_RES ?tmpP ?bn .
     ?bn rdf:type/rdfs:subClassOf+ :Facet .
     ?bn ?bnp ?bno .
@@ -100,7 +99,7 @@ where {
   }
   union
   {
-    # blank nodes
+    # facets
     ?R_RES ?tmpP ?bn .
     ?bn rdf:type/rdfs:subClassOf+ :Event .
     ?bn ?bnp ?bno .
@@ -141,7 +140,7 @@ where {
   }
   union
   {
-    ?R_RES bdo:workHasItemImageAsset ?imA .
+    ?R_RES bdo:workHasItem ?imA .
     ?imA bdo:itemHasVolume ?iV .
   }
   union
