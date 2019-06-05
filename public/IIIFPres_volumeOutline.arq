@@ -25,7 +25,7 @@ construct {
 where {
   {
     {
-      ?R_RES :volumeOf/:itemImageAssetForWork ?work ;
+      ?R_RES :volumeOf/:itemForWork ?work ;
              :volumeNumber ?volnum .
       ?loc :workLocationWork ?work .
       ?loc :workLocationVolume ?bvol .
@@ -44,7 +44,7 @@ where {
     ?R_RES :volumeOf ?item .
     ?R_RES ?p ?o .
     ?item :itemForWork ?work .
-    ?admItem adm:adminAbout/?item .
+    ?admItem adm:adminAbout ?item .
     ?admItem adm:access ?access .
     ?admItem adm:restrictedInChina ?ric .
     ?admItem adm:contentLegal/adm:license ?license .
