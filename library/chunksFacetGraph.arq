@@ -14,8 +14,8 @@ construct{
   ?chunk a :EtextChunk .
   ?chunk :eTextHasChunk ?lit .
   ?chunk bdo:seqNum ?seqNum . 
-  ?chunk bdo:sliceStartChunk ?startChunk .
-  ?chunk bdo:sliceEndChunk ?endChunk .
+  ?chunk bdo:sliceStartChar ?startChar .
+  ?chunk bdo:sliceEndChar ?endChar .
   ?chunk tmp:forEtext ?etext .
   ?chunk tmp:forWork ?s .
   ?chunk tmp:workLabel ?workLabel .
@@ -32,8 +32,8 @@ where
   (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME ?I_LIM "highlight:") .
   ?etext :eTextHasChunk ?chunk .
   ?chunk bdo:seqNum ?seqNum .
-  ?chunk bdo:sliceStartChunk ?startChunk .
-  ?chunk bdo:sliceEndChunk ?endChunk .
+  ?chunk bdo:sliceStartChar ?startChar .
+  ?chunk bdo:sliceEndChar ?endChar .
   ?s :workHasItemEtext/bdo:itemHasVolume/bdo:volumeHasEtext/bdo:eTextResource  ?etext.
   ?etext bdo:eTextTitle ?etextTitle .
   optional{?etext bdo:eTextIsVolume ?isVolume .}
