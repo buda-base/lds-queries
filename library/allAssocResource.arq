@@ -94,7 +94,7 @@ where {
   {
     # blank nodes
     ?R_RES ?tmpP ?bn .
-    ?tmpP rdfs:subClassOf+ :Facet .
+    ?bn rdf:type/rdfs:subClassOf+ :Facet .
     ?bn ?bnp ?bno .
     ?bno skos:prefLabel ?bnol .
   }
@@ -102,7 +102,7 @@ where {
   {
     # blank nodes
     ?R_RES ?tmpP ?bn .
-    ?tmpP rdfs:subClassOf+ :Event .
+    ?bn rdf:type/rdfs:subClassOf+ :Event .
     ?bn ?bnp ?bno .
     ?bno skos:prefLabel ?bnol .
   }
