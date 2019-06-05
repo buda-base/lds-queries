@@ -11,6 +11,7 @@
 construct {
  ?R_RES ?rp ?ro .
  ?ro2 ?ro2p ?ro2o .
+ ?ro3 ?ro3p ?ro3o .
 } where {
   {
     ?R_RES ?rp ?ro .
@@ -19,5 +20,10 @@ construct {
     ?ro2 a ?ro2type .
     ?ro2type rdfs:subClassOf+ :Facet .
     ?ro2 ?ro2p ?ro2o .
+  } union {
+    ?R_RES ?rp3 ?ro3 .
+    ?ro3 a ?ro3type .
+    ?ro3type rdfs:subClassOf+ :Event .
+    ?ro3 ?ro3p ?ro3o .
   }
 }
