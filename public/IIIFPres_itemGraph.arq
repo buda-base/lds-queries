@@ -15,11 +15,6 @@ construct {
   { 
     ?R_RES ?p ?o .
     BIND (?R_RES as ?s)
-    FILTER (!isBlank(?o))
-  } union {
-    ?R_RES :itemForWork ?s .
-    ?s ?p ?o .
-    FILTER (sameTerm(?p, adm:access) || sameTerm(?p, adm:license) || sameTerm(?p, skos:prefLabel))
   } union {
     ?s adm:adminAbout ?R_RES .
     ?s ?p ?o .

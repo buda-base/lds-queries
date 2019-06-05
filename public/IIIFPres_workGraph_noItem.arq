@@ -16,6 +16,7 @@ construct {
   ?lt a ?ltt .
   ?R_RES tmp:rootAccess ?access .
   ?R_RES tmp:rootRestrictedInChina ?ric .
+  ?R_RES tmp:rootLicense ?license .
   ?R_RES tmp:inItem ?item .
   ?R_RES tmp:firstVolume ?vol .
 }
@@ -23,11 +24,9 @@ where {
   { 
     ?R_RES ?p ?o .
     BIND (?R_RES as ?s)
-    FILTER (!isBlank(?o) || ?p = :workLocation)
   } union { 
     ?R_RES :workLinkTo ?s .
     ?s ?p ?o .
-    FILTER (!isBlank(?o) || ?p = :workLocation)
   } union {
     ?R_RES :workLinkTo?/:workCreator/skos:prefLabel ?o .
     BIND (?R_RES as ?s)
@@ -45,6 +44,7 @@ where {
     ?admItem adm:adminAbout ?item .
     ?admItem adm:access ?access .
     ?admItem adm:restrictedInChina ?ric .
+    ?admItem adm:contentLegal/adm:license ?license .
   } union {
     ?R_RES :workLinkTo?/bdo:workPartOf* ?rw .
     ?rw :workHasItemImageAsset ?item .
@@ -59,7 +59,6 @@ where {
   } union {
     ?R_RES :workLinkTo?/:workHasPart ?s .
     ?s ?p ?o .
-    FILTER (!isBlank(?o))
   } union {
     ?R_RES :workHasPart ?s .
     ?s :workLinkTo ?o .
