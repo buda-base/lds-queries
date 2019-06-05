@@ -16,11 +16,11 @@
 #output.?imageGroup.desc=the image group (internal BDRC data)
 #output.?imageList.type=string
 #output.?imageList.desc=the image list of the given volume
-#output.?totalPages.type=string
+#output.?totalPages.type=int
 #output.?totalPages.desc=the number of pages in this volume
-#output.?pagesText.type=string
-#output.?pagesText.desc=the actual number of pages of text in this volume
-#output.?pagesIntroTbrc.type=string
+#output.?pagesText.type=int
+#output.?pagesText.desc=the number of pages of text in this volume
+#output.?pagesIntroTbrc.type=int
 #output.?pagesIntroTbrc.desc=the number of pages of tbrc intro for this volume
 #output.?pagesIntro.type=string
 #output.?pagesIntro.desc=the number of pages of the general intro for this volume
@@ -33,19 +33,23 @@
 #param.R_RES.subtype=:Volume
 #param.R_RES.desc=the URI of the volume being investigated
 
-select distinct ?workId ?itemId ?access ?license ?imageGroup ?imageList ?totalPages ?pagesText ?pagesIntroTbrc ?pagesIntro ?volumeNumber ?volumeLabel ?iiifManifest where {
-  ?R_RES a :VolumeImageAsset .
-  optional { ?R_RES adm:legacyImageGroupRID ?imageGroup . }
-  optional { ?R_RES :volumeNumber ?volumeNumber . }
-  optional { ?R_RES bdo:imageList ?imageList . }
-  optional { ?R_RES bdo:volumePagesTotal ?totalPages . }
-  optional { ?R_RES bdo:volumePagesText ?pagesText . }
-  optional { ?R_RES bdo:volumePagesTbrcIntro ?pagesIntroTbrc . }
-  optional { ?R_RES bdo:volumePagesIntro ?pagesIntro . }
-  optional { ?R_RES skos:prefLabel ?volumeLabel . }
-  optional { ?R_RES :hasIIIFManifest ?iiifManifest . }
-  ?itemId :itemForWork ?workId ;
-      :itemHasVolume ?R_RES .
-  ?workId adm:access ?access ;
-    adm:license ?license .
+select distinct ?workId ?itemId ?access ?ric ?license ?imageGroup ?imageList ?totalPages ?pagesIntroTbrc ?volumeNumber ?volumeLabel ?iiifManifest where {
+  {
+    ?R_RES a :VolumeImageAsset .
+    optional { ?R_RES adm:legacyImageGroupRID ?imageGroup . }
+    optional { ?R_RES :volumeNumber ?volumeNumber . }
+    optional { ?R_RES bdo:imageList ?imageList . }
+    optional { ?R_RES bdo:volumePagesTbrcIntro ?pagesIntroTbrc . }
+    optional { ?R_RES skos:prefLabel ?volumeLabel . }
+    optional { ?R_RES :hasIIIFManifest ?iiifManifest . }
+    ?itemId :itemForWork ?workId ;
+        :itemHasVolume ?R_RES .
+    ?R_RES a :VolumeImageAsset .
+    ?admVol adm:adminAbout ?R_RES .
+    ?admVol adm:legacyImageGroupRID ?imageGroup .
+    ?admItem adm:adminAbout/:itemHasVolume ?R_RES .
+    ?admItem adm:access ?access .
+    ?admItem adm:restrictedInChina ?ric .
+    ?admItem adm:contentLegal/adm:license ?license .
+  }
 }
