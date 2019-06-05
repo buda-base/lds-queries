@@ -40,6 +40,7 @@ select distinct ?workId ?itemId ?access ?ric ?license ?imageGroup ?imageList ?to
     optional { ?R_RES :volumeNumber ?volumeNumber . }
     optional { ?R_RES bdo:imageList ?imageList . }
     optional { ?R_RES bdo:volumePagesTbrcIntro ?pagesIntroTbrc . }
+    optional { ?R_RES bdo:volumePagesTotal ?totalPages . }
     optional { ?R_RES skos:prefLabel ?volumeLabel . }
     optional { ?R_RES :hasIIIFManifest ?iiifManifest . }
     ?itemId :itemForWork ?workId ;

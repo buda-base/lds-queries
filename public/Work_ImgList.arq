@@ -8,16 +8,17 @@
 #param.R_RES.subtype=a Resource ID
 #param.R_RES.desc=the ID of the work we are interested in
 
-#output.?work.type=URI
-#output.?work.desc=the resource URI of an image asset for the work
+#output.?item.type=URI
+#output.?item.desc=the URI of an image asset for the work
 #output.?list.type=string
 #output.?list.desc=the list of images for the image asset of the work
 #output.?grId.type=string
 #output.?grId.desc=the legacyImageGroupRID of the image list
 
-select ?work ?list ?grId where{  
-  ?R_RES :workHasItemImageAsset ?work .
-  ?work :itemHasVolume ?v .
+select ?item ?list ?grId where{  
+  ?R_RES :workHasItem ?item .
+  ?item  a bdo:ItemImageAsset ;
+         :itemHasVolume ?v .
   ?v :imageList ?list .
   ?v adm:legacyImageGroupRID ?grId  
 } 
