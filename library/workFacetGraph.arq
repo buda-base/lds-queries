@@ -9,100 +9,59 @@
 #param.L_NAME.isLucene=true
 #param.L_NAME.example="ye shes"
 
-
-PREFIX  :     <http://purl.bdrc.io/ontology/core/>
-PREFIX  bf:   <http://id.loc.gov/ontologies/bibframe/>
-PREFIX  tbr:  <http://purl.bdrc.io/ontology/toberemoved/>
-PREFIX  owl:  <http://www.w3.org/2002/07/owl#>
-PREFIX  f:    <java:io.bdrc.ldspdi.sparql.functions.>
-PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
-PREFIX  skos: <http://www.w3.org/2004/02/skos/core#>
-PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX  adm:  <http://purl.bdrc.io/ontology/admin/>
-PREFIX  vcard: <http://www.w3.org/2006/vcard/ns#>
-PREFIX  bdo:  <http://purl.bdrc.io/ontology/core/>
-PREFIX  bdr:  <http://purl.bdrc.io/resource/>
-PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX  dcterms: <http://purl.org/dc/terms/>
-PREFIX  text: <http://jena.apache.org/text#>
-PREFIX  foaf: <http://xmlns.com/foaf/0.1/>
-
 CONSTRUCT
   {
-    ?res adm:license ?lic .
+    ?res adm:license ?license .
     ?res adm:status ?st .
-    ?res adm:access ?acc .
-    ?res bdo:workLangScript ?ls .
-    ?res ?pp ?lit .
-    ?res skos:prefLabel ?l.
-    ?res <http://purl.bdrc.io/ontology/tmp/prefLabelMatch> ?lit1.
-    ?res <http://purl.bdrc.io/ontology/tmp/altLabelMatch> ?lit2.
-
+    ?res a ?type .
+    ?res adm:access ?access .
+    ?res bdo:workIsAbout ?t .
     ?res bdo:workGenre ?g .
-    ?res <http://purl.bdrc.io/ontology/core/rootTax> ?tx.
-    ?res <http://purl.bdrc.io/ontology/core/labelMatch> ?match.
-
-    ?res bdo:workType ?wT.
-    ?res bdo:workPartType ?wPT.
-    ?res bdo:workHasPart ?wHP.
-    ?res bdo:workExpressionOf ?wE.
-    ?res <http://purl.bdrc.io/ontology/tmp/prefLabelExpressionOf> ?litE.
-    ?res bdo:workHasExpression ?wH.
-    ?res <http://purl.bdrc.io/ontology/tmp/prefLabelHasExpression> ?litH.
-
+    ?res bdo:workLangScript ?ls .
+    ?res skos:prefLabel ?l .
+    ?res tmp:titleMatch ?lit .
+    ?res tmp:matchScore ?sc .
+    ?res tmp:labelMatch ?labelMatch.
+    ?res bdo:workPartType ?wPT .
+    ?res bdo:workHasPart ?wHP .
+    ?res bdo:workExpressionOf ?wE .
+    ?res tmp:prefLabelExpressionOf ?litE .
+    ?res bdo:workHasExpression ?wH .
+    ?res tmp:prefLabelHasExpression ?litH .
   }
-WHERE {
-{
+WHERE 
   {
-    (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ).
-    ?res ?p ?s.
-    ?s rdf:type ?pp .
-    optional{?res adm:license ?lic.
-    ?res adm:status ?st .
-    ?res adm:access ?acc .
-        ?res bdo:workLangScript ?ls.}
-    OPTIONAL {?res skos:prefLabel ?match.
-      Filter(str(?match)=str(?lit))
-      }
+    (?title ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+    ?res :workTitle ?title .
+    ?res a ?type .
+    ?res skos:prefLabel ?l .
+    optional {
+      ?res skos:prefLabel ?labelMatch.
+      Filter ( str(?labelMatch) = str(?lit) )
     }
-  union
-
-  { (?res ?sc ?lit2) text:query ( skos:altLabel ?L_NAME "highlight:" ).
-    optional{?res bdo:workPartOf+ ?po .
-    ?po adm:license ?lic .
-    ?po adm:access ?acc .
-    ?res adm:status ?st .
-        ?po bdo:workLangScript ?ls.}
-    OPTIONAL {?res skos:prefLabel ?match.
-      Filter(str(?match)=str(?lit2))}
+    ?resAdm adm:adminAbout ?res ;
+            adm:status ?st .
+    optional {
+        ?res bdo:workPartOf* ?po . 
+        ?po  bdo:workLangScript ?ls . 
+      } .
+    optional { ?res bdo:workHasPart ?wHP . } .
+    optional { ?res bdo:workPartType ?wPT . } .
+    optional {
+      ?res bdo:workHasExpression ?wH .
+      ?wH skos:prefLabel ?litH .
+    }
+    optional { ?res bdo:workGenre ?g } .
+    optional {
+      ?res bdo:workIsAbout ?t .
+      ?t a :Topic
+    }
+    optional {
+      ?res bdo:workPartOf* ?rw .
+      ?rw :workHasItem ?item .
+      ?item a :ItemImageAsset .
+      ?itemAdm adm:adminAbout ?item .
+      ?itemAdm adm:access ?access .
+      ?itemAdm adm:contentLegal/adm:license ?license .
+    }
   }
-  union
-  { (?res ?sc ?lit1) text:query ( skos:prefLabel ?L_NAME "highlight:" ).
-    optional{?res bdo:workPartOf+ ?po .
-    ?po adm:license ?lic .
-    ?po adm:access ?acc .
-    ?po adm:status ?st .
-        ?po bdo:workLangScript ?ls.}
-    OPTIONAL {?res skos:prefLabel ?match.
-      Filter(str(?match)=str(?lit1))}
-  }
-
-}
-
-  OPTIONAL{?res bdo:workHasPart ?wHP . } .
-  OPTIONAL{?res bdo:workPartType ?wPT . } .
-  OPTIONAL{?res bdo:workType ?wT . } .
-  OPTIONAL{
-    ?res bdo:workExpressionOf ?wE.
-    ?wE skos:prefLabel ?litE.
-   }.
-  OPTIONAL{
-    ?res bdo:workHasExpression ?wH.
-    ?wH skos:prefLabel ?litH.
-  }
-  optional{?res bdo:workGenre ?g .
-  ?g a :Topic
-  }
-  ?res skos:prefLabel ?l.
-  ?res a :Work
-}
