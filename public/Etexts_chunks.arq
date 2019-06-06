@@ -21,9 +21,10 @@
 #param.I_LIM.desc=the maximum number of results
 #param.I_LIM.example=25
 
-select ?txt ?seq ?lit
+select ?txt ?chunk ?startChar ?endChar ?score ?lit
 where {
    (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME ?I_LIM "highlight:") .
    ?txt :eTextHasChunk ?chunk .
-   ?chunk :seqNum ?seq .
+   ?chunk :sliceStartChar ?startChar .
+   ?chunk :sliceEndChar ?endChar .
 } 

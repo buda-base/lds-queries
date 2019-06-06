@@ -8,15 +8,15 @@
 #param.R_RES.subtype=a Resource ID
 #param.R_RES.desc=the unique resource ID of the Etext being searched
 
-#param.I_SEQ.type=int
-#param.I_SEQ.desc=the index (sequence number) of the first chunk to be fetched
+#param.I_START.type=int
+#param.I_START.desc=the char index of the first chunk to be fetched
 
-#param.I_LIM.type=int
-#param.I_LIM.desc=the maximum number of chunks returned
+#param.I_END.type=int
+#param.I_END.desc=the char index of the last chunk
 
 construct {
   ?R_RES bdo:eTextHasChunk ?chunk .
-  ?chunk ?p ?o .
+  ?chunk ?chunkP ?chunkO .
   ?R_RES :eTextHasPage ?page .
   ?page ?pageP ?pageO .
   ?line ?lineP ?lineO .
@@ -24,31 +24,22 @@ construct {
 where {
   {
     ?R_RES bdo:eTextHasChunk ?chunk .
-    ?chunk bdo:seqNum ?seqNum .
-    BIND((?I_SEQ + ?I_LIM) AS ?max).
-    filter (?seqNum >= ?I_SEQ && ?seqNum < ?max)
-    ?chunk ?p ?o .
+    ?chunk  :sliceStartChar ?chunkstart ;
+            :sliceEndChar ?chunkend .
+    FILTER (?chunkstart <= ?I_END && ?chunkend >= ?I_START)
+    ?chunk ?chunkP ?chunkO .
   } union {
     ?R_RES :eTextHasPage ?page .
-    ?page :sliceStartChunk ?chunkNum .
-    {
-      # fetch max chunk values (needs to be in a subquery, at least I couldn't find any other way)
-      select (max(?endChunksub) as ?endChunkMax) (min(?startChunksub) as ?startChunkMin) where {
-        ?R_RES bdo:eTextHasChunk ?chunksub .
-        ?chunksub bdo:seqNum ?seqNumsub .
-        BIND((?I_SEQ + ?I_LIM) AS ?max).
-        filter (?seqNumsub >= ?I_SEQ && ?seqNumsub < ?max)
-        ?chunksub
-         :sliceStartChunk ?startChunksub ;
-         :sliceEndChunk ?endChunksub .
-      }
-    }
-    filter (?chunkNum>=?startChunkMin && ?chunkNum<?endChunkMax)
+    ?page  :sliceStartChar ?chunkstart ;
+           :sliceEndChar ?chunkend .
+    FILTER (?chunkstart <= ?I_END && ?chunkend >= ?I_START)
     ?page ?pageP ?pageO .
-    optional {
-      ?page :pageHasLine ?line .
-      ?line ?lineP ?lineO .
-    }
+  } union {
+    ?R_RES :eTextHasPage/:pageHasLine ?line .
+    ?line  :sliceStartChar ?chunkstart ;
+           :sliceEndChar ?chunkend .
+    FILTER (?chunkstart <= ?I_END && ?chunkend >= ?I_START)
+    ?line ?lineP ?lineO .
   }
 }
 
