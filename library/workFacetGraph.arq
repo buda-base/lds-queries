@@ -9,6 +9,8 @@
 #param.L_NAME.isLucene=true
 #param.L_NAME.example="ye shes"
 
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
 CONSTRUCT
   {
     ?res adm:license ?license .
@@ -39,29 +41,33 @@ WHERE
       ?res skos:prefLabel ?labelMatch.
       Filter ( str(?labelMatch) = str(?lit) )
     }
-    ?resAdm adm:adminAbout ?res ;
+    ?res bdo:workPartOf* ?rw .
+    # for some reason this doesn't work:
+    #OPTIONAL { FILTER (!sameTerm(?rw,?res))
+    #  BIND(?rw AS ?root)
+    #}
+    ?rw :isRoot true .
+    ?resAdm adm:adminAbout ?rw ;
             adm:status ?st .
     optional {
-        ?res bdo:workPartOf* ?po . 
-        ?po  bdo:workLangScript ?ls . 
-      } .
+        ?rw  bdo:workLangScript ?ls . 
+    } .
     optional { ?res bdo:workHasPart ?wHP . } .
     optional { ?res bdo:workPartType ?wPT . } .
     optional {
       ?res bdo:workHasExpression ?wH .
       ?wH skos:prefLabel ?litH .
-    }
+    } .
     optional { ?res bdo:workGenre ?g } .
     optional {
       ?res bdo:workIsAbout ?t .
       ?t a :Topic
-    }
+    } .
     optional {
-      ?res bdo:workPartOf* ?rw .
       ?rw :workHasItem ?item .
       ?item a :ItemImageAsset .
       ?itemAdm adm:adminAbout ?item .
       ?itemAdm adm:access ?access .
       ?itemAdm adm:contentLegal/adm:license ?license .
-    }
+    } .
   }
