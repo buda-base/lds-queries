@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=The tree of BDRC topics Taxonomy
 #QueryParams=R_RES
-#QueryUrl=/Taxtree?R_RES=bdr:O9TAXTBRC201605_2741
+#QueryUrl=/lib/Taxtree?R_RES=bdr:O9TAXTBRC201605_2741
 
 construct {
   ?super bdo:taxHasSubClass ?sub .
