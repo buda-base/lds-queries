@@ -12,14 +12,11 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 construct {
   #associated Works
-  ?work a :Work .
+  ?work a ?type .
   ?work skos:prefLabel ?worklabel .
   ?work bdo:workIsAbout ?workAbout .
-  ?work adm:license ?worklicense.
-  ?work adm:status ?workstatus .
-  ?work adm:access ?workaccess .
   ?work bdo:workLangScript ?workscript.
-  ?work bdo:workType ?worktype .
+  ?work bdo:workType ?type .
   ?work bdo:workGenre ?workgenre .
 
   ?work adm:license ?rootWorkLicence.
@@ -46,35 +43,28 @@ where {
       }
       FILTER (!bound(?workExpressed))
       ?work skos:prefLabel ?worklabel .
-      optional {?work bdo:workIsAbout ?workAbout .
-      ?workAbout a bdo:Topic .}
-      optional {?work adm:license ?worklicense .}
-      optional {?work adm:status ?workstatus .}
-      optional {?work adm:access ?workaccess .}
-      optional {?work bdo:workLangScript ?workscript .}
-      optional {?work bdo:workType ?worktype .}
-      optional {?work bdo:workGenre ?workgenre .}      
-      # we could fetch dates, but our data is almost only publishing date, which is not that interesting
-      #optional {
-      #  ?work bdo:workEvent ?we .
-      #  ?we a ?wet .
-      #  FILTER (?wet = bdo:CompletedEvent || ?wet = bdo:TranslatedEvent || ?rwet = bdo:PublishedEvent)
-      #  optional { ?we :notAfter ?wena . }
-      #  optional { ?we :notBefore ?wenb . }
-      #  optional { ?we :onYear ?wenoy . }
-      #}
-
+      ?work a ?type .
       optional {
-        ?work bdo:workPartOf+ ?rootWork .
-        optional { ?rootWork bdo:workPartOf ?parentWork }
-        FILTER (!bound(?parentWork))
-        ?rootWork skos:prefLabel ?rootWorkPrefLabel .
-        optional {?rootWork adm:license ?rootWorkLicence .}
-        optional {?rootWork adm:status ?rootWorkStatus .}
-        optional {?rootWork adm:access ?rootWorkAccess .}
-        optional {?rootWork bdo:workLangScript ?rootWorkScript .}
+        ?work bdo:workIsAbout ?workAbout .
+        ?workAbout a bdo:Topic .
       }
-  }
+      ?work bdo:workPartOf* ?rw .
+      ?rw :isRoot true .
+      ?rw skos:prefLabel ?rootWorkPrefLabel .
+      ?resAdm adm:adminAbout ?rw ;
+              adm:status ?rootWorkStatus .
+
+      optional {?work bdo:workLangScript ?workscript .}
+
+      optional {?work bdo:workGenre ?workgenre .}      
+      optional {
+        ?rw :workHasItem ?item .
+        ?item a :ItemImageAsset .
+        ?itemAdm adm:adminAbout ?item .
+        ?itemAdm adm:access ?rootWorkAccess .
+        ?itemAdm adm:contentLegal/adm:license ?rootWorkLicence .
+      }
+      optional { ?rw  bdo:workLangScript ?rootWorkScript . } .  }
   #associated Lineages
   union
   {

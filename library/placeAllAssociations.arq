@@ -8,10 +8,12 @@
 #param.R_RES.subtype=a Resource ID
 #param.R_RES.desc=the unique resource ID of the referenced Place
 
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
 construct
 {
   	#Associated People
-    ?s <http://purl.bdrc.io/ontology/tmp/relationType> ?pl .
+    ?s tmp:relationType ?pl .
   	?s bdo:personGender ?g .
     ?s skos:prefLabel ?l .
   	?s ?Name_Type ?Name .
@@ -19,23 +21,16 @@ construct
 
     ?pEw a :Person .
     ?pEw skos:prefLabel ?pEl .
-    ?pEw <http://purl.bdrc.io/ontology/tmp/relationType> ?pEa .
-  	 ?pEw bdo:personGender ?pEg .
+    ?pEw tmp:relationType ?pEa .
+  	?pEw bdo:personGender ?pEg .
 
   #Associated places
     ?plc a :Place .
-    ?plc <http://purl.bdrc.io/ontology/tmp/isContainedBy> ?R_RES .
+    ?plc tmp:isContainedBy ?R_RES .
     ?plc skos:prefLabel ?ll .
     ?plc1 a :Place .
     ?plc1 skos:prefLabel ?ll1 .
     ?plc1 bdo:placeContains ?R_RES .
-
-  #Associated literary production
-    ?w a :Work .
-    ?w bdo:workHasSourcePrintery ?R_RES .
-    ?w skos:prefLabel ?wl .
-    ?w bdo:workGenre ?wG .
-    ?w bdo:workIsAbout ?wAB .
 
   #Associated Works
     ?aw a :Work .
@@ -59,7 +54,7 @@ where {
   	?s skos:prefLabel ?l .
   	?p_name rdf:type ?Name_Type .
   	OPTIONAL {?p_name ?title ?Name} .
-  	OPTIONAL{?s bdo:personGender ?g} .
+  	OPTIONAL {?s bdo:personGender ?g} .
   }
   union {
    ?R_RES bdo:placeEvent ?pE .
@@ -76,32 +71,28 @@ where {
     ?plc1 bdo:placeContains ?R_RES .
     ?plc1 skos:prefLabel ?ll1 .
   }
-  #Associated literary production
-  union
-  {
-    ?w bdo:workHasSourcePrintery ?R_RES .
-    ?w skos:prefLabel ?wl
-    optional {?w bdo:workGenre ?wG .
-      ?wG a :Topic .}
-    optional {?w bdo:workIsAbout ?wAB .
-      ?wAB a :Topic .}
-  }
   #Associated Works
   union
   {
   	?aw a :Work .
-  	?aw ?p ?o .
+  	?aw ?p ?R_RES .
     ?aw skos:prefLabel ?awl .
-    ?aw bdo:workPartOf* ?aw1 .
-    optional {?aw bdo:workGenre ?awG .
-      ?awG a :Topic .}
+    ?aw bdo:workPartOf* ?arw .
+    ?arw :isRoot true .
+    ?resAdm adm:adminAbout ?rw ;
+            adm:status ?st .
+    optional {?aw bdo:workGenre ?awG . }
     optional {?aw bdo:workIsAbout ?awAB .
       ?awAB a :Topic .}
-    ?aw1 adm:license ?lic.
-  	?aw1 adm:status ?st .
-  	?aw1 adm:access ?acc .
-  	?aw1 bdo:workLangScript ?ls.
-  	Filter(?o = ?R_RES)
-  	Filter(?p != :workHasSourcePrintery)
+    optional {
+      ?rw :workHasItem ?item .
+      ?item a :ItemImageAsset .
+      ?itemAdm adm:adminAbout ?item .
+      ?itemAdm adm:access ?acc .
+      ?itemAdm adm:contentLegal/adm:license ?lic .
+    }
+    optional {
+      ?rw bdo:workLangScript ?ls .
+    }
   }
 }

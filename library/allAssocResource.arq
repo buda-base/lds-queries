@@ -134,8 +134,7 @@ where {
   {
     # root work is a parent with no parent
     ?R_RES bdo:workPartOf+ ?rw .
-    optional { ?rw bdo:workPartOf ?rwP }
-    FILTER (!bound(?rwP))
+    ?rw :isRoot true .
     ?rw skos:prefLabel ?rwO .
   }
   union
@@ -153,8 +152,7 @@ where {
     ?R_RES bdo:workHasExpression ?hEx .
     # same as above, root work is a parent with no parent
     ?hEx bdo:workPartOf+ ?hExW .
-    optional { ?hExW bdo:workPartOf ?hExWP }
-    FILTER (!bound(?hExWP))
+    ?hExW :isRoot true .
     ?hExW skos:prefLabel ?hExO .
   }
 }

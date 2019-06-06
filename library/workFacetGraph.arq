@@ -42,10 +42,6 @@ WHERE
       Filter ( str(?labelMatch) = str(?lit) )
     }
     ?res bdo:workPartOf* ?rw .
-    # for some reason this doesn't work:
-    #OPTIONAL { FILTER (!sameTerm(?rw,?res))
-    #  BIND(?rw AS ?root)
-    #}
     ?rw :isRoot true .
     ?resAdm adm:adminAbout ?rw ;
             adm:status ?st .

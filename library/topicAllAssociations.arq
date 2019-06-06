@@ -45,25 +45,25 @@ where {
         ?w bdo:workExpressionOf ?wE .
       }
       FILTER (!bound(?wE))
+      ?w bdo:workPartOf* ?rw .
+      ?rw :isRoot true .
+      ?resAdm adm:adminAbout ?rw ;
+              adm:status ?st .
+      ?rw skos:prefLabel ?rwO .
       ?w skos:prefLabel ?l .
-      optional {?w adm:license ?lic .}
-      optional {?w adm:status ?st .}
-      optional {?w adm:access ?acc .}
       optional {?w bdo:workLangScript ?ls .}
       optional {?w bdo:workType ?wT .}
-      optional {?w bdo:workGenre ?wG .
-      ?wG a :Topic .}
-      optional {?w bdo:workIsAbout ?wAB .
-      ?wAB a :Topic .}
+      optional {?w bdo:workGenre ?wG .}
       optional {
-        ?w bdo:workPartOf+ ?rw .
-        optional { ?rw bdo:workPartOf ?rwP }
-        FILTER (!bound(?rwP))
-        ?rw skos:prefLabel ?rwO .
-        optional {?rw adm:license ?rwlic .}
-        optional {?rw adm:status ?rwst .}
-        optional {?rw adm:access ?rwacc .}
-        optional {?rw bdo:workLangScript ?rwls .}
+        ?w bdo:workIsAbout ?wAB .
+        ?wAB a :Topic .
+      }
+      optional {
+        ?rw :workHasItem ?item .
+        ?item a :ItemImageAsset .
+        ?itemAdm adm:adminAbout ?item .
+        ?itemAdm adm:access ?rootWorkAccess .
+        ?itemAdm adm:contentLegal/adm:license ?rootWorkLicence .
       }
   }
 

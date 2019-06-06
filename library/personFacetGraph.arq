@@ -9,6 +9,7 @@
 #param.L_NAME.isLucene=true
 #param.L_NAME.example="ye shes"
 
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 CONSTRUCT
   {
@@ -16,7 +17,7 @@ CONSTRUCT
     ?res ?pp ?lit .
     ?res skos:prefLabel ?l.
     ?res skos:prefLabel ?ll.
-    ?res <http://purl.bdrc.io/ontology/tmp/prefLabelMatch> ?lit1.
+    ?res tmp:prefLabelMatch ?lit1.
     ?res :personGender ?g.
   }
 WHERE {

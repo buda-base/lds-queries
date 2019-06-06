@@ -10,12 +10,17 @@
 
 CONSTRUCT
 {
-   ?p a bdr:Person .
+   ?p a ?type .
    ?p skos:prefLabel ?pLab .
 }
 WHERE {
-
-  	#Associated People
-   ?p :personEvent ?pE . ?pE :personEventRole ?R_RES .
-   ?p skos:prefLabel ?pLab .
+  {
+    ?agentAsR :role ?R_RES .
+    ?agentAsR :agent ?p .
+    ?p skos:prefLabel ?pLab .
+    ?p a ?type .
+  } union {
+    ?p :role ?R_RES .
+    ?p a ?type .
+  }
 }

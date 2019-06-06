@@ -65,7 +65,6 @@ WHERE {
   }
 }
 
-  OPTIONAL{?TT bdo:workType ?wT. }
   OPTIONAL{?TT bdo:workPartType ?wPT. }
   OPTIONAL{?TT bdo:workHasPart ?wHP. }
   #?TT bdo:workType bdr:WorkTypeAbstractWork.}.
