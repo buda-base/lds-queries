@@ -32,14 +32,13 @@ where
   ?etext :eTextHasChunk ?chunk .
   ?chunk bdo:sliceStartChar ?startChar .
   ?chunk bdo:sliceEndChar ?endChar .
-  ?s :workHasItemEtext/bdo:itemHasVolume/bdo:volumeHasEtext/bdo:eTextResource  ?etext.
+  ?s :workHasItem/bdo:itemHasVolume/bdo:volumeHasEtext/bdo:eTextResource  ?etext.
   ?etext bdo:eTextTitle ?etextTitle .
   optional{?etext bdo:eTextIsVolume ?isVolume .}
   optional{?etext bdo:eTextVolumeIndex ?volIndex .}
   optional{?s bdo:workIsAbout ?about .
     ?about a :Topic}.
-  optional {?s bdo:workGenre ?workgenre .
-  ?workgenre a :Topic} 
+  optional {?s bdo:workGenre ?workgenre . } 
   optional{?s skos:prefLabel ?workLabel .}
   Optional{ ?s bdo:creatorMainAuthor ?author .
   ?author skos:prefLabel ?author_name }.
