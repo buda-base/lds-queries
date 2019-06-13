@@ -29,7 +29,7 @@ where {
   ?pfirst :sliceStartChar ?pfirstStartChar .
   ?R_RES :eTextHasPage ?plast .
   ?plast :seqNum ?I_END .
-  ?plast :sliceStartChar ?pendEndChar .
+  ?plast :sliceEndChar ?pendEndChar .
   ?R_RES :eTextHasChunk ?cc .
   ?cc  :sliceStartChar ?chunkstart ;
        :sliceEndChar ?chunkend .
