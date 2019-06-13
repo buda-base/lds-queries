@@ -35,6 +35,8 @@ where {
        :sliceEndChar ?chunkend .
   FILTER (?chunkstart <= ?pendEndChar && ?chunkend >= ?pfirstStartChar)
   ?cc ?ccp ?cco .
-  ?p :pageHasLine ?l .
-  ?l ?lp ?lo .
+  optional {
+    ?p :pageHasLine ?l .
+    ?l ?lp ?lo .
+  }
 }
