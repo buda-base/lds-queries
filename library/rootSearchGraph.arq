@@ -20,30 +20,32 @@
 #param.L_NAME.isLucene=true
 #param.L_NAME.example="ye shes"
 
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 CONSTRUCT
   {
     ?TT a ?type .
     ?TT ?pp ?lit .
     ?TT skos:prefLabel ?l.
-    ?TT <http://purl.bdrc.io/ontology/tmp/prefLabelMatch> ?lit1.
-    ?TT <http://purl.bdrc.io/ontology/tmp/altLabelMatch> ?lit2.
+    ?TT tmp:matchScore ?sc .
+    ?TT tmp:prefLabelMatch ?lit1.
+    ?TT tmp:altLabelMatch ?lit2.
     ?TT bdo:workType ?wT.
     ?TT bdo:workPartType ?wPT.
     ?TT bdo:workHasPart ?wHP.
     ?TT bdo:workExpressionOf ?wE.
-    ?TT <http://purl.bdrc.io/ontology/tmp/prefLabelExpressionOf> ?litE.
-    #?TT <http://purl.bdrc.io/ontology/tmp/prefLabelExpressionOfMatch> ?litEH.
+    ?TT tmp:prefLabelExpressionOf ?litE.
+    #?TT tmp:prefLabelExpressionOfMatch ?litEH.
     ?TT bdo:workHasExpression ?wH.
-    ?TT <http://purl.bdrc.io/ontology/tmp/prefLabelHasExpression> ?litH.
-    #?TT <http://purl.bdrc.io/ontology/tmp/prefLabelHasExpressionMatch> ?litHH.
+    ?TT tmp:prefLabelHasExpression ?litH.
+    #?TT tmp:prefLabelHasExpressionMatch ?litHH.
 
     #?TT bdo:workTranslationOf ?wTr.
     #?TT bdo:workHasTranslation ?wHTr.
   }
 WHERE {
 {
-  BIND(<http://purl.bdrc.io/ontology/core/tmp/prop> as ?x)
+  BIND(tmp:prop as ?x)
   {
     (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ).
     ?TT ?p ?s.
@@ -56,7 +58,6 @@ WHERE {
     (?TT ?sc ?lit2) text:query ( skos:altLabel ?L_NAME "highlight:" ).
     ?TT rdf:type ?type .
     ?TT skos:prefLabel ?l.
-
   }
   union
   { (?TT ?sc ?lit1) text:query ( skos:prefLabel ?L_NAME "highlight:").
@@ -98,3 +99,4 @@ WHERE {
  #   }
  # }.
 }
+order by desc(?sc)

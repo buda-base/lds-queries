@@ -10,13 +10,13 @@
 #param.L_NAME.example="ye shes"
 
 construct{
-  
   ?chunk a :EtextChunk .
   ?chunk :eTextHasChunk ?lit .
   ?chunk bdo:sliceStartChar ?startChar .
   ?chunk bdo:sliceEndChar ?endChar .
   ?chunk tmp:forEtext ?etext .
   ?chunk tmp:forWork ?s .
+  ?chunk tmp:matchScore ?score .
   ?chunk tmp:workLabel ?workLabel .
   ?chunk bdo:creatorMainAuthor ?author.
   ?chunk tmp:authorName ?author_name .

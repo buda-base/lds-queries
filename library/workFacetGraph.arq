@@ -67,3 +67,4 @@ WHERE
       ?itemAdm adm:contentLegal/adm:license ?license .
     } .
   }
+order by desc(?sc)

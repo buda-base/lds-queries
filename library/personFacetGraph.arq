@@ -13,15 +13,14 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 CONSTRUCT
   {
-
     ?res ?pp ?lit .
+    ?res tmp:matchScore ?sc .
     ?res skos:prefLabel ?l.
     ?res skos:prefLabel ?ll.
     ?res tmp:prefLabelMatch ?lit1.
     ?res :personGender ?g.
   }
 WHERE {
-
   {
     (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ).
     ?res ?p ?s.
@@ -41,3 +40,4 @@ WHERE {
   }
   ?res a :Person
 }
+order by desc(?sc)
