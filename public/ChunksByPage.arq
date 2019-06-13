@@ -1,4 +1,4 @@
-#QueryScope=Etext
+#QueryScope=Etexts
 #QueryReturnType=Graph
 #QueryResults=Chunks in the asked page range
 #QueryParams=R_RES,I_START,I_END
