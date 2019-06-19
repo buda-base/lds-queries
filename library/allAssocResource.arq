@@ -19,6 +19,7 @@ construct {
   ?rcn ?ppr ?rcl .
   ?tp skos:prefLabel ?tpl .
   ?imA bdo:itemHasVolume ?iV .
+  ?imA tmp:itemType ?itemT .
   ?hEx bdo:workHasRoot ?hExW .
   ?hExW skos:prefLabel ?hExO .
   ?R_RES bdo:workHasRoot ?rw .
@@ -141,6 +142,7 @@ where {
   {
     ?R_RES bdo:workHasItem ?imA .
     ?imA bdo:itemHasVolume ?iV .
+    ?imA a ?itemT .
   }
   union
   {
