@@ -5,13 +5,13 @@
 #QueryUrl=/IIIFPres_volumeInfo?R_RES=bdr:V22084_I0886
 
 #output.?workId.type=URI
-#output.?workId.desc=the work/collection expressed by this volume
+#output.?workId.desc=the work expressed by this volume
 #output.?itemId.type=URI
 #output.?itemId.desc=the item this volume belongs to
 #output.?access.type=URI
-#output.?access.desc=the access policy of the work/collection
+#output.?access.desc=the access policy of the item
 #output.?license.type=URI
-#output.?license.desc=the license of the work/collection
+#output.?license.desc=the license of the item
 #output.?imageGroup.type=string
 #output.?imageGroup.desc=the image group (internal BDRC data)
 #output.?imageList.type=string
@@ -28,12 +28,14 @@
 #output.?volumeNumber.desc=the volume number
 #output.?iiifManifest.type=URI
 #output.?iiifManifest.desc=the (external) manifest URI
+#output.?status.type=URI
+#output.?status.desc=the status of the item
 
 #param.R_RES.type=URI
 #param.R_RES.subtype=:Volume
 #param.R_RES.desc=the URI of the volume being investigated
 
-select distinct ?workId ?itemId ?access ?ric ?license ?imageGroup ?imageList ?totalPages ?pagesIntroTbrc ?volumeNumber ?volumeLabel ?iiifManifest where {
+select distinct ?workId ?itemId ?access ?ric ?license ?imageGroup ?imageList ?totalPages ?pagesIntroTbrc ?volumeNumber ?volumeLabel ?iiifManifest ?status where {
   {
     ?R_RES a :VolumeImageAsset .
     optional { ?R_RES adm:legacyImageGroupRID ?imageGroup . }
@@ -50,6 +52,7 @@ select distinct ?workId ?itemId ?access ?ric ?license ?imageGroup ?imageList ?to
     ?admVol adm:legacyImageGroupRID ?imageGroup .
     ?admItem adm:adminAbout/:itemHasVolume ?R_RES .
     ?admItem adm:access ?access .
+    ?admItem adm:status ?status .
     ?admItem adm:restrictedInChina ?ric .
     ?admItem adm:contentLegal/adm:license ?license .
   }

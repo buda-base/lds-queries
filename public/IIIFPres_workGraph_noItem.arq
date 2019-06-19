@@ -17,6 +17,7 @@ construct {
   ?R_RES tmp:rootAccess ?access .
   ?R_RES tmp:rootRestrictedInChina ?ric .
   ?R_RES tmp:rootLicense ?license .
+  ?R_RES tmp:rootStatus ?status .
   ?R_RES tmp:inItem ?item .
   ?R_RES tmp:firstVolume ?vol .
 }
@@ -37,12 +38,12 @@ where {
   } union {
     ?R_RES :workLinkTo?/bdo:workPartOf* ?rw .
     ?rw :workHasItemImageAsset ?item .
-    ?rw adm:access ?access
   } union {
     ?R_RES :workLinkTo?/bdo:workPartOf*/:workHasItem ?item .
     ?item a :ItemImageAsset .
     ?admItem adm:adminAbout ?item .
     ?admItem adm:access ?access .
+    ?admItem adm:status ?status .
     ?admItem adm:restrictedInChina ?ric .
     ?admItem adm:contentLegal/adm:license ?license .
   } union {

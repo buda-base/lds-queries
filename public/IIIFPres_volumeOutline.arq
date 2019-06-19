@@ -14,6 +14,7 @@ construct {
   ?R_RES ?p ?o .
   ?item :itemForWork ?work .
   ?R_RES tmp:rootAccess ?access .
+  ?R_RES tmp:rootStatus ?status .
   ?R_RES tmp:rootRestrictedInChina ?ric .
   ?R_RES tmp:rootLicense ?license .
   ?R_RES tmp:legacyImageGroupRID ?imageGroupId .
@@ -49,6 +50,7 @@ where {
     ?admVol adm:legacyImageGroupRID ?imageGroupId .
     ?admItem adm:adminAbout ?item .
     ?admItem adm:access ?access .
+    ?admItem adm:status ?status .
     ?admItem adm:restrictedInChina ?ric .
     ?admItem adm:contentLegal/adm:license ?license .
   }
