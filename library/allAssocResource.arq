@@ -39,6 +39,7 @@ construct {
   ?ivol bdo:volumeNumber ?ivolnum .
   ?pRole skos:prefLabel ?pRoleLab .
   ?R_RES tmp:hasEtextVol ?etextvol .
+  ?R_RES tmp:hasEtextRes ?etextres .
 }
 where {
   {
@@ -99,6 +100,7 @@ where {
     ?voli a :ItemEtext .
     ?voli :itemHasVolume ?etextvol .
     ?etextvol :volumeNumber ?volNum .
+    ?etextvol :volumeHasEtext/:eTextResource ?etextres .
   }
   union
   {
