@@ -27,9 +27,12 @@ where {
   ?R_RES :eTextHasPage ?pfirst .
   ?pfirst :seqNum ?I_START .
   ?pfirst :sliceStartChar ?pfirstStartChar .
-  ?R_RES :eTextHasPage ?plast .
-  ?plast :seqNum ?I_END .
-  ?plast :sliceEndChar ?pendEndChar .
+  optional {
+    ?R_RES :eTextHasPage ?plast .
+    ?plast :seqNum ?I_END .
+    ?plast :sliceEndChar ?pendPageEndChar .
+  }
+  bind( IF (BOUND (?pendPageEndChar) , ?pendPageEndChar , 99999999999) as ?pendEndChar )
   ?R_RES :eTextHasChunk ?cc .
   ?cc  :sliceStartChar ?chunkstart ;
        :sliceEndChar ?chunkend .

@@ -10,7 +10,11 @@
 
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
-construct { ?s ?p ?o }
+construct { 
+   ?s ?p ?o .
+   ?item bdo:itemForWork ?work .
+   ?work skos:prefLabel ?workpl .
+  }
 where {
   { 
     ?R_RES ?p ?o .
@@ -19,9 +23,9 @@ where {
     ?R_RES bdo:eTextInItem  ?s .
     ?s ?p ?o .
   } union {
-    ?R_RES bdo:eTextInItem/bdo:itemForWork  ?s .
-    ?s skos:prefLabel ?o .
-    BIND (skos:prefLabel as ?p)
+    ?R_RES bdo:eTextInItem ?item .
+    ?item bdo:itemForWork ?work .
+    ?work skos:prefLabel ?workpl .
   } union {
     # get image volume ID (for iiif)
     ?R_RES :eTextIsVolume ?volNum .

@@ -38,7 +38,6 @@
 select distinct ?workId ?itemId ?access ?ric ?license ?imageGroup ?imageList ?totalPages ?pagesIntroTbrc ?volumeNumber ?volumeLabel ?iiifManifest ?status where {
   {
     ?R_RES a :VolumeImageAsset .
-    optional { ?R_RES adm:legacyImageGroupRID ?imageGroup . }
     optional { ?R_RES :volumeNumber ?volumeNumber . }
     optional { ?R_RES bdo:imageList ?imageList . }
     optional { ?R_RES bdo:volumePagesTbrcIntro ?pagesIntroTbrc . }
@@ -47,10 +46,9 @@ select distinct ?workId ?itemId ?access ?ric ?license ?imageGroup ?imageList ?to
     optional { ?R_RES :hasIIIFManifest ?iiifManifest . }
     ?itemId :itemForWork ?workId ;
         :itemHasVolume ?R_RES .
-    ?R_RES a :VolumeImageAsset .
     ?admVol adm:adminAbout ?R_RES .
     ?admVol adm:legacyImageGroupRID ?imageGroup .
-    ?admItem adm:adminAbout/:itemHasVolume ?R_RES .
+    ?admItem adm:adminAbout ?itemId .
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
     ?admItem adm:restrictedInChina ?ric .
