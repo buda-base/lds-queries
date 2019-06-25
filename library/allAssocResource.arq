@@ -38,6 +38,7 @@ construct {
   ?annbalocWork skos:prefLabel ?annbalocWorkLabel .
   ?ivol bdo:volumeNumber ?ivolnum .
   ?pRole skos:prefLabel ?pRoleLab .
+  ?R_RES tmp:hasEtextVol ?etextvol .
 }
 where {
   {
@@ -89,6 +90,15 @@ where {
   {
     ?rev ?pp  ?R_RES .
     ?rev skos:prefLabel ?revl .
+  }
+  # etexts
+  union
+  {
+    ?R_RES :eTextIsVolume ?volNum .
+    ?R_RES :volumeOf/:itemForWork/:workHasItem ?voli .
+    ?voli a :ItemEtext .
+    ?voli :itemHasVolume ?etextvol .
+    ?etextvol :volumeNumber ?volNum .
   }
   union
   {
