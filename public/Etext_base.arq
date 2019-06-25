@@ -12,8 +12,8 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 construct { 
    ?s ?p ?o .
-   ?item bdo:itemForWork ?work .
-   ?work skos:prefLabel ?workpl .
+   ?R_RES tmp:imageVolumeId ?imagevol .
+   ?imagevol tmp:workLabel ?workpl .
   }
 where {
   { 
@@ -23,17 +23,17 @@ where {
     ?R_RES bdo:eTextInItem  ?s .
     ?s ?p ?o .
   } union {
-    ?R_RES bdo:eTextInItem ?item .
-    ?item bdo:itemForWork ?work .
-    ?work skos:prefLabel ?workpl .
+    ?R_RES bdo:eTextInItem/bdo:itemForWork  ?s .
+    ?s skos:prefLabel ?o .
+    BIND (skos:prefLabel as ?p)
   } union {
     # get image volume ID (for iiif)
     ?R_RES :eTextIsVolume ?volNum .
-    ?R_RES :eTextInItem/:itemForWork/:workHasItem/:itemHasVolume ?o .
-    ?o a :VolumeImageAsset .
-    ?o :volumeNumber ?volNum .
-    BIND (tmp:imageVolumeId as ?p)
-    BIND (?R_RES as ?s)
+    ?R_RES :eTextInItem/:itemForWork ?work .
+    :workHasItem/:itemHasVolume ?imagevol .
+    ?imagevol a :VolumeImageAsset .
+    ?imagevol :volumeNumber ?volNum .
+    ?work skos:prefLabel ?workpl .
   }
 }
 
