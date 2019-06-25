@@ -94,7 +94,7 @@ where {
   # etexts
   union
   {
-    ?R_RES :eTextIsVolume ?volNum .
+    ?R_RES :volumeNumber ?volNum .
     ?R_RES :volumeOf/:itemForWork/:workHasItem ?voli .
     ?voli a :ItemEtext .
     ?voli :itemHasVolume ?etextvol .
