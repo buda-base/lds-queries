@@ -30,11 +30,30 @@ CONSTRUCT
     ?res tmp:prefLabelExpressionOf ?litE .
     ?res bdo:workHasExpression ?wH .
     ?res tmp:prefLabelHasExpression ?litH .
+
+    ?res ?eventType ?litA.
   }
 WHERE 
   {
-    (?title ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ) .
-    ?res :workTitle ?title .
+    {
+      (?title ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+      ?res :workTitle ?title .
+      optional { ?res bdo:workGenre ?g } .
+      optional { ?res bdo:workIsAbout ?t . ?t a :Topic } .
+    }
+    union 
+    {
+      (?author ?sc ?litA) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+      ?anypropobj rdf:eventWho ?author .  
+      ?res ?anyprop ?anypropobj .       
+      ?anypropobj a ?eventType .
+      ?res :workTitle ?title .
+      optional { ?res bdo:workGenre ?g } .
+      optional { ?res bdo:workIsAbout ?t . ?t a :Topic } .
+      optional { ?rootRes (:workHasPart)+ ?res }
+      optional { ?rootRes bdo:workGenre ?g } .
+      optional { ?rootRes bdo:workIsAbout ?t . ?t a :Topic } .
+    }
     ?res a ?type .
     ?res skos:prefLabel ?l .
     optional {
@@ -53,11 +72,6 @@ WHERE
     optional {
       ?res bdo:workHasExpression ?wH .
       ?wH skos:prefLabel ?litH .
-    } .
-    optional { ?res bdo:workGenre ?g } .
-    optional {
-      ?res bdo:workIsAbout ?t .
-      ?t a :Topic
     } .
     optional {
       ?rw :workHasItem ?item .
