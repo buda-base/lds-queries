@@ -65,22 +65,38 @@ where {
   {
     {
       ?w :creator/:agent ?R_RES .
-      BIND(:creator as ?wrel)
-    } union {
+      ?w :creator/:role ?creaRole .
+      ?creaRole skos:prefLabel ?roleLabel . 
+      ?R_RES skos:prefLabel ?creaLabel . 
+      BIND(?roleLabel as ?wrel)
+    }
+    union 
+    {
       ?w :workIsAbout ?R_RES .
       BIND(:workIsAbout as ?wrel)
     }
     ?w a ?type .
     ?w skos:prefLabel ?ll .
-    ?w bdo:workPartOf* ?rw .
-    ?rw :isRoot true ;
-        adm:status ?rwst ;
-        skos:prefLabel ?rwO .
 
-    ?resAdm adm:adminAbout ?rw ;
-            adm:status ?st .
+    optional {
+      ?w bdo:workPartOf* ?rw .
+      ?rw :isRoot true ;
+          adm:status ?rwst ;
+          skos:prefLabel ?rwO .
 
-    optional {?rw bdo:workLangScript ?rwls .}
+      ?resAdm adm:adminAbout ?rw ;
+              adm:status ?st .
+
+      optional {?rw bdo:workLangScript ?rwls .}
+
+      optional {
+        ?rw :workHasItem ?item .
+        ?item a :ItemImageAsset .
+        ?itemAdm adm:adminAbout ?item .
+        ?itemAdm adm:access ?acc .
+        ?itemAdm adm:contentLegal/adm:license ?lic .
+      }
+    }
 
     optional {?w bdo:workLangScript ?ls .}
     optional {?w bdo:workGenre ?wG .}
@@ -88,15 +104,7 @@ where {
        ?w bdo:workIsAbout ?wAB .
        ?wAB a :Topic .
     }
-
-    optional {
-      ?rw :workHasItem ?item .
-      ?item a :ItemImageAsset .
-      ?itemAdm adm:adminAbout ?item .
-      ?itemAdm adm:access ?acc .
-      ?itemAdm adm:contentLegal/adm:license ?lic .
-    }
-
+    
     OPTIONAL{?w bdo:workHasPart ?wHP . } .
     OPTIONAL{?w bdo:workPartType ?wPT . } .
     OPTIONAL{

@@ -31,16 +31,40 @@ CONSTRUCT
 
     #?TT bdo:workTranslationOf ?wTr.
     #?TT bdo:workHasTranslation ?wHTr.
+
+    ?TT ?eventType ?lit .
+
+    ?TT tmp:creatorLabel ?litC .
+    ?TT tmp:creatorRole ?roleLabel .
   }
 WHERE {
 {
   BIND(tmp:prop as ?x)
   {
     (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ).
-    ?TT ?p ?s.
-    ?s rdf:type ?pp .
+    {
+      ?TT ?anyprop ?anypropobj .       
+      ?anypropobj rdf:eventWho ?s ; a ?eventType .
+      ?TT rdf:type ?type .
+      OPTIONAL{?TT skos:prefLabel ?l.}.
+    } 
+    union 
+    {
+      ?TT ?p ?s.
+      FILTER(!EXISTS { ?TT rdf:eventWho ?anywho })
+      ?s rdf:type ?pp .
+      ?TT rdf:type ?type .
+      OPTIONAL{?TT skos:prefLabel ?l.}.
+    }
+
+  }
+  union
+  { (?s ?sc ?litC) text:query ( skos:prefLabel ?L_NAME "highlight:").
+    ?TT bdo:creator/bdo:agent ?s .
+    ?TT bdo:creator/bdo:role ?creaRole .
+    ?creaRole skos:prefLabel ?roleLabel . 
     ?TT rdf:type ?type .
-    OPTIONAL{?TT skos:prefLabel ?l.}.
+    ?TT skos:prefLabel ?l.    
   }
   union
   {
@@ -49,7 +73,8 @@ WHERE {
     ?TT skos:prefLabel ?l.
   }
   union
-  { (?TT ?sc ?lit1) text:query ( skos:prefLabel ?L_NAME "highlight:").
+  {
+    (?TT ?sc ?lit1) text:query ( skos:prefLabel ?L_NAME "highlight:" ).
     ?TT rdf:type ?type .
     ?TT skos:prefLabel ?l.
   }
