@@ -20,6 +20,7 @@ select ?item ?list ?grId where{
   ?item  a bdo:ItemImageAsset ;
          :itemHasVolume ?v .
   ?v :imageList ?list .
-  ?v adm:legacyImageGroupRID ?grId  
+  ?va adm:adminAbout  ?v .
+  ?va adm:legacyImageGroupRID ?grId .
 } 
 order by ?grId
