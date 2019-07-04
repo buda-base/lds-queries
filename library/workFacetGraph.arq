@@ -38,22 +38,36 @@ WHERE
     {
       (?title ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ) .
       ?res :workTitle ?title .
-      optional { ?res bdo:workGenre ?g } .
-      optional { ?res bdo:workIsAbout ?t . ?t a :Topic } .
     }
     union 
     {
       (?author ?sc ?litA) text:query ( rdfs:label ?L_NAME "highlight:" ) .
-      ?anypropobj rdf:eventWho ?author .  
-      ?res ?anyprop ?anypropobj .       
-      ?anypropobj a ?eventType .
-      ?res :workTitle ?title .
-      optional { ?res bdo:workGenre ?g } .
-      optional { ?res bdo:workIsAbout ?t . ?t a :Topic } .
-      optional { ?rootRes (:workHasPart)+ ?res }
-      optional { ?rootRes bdo:workGenre ?g } .
-      optional { ?rootRes bdo:workIsAbout ?t . ?t a :Topic } .
+      {
+        ?author ^rdf:eventWho ?anypropobj .
+        ?res ?anyprop ?anypropobj .
+        ?anypropobj a ?eventType .
+      }
+      union 
+      {
+        ?author ^:personName/^:agent ?agent .
+        ?agent ^:creator ?res .
+        ?agent bdo:role ?eventType .
+      }      
     }
+    
+    optional { ?res bdo:workGenre ?g } .
+    optional { ?res bdo:workIsAbout ?t . ?t a :Topic } .
+
+    # good idea (but needs to be tested in a real case)
+    #optional { 
+    #  FILTER(!EXISTS { 
+    #    { ?res bdo:workGenre ?g } union { ?res bdo:workIsAbout ?t . }
+    #  })
+    #  ?rootRes (:workHasPart)+ ?res .
+    #  optional { ?rootRes bdo:workGenre ?g . }
+    #  optional { ?rootRes bdo:workIsAbout ?t . ?t a :Topic . }
+    #}
+
     ?res a ?type .
     ?res skos:prefLabel ?l .
     optional {
