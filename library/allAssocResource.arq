@@ -43,7 +43,14 @@ construct {
 }
 where {
   {
-    ?R_RES ?p ?o .
+    {
+      ?R_RES ?p ?o .
+    }
+    union
+    {
+      ?admin adm:adminAbout ?R_RES .
+      ?admin ?p ?o .
+    }
     ?o skos:prefLabel ?l .
     optional {
       ?o bdo:contentProvider ?prov .
