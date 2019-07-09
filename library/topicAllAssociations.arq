@@ -13,7 +13,7 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 construct {
   #associated Works
   ?w a ?wT .
-  ?w tmp:relationType ?wrel .
+  #?w tmp:relationType ?wrel .
   ?w skos:prefLabel ?l .
   ?w adm:license ?lic.
   ?w adm:status ?st .
@@ -28,8 +28,8 @@ construct {
   ?w bdo:workType ?wT.
   ?w bdo:workHasRoot ?rw .
   ?w tmp:rootPrefLabel ?rwO .
-  #?w bdo:workGenre ?wG .
-  #?w bdo:workIsAbout ?wAB .
+  ?w bdo:workGenre ?wG .
+  ?w bdo:workIsAbout ?wAB .
 
   #associated Lineages
   ?lin a :Lineage .
