@@ -13,6 +13,7 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 construct {
   #associated Works
   ?w a ?wT .
+  ?w tmp:relationType ?wrel .
   ?w skos:prefLabel ?l .
   ?w adm:license ?lic.
   ?w adm:status ?st .
@@ -27,8 +28,8 @@ construct {
   ?w bdo:workType ?wT.
   ?w bdo:workHasRoot ?rw .
   ?w tmp:rootPrefLabel ?rwO .
-  ?w bdo:workGenre ?wG .
-  ?w bdo:workIsAbout ?wAB .
+  #?w bdo:workGenre ?wG .
+  #?w bdo:workIsAbout ?wAB .
 
   #associated Lineages
   ?lin a :Lineage .
@@ -37,9 +38,13 @@ construct {
 where {
     #associated Works
   {
-      { ?w :workGenre ?R_RES . }
+      { ?w :workGenre ?R_RES . 
+        BIND(:workGenre as ?wrel)
+      }
       union
-      { ?w :workIsAbout ?R_RES . } .
+      { ?w :workIsAbout ?R_RES . 
+        BIND(:workIsAbout as ?wrel)
+      } .
       # we don't want expressions, just the most abstract
       OPTIONAL{
         ?w bdo:workExpressionOf ?wE .
