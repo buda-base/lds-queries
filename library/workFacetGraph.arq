@@ -43,7 +43,7 @@ WHERE
     {
       (?author ?sc ?litA) text:query ( rdfs:label ?L_NAME "highlight:" ) .
       {
-        ?author ^rdf:eventWho ?anypropobj .
+        ?author ^:eventWho ?anypropobj .
         ?res ?anyprop ?anypropobj .
         ?anypropobj a ?eventType .
       }
