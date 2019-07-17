@@ -30,6 +30,7 @@ construct
   ?w bdo:workGenre ?wG .
   ?w bdo:workIsAbout ?wAB .
   ?w bdo:workPartType ?wPT.
+  ?w bdo:workObjectType ?wOT.
   ?w bdo:workHasPart ?wHP.
   ?w bdo:workPartOf ?wPO.
   ?w bdo:workExpressionOf ?wE.
@@ -99,6 +100,8 @@ where {
     }
 
     optional {?w bdo:workLangScript ?ls .}
+    optional {?w bdo:workObjectType ?wOT .}
+     optional {?w bdo:workPartType ?wPT .}
     optional {?w bdo:workGenre ?wG .}
     optional {
        ?w bdo:workIsAbout ?wAB .

@@ -19,6 +19,8 @@ construct {
   ?w adm:status ?st .
   ?w adm:access ?acc .
   ?w bdo:workLangScript ?ls.
+  ?w bdo:workPartType ?wPT.
+  ?w bdo:workObjectType ?wOT.
 
   ?w adm:license ?rwlic.
   ?w adm:status ?rwst .
@@ -71,6 +73,8 @@ where {
       ?w skos:prefLabel ?l .
       optional {?w bdo:workLangScript ?ls .}
       optional {?w bdo:workGenre ?wG .}
+      optional {?w bdo:workObjectType ?wOT .}
+      optional {?w bdo:workPartType ?wPT .}
       optional {
         ?w bdo:workIsAbout ?wAB .
         ?wAB a :Topic .

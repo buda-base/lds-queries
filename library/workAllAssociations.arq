@@ -18,6 +18,8 @@ construct {
   ?work bdo:workLangScript ?workscript.
   ?work bdo:workType ?type .
   ?work bdo:workGenre ?workgenre .
+  ?work bdo:workObjectType ?wOT .
+  ?work bdo:workPartType ?wPT .
 
   ?work adm:license ?rootWorkLicence.
   ?work adm:status ?rootWorkStatus .
@@ -55,6 +57,8 @@ where {
               adm:status ?rootWorkStatus .
 
       optional {?work bdo:workLangScript ?workscript .}
+      optional {?work bdo:workPartType ?wPT . } .
+      optional {?work bdo:workObjectType ?wOT . } .
 
       optional {?work bdo:workGenre ?workgenre .}      
       optional {
