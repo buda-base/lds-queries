@@ -44,14 +44,14 @@ WHERE {
     (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ).
     {
       ?TT ?anyprop ?anypropobj .       
-      ?anypropobj rdf:eventWho ?s ; a ?eventType .
+      ?anypropobj :eventWho ?s ; a ?eventType .
       ?TT rdf:type ?type .
       OPTIONAL{?TT skos:prefLabel ?l.}.
     } 
     union 
     {
       ?TT ?p ?s.
-      FILTER(!EXISTS { ?TT rdf:eventWho ?anywho })
+      FILTER(!EXISTS { ?TT :eventWho ?anywho })
       ?s rdf:type ?pp .
       ?TT rdf:type ?type .
       OPTIONAL{?TT skos:prefLabel ?l.}.

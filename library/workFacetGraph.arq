@@ -24,6 +24,7 @@ CONSTRUCT
     ?res tmp:titleMatch ?lit .
     ?res tmp:matchScore ?sc .
     ?res tmp:labelMatch ?labelMatch.
+    ?res bdo:workObjectType ?wOT .
     ?res bdo:workPartType ?wPT .
     ?res bdo:workHasPart ?wHP .
     ?res bdo:workExpressionOf ?wE .
@@ -43,7 +44,7 @@ WHERE
     {
       (?author ?sc ?litA) text:query ( rdfs:label ?L_NAME "highlight:" ) .
       {
-        ?author ^rdf:eventWho ?anypropobj .
+        ?author ^:eventWho ?anypropobj .
         ?res ?anyprop ?anypropobj .
         ?anypropobj a ?eventType .
       }
@@ -83,6 +84,7 @@ WHERE
     } .
     optional { ?res bdo:workHasPart ?wHP . } .
     optional { ?res bdo:workPartType ?wPT . } .
+    optional { ?res bdo:workObjectType ?wOT . } .
     optional {
       ?res bdo:workHasExpression ?wH .
       ?wH skos:prefLabel ?litH .
