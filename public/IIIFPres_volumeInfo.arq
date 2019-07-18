@@ -46,8 +46,10 @@ select distinct ?workId ?itemId ?access ?ric ?license ?imageGroup ?imageList ?to
     optional { ?R_RES :hasIIIFManifest ?iiifManifest . }
     ?itemId :itemForWork ?workId ;
         :itemHasVolume ?R_RES .
-    ?admVol adm:adminAbout ?R_RES .
-    ?admVol adm:legacyImageGroupRID ?imageGroup .
+    optional {
+      ?admVol adm:adminAbout ?R_RES .
+      ?admVol adm:legacyImageGroupRID ?imageGroup .
+    }
     ?admItem adm:adminAbout ?itemId .
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
