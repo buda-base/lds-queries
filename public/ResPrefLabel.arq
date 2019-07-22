@@ -1,0 +1,15 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=A graph for the preflabels of the given resource.
+#QueryParams=R_RES
+#QueryUrl=/ResPrefLabel?R_RES=bdr:W22084
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the chosen resource
+
+construct {
+	?R_RES skos:prefLabel ?label
+} where { 
+	{ ?R_RES skos:prefLabel ?label } 
+}
