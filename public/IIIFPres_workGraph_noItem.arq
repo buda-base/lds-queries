@@ -13,7 +13,7 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 construct { 
   ?s ?p ?o .
   ?o a ?ot .
-  ?o a ?ol .
+  ?o skos:prefLabel ?ol .
   ?lt a ?ltt .
   ?R_RES tmp:rootAccess ?access .
   ?R_RES tmp:rootRestrictedInChina ?ric .
