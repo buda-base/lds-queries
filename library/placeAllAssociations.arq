@@ -13,16 +13,23 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 construct
 {
   	#Associated People
-    ?s tmp:relationType ?pl .
-  	?s bdo:personGender ?g .
-    ?s skos:prefLabel ?l .
-  	?s ?Name_Type ?Name .
-    ?s a :Person .
 
-    ?pEw a :Person .
-    ?pEw skos:prefLabel ?pEl .
-    ?pEw tmp:relationType ?pEa .
-  	?pEw bdo:personGender ?pEg .
+
+    ?p tmp:relationType ?plrel .
+  	?p bdo:personGender ?g .
+    ?p skos:prefLabel ?plabel .
+    ?p a :Person .
+
+    #?s tmp:relationType ?pl .
+  	#?s bdo:personGender ?g .
+    #?s skos:prefLabel ?l .
+  	#?s ?Name_Type ?Name .
+    #?s a :Person .
+
+    #?pEw a :Person .
+    #?pEw skos:prefLabel ?pEl .
+    #?pEw tmp:relationType ?pEa .
+  	#?pEw bdo:personGender ?pEg .
 
   #Associated places
     ?plc a :Place .
@@ -47,22 +54,39 @@ construct
 where {
   #Associated People
   {
-  	?s bdo:personEvent ?e .
-  	?e rdf:type ?pl .
-  	?e bdo:personEventPlace ?R_RES.
-  	?s :personName ?p_name .
-  	?s skos:prefLabel ?l .
-  	?p_name rdf:type ?Name_Type .
-  	OPTIONAL {?p_name ?title ?Name} .
-  	OPTIONAL {?s bdo:personGender ?g} .
+    
+    # in the person events
+    {
+      ?p bdo:personEvent ?e.
+      ?e a ?plrel .
+      ?e :eventWhere ?R_RES .
+      ?p skos:prefLabel ?plabel .
+    }
+    # in other events
+    union
+    {
+      ?e :eventWho ?p .
+      ?a a ?plrel .
+      ?e :eventWhere ?R_RES .
+      ?p skos:prefLabel ?plabel .
+    }
+
+  	#?e rdf:type ?pl .
+  	#?e bdo:personEventPlace ?R_RES.
+  	#?s :personName ?p_name .
+  	#?s skos:prefLabel ?l .
+  	#?p_name rdf:type ?Name_Type .
+  	#OPTIONAL {?p_name ?title ?Name} .
+  	
+    OPTIONAL {?p bdo:personGender ?g} .
   }
-  union {
-   ?R_RES bdo:placeEvent ?pE .
-   ?pE a ?pEa .
-   ?pE bdo:eventWho ?pEw .
-   ?pEw skos:prefLabel ?pEl .
-   OPTIONAL { ?pEw bdo:personGender ?pEg . }
-  }
+  #union {
+  # ?R_RES bdo:placeEvent ?pE .
+  # ?pE a ?pEa .
+  # ?pE bdo:eventWho ?pEw .
+  # ?pEw skos:prefLabel ?pEl .
+  # OPTIONAL { ?pEw bdo:personGender ?pEg . }
+  #}
   #Associated Places
   union
   {
@@ -77,22 +101,25 @@ where {
   	?aw a :Work .
   	?aw ?p ?R_RES .
     ?aw skos:prefLabel ?awl .
+
     ?aw bdo:workPartOf* ?arw .
     ?arw :isRoot true .
-    ?resAdm adm:adminAbout ?rw ;
-            adm:status ?st .
+    ?resAdm adm:adminAbout ?arw ;
+            adm:status ?st .    
+
     optional {?aw bdo:workGenre ?awG . }
     optional {?aw bdo:workIsAbout ?awAB .
       ?awAB a :Topic .}
+    
     optional {
-      ?rw :workHasItem ?item .
+      ?arw :workHasItem ?item .
       ?item a :ItemImageAsset .
       ?itemAdm adm:adminAbout ?item .
       ?itemAdm adm:access ?acc .
       ?itemAdm adm:contentLegal/adm:license ?lic .
     }
     optional {
-      ?rw bdo:workLangScript ?ls .
+      ?arw bdo:workLangScript ?ls .
     }
   }
 }
