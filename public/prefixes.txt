@@ -30,3 +30,4 @@ prefix sh: <http://www.w3.org/ns/shacl#>
 prefix rsh: <http://purl.bdrc.io/shacl/core/shape/>
 prefix bdg:   <http://purl.bdrc.io/graph/>
 prefix bda:   <http://purl.bdrc.io/admindata/>
+prefix dila:  <http://purl.dila.edu.tw/resource/>
