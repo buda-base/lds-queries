@@ -41,7 +41,7 @@ construct
 
   #Associated Works
     ?aw a :Work .
-    ?aw ?p ?R_RES .
+    ?aw ?plw ?R_RES .
     ?aw skos:prefLabel ?awl .
     ?aw adm:license ?lic.
   	?aw adm:status ?st .
@@ -66,7 +66,7 @@ where {
     union
     {
       ?e :eventWho ?p .
-      ?a a ?plrel .
+      ?e a ?plrel .
       ?e :eventWhere ?R_RES .
       ?p skos:prefLabel ?plabel .
     }
@@ -99,7 +99,7 @@ where {
   union
   {
   	?aw a :Work .
-  	?aw ?p ?R_RES .
+  	?aw ?plw ?R_RES .
     ?aw skos:prefLabel ?awl .
 
     ?aw bdo:workPartOf* ?arw .
