@@ -65,8 +65,8 @@ where {
   union
   {
     {
-      ?w :creator/:agent ?R_RES .
-      ?w :creator/:role ?creaRole .
+      ?w :creator ?agent .
+      ?agent :agent ?R_RES ; :role ?creaRole .
       ?creaRole skos:prefLabel ?roleLabel . 
       ?R_RES skos:prefLabel ?creaLabel . 
       BIND(?roleLabel as ?wrel)
