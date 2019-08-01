@@ -60,8 +60,8 @@ WHERE {
   }
   union
   { (?s ?sc ?litC) text:query ( skos:prefLabel ?L_NAME "highlight:").
-    ?TT bdo:creator/bdo:agent ?s .
-    ?TT bdo:creator/bdo:role ?creaRole .
+    ?TT bdo:creator ?agent .
+    ?agent bdo:agent ?s ; bdo:role ?creaRole .
     ?creaRole skos:prefLabel ?roleLabel . 
     ?TT rdf:type ?type .
     ?TT skos:prefLabel ?l.    
