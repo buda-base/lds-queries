@@ -32,7 +32,7 @@ CONSTRUCT
     ?res bdo:workHasExpression ?wH .
     ?res tmp:prefLabelHasExpression ?litH .
 
-    ?res ?eventType ?litA.
+    ?res ?creaRole ?litA.
   }
 WHERE 
   {
@@ -46,13 +46,12 @@ WHERE
       {
         ?author ^:eventWho ?anypropobj .
         ?res ?anyprop ?anypropobj .
-        ?anypropobj a ?eventType .
+        ?anypropobj a ?creaRole .
       }
       union 
       {
-        ?author ^:personName/^:agent ?agent .
-        ?agent ^:creator ?res .
-        ?agent bdo:role ?eventType .
+        ?res :creator ?agent . 
+        ?agent :agent/:personName ?author ; :role ?creaRole .
       }      
     }
     
