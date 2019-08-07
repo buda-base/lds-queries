@@ -1,0 +1,15 @@
+#QueryScope=Work
+#QueryReturnType=Table
+#QueryResults=The list of URIs of works we do not send to mirror website
+#QueryParams=
+#QueryUrl=/listRestricted
+
+#output.workrid.type=URI
+#output.workrid.subtype=Work
+#param.workrid.desc=the URI of work
+
+select ?workrid 
+where {
+    ?admItem adm:restrictedInChina true .
+    ?admItem adm:adminAbout/:itemForWork ?workrid .
+}
