@@ -21,6 +21,8 @@ construct {
   ?work bdo:workObjectType ?wOT .
   ?work bdo:workPartType ?wPT .
 
+  ?work bdo:workLangScript ?lssub.  
+
   ?work adm:license ?rootWorkLicence.
   ?work adm:status ?rootWorkStatus .
   ?work adm:access ?rootWorkAccess .
@@ -56,7 +58,13 @@ where {
       ?resAdm adm:adminAbout ?rw ;
               adm:status ?rootWorkStatus .
 
-      optional {?work bdo:workLangScript ?workscript .}
+      optional {?work bdo:workLangScript ?workscript .      
+        optional {
+          ?workscript rdfs:subClassOf+ ?lssub .
+          ?lssub bdo:language ?lssublang .
+          filter(bound(?lssublang))
+        }
+      }
       optional {?work bdo:workPartType ?wPT . } .
       optional {?work bdo:workObjectType ?wOT . } .
 
@@ -68,7 +76,13 @@ where {
         ?itemAdm adm:access ?rootWorkAccess .
         ?itemAdm adm:contentLegal/adm:license ?rootWorkLicence .
       }
-      optional { ?rw  bdo:workLangScript ?rootWorkScript . } .  }
+      optional { ?rw  bdo:workLangScript ?rootWorkScript .       
+        optional {
+          ?rootWorkScript rdfs:subClassOf+ ?lssub .
+          ?lssub bdo:language ?lssublang .
+          filter(bound(?lssublang))
+        }
+      } .  }
   #associated Lineages
   union
   {
