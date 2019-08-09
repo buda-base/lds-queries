@@ -20,6 +20,7 @@ CONSTRUCT
     ?res bdo:workIsAbout ?t .
     ?res bdo:workGenre ?g .
     ?res bdo:workLangScript ?ls .
+    ?res bdo:workLangScript ?lssub .
     ?res skos:prefLabel ?l .
     ?res tmp:titleMatch ?lit .
     ?res tmp:matchScore ?sc .
@@ -80,6 +81,11 @@ WHERE
             adm:status ?st .
     optional {
         ?rw  bdo:workLangScript ?ls . 
+        optional {
+          ?ls rdfs:subClassOf+ ?lssub .
+          ?lssub bdo:language ?lssublang .
+          filter(bound(?lssublang))
+        }
     } .
     optional { ?res bdo:workHasPart ?wHP . } .
     optional { ?res bdo:workPartType ?wPT . } .
