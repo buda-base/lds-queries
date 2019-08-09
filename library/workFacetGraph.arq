@@ -38,6 +38,11 @@ CONSTRUCT
 WHERE 
   {
     {
+      (?res ?sc ?lit) text:query ( skos:prefLabel ?L_NAME "highlight:" ) .
+      ?res a :Work .
+    }
+    union 
+    {
       (?title ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ) .
       ?res :workTitle ?title .
     }

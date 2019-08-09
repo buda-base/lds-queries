@@ -47,6 +47,7 @@ construct
   	?aw adm:status ?st .
   	?aw adm:access ?acc .
   	?aw bdo:workLangScript ?ls.
+  	?aw bdo:workLangScript ?lssub.
     ?aw bdo:workGenre ?awG .
     ?aw bdo:workIsAbout ?awAB .
 }
@@ -119,7 +120,12 @@ where {
       ?itemAdm adm:contentLegal/adm:license ?lic .
     }
     optional {
-      ?arw bdo:workLangScript ?ls .
+      ?arw bdo:workLangScript ?ls .    
+      optional {
+        ?ls rdfs:subClassOf+ ?lssub .
+        ?lssub bdo:language ?lssublang .
+        filter(bound(?lssublang))
+      }
     }
   }
 }

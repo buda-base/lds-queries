@@ -39,6 +39,7 @@ construct
   ?w tmp:prefLabelHasExpression ?litH.
 
   ?w bdo:workLangScript ?rwls.
+  ?w bdo:workLangScript ?lssub.
   ?w bdo:workHasRoot ?rw .
   ?w tmp:rootPrefLabel ?rwO .
 
@@ -88,7 +89,13 @@ where {
       ?resAdm adm:adminAbout ?rw ;
               adm:status ?st .
 
-      optional {?rw bdo:workLangScript ?rwls .}
+      optional {?rw bdo:workLangScript ?rwls .      
+        optional {
+          ?rwls rdfs:subClassOf+ ?lssub .
+          ?lssub bdo:language ?lssublang .
+          filter(bound(?lssublang))
+        }
+      }
 
       optional {
         ?rw :workHasItem ?item .
@@ -99,7 +106,13 @@ where {
       }
     }
 
-    optional {?w bdo:workLangScript ?ls .}
+    optional {?w bdo:workLangScript ?ls .    
+        optional {
+          ?ls rdfs:subClassOf+ ?lssub .
+          ?lssub bdo:language ?lssublang .
+          filter(bound(?lssublang))
+        }
+    }
     optional {?w bdo:workObjectType ?wOT .}
      optional {?w bdo:workPartType ?wPT .}
     optional {?w bdo:workGenre ?wG .}

@@ -19,6 +19,7 @@ construct {
   ?w adm:status ?st .
   ?w adm:access ?acc .
   ?w bdo:workLangScript ?ls.
+  ?w bdo:workLangScript ?lssub.
   ?w bdo:workPartType ?wPT.
   ?w bdo:workObjectType ?wOT.
 
@@ -71,7 +72,13 @@ where {
       }
       
       ?w skos:prefLabel ?l .
-      optional {?w bdo:workLangScript ?ls .}
+      optional {?w bdo:workLangScript ?ls .
+        optional {
+          ?ls rdfs:subClassOf+ ?lssub .
+          ?lssub bdo:language ?lssublang .
+          filter(bound(?lssublang))
+        }
+      }
       optional {?w bdo:workGenre ?wG .}
       optional {?w bdo:workObjectType ?wOT .}
       optional {?w bdo:workPartType ?wPT .}
