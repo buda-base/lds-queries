@@ -19,6 +19,8 @@ CONSTRUCT
     ?res adm:access ?access .
     ?res bdo:workIsAbout ?t .
     ?res bdo:workGenre ?g .
+    ?res bdo:workIsAbout ?rootT .
+    ?res bdo:workGenre ?rootG .
     ?res bdo:workLangScript ?ls .
     ?res bdo:workLangScript ?lssub .
     ?res skos:prefLabel ?l .
@@ -61,8 +63,8 @@ WHERE
       }      
     }
     
-    optional { ?res bdo:workGenre ?g } .
-    optional { ?res bdo:workIsAbout ?t . ?t a :Topic } .
+    optional { ?res bdo:workGenre ?g . optional { ?g ^:taxHasSubClass+ ?rootG . } . }
+    optional { ?res bdo:workIsAbout ?t . ?t a :Topic . optional { ?t ^:taxHasSubClass+ ?rootT . } . }
 
     # good idea (but needs to be tested in a real case)
     #optional { 

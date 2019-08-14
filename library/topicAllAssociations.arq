@@ -33,6 +33,8 @@ construct {
   ?w tmp:rootPrefLabel ?rwO .
   ?w bdo:workGenre ?wG .
   ?w bdo:workIsAbout ?wAB .
+  ?w bdo:workGenre ?rootWg .
+  ?w bdo:workIsAbout ?rootWab .
 
   #associated Lineages
   ?lin a :Lineage .
@@ -55,37 +57,42 @@ where {
       FILTER (!bound(?wE))
       ?w a ?wT.
       
-      optional {
-        ?w bdo:workPartOf* ?rw .
-        ?rw :isRoot true .
-        ?rw skos:prefLabel ?rwO .
-        ?resAdm adm:adminAbout ?rw ;
-                adm:status ?st .
+      ?w bdo:workPartOf* ?rw .
+      ?rw :isRoot true .
+      ?rw skos:prefLabel ?rwO .
+      ?resAdm adm:adminAbout ?rw ;
+              adm:status ?st .
 
-        optional {
-          ?rw :workHasItem ?item .
-          ?item a :ItemImageAsset .
-          ?itemAdm adm:adminAbout ?item .
-          ?itemAdm adm:access ?rootWorkAccess .
-          ?itemAdm adm:contentLegal/adm:license ?rootWorkLicence .
-        }
+      optional {
+        ?rw :workHasItem ?item .
+        ?item a :ItemImageAsset .
+        ?itemAdm adm:adminAbout ?item .
+        ?itemAdm adm:access ?rootWorkAccess .
+        ?itemAdm adm:contentLegal/adm:license ?rootWorkLicence .
       }
-      
-      ?w skos:prefLabel ?l .
-      optional {?w bdo:workLangScript ?ls .
+
+      optional {?rw bdo:workLangScript ?ls .
         optional {
           ?ls rdfs:subClassOf+ ?lssub .
           ?lssub bdo:language ?lssublang .
           filter(bound(?lssublang))
         }
       }
-      optional {?w bdo:workGenre ?wG .}
+    
+      
+      ?w skos:prefLabel ?l .
+      optional {?w bdo:workLangScript ?rootls .
+        optional {
+          ?rootls rdfs:subClassOf+ ?lssub .
+          ?lssub bdo:language ?lssublang .
+          filter(bound(?lssublang))
+        }
+      }
       optional {?w bdo:workObjectType ?wOT .}
       optional {?w bdo:workPartType ?wPT .}
-      optional {
-        ?w bdo:workIsAbout ?wAB .
-        ?wAB a :Topic .
-      }
+      
+      optional {?w bdo:workIsAbout ?wAB . ?wAB a :Topic . optional {?wAB ^:taxHasSubClass+ ?rootWab . } }
+      optional {?w bdo:workGenre ?wG . optional {?wG ^:taxHasSubClass+ ?rootWg . } }
   }
 
   #associated Lineages

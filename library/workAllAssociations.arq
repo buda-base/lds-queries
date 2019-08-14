@@ -14,10 +14,12 @@ construct {
   #associated Works
   ?work a ?type .
   ?work skos:prefLabel ?worklabel .
-  ?work bdo:workIsAbout ?workAbout .
   ?work bdo:workLangScript ?workscript.
   ?work bdo:workType ?type .
-  ?work bdo:workGenre ?workgenre .
+  ?work bdo:workGenre ?wG .
+  ?work bdo:workIsAbout ?wAB .
+  ?work bdo:workGenre ?rootWg .
+  ?work bdo:workIsAbout ?rootWab .
   ?work bdo:workObjectType ?wOT .
   ?work bdo:workPartType ?wPT .
 
@@ -27,7 +29,7 @@ construct {
   ?work adm:status ?rootWorkStatus .
   ?work adm:access ?rootWorkAccess .
   ?work bdo:workLangScript ?rootWorkScript.
-  ?work bdo:workHasRoot ?rootWork .
+  ?work bdo:workHasRoot ?rw .
   ?work tmp:relationType ?relationType .
   ?work tmp:rootPrefLabel ?rootWorkPrefLabel .
 
@@ -48,10 +50,6 @@ where {
       FILTER (!bound(?workExpressed))
       ?work skos:prefLabel ?worklabel .
       ?work a ?type .
-      optional {
-        ?work bdo:workIsAbout ?workAbout .
-        ?workAbout a bdo:Topic .
-      }
       ?work bdo:workPartOf* ?rw .
       ?rw :isRoot true .
       ?rw skos:prefLabel ?rootWorkPrefLabel .
@@ -68,7 +66,9 @@ where {
       optional {?work bdo:workPartType ?wPT . } .
       optional {?work bdo:workObjectType ?wOT . } .
 
-      optional {?work bdo:workGenre ?workgenre .}      
+      optional {?work bdo:workIsAbout ?wAB . ?wAB a :Topic . optional {?wAB ^:taxHasSubClass+ ?rootWab . } }
+      optional {?work bdo:workGenre ?wG . optional {?wG ^:taxHasSubClass+ ?rootWg . } }
+
       optional {
         ?rw :workHasItem ?item .
         ?item a :ItemImageAsset .

@@ -50,6 +50,10 @@ construct
   	?aw bdo:workLangScript ?lssub.
     ?aw bdo:workGenre ?awG .
     ?aw bdo:workIsAbout ?awAB .
+    ?aw bdo:workGenre ?rootWg .
+    ?aw bdo:workIsAbout ?rootWab .
+    ?aw bdo:workHasRoot ?arw .
+    ?aw tmp:rootPrefLabel ?arwLabel .
 }
 
 where {
@@ -105,12 +109,12 @@ where {
 
     ?aw bdo:workPartOf* ?arw .
     ?arw :isRoot true .
+    ?arw skos:prefLabel ?arwLabel .
     ?resAdm adm:adminAbout ?arw ;
             adm:status ?st .    
 
-    optional {?aw bdo:workGenre ?awG . }
-    optional {?aw bdo:workIsAbout ?awAB .
-      ?awAB a :Topic .}
+    optional {?aw bdo:workGenre ?awG . optional { ?awG ^:taxHasSubClass+ ?rootWg . } . }
+    optional {?aw bdo:workIsAbout ?awAB . ?awAB a :Topic . optional { ?awAB ^:taxHasSubClass+ ?rootWab . } . }
     
     optional {
       ?arw :workHasItem ?item .
