@@ -35,6 +35,9 @@ CONSTRUCT
     ?res bdo:workHasExpression ?wH .
     ?res tmp:prefLabelHasExpression ?litH .
 
+    ?res bdo:workHasRoot ?rw .
+    ?res tmp:rootPrefLabel ?rwO .
+
     ?res ?creaRole ?litA.
   }
 WHERE 
@@ -84,6 +87,7 @@ WHERE
     }
     ?res bdo:workPartOf* ?rw .
     ?rw :isRoot true .
+    ?rw skos:prefLabel ?rwO .
     ?resAdm adm:adminAbout ?rw ;
             adm:status ?st .
     optional {
