@@ -29,6 +29,9 @@ where {
   } union { 
     ?R_RES :workLinkTo ?s .
     ?s ?p ?o .
+  } union { 
+    ?R_RES :workLocation/:workLocationWork ?s .
+    ?s ?p ?o .
   } union {
     ?R_RES :workLinkTo?/:workCreator/skos:prefLabel ?o .
     BIND (?R_RES as ?s)
@@ -37,10 +40,15 @@ where {
     ?R_RES :workLinkTo?/:workLocation ?s .
     ?s ?p ?o .
   } union {
-    ?R_RES :workLinkTo?/bdo:workPartOf* ?rw .
-    ?rw :workHasItemImageAsset ?item .
-  } union {
     ?R_RES :workLinkTo?/bdo:workPartOf*/:workHasItem ?item .
+    ?item a :ItemImageAsset .
+    ?admItem adm:adminAbout ?item .
+    ?admItem adm:access ?access .
+    ?admItem adm:status ?status .
+    ?admItem adm:restrictedInChina ?ric .
+    ?admItem adm:contentLegal/adm:license ?license .
+  } union {
+    ?R_RES :workLocation/:workLocationWork/:workHasItem ?item .
     ?item a :ItemImageAsset .
     ?admItem adm:adminAbout ?item .
     ?admItem adm:access ?access .
