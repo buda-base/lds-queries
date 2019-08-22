@@ -107,7 +107,10 @@ where {
     ?voli a :ItemEtext .
     ?voli :itemHasVolume ?etextvol .
     ?etextvol :volumeNumber ?volNum .
-    ?etextvol :volumeHasEtext/:eTextResource ?etextres .
+    optional {
+      ?etextvol :volumeHasEtext/:eTextResource ?etextres .
+      ?etextres a  bdo:EtextPaginated .
+    }
   }
   union
   {
