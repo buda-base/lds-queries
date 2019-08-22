@@ -13,11 +13,11 @@ construct {
   ?wp :workHasPart ?wpp .
   ?loc ?pl ?ol .
   ?wp skos:prefLabel ?wpl .
-  ?wp :workPartIndex ?wpi ;
+  ?wp :workPartIndex ?wpi .
 }
 where {
-  ?R_RES :workHasPart* ?wp .
-  ?wp :workPartIndex ?wpi ;
+  ?R_RES :workLinkTo?/:workHasPart* ?wp .
+  ?wp :workPartIndex ?wpi .
   ?wp skos:prefLabel ?wpl .
   ?wp :workLocation ?loc .
   ?loc ?pl ?ol .
