@@ -1,0 +1,27 @@
+#QueryScope=Volume
+#QueryReturnType=Graph
+#QueryResults=Outline of a work for the IIIF presentation API
+#QueryParams=R_RES
+#QueryUrl=/IIIFPres_volumeOutline?R_RES=bdr:W25094
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=:Work
+#param.R_RES.desc=the URI of the work
+
+construct { 
+  ?wp :workLocation ?loc .
+  ?wp :workHasPart ?wpp .
+  ?loc ?pl ?ol .
+  ?wp skos:prefLabel ?wpl .
+  ?wp :workPartIndex ?wpi ;
+}
+where {
+  ?R_RES :workHasPart* ?wp .
+  ?wp :workPartIndex ?wpi ;
+  ?wp skos:prefLabel ?wpl .
+  ?wp :workLocation ?loc .
+  ?loc ?pl ?ol .
+  optional {
+    ?wp :workHasPart ?wpp .
+  }
+}
