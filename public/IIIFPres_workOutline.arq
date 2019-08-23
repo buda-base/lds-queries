@@ -14,18 +14,33 @@ construct {
   ?loc ?pl ?ol .
   ?wp skos:prefLabel ?wpl .
   ?wp :workPartIndex ?wpi .
+  ?R_RES tmp:firstVolume ?vol .
 }
 where {
-  ?R_RES :workLinkTo?/:workHasPart* ?wp .
-  ?wp skos:prefLabel ?wpl .
-  optional {
-    ?wp :workPartIndex ?wpi .
+  {
+    ?R_RES :workLinkTo?/:workHasPart* ?wp .
+    ?wp skos:prefLabel ?wpl .
+    optional {
+      ?wp :workPartIndex ?wpi .
+    }
+    optional {
+      ?wp :workLocation ?loc .
+      ?loc ?pl ?ol .
+    }
+    optional {
+      ?wp :workHasPart ?wpp .
+    }
+  } union {
+    ?R_RES :workLinkTo?/bdo:workPartOf* ?rw .
+    ?rw :workHasItemImageAsset ?item .
+    ?R_RES :workLinkTo?/:workLocation ?loc .
+    ?loc :workLocationVolume ?bvol .
+    ?item :itemHasVolume ?vol .
+    ?vol :volumeNumber ?bvol .
+  } union {
+    ?R_RES :workLinkTo?/:workHasItemImageAsset ?item .
+    ?item :itemHasVolume ?vol .
+    ?vol :volumeNumber 1 .
   }
-  optional {
-    ?wp :workLocation ?loc .
-    ?loc ?pl ?ol .
-  }
-  optional {
-    ?wp :workHasPart ?wpp .
-  }
+
 }

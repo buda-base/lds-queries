@@ -58,7 +58,7 @@ where {
   } union {
     ?R_RES :workLinkTo?/bdo:workPartOf* ?rw .
     ?rw :workHasItemImageAsset ?item .
-    ?R_RES :workLocation ?loc .
+    ?R_RES :workLinkTo?/:workLocation ?loc .
     ?loc :workLocationVolume ?bvol .
     ?item :itemHasVolume ?vol .
     ?vol :volumeNumber ?bvol .
