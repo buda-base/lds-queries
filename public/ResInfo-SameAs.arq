@@ -1,0 +1,40 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=A graph for the given resource.
+#QueryParams=R_RES
+#QueryUrl=/ResInfo-SameAs?R_RES=bdr:P360
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the chosen resource
+
+construct {
+ ?r ?rp ?ro .
+ ?ro2 ?ro2p ?ro2o .
+ ?ro3 ?ro3p ?ro3o .
+ ?ro3o ?ro4p ?ro4o .
+ ?ro5o ?ro6p ?ro6o .
+} where {
+    ?R_RES owl:sameAs* ?r .
+  {
+    ?r ?rp ?ro .
+  } union {
+    ?r ?rp2 ?ro2 .
+    ?ro2 rdf:type/rdfs:subClassOf+ :Facet .
+    ?ro2 ?ro2p ?ro2o .
+  } union {
+    ?r ?rp3 ?ro3 .
+    ?ro3 rdf:type/rdfs:subClassOf+ :Event .
+    ?ro3 ?ro3p ?ro3o .
+    optional {
+      ?ro3o rdf:type/rdfs:subClassOf+ :Facet .
+      ?ro3o ?ro4p ?ro4o .
+    } 
+  } union {
+    ?r ?rp5 ?ro5 .
+    ?ro5 ?ro5p ?ro5o .
+    ?ro5o rdf:type/rdfs:subClassOf+ :Event .
+    ?ro5o ?ro6p ?ro6o .
+  }
+}
+
