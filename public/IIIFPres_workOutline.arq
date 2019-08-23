@@ -17,10 +17,14 @@ construct {
 }
 where {
   ?R_RES :workLinkTo?/:workHasPart* ?wp .
-  ?wp :workPartIndex ?wpi .
   ?wp skos:prefLabel ?wpl .
-  ?wp :workLocation ?loc .
-  ?loc ?pl ?ol .
+  optional {
+    ?wp :workPartIndex ?wpi .
+  }
+  optional {
+    ?wp :workLocation ?loc .
+    ?loc ?pl ?ol .
+  }
   optional {
     ?wp :workHasPart ?wpp .
   }
