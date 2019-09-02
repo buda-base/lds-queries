@@ -1,7 +1,7 @@
 #QueryScope=Etexts
 #QueryReturnType=Table
 #QueryResults=etext chunks containing the given expression
-#QueryUrl=/Etexts_chunks?L_NAME=("མཁན་ཆེན་" AND ("འོད་ཟེར་" OR "ཡེ་ཤེས་"))&LG_NAMLI_NAME=45
+#QueryUrl=/Etexts_chunks?L_NAME=("མཁན་ཆེན་" AND ("འོད་ཟེར་" OR "ཡེ་ཤེས་"))&LG_NAME&LI_NAME=45
 #QueryParams=L_NAME,LG_NAME
 
 #output.?txt.type=URI
