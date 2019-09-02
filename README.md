@@ -188,6 +188,17 @@ where {
   }
 }
 ```
+### Limiting text search output :
+
+You can limit the text search output (i.e the number of matches returned by jena Text) using a LI_XXX param where XXX is the name of the text variable (for instance: `L_NAME`)
+
+This naming convention is illustrated by that query string:
+
+`/Name_of_the_template?L_XXX=("མཁན་ཆེན་"+AND+("འོད་ཟེར་"+OR+"ཡེ་ཤེས་"))&LG_XXX=bo&LI_XXX=25`
+
+if no `LI_XXX` is specified, then the limit is set to a default value definied in the application properties:
+
+`text_query_limit=1000`
 
 ## Copyright and License
 
