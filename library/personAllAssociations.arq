@@ -54,6 +54,14 @@ construct
   ?lin a :Lineage .
   ?lin skos:prefLabel ?linl .
   ?lin ?pr ?R_RES .
+
+  #sameAs resources
+  ?same a ?sameT .
+  ?same skos:prefLabel ?sameL .
+  ?same tmp:relationType owl:sameAs .
+  ?same2 a ?sameT .
+  ?same2 skos:prefLabel ?same2L .
+  ?same2 tmp:relationType owl:sameAs .
 }
 
 where {
@@ -153,5 +161,25 @@ where {
     ?lin bdo:lineageHolder ?hold .
     ?hold ?pr ?R_RES .
     ?lin skos:prefLabel ?linl
+  }
+  # sameAs resources
+  union
+  {
+    { ?same owl:sameAs ?R_RES . }
+    union
+    { ?R_RES owl:sameAs ?same . } .
+    filter( ?same != ?R_RES ) .
+    ?R_RES a ?sameT .
+    optional { ?same skos:prefLabel ?sameL } .
+    optional { ?same foaf:name ?sameL } .
+    optional { 
+      ?same a ?sameT .
+      { ?same2 owl:sameAs ?same . }
+      union
+      { ?same owl:sameAs ?same2 . } .
+      filter( ?same2 != ?R_RES ) .
+      optional { ?same2 skos:prefLabel ?same2L } .
+      optional { ?same2 foaf:name ?same2L } .    
+    }
   }
 }
