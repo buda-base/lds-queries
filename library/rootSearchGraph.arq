@@ -38,7 +38,9 @@ CONSTRUCT
     ?TT tmp:creatorRole ?roleLabel .
 
     ?TT owl:sameAs ?same1 .
-    ?TT owl:sameAs ?same2 .
+    ?TT owl:sameAs ?same2 .    
+    ?TT ?same1 ?same1L .
+    ?TT ?same2 ?same2L .
   }
 WHERE {
 {
@@ -83,9 +85,16 @@ WHERE {
   }
 }
 
-  optional{ ?TT owl:sameAs ?same1. } .
-
-  optional{ ?same2 owl:sameAs ?TT. } .
+  optional{ 
+    ?TT owl:sameAs ?same1 . 
+    OPTIONAL{ ?same1 skos:prefLabel ?same1L . } . 
+    OPTIONAL{ ?same1 foaf:name ?same1L . } . 
+  } .
+  optional{ 
+    ?same2 owl:sameAs ?TT . 
+    OPTIONAL{ ?same2 skos:prefLabel ?same2L . } .
+    OPTIONAL{ ?same2 foaf:name ?same2L . } .  
+  } .
 
   OPTIONAL{?TT bdo:workPartType ?wPT. }
   OPTIONAL{?TT bdo:workHasPart ?wHP. }
