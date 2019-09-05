@@ -40,6 +40,7 @@ construct {
   ?pRole skos:prefLabel ?pRoleLab .
   ?R_RES tmp:hasEtextVol ?etextvol .
   ?R_RES tmp:hasEtextRes ?etextres .
+  ?sameR foaf:name ?sameL .
 }
 where {
   {
@@ -178,5 +179,11 @@ where {
     ?hEx bdo:workPartOf+ ?hExW .
     ?hExW :isRoot true .
     ?hExW skos:prefLabel ?hExO .
+  }
+  union {
+    ?R_RES ?sameP ?sameR .
+    ?sameP rdfs:subPropertyOf* owl:sameAs .
+    optional { ?sameR skos:prefLabel ?sameL } .
+    optional { ?sameR foaf:name ?sameL } .
   }
 }
