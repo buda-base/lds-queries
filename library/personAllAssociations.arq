@@ -59,9 +59,9 @@ construct
   ?same a ?sameT .
   ?same skos:prefLabel ?sameL .
   ?same tmp:relationType owl:sameAs .
-  ?same2 a ?sameT .
-  ?same2 skos:prefLabel ?same2L .
-  ?same2 tmp:relationType owl:sameAs .
+  ?sameBDRC a ?sameT .
+  ?sameBDRC skos:prefLabel ?sameBDRClabel .
+  ?sameBDRC tmp:relationType owl:sameAs .
 }
 
 where {
@@ -165,21 +165,19 @@ where {
   # sameAs resources
   union
   {
-    { ?same owl:sameAs ?R_RES . }
-    union
-    { ?R_RES owl:sameAs ?same . } .
-    filter( ?same != ?R_RES ) .
-    ?R_RES a ?sameT .
-    optional { ?same skos:prefLabel ?sameL } .
-    optional { ?same foaf:name ?sameL } .
-    optional { 
-      ?same a ?sameT .
-      { ?same2 owl:sameAs ?same . }
-      union
-      { ?same owl:sameAs ?same2 . } .
-      filter( ?same2 != ?R_RES ) .
-      optional { ?same2 skos:prefLabel ?same2L } .
-      optional { ?same2 foaf:name ?same2L } .    
+    { 
+      ?sameBDRC owl:sameAs+ ?R_RES ; owl:sameAs ?same . 
+      ?sameBDRC a ?sameT .
+      ?sameT rdfs:subClassOf+ bdo:Entity .      
+      filter( ?same != ?R_RES && ?sameBDRC != ?R_RES ) .
+      optional { ?sameBDRC skos:prefLabel ?sameBDRClabel } .
     }
+    union {
+      ?R_RES a ?sameT .
+      ?sameT rdfs:subClassOf+ bdo:Entity .      
+      ?R_RES owl:sameAs ?same .
+    } 
+    optional { ?same skos:prefLabel ?sameL } .
+    optional { ?same foaf:name ?sameL } .    
   }
 }
