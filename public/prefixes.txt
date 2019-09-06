@@ -33,3 +33,4 @@ prefix bda:   <http://purl.bdrc.io/admindata/>
 prefix dila:  <http://purl.dila.edu.tw/resource/>
 prefix wd: <http://www.wikidata.org/entity/>
 prefix viaf:    <http://viaf.org/viaf/>
+prefix ola:  <https://openlibrary.org/authors/>
