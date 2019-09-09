@@ -57,7 +57,8 @@ where {
     ?admItem adm:contentLegal/adm:license ?license .
   } union {
     ?R_RES :workLinkTo?/bdo:workPartOf* ?rw .
-    ?rw :workHasItemImageAsset ?item .
+    ?rw :workHasItem ?item .
+    ?item a :ItemImageAsset .
     ?R_RES :workLinkTo?/:workLocation ?loc .
     ?loc :workLocationVolume ?bvol .
     ?item :itemHasVolume ?vol .
