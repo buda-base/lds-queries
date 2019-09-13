@@ -39,7 +39,8 @@ where {
     ?item :itemHasVolume ?vol .
     ?vol :volumeNumber ?bvol .
   } union {
-    ?R_RES :workLinkTo?/:workHasItemImageAsset ?item .
+    ?R_RES :workLinkTo?/:workHasItem ?item .
+    ?item a bdo:ItemImageAsset .
     ?item :itemHasVolume ?vol .
     ?vol :volumeNumber 1 .
   }

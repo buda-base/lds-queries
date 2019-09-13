@@ -64,7 +64,8 @@ where {
     ?item :itemHasVolume ?vol .
     ?vol :volumeNumber ?bvol .
   } union {
-    ?R_RES :workLinkTo?/:workHasItemImageAsset ?item .
+    ?R_RES :workLinkTo?/:workHasItem ?item .
+    ?rw :workHasItem ?item .
     ?item :itemHasVolume ?vol .
     ?vol :volumeNumber 1 .
   } union {
