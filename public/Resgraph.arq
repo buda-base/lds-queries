@@ -8,8 +8,6 @@
 #param.R_RES.subtype=a Resource ID
 #param.R_RES.desc=the unique resource ID of the chosen resource
 
-construct {
-    { ?s ?p ?o }
-} where { 
+construct { ?s ?p ?o } where { 
     graph ?R_RES { ?s ?p ?o }
 }
