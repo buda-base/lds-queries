@@ -9,7 +9,7 @@
 #param.R_RES.desc=the unique resource ID of the chosen resource
 
 construct {
-    graph ?R_RES { ?s :p ?o }
+    graph ?R_RES { ?s ?p ?o }
 } where { 
     graph ?R_RES { ?s ?p ?o }
 }
