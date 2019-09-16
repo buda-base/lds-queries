@@ -34,3 +34,4 @@ prefix dila:  <http://purl.dila.edu.tw/resource/>
 prefix wd: <http://www.wikidata.org/entity/>
 prefix viaf:    <http://viaf.org/viaf/>
 prefix ola:  <https://openlibrary.org/authors/>
+prefix mbbt:  <http://mbingenheimer.net/tools/bibls/>
