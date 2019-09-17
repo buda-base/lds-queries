@@ -37,6 +37,15 @@ construct {
   ?lineage a :Lineage .
   ?lineage skos:prefLabel ?lineagePrefLabel . 
   ?lineage tmp:relationType bdo:lineageObject .
+
+
+  #sameAs resources
+  ?same a ?sameT .
+  ?same skos:prefLabel ?sameL .
+  ?same tmp:relationType owl:sameAs .
+  ?sameBDRC a ?sameT .
+  ?sameBDRC skos:prefLabel ?sameBDRClabel .
+  ?sameBDRC tmp:relationType owl:sameAs .
 }
 where {
     #associated Works
@@ -88,5 +97,24 @@ where {
   {
     ?lineage bdo:lineageObject ?R_RES .
     ?lineage skos:prefLabel ?lineagePrefLabel
+  }
+
+  # sameAs resources
+  union
+  {
+    { 
+      ?sameBDRC owl:sameAs+ ?R_RES ; owl:sameAs ?same . 
+      ?sameBDRC a ?sameT .
+      ?sameT rdfs:subClassOf+ bdo:Entity .      
+      filter( ?same != ?R_RES && ?sameBDRC != ?R_RES ) .
+      optional { ?sameBDRC skos:prefLabel ?sameBDRClabel } .
+    }
+    union {
+      ?R_RES a ?sameT .
+      ?sameT rdfs:subClassOf+ bdo:Entity .      
+      ?R_RES owl:sameAs ?same .
+    } 
+    optional { ?same skos:prefLabel ?sameL } .
+    optional { ?same foaf:name ?sameL } .    
   }
 }
