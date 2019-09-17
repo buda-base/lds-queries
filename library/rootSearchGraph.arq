@@ -42,6 +42,7 @@ CONSTRUCT
     ?TT owl:sameAs ?sameBDRC .
     ?TT ?sameBDRC ?sameBDRClabel .
     ?TT a ?sameT .
+    ?TT adm:canonicalHtml ?sameCanonHTML .
   }
 WHERE {
 {
@@ -103,6 +104,7 @@ WHERE {
     .
     OPTIONAL{ ?same skos:prefLabel ?sameL . } . 
     OPTIONAL{ ?same foaf:name ?sameL . } . 
+    optional { ?same adm:canonicalHtml ?sameCanonHTML } .
   }
 
   OPTIONAL{?TT bdo:workPartType ?wPT. }

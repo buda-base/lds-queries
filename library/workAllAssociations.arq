@@ -43,6 +43,7 @@ construct {
   ?same a ?sameT .
   ?same skos:prefLabel ?sameL .
   ?same tmp:relationType owl:sameAs .
+  ?same adm:canonicalHtml ?sameCanonHTML .
   ?sameBDRC a ?sameT .
   ?sameBDRC skos:prefLabel ?sameBDRClabel .
   ?sameBDRC tmp:relationType owl:sameAs .
@@ -117,5 +118,6 @@ where {
     } 
     optional { ?same skos:prefLabel ?sameL } .
     optional { ?same foaf:name ?sameL } .    
+    optional { ?same adm:canonicalHtml ?sameCanonHTML } .
   }
 }

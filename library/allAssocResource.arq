@@ -41,6 +41,7 @@ construct {
   ?R_RES tmp:hasEtextVol ?etextvol .
   ?R_RES tmp:hasEtextRes ?etextres .
   ?sameR foaf:name ?sameL .
+  ?sameR adm:canonicalHtml ?canonHTML .
 }
 where {
   {
@@ -185,5 +186,6 @@ where {
     ?sameP rdfs:subPropertyOf* owl:sameAs .
     optional { ?sameR skos:prefLabel ?sameL } .
     optional { ?sameR foaf:name ?sameL } .
+    optional { ?sameR adm:canonicalHtml ?canonHTML } .
   }
 }
