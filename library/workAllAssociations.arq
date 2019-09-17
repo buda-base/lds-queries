@@ -112,7 +112,8 @@ where {
     union {
       ?R_RES a ?sameT .
       ?sameT rdfs:subClassOf+ bdo:Entity .      
-      ?R_RES owl:sameAs ?same .
+      ?R_RES ?sameAsProp ?same .
+      ?sameAsProp rdfs:subPropertyOf* owl:sameAs.
     } 
     optional { ?same skos:prefLabel ?sameL } .
     optional { ?same foaf:name ?sameL } .    
