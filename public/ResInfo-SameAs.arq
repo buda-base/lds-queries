@@ -14,6 +14,10 @@ construct {
  ?ro3 ?ro3p ?ro3o .
  ?ro3o ?ro4p ?ro4o .
  ?ro5o ?ro6p ?ro6o . 
+
+ ?q ?qp ?qo .
+ ?r tmp:hasAdminData ?q .
+
 } where {
   ?R_RES owl:sameAs* ?r .
   {
@@ -35,6 +39,10 @@ construct {
     ?ro5 ?ro5p ?ro5o .
     ?ro5o rdf:type/rdfs:subClassOf+ :Event .
     ?ro5o ?ro6p ?ro6o .
+  } union {
+    ?q adm:adminAbout ?r .
+    ?q ?qp ?qo .
+    #filter ( ?qp = adm:originalRecord || ?qp  = adm:metadataLegal  || ?qp = contentProvider ) .   
   }
 }
 
