@@ -42,11 +42,19 @@ construct {
   ?R_RES tmp:hasEtextRes ?etextres .
   ?sameR foaf:name ?sameL .
   ?sameR adm:canonicalHtml ?canonHTML .
+
+  ?extW adm:metadataLegal ?legal .
+
 }
 where {
   {
     {
       ?R_RES ?p ?o .
+      optional {       
+        ?admdata adm:adminAbout ?o ; adm:metadataLegal ?legal .
+        filter( ?legal = bda:LD_GRETIL || ?legal = bda:LD_EAP_metadata  ) .
+        bind( ?o as ?extW) .
+      } .
     }
     union
     {

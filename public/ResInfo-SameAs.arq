@@ -13,9 +13,9 @@ construct {
  ?ro2 ?ro2p ?ro2o .
  ?ro3 ?ro3p ?ro3o .
  ?ro3o ?ro4p ?ro4o .
- ?ro5o ?ro6p ?ro6o .
+ ?ro5o ?ro6p ?ro6o . 
 } where {
-    ?R_RES owl:sameAs* ?r .
+  ?R_RES owl:sameAs* ?r .
   {
     ?r ?rp ?ro .
   } union {
