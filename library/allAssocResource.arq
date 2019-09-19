@@ -43,7 +43,8 @@ construct {
   ?sameR foaf:name ?sameL .
   ?sameR adm:canonicalHtml ?canonHTML .
 
-  ?extW adm:provider ?legal .
+  ?o adm:provider ?legal .
+  ?o adm:originalRecord ?orecord .
 
 }
 where {
@@ -51,8 +52,10 @@ where {
     {
       ?R_RES ?p ?o .
       optional {       
-        ?admdata adm:adminAbout ?o ; adm:metadataLegal/adm:provider/skos:prefLabel ?legal .
-        bind( ?o as ?extW) .
+        ?admdata adm:adminAbout ?o .
+        optional { ?admdata adm:metadataLegal/adm:provider/skos:prefLabel ?legal . }
+        optional { ?admdata adm:originalRecord ?orecord . }
+        optional { ?o bdo:originalRecord ?orecord . }
       } .
     }
     union
