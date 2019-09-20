@@ -27,7 +27,7 @@ construct {
   ?wp bdo:workPartIndex ?wpPi .
   ?wp bdo:workPartType ?wpPt .
   ?o bdo:originalRecord ?ori .
-  ?o bdo:contentProvider ?provL .
+  ?o bdo:contentProvider ?prov .
   ?rs ?rsp ?rso .
   ?ann ?annp ?anno .
   ?annb ?annbp ?annbo .
@@ -74,7 +74,6 @@ where {
     ?o skos:prefLabel ?l .
     optional {
       ?o bdo:contentProvider ?prov .
-      ?prov skos:prefLabel ?provL .
       ?o bdo:originalRecord ?ori .
     }
   }
