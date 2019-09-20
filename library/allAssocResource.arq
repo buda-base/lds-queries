@@ -52,18 +52,24 @@ where {
   {
     {
       ?R_RES ?p ?o .
-      optional { ?o adm:canonicalHtml ?canonHTMLo . }
+
+      # see bdr:WIA_BCA
       optional { ?o bdo:originalRecord ?orecord . }
-      optional {       
-        ?admdata adm:adminAbout ?o .
-        optional { ?admdata adm:metadataLegal/adm:provider/skos:prefLabel ?legal . }
-        optional { ?admdata adm:originalRecord ?orecord . }
-      } .
+      
+      # see mbbt:textT08n0235-transl10  
+      optional { ?o adm:canonicalHtml ?canonHTMLo . }
+      
+      #  ?admdata adm:adminAbout ?o .
+      optional { ?admdata adm:adminAbout ?o . ?admdata adm:metadataLegal/adm:provider/skos:prefLabel ?legal . }
+      optional { ?admdata adm:adminAbout ?o . ?admdata adm:originalRecord ?orecord . }
+      optional { ?admdata adm:adminAbout ?o . ?admdata adm:canonicalHtml ?canonHTMLo . }
+      
     }
     union
     {
       ?admin adm:adminAbout ?R_RES .
       ?admin ?p ?o .
+      filter( ?p != adm:adminAbout ) .
     }
     ?o skos:prefLabel ?l .
     optional {
