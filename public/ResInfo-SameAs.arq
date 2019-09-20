@@ -41,8 +41,7 @@ construct {
     ?ro5o ?ro6p ?ro6o .
   } union {
     ?q adm:adminAbout ?r .
-    ?q ?qp ?qo .
-    #filter ( ?qp = adm:originalRecord || ?qp  = adm:metadataLegal  || ?qp = contentProvider ) .   
+    ?q ?qp ?qo .  
   }
 }
 

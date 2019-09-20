@@ -45,17 +45,19 @@ construct {
 
   ?o adm:provider ?legal .
   ?o adm:originalRecord ?orecord .
+  ?o adm:canonicalHtml ?canonHTMLo .
 
 }
 where {
   {
     {
       ?R_RES ?p ?o .
+      optional { ?o adm:canonicalHtml ?canonHTMLo . }
+      optional { ?o bdo:originalRecord ?orecord . }
       optional {       
         ?admdata adm:adminAbout ?o .
         optional { ?admdata adm:metadataLegal/adm:provider/skos:prefLabel ?legal . }
         optional { ?admdata adm:originalRecord ?orecord . }
-        optional { ?o bdo:originalRecord ?orecord . }
       } .
     }
     union
