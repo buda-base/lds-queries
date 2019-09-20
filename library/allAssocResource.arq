@@ -47,6 +47,7 @@ construct {
   ?o adm:originalRecord ?orecord .
   ?o adm:canonicalHtml ?canonHTMLo .
 
+  ?legal skos:prefLabel ?customLegalLabel .
 }
 where {
   {
@@ -54,10 +55,14 @@ where {
       ?R_RES ?p ?o .
 
       # see bdr:WIA_BCA from bdr:W19740
-      # optional { ?o bdo:originalRecord ?orecord . }
+      optional { ?o bdo:originalRecord ?orecord . }
       
       # see mbbt:textT08n0235-transl10 from mbbt:textT08n0235 
-      optional { ?o adm:canonicalHtml ?canonHTMLo . }
+      optional { ?o adm:canonicalHtml ?canonHTMLo .         
+        # + get legal data label for mbbt (not in ontology)
+        ?admdataMB adm:adminAbout ?o ; adm:metadataLegal ?legal . 
+        ?legal skos:prefLabel ?customLegalLabel .
+      }
       
       #  ?admdata adm:adminAbout ?o .
       optional { ?admdata adm:adminAbout ?o . ?admdata adm:metadataLegal/adm:provider ?legal . }
@@ -65,15 +70,18 @@ where {
       optional { ?admdata adm:adminAbout ?o . ?admdata adm:canonicalHtml ?canonHTMLo . }
       
     }
-    union
-    {
-      ?admin adm:adminAbout ?R_RES .
-      ?admin ?p ?o .
-      filter( ?p != adm:adminAbout ) .
-    }
+
     ?o skos:prefLabel ?l .
+
+    # # deprecated (directly get labels from ontology in client)
+    # union
+    #{
+    #  ?admin adm:adminAbout ?R_RES .
+    #  ?admin ?p ?o .
+    #  filter( ?p != adm:adminAbout ) .
+    #}
     
-    # deprecated (bdr:WIA_BCA)
+    # # deprecated (bdr:WIA_BCA)
     # optional {
     #   ?o bdo:contentProvider ?prov .
     #   ?o bdo:originalRecord ?ori .
