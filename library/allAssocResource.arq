@@ -60,8 +60,10 @@ where {
       # see mbbt:textT08n0235-transl10 from mbbt:textT08n0235 
       optional { ?o adm:canonicalHtml ?canonHTMLo .         
         # + get legal data label for mbbt (not in ontology)
-        ?admdataMB adm:adminAbout ?o ; adm:metadataLegal ?legal . 
-        ?legal skos:prefLabel ?customLegalLabel .
+        optional { 
+          ?admdataMB adm:adminAbout ?o ; adm:metadataLegal ?legal . 
+          ?legal skos:prefLabel ?customLegalLabel .
+        }
       }
       
       #  ?admdata adm:adminAbout ?o .
