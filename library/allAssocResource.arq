@@ -43,7 +43,7 @@ construct {
   ?sameR foaf:name ?sameL .
   ?sameR adm:canonicalHtml ?canonHTML .
 
-  ?o adm:provider ?legal .
+  ?o tmp:provider ?legal .
   ?o adm:originalRecord ?orecord .
   ?o adm:canonicalHtml ?canonHTMLo .
 
@@ -53,14 +53,14 @@ where {
     {
       ?R_RES ?p ?o .
 
-      # see bdr:WIA_BCA
-      optional { ?o bdo:originalRecord ?orecord . }
+      # see bdr:WIA_BCA from bdr:W19740
+      # optional { ?o bdo:originalRecord ?orecord . }
       
-      # see mbbt:textT08n0235-transl10  
+      # see mbbt:textT08n0235-transl10 from mbbt:textT08n0235 
       optional { ?o adm:canonicalHtml ?canonHTMLo . }
       
       #  ?admdata adm:adminAbout ?o .
-      optional { ?admdata adm:adminAbout ?o . ?admdata adm:metadataLegal/adm:provider/skos:prefLabel ?legal . }
+      optional { ?admdata adm:adminAbout ?o . ?admdata adm:metadataLegal/adm:provider ?legal . }
       optional { ?admdata adm:adminAbout ?o . ?admdata adm:originalRecord ?orecord . }
       optional { ?admdata adm:adminAbout ?o . ?admdata adm:canonicalHtml ?canonHTMLo . }
       
@@ -72,10 +72,12 @@ where {
       filter( ?p != adm:adminAbout ) .
     }
     ?o skos:prefLabel ?l .
-    optional {
-      ?o bdo:contentProvider ?prov .
-      ?o bdo:originalRecord ?ori .
-    }
+    
+    # deprecated (bdr:WIA_BCA)
+    # optional {
+    #   ?o bdo:contentProvider ?prov .
+    #   ?o bdo:originalRecord ?ori .
+    # }
   }
   union
   {
