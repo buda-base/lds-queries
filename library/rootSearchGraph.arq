@@ -43,6 +43,7 @@ CONSTRUCT
     ?TT ?sameBDRC ?sameBDRClabel .
     ?TT a ?sameT .
     ?TT adm:canonicalHtml ?sameCanonHTML .
+    ?TT adm:canonicalHtml ?canonHTML .
   }
 WHERE {
 {
@@ -86,6 +87,9 @@ WHERE {
     ?TT skos:prefLabel ?l.
   }
 }
+
+
+  optional { ?TT adm:canonicalHtml ?canonHTML } .
 
   optional
   { 
