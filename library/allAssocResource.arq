@@ -41,7 +41,7 @@ construct {
   ?R_RES tmp:hasEtextVol ?etextvol .
   ?R_RES tmp:hasEtextRes ?etextres .
 
-  ?wDeriv bdo:workLangScript ?wDerivLS .
+  ?wDeriv tmp:language ?wDerivLS .
 
   ?sameR foaf:name ?sameL .
   ?sameR adm:canonicalHtml ?canonHTML .
@@ -216,7 +216,7 @@ where {
   union
   {
     ?R_RES bdo:workHasDerivative ?wDeriv .
-    ?wDeriv bdo:workLangScript ?wDerivLS . 
+    ?wDeriv bdo:workLangScript/bdo:language ?wDerivLS . 
   }
   union {
     ?R_RES ?sameP ?sameR .
