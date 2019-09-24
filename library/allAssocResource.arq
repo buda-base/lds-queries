@@ -40,6 +40,9 @@ construct {
   ?pRole skos:prefLabel ?pRoleLab .
   ?R_RES tmp:hasEtextVol ?etextvol .
   ?R_RES tmp:hasEtextRes ?etextres .
+
+  ?wDeriv bdo:workLangScript ?wDerivLS .
+
   ?sameR foaf:name ?sameL .
   ?sameR adm:canonicalHtml ?canonHTML .
 
@@ -209,6 +212,11 @@ where {
     ?hEx bdo:workPartOf+ ?hExW .
     ?hExW :isRoot true .
     ?hExW skos:prefLabel ?hExO .
+  }
+  union
+  {
+    ?R_RES bdo:workHasDerivative ?wDeriv .
+    ?wDeriv bdo:workLangScript ?wDerivLS . 
   }
   union {
     ?R_RES ?sameP ?sameR .
