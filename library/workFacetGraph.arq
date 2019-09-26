@@ -28,12 +28,15 @@ CONSTRUCT
     ?res tmp:matchScore ?sc .
     ?res tmp:labelMatch ?labelMatch.
     ?res bdo:workObjectType ?wOT .
-    ?res bdo:workPartType ?wPT .
-    ?res bdo:workHasPart ?wHP .
-    ?res bdo:workExpressionOf ?wE .
-    ?res tmp:prefLabelExpressionOf ?litE .
-    ?res bdo:workHasExpression ?wH .
-    ?res tmp:prefLabelHasExpression ?litH .
+
+
+    # redundant with rootSearch
+    #?res bdo:workPartType ?wPT .
+    #?res bdo:workHasPart ?wHP .    
+    #?res bdo:workExpressionOf ?wE .
+    #?res tmp:prefLabelExpressionOf ?litE .
+    #?res bdo:workHasExpression ?wH .
+    #?res tmp:prefLabelHasExpression ?litH .
 
     ?res bdo:workHasRoot ?rw .
     ?res tmp:rootPrefLabel ?rwO .
@@ -44,7 +47,8 @@ WHERE
   {
     {
       (?res ?sc ?lit) text:query ( skos:prefLabel ?L_NAME "highlight:" ) .
-      ?res a :Work .
+      ?res a ?wtype . 
+      ?wtype rdfs:subClassOf* bdo:Work .
     }
     union 
     {
@@ -86,8 +90,10 @@ WHERE
       Filter ( str(?labelMatch) = str(?lit) )
     }
     ?res bdo:workPartOf* ?rw .
-    ?rw :isRoot true .
-    ?rw skos:prefLabel ?rwO .
+    optional {
+      ?rw :isRoot true .
+      ?rw skos:prefLabel ?rwO .
+    }
     ?resAdm adm:adminAbout ?rw ;
             adm:status ?st .
     optional {
@@ -98,13 +104,17 @@ WHERE
           filter(bound(?lssublang))
         }
     } .
+    optional { ?res bdo:workObjectType ?wOT . } .
+
+
+    # redundant with rootSearch
     optional { ?res bdo:workHasPart ?wHP . } .
     optional { ?res bdo:workPartType ?wPT . } .
-    optional { ?res bdo:workObjectType ?wOT . } .
-    optional {
-      ?res bdo:workHasExpression ?wH .
-      ?wH skos:prefLabel ?litH .
-    } .
+    #optional {
+    #  ?res bdo:workHasExpression ?wH .
+    #  ?wH skos:prefLabel ?litH .
+    #} .
+
     optional {
       ?rw :workHasItem ?item .
       ?item a :ItemImageAsset .

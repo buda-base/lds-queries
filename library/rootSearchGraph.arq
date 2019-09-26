@@ -19,7 +19,9 @@ CONSTRUCT
     ?TT tmp:matchScore ?sc .
     ?TT tmp:prefLabelMatch ?lit1.
     ?TT tmp:altLabelMatch ?lit2.
-    ?TT bdo:workType ?wT.
+    
+    ?TT bdo:workType ?wT .
+
     ?TT bdo:workPartType ?wPT.
     ?TT bdo:workHasPart ?wHP.
     ?TT bdo:workExpressionOf ?wE.
@@ -44,50 +46,43 @@ CONSTRUCT
     ?TT a ?sameT .
     ?TT adm:canonicalHtml ?sameCanonHTML .
     ?TT adm:canonicalHtml ?canonHTML .
+
   }
 WHERE {
-{
-  BIND(tmp:prop as ?x)
+
   {
     (?s ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ).
     {
       ?TT ?anyprop ?anypropobj .       
       ?anypropobj :eventWho ?s ; a ?eventType .
-      ?TT rdf:type ?type .
-      OPTIONAL{?TT skos:prefLabel ?l.}.
     } 
     union 
     {
       ?TT ?p ?s.
       FILTER(!EXISTS { ?TT :eventWho ?anywho })
       ?s rdf:type ?pp .
-      ?TT rdf:type ?type .
-      OPTIONAL{?TT skos:prefLabel ?l.}.
     }
 
   }
   union
-  { (?s ?sc ?litC) text:query ( skos:prefLabel ?L_NAME "highlight:").
+  { 
+    (?s ?sc ?litC) text:query ( skos:prefLabel ?L_NAME "highlight:").
     ?TT bdo:creator ?agent .
     ?agent bdo:agent ?s ; bdo:role ?creaRole .
     ?creaRole skos:prefLabel ?roleLabel . 
-    ?TT rdf:type ?type .
-    ?TT skos:prefLabel ?l.    
   }
   union
   {
     (?TT ?sc ?lit2) text:query ( skos:altLabel ?L_NAME "highlight:" ).
-    ?TT rdf:type ?type .
-    ?TT skos:prefLabel ?l.
   }
   union
   {
     (?TT ?sc ?lit1) text:query ( skos:prefLabel ?L_NAME "highlight:" ).
-    ?TT rdf:type ?type .
-    ?TT skos:prefLabel ?l.
   }
-}
 
+  ?TT rdf:type ?type .  
+
+  OPTIONAL{?TT skos:prefLabel ?l.}.
 
   optional { ?TT adm:canonicalHtml ?canonHTML } .
 
