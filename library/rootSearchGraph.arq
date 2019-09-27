@@ -26,9 +26,11 @@ CONSTRUCT
     ?TT bdo:workHasPart ?wHP.
     ?TT bdo:workExpressionOf ?wE.
     ?TT tmp:prefLabelExpressionOf ?litE.
+    ?TT ?wE ?litE.
     #?TT tmp:prefLabelExpressionOfMatch ?litEH.
     ?TT bdo:workHasExpression ?wH.
     ?TT tmp:prefLabelHasExpression ?litH.
+    ?TT ?wH ?litH.
     #?TT tmp:prefLabelHasExpressionMatch ?litHH.
 
     #?TT bdo:workTranslationOf ?wTr.

@@ -108,8 +108,8 @@ WHERE
 
 
     # redundant with rootSearch
-    optional { ?res bdo:workHasPart ?wHP . } .
-    optional { ?res bdo:workPartType ?wPT . } .
+    #optional { ?res bdo:workHasPart ?wHP . } .
+    #optional { ?res bdo:workPartType ?wPT . } .
     #optional {
     #  ?res bdo:workHasExpression ?wH .
     #  ?wH skos:prefLabel ?litH .
