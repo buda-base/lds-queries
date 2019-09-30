@@ -116,6 +116,11 @@ where {
   union
   {
     { 
+      ?same owl:sameAs+ ?R_RES . 
+      ?same a ?sameT .
+      ?sameT rdfs:subClassOf+ bdo:Entity .      
+    }
+    union { 
       ?sameBDRC owl:sameAs+ ?R_RES ; owl:sameAs ?same . 
       ?sameBDRC a ?sameT .
       ?sameT rdfs:subClassOf+ bdo:Entity .      
