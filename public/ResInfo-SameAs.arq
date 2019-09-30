@@ -41,7 +41,9 @@ construct {
     ?ro5o ?ro6p ?ro6o .
   } union {
     ?q adm:adminAbout ?r .
-    ?q ?qp ?qo .  
+    ?q ?qp ?qo .
+    # we don't return all the adminAbout, they can be in large quantities
+    FILTER(?qp != adm:adminAbout)
   }
 }
 
