@@ -38,6 +38,11 @@ construct {
   ?lineage skos:prefLabel ?lineagePrefLabel . 
   ?lineage tmp:relationType bdo:lineageObject .
 
+  #associated people  
+  # [TODO] add Person to possible return types (error 500 for now)
+  #?crea a :Person .
+  #?crea skos:prefLabel ?creaLabel .
+  #?crea tmp:relationType ?roleLabel .
 
   #sameAs resources
   ?same a ?sameT .
@@ -99,7 +104,14 @@ where {
     ?lineage bdo:lineageObject ?R_RES .
     ?lineage skos:prefLabel ?lineagePrefLabel
   }
-
+  #associated people
+  union
+  {
+    ?R_RES :creator ?agent .
+    ?agent :agent ?crea ; :role ?creaRole .
+    ?creaRole skos:prefLabel ?roleLabel . 
+    ?crea skos:prefLabel ?creaLabel .   
+  }
   # sameAs resources
   union
   {
