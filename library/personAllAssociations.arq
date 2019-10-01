@@ -38,7 +38,8 @@ construct
   ?w bdo:workExpressionOf ?wE.
   ?w tmp:prefLabelExpressionOf ?litE.
   ?w bdo:workHasExpression ?wH.
-  ?w tmp:prefLabelHasExpression ?litH.
+  #?w tmp:prefLabelHasExpression ?litH.
+  ?w ?wH ?litH .
 
   ?w bdo:workLangScript ?rwls.
   ?w bdo:workLangScript ?lssub.
@@ -59,9 +60,12 @@ construct
   ?same a ?sameT .
   ?same skos:prefLabel ?sameL .
   ?same tmp:relationType owl:sameAs .
+  ?same adm:canonicalHtml ?sameCanonHTML .
   ?sameBDRC a ?sameT .
   ?sameBDRC skos:prefLabel ?sameBDRClabel .
   ?sameBDRC tmp:relationType owl:sameAs .
+
+  
 }
 
 where {
@@ -166,6 +170,11 @@ where {
   union
   {
     { 
+      ?same owl:sameAs+ ?R_RES . 
+      ?same a ?sameT .
+      ?sameT rdfs:subClassOf+ bdo:Entity .      
+    }
+    union { 
       ?sameBDRC owl:sameAs+ ?R_RES ; owl:sameAs ?same . 
       ?sameBDRC a ?sameT .
       ?sameT rdfs:subClassOf+ bdo:Entity .      
@@ -175,9 +184,11 @@ where {
     union {
       ?R_RES a ?sameT .
       ?sameT rdfs:subClassOf+ bdo:Entity .      
-      ?R_RES owl:sameAs ?same .
+      ?R_RES ?sameAsProp ?same .
+      ?sameAsProp rdfs:subPropertyOf* owl:sameAs.
     } 
     optional { ?same skos:prefLabel ?sameL } .
     optional { ?same foaf:name ?sameL } .    
+    optional { ?same adm:canonicalHtml ?sameCanonHTML } .
   }
 }

@@ -41,7 +41,7 @@ construct {
   ?R_RES tmp:hasEtextVol ?etextvol .
   ?R_RES tmp:hasEtextRes ?etextres .
 
-  ?wDeriv tmp:language ?wDerivLS .
+  ?wTr tmp:language ?wTrLS .
 
   ?sameR foaf:name ?sameL .
   ?sameR adm:canonicalHtml ?canonHTML .
@@ -217,10 +217,9 @@ where {
   }
   union
   {
-    # get language of expressions
-    ?exprP2 rdfs:subPropertyOf* bdo:workHasExpression .
-    ?R_RES ?exprP2 ?wDeriv .
-    ?wDeriv bdo:workLangScript/bdo:language ?wDerivLS . 
+    # get language of translations
+    ?R_RES bdo:workHasTranslation ?wTr .
+    ?wTr bdo:workLangScript/bdo:language ?wTrLS . 
   }
   union {
     ?R_RES ?sameP ?sameR .

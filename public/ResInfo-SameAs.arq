@@ -18,8 +18,20 @@ construct {
  ?q ?qp ?qo .
  ?r tmp:hasAdminData ?q .
 
+ ?r owl:sameAs ?same .
+
 } where {
-  ?R_RES owl:sameAs* ?r .
+
+  { ?r owl:sameAs* ?R_RES . }
+  union
+  { 
+    ?R_RES owl:sameAs* ?r . 
+    optional {
+      ?same owl:sameAs+ ?r . 
+      filter( ?same != ?r )
+    }
+  }
+
   {
     ?r ?rp ?ro .
   } union {
