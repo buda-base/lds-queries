@@ -49,6 +49,9 @@ CONSTRUCT
     ?TT adm:canonicalHtml ?sameCanonHTML .
     ?TT adm:canonicalHtml ?canonHTML .
 
+    ?TT skos:prefLabel ?sameL.
+    ?TT skos:prefLabel ?sameBDRClabel.
+
   }
 WHERE {
 
