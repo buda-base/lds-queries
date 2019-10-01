@@ -207,7 +207,9 @@ where {
   }
   union
   {
-    ?R_RES bdo:workHasExpression ?hEx .
+    # get root work of expressions
+    ?exprP rdfs:subPropertyOf* bdo:workHasExpression .
+    ?R_RES ?exprP ?hEx .
     # same as above, root work is a parent with no parent
     ?hEx bdo:workPartOf+ ?hExW .
     ?hExW :isRoot true .
@@ -215,7 +217,9 @@ where {
   }
   union
   {
-    ?R_RES bdo:workHasDerivative ?wDeriv .
+    # get language of expressions
+    ?exprP2 rdfs:subPropertyOf* bdo:workHasExpression .
+    ?R_RES ?exprP2 ?wDeriv .
     ?wDeriv bdo:workLangScript/bdo:language ?wDerivLS . 
   }
   union {
