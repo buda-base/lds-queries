@@ -1,4 +1,3 @@
-
 # lds-queries 
 
 A repository of SPARQL queries to be used by [LDS-PDI](https://github.com/buda-base/lds-pdi/).
