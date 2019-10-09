@@ -7,7 +7,7 @@ prefix bdac:  <http://purl.bdrc.io/anncollection/>
 prefix tbr:   <http://purl.bdrc.io/ontology/toberemoved/>
 prefix tmp:   <http://purl.bdrc.io/ontology/tmp/>
 prefix aut:   <http://purl.bdrc.io/ontology/ext/auth/>
-prefix adr:   <http://purl.bdrc.io/resource-auth/>
+prefix adr:   <http://purl.bdrc.io/resource-nc/auth/>
 prefix bf:    <http://id.loc.gov/ontologies/bibframe/>
 prefix dcterms: <http://purl.org/dc/terms/>
 prefix f:     <java:io.bdrc.ldspdi.sparql.functions.>
