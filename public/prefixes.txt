@@ -33,3 +33,7 @@ prefix wd: <http://www.wikidata.org/entity/>
 prefix viaf:    <http://viaf.org/viaf/>
 prefix ola:  <https://openlibrary.org/authors/>
 prefix mbbt:  <http://mbingenheimer.net/tools/bibls/>
+prefix bdou: <http://purl.bdrc.io/ontology/ext/user/>
+prefix bdgu: <http://purl.bdrc.io/graph-nc/user/>
+prefix bdu: <http://purl.bdrc.io/resource-nc/user/>
+prefix bdgup: <http://purl.bdrc.io/graph-nc/user-private/>
