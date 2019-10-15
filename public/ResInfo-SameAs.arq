@@ -20,6 +20,8 @@ construct {
 
  ?r owl:sameAs ?same .
 
+ ?r tmp:siblingExpressions ?sibling .
+
 } where {
 
   { ?r owl:sameAs* ?R_RES . }
@@ -56,6 +58,9 @@ construct {
     ?q ?qp ?qo .
     # we don't return all the adminAbout, they can be in large quantities
     FILTER(?qp != adm:adminAbout)
+  } union {
+    ?parent bdo:workHasExpression ?r ; bdo:workHasExpression ?sibling .
+    filter( str(?r) != str(?sibling) ) .
   }
 }
 

@@ -51,11 +51,23 @@ construct {
   ?o adm:canonicalHtml ?canonHTMLo .
 
   ?legal skos:prefLabel ?customLegalLabel .
+
 }
 where {
   {
     {
-      ?R_RES ?p ?o .
+      { ?R_RES ?p ?o . }
+      union 
+      {
+        ?parent bdo:workHasExpression ?R_RES ; bdo:workHasExpression ?o .
+        filter( str(?R_RES) != str(?o) ) .        
+        bind( ?o as ?hEx ) . 
+        optional {
+          ?hEx bdo:workPartOf+ ?hExW .
+          ?hExW :isRoot true .
+          ?hExW skos:prefLabel ?hExO .
+        }
+      }
 
       # see bdr:WIA_BCA from bdr:W19740
       optional { ?o bdo:originalRecord ?orecord . }
@@ -208,8 +220,8 @@ where {
   union
   {
     # get root work of expressions
-    ?exprP rdfs:subPropertyOf* bdo:workHasExpression .
-    ?R_RES ?exprP ?hEx .
+    ?exprP rdfs:subPropertyOf* bdo:workHasExpression .    
+    ?R_RES ?exprP ?hEx . 
     # same as above, root work is a parent with no parent
     ?hEx bdo:workPartOf+ ?hExW .
     ?hExW :isRoot true .
