@@ -52,6 +52,8 @@ CONSTRUCT
     ?TT skos:prefLabel ?sameL.
     ?TT skos:prefLabel ?sameBDRClabel.
 
+    ?TT adm:status ?status .
+
   }
 WHERE {
 
@@ -90,6 +92,11 @@ WHERE {
   OPTIONAL{?TT skos:prefLabel ?l.}.
 
   optional { ?TT adm:canonicalHtml ?canonHTML } .
+
+  optional { 
+    ?TT bdo:workPartOf* ?res .
+    ?adm adm:adminAbout ?res ; adm:status ?status . 
+  }
 
   optional
   { 
