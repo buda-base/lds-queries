@@ -19,6 +19,7 @@ CONSTRUCT
     ?res skos:prefLabel ?ll.
     ?res tmp:prefLabelMatch ?lit1.
     ?res :personGender ?g.
+    ?res adm:status ?status .
   }
 WHERE {
   {
@@ -39,5 +40,9 @@ WHERE {
     OPTIONAL{?res :personGender ?g.}
   }
   ?res a :Person
+
+  optional { ?adm adm:adminAbout ?res ; adm:status ?status . }
+
+
 }
 order by desc(?sc)

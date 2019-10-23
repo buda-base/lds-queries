@@ -52,6 +52,11 @@ construct {
   ?sameBDRC a ?sameT .
   ?sameBDRC skos:prefLabel ?sameBDRClabel .
   ?sameBDRC tmp:relationType owl:sameAs .
+
+  ?sameBDRC owl:sameAs ?same .
+  ?same owl:sameAs ?sameBDRC .
+  ?same owl:sameAs ?R_RES .
+  ?sameBDRC owl:sameAs ?R_RES .
 }
 where {
     #associated Works

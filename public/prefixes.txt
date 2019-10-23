@@ -7,7 +7,7 @@ prefix bdac:  <http://purl.bdrc.io/anncollection/>
 prefix tbr:   <http://purl.bdrc.io/ontology/toberemoved/>
 prefix tmp:   <http://purl.bdrc.io/ontology/tmp/>
 prefix aut:   <http://purl.bdrc.io/ontology/ext/auth/>
-prefix adr:   <http://purl.bdrc.io/resource-auth/>
+prefix adr:   <http://purl.bdrc.io/resource-nc/auth/>
 prefix bf:    <http://id.loc.gov/ontologies/bibframe/>
 prefix dcterms: <http://purl.org/dc/terms/>
 prefix f:     <java:io.bdrc.ldspdi.sparql.functions.>
@@ -33,3 +33,7 @@ prefix wd: <http://www.wikidata.org/entity/>
 prefix viaf:    <http://viaf.org/viaf/>
 prefix ola:  <https://openlibrary.org/authors/>
 prefix mbbt:  <http://mbingenheimer.net/tools/bibls/>
+prefix bdou: <http://purl.bdrc.io/ontology/ext/user/>
+prefix bdgu: <http://purl.bdrc.io/graph-nc/user/>
+prefix bdu: <http://purl.bdrc.io/resource-nc/user/>
+prefix bdgup: <http://purl.bdrc.io/graph-nc/user-private/>
