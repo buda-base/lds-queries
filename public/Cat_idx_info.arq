@@ -1,0 +1,36 @@
+#QueryScope=Work
+#QueryReturnType=Table
+#QueryResults=(used by 84000) info on catalog indexes in a specific edition of a collection
+#QueryParams=R_RES
+#QueryUrl=/Cat_idx_info?R_RES=bdr:W22084&R_IdxProp=bdo:workKaTenSiglaD
+
+#output.?idx.type=string
+#output.?idx.desc=The tohoku index
+
+#output.?abstractI.type=URI
+#output.?abstractI.desc=the URI of the most abstract work (in Indic)
+
+#output.?abstractT.type=URI
+#output.?abstractT.desc=the URI of the abstract text of the Tibetan translation
+
+#output.?expr.type=URI
+#output.?expr.desc=the URI of the expression in the edition
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=:Work
+#param.R_RES.desc=the URI of the collection being investigated
+
+#param.R_IdxProp.type=URI
+#param.R_IdxProp.subtype=:workRefs
+#param.R_IdxProp.desc=the URI of the collection being investigated
+
+select distinct ?idx ?abstractI ?abstractT ?expr where {
+  ?R_RES a :Work .
+  ?R_IdxProp rdfs:subPropertyOf :workRefs .
+  ?expr :workPartOf+ ?R_RES ;
+        ?R_IdxProp ?idx ;
+        :workExpressionOf ?abstractT .
+  optional {
+    ?abstractT :workTranslationOf ?abstractI .
+  }
+} order by ?idx
