@@ -100,19 +100,22 @@ WHERE {
 
   optional
   { 
-    { 
-      ?TT owl:sameAs ?same .
-      ?TT a ?sameT . 
-      ?sameT rdfs:subClassOf+ bdo:Entity . 
-    }
-    union
-    { 
-      ?sameBDRC owl:sameAs+ ?TT ; owl:sameAs ?same .
-      ?sameBDRC a ?sameT . 
-      ?sameT rdfs:subClassOf+ bdo:Entity . 
-      OPTIONAL{ ?sameBDRC skos:prefLabel ?sameBDRClabel . } . 
-    } 
-    .
+    ?TT owl:sameAs ?same .
+    ?TT a ?sameT . 
+    ?sameT rdfs:subClassOf+ bdo:Entity . 
+
+    OPTIONAL{ ?same skos:prefLabel ?sameL . } . 
+    OPTIONAL{ ?same foaf:name ?sameL . } . 
+    optional { ?same adm:canonicalHtml ?sameCanonHTML } .
+  }
+
+  optional
+  { 
+    ?sameBDRC owl:sameAs+ ?TT ; owl:sameAs ?same .
+    ?sameBDRC a ?sameT . 
+    ?sameT rdfs:subClassOf+ bdo:Entity . 
+    OPTIONAL{ ?sameBDRC skos:prefLabel ?sameBDRClabel . } .      
+    
     OPTIONAL{ ?same skos:prefLabel ?sameL . } . 
     OPTIONAL{ ?same foaf:name ?sameL . } . 
     optional { ?same adm:canonicalHtml ?sameCanonHTML } .
