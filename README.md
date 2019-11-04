@@ -47,11 +47,12 @@ These parameters must be defined for all the queries, at the top of the file:
 
 | Parameter | Values | Description |
 | ----- | ----- | ----- |
-| `QueryScope` | ? | ? |
+| `QueryScope` | the scope of the query | used on the index page to group the queries Scope examples are Work, General, Etexts, Volume, etc... |
 | `QueryReturnType` | `Table` or `Graph` | Indicates if the (resp.) `SELECT` or `CONSTRUCT` keyword is used. |
-| `QueryResults` | ? | ? |
-| `QueryParams` | ? | ? |
-| `QueryUrl` | ? | ? |
+| `QueryResults` | Example: "all the works of a given author" | a description of the returned results |
+| `QueryParams` | the names of all the params expected by the query | comma separated list of the name of the params expected by the query |
+| `QueryUrl` | any Url using that template | eventually used on the index page to run a valid example |
+| `QueryLimit` | an integer | overrides the default (500) allowed number of results |
 
 
 ### Variable metadata

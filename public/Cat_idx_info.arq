@@ -3,6 +3,7 @@
 #QueryResults=(used by 84000) info on catalog indexes in a specific edition of a collection
 #QueryParams=R_RES
 #QueryUrl=/Cat_idx_info?R_RES=bdr:W22084&R_IdxProp=bdo:workKaTenSiglaD
+#QueryLimit=5000
 
 #output.?idx.type=string
 #output.?idx.desc=The tohoku index
