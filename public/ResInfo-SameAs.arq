@@ -22,6 +22,9 @@ construct {
 
  ?r tmp:siblingExpressions ?sibling .
 
+ ?ro tmp:withSameAs ?roSame .
+ ?ro tmp:withSameAs ?roSame2 .
+
 } where {
 
   { ?r owl:sameAs* ?R_RES . }
@@ -30,12 +33,17 @@ construct {
     ?R_RES owl:sameAs* ?r . 
     optional {
       ?same owl:sameAs+ ?r . 
-      filter( ?same != ?r )
     }
   }
 
   {
     ?r ?rp ?ro .
+    optional {
+      ?ro owl:sameAs+ ?roSame .
+    }
+    optional {
+      ?roSame2 owl:sameAs+ ?ro .
+    }
   } union {
     ?r ?rp2 ?ro2 .
     ?ro2 rdf:type/rdfs:subClassOf+ :Facet .
