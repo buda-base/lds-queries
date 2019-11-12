@@ -12,6 +12,7 @@ construct {
  ?R_RES ?rp ?ro .
  ?ro2 ?ro2p ?ro2o .
  ?ro3 ?ro3p ?ro3o .
+ ?dt ?dtp ?dto
 } where {
   {
     ?R_RES ?rp ?ro .
@@ -23,5 +24,9 @@ construct {
     ?R_RES ?rp3 ?ro3 .
     ?ro3 rdf:type/rdfs:subClassOf+ :Event .
     ?ro3 ?ro3p ?ro3o .
+    OPTIONAL {
+      ?ro3 bdo:dateIndication ?dt .    
+      ?dt ?dtp ?dto
+    }
   }
 }
