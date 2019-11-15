@@ -18,7 +18,8 @@ construct {
  ?q ?qp ?qo .
  ?r tmp:hasAdminData ?q .
 
- ?r owl:sameAs ?same .
+ ?r owl:sameAs ?sameA .
+ ?r owl:sameAs ?sameB .
 
  ?r tmp:siblingExpressions ?sibling .
 
@@ -29,12 +30,10 @@ construct {
 
   { ?r owl:sameAs* ?R_RES . }
   union
-  { 
-    ?R_RES owl:sameAs* ?r . 
-    optional {
-      ?same owl:sameAs+ ?r . 
-    }
-  }
+  { ?R_RES owl:sameAs* ?r . }
+
+  optional { ?r owl:sameAs+ ?sameA . } 
+  optional { ?sameB owl:sameAs+ ?r . }
 
   {
     ?r ?rp ?ro .
