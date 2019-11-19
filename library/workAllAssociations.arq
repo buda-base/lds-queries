@@ -134,9 +134,15 @@ where {
     union {
       ?R_RES a ?sameT .
       ?sameT rdfs:subClassOf+ bdo:Entity .      
-      ?R_RES ?sameAsProp ?same .
-      ?sameAsProp rdfs:subPropertyOf* owl:sameAs.
+      { 
+        ?R_RES ?sameAsProp ?same .
+        ?sameAsProp rdfs:subPropertyOf* owl:sameAs. 
+      }
+      union {
+        ?R_RES owl:sameAs+ ?same .
+      }
     } 
+    
     optional { ?same skos:prefLabel ?sameL } .
     optional { ?same foaf:name ?sameL } .    
     optional { ?same adm:canonicalHtml ?sameCanonHTML } .
