@@ -98,28 +98,108 @@ WHERE {
     ?adm adm:adminAbout ?res ; adm:status ?status . 
   }
 
+
+
+
+
+  # --------------------------------------- case :RES sameAs :A when there is no :A record
   optional
   { 
-    ?TT owl:sameAs ?same .
+    ?TT owl:sameAs+ ?same .
+    ?TT a ?sameT . 
+    ?sameT rdfs:subClassOf+ bdo:Entity . 
+  }
+  # duplicate from above with sameCanonHtml
+  optional
+  { 
+    ?TT owl:sameAs+ ?same .
     ?TT a ?sameT . 
     ?sameT rdfs:subClassOf+ bdo:Entity . 
 
-    OPTIONAL{ ?same skos:prefLabel ?sameL . } . 
-    OPTIONAL{ ?same foaf:name ?sameL . } . 
-    optional { ?same adm:canonicalHtml ?sameCanonHTML } .
+    ?same adm:canonicalHtml ?sameCanonHTML . 
   }
+
+  # --------------------------------------- case :RES sameAs :A when :A has a prefLabel or foaf:name
+  optional
+  { 
+    ?TT owl:sameAs+ ?same .
+    ?TT a ?sameT . 
+    ?sameT rdfs:subClassOf+ bdo:Entity . 
+
+    { ?same skos:prefLabel ?sameL . } 
+    union
+    { ?same foaf:name ?sameL . }  
+  }
+  # duplicate from above with sameCanonHtml
+  optional
+  { 
+    ?TT owl:sameAs+ ?same .
+    ?TT a ?sameT . 
+    ?sameT rdfs:subClassOf+ bdo:Entity . 
+
+    { ?same skos:prefLabel ?sameL . } 
+    union
+    { ?same foaf:name ?sameL . }  
+    
+    ?same adm:canonicalHtml ?sameCanonHTML . 
+  }
+
+  # --------------------------------------- case :A sameAs :RES when there is no :A record
 
   optional
   { 
-    ?sameBDRC owl:sameAs+ ?TT ; owl:sameAs ?same .
+    ?sameBDRC owl:sameAs+ ?TT ; owl:sameAs+ ?same .
     ?sameBDRC a ?sameT . 
     ?sameT rdfs:subClassOf+ bdo:Entity . 
-    OPTIONAL{ ?sameBDRC skos:prefLabel ?sameBDRClabel . } .      
-    
-    OPTIONAL{ ?same skos:prefLabel ?sameL . } . 
-    OPTIONAL{ ?same foaf:name ?sameL . } . 
-    optional { ?same adm:canonicalHtml ?sameCanonHTML } .
+  }  
+  # duplicate from above with sameCanonHtml
+  optional
+  { 
+    ?sameBDRC owl:sameAs+ ?TT ; owl:sameAs+ ?same .
+    ?sameBDRC a ?sameT . 
+    ?sameT rdfs:subClassOf+ bdo:Entity . 
+
+    ?same adm:canonicalHtml ?sameCanonHTML . 
   }
+
+  # --------------------------------------- case :A sameAs :RES when :A has a prefLabel or foaf:name
+  optional
+  { 
+    ?sameBDRC owl:sameAs+ ?TT ; owl:sameAs+ ?same .
+    ?sameBDRC a ?sameT . 
+    ?sameT rdfs:subClassOf+ bdo:Entity . 
+
+    { ?sameBDRC skos:prefLabel ?sameBDRClabel . } 
+    union
+    { ?sameBDRC foaf:name ?sameBDRClabel . } 
+    
+    { ?same skos:prefLabel ?sameL . }     
+    union
+    { ?same foaf:name ?sameL . } 
+  }  
+  # duplicate from above with sameCanonHtml
+  optional
+  { 
+    ?sameBDRC owl:sameAs+ ?TT ; owl:sameAs+ ?same .
+    ?sameBDRC a ?sameT . 
+    ?sameT rdfs:subClassOf+ bdo:Entity . 
+
+    { ?sameBDRC skos:prefLabel ?sameBDRClabel . } 
+    union
+    { ?sameBDRC foaf:name ?sameBDRClabel . } 
+    
+    { ?same skos:prefLabel ?sameL . }     
+    union
+    { ?same foaf:name ?sameL . } 
+
+    ?same adm:canonicalHtml ?sameCanonHTML . 
+  }
+
+
+
+
+
+
 
   OPTIONAL{?TT bdo:workPartType ?wPT. }
   OPTIONAL{?TT bdo:workHasPart ?wHP. }
