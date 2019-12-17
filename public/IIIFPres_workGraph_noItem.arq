@@ -19,7 +19,7 @@ construct {
   ?R_RES tmp:rootRestrictedInChina ?ric .
   ?R_RES tmp:rootLicense ?license .
   ?R_RES tmp:rootStatus ?status .
-  ?R_RES tmp:inItem ?item .
+  ?R_RES tmp:inImageItem ?iinstance .
   ?R_RES tmp:firstVolume ?vol .
 }
 where {
@@ -33,41 +33,41 @@ where {
     ?R_RES :workLocation/:workLocationWork ?s .
     ?s ?p ?o .
   } union {
-    ?R_RES :workLinkTo?/:workCreator/skos:prefLabel ?o .
+    ?R_RES :workLinkTo?/:instanceOf/:workCreator/skos:prefLabel ?o .
     BIND (?R_RES as ?s)
     BIND (tmp:workCreatorLit as ?p)
   } union {
     ?R_RES :workLinkTo?/:workLocation ?s .
     ?s ?p ?o .
   } union {
-    ?R_RES :workLinkTo?/bdo:workPartOf*/:workHasItem ?item .
-    ?item a :ItemImageAsset .
-    ?admItem adm:adminAbout ?item .
+    ?R_RES :workLinkTo?/bdo:workPartOf*/:instanceHasReproduction ?iinstance .
+    ?iinstance a :ImageInstance .
+    ?admItem adm:adminAbout ?iinstance .
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
     ?admItem adm:restrictedInChina ?ric .
     ?admItem adm:contentLegal/adm:license ?license .
   } union {
-    ?R_RES :workLocation/:workLocationWork/:workHasItem ?item .
-    ?item a :ItemImageAsset .
-    ?admItem adm:adminAbout ?item .
+    ?R_RES :workLocation/:workLocationWork/:instanceHasReproduction ?iinstance .
+    ?iinstance a :ImageInstance .
+    ?admItem adm:adminAbout ?iinstance .
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
     ?admItem adm:restrictedInChina ?ric .
     ?admItem adm:contentLegal/adm:license ?license .
   } union {
     ?R_RES :workLinkTo?/bdo:workPartOf* ?rw .
-    ?rw :workHasItem ?item .
-    ?item a :ItemImageAsset .
+    ?rw :instanceHasReproduction ?iinstance .
+    ?iinstance a :ImageInstance .
     ?R_RES :workLinkTo?/:workLocation ?loc .
     ?loc :workLocationVolume ?bvol .
-    ?item :itemHasVolume ?vol .
+    ?iinstance :itemHasVolume ?vol .
     ?vol :volumeNumber ?bvol .
   } union {
-    ?R_RES :workLinkTo?/:workHasItem ?item .
-    ?rw :workHasItem ?item .
-    ?item a :ItemImageAsset .
-    ?item :itemHasVolume ?vol .
+    ?R_RES :workLinkTo?/:instanceHasReproduction ?iinstance .
+    ?rw :work ?iinstance .
+    ?iinstance a :ImageInstance .
+    ?iinstance :itemHasVolume ?vol .
     ?vol :volumeNumber 1 .
   } union {
     ?R_RES :workLinkTo?/:workHasPart ?s .

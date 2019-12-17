@@ -33,15 +33,15 @@ where {
   } union {
     ?R_RES :workLinkTo?/bdo:workPartOf* ?rw .
     ?rw :workHasItem ?item .
-    ?item a bdo:ItemImageAsset .
+    ?item a bdo:ImageInstance .
     ?R_RES :workLinkTo?/:workLocation ?loc .
     ?loc :workLocationVolume ?bvol .
-    ?item :itemHasVolume ?vol .
+    ?item :instanceHasVolume ?vol .
     ?vol :volumeNumber ?bvol .
   } union {
     ?R_RES :workLinkTo?/:workHasItem ?item .
-    ?item a bdo:ItemImageAsset .
-    ?item :itemHasVolume ?vol .
+    ?item a bdo:ImageInstance .
+    ?item :instanceHasVolume ?vol .
     ?vol :volumeNumber 1 .
   }
 

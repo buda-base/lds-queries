@@ -26,11 +26,11 @@
 #param.R_IdxProp.desc=the URI of the collection being investigated
 
 select distinct ?idx ?abstractI ?abstractT ?expr where {
-  ?R_RES a :Work .
+  ?R_RES a :Instance .
   ?R_IdxProp rdfs:subPropertyOf :workRefs .
   ?expr :workPartOf+ ?R_RES ;
         ?R_IdxProp ?idx ;
-        :workExpressionOf ?abstractT .
+        :workInstanceOf ?abstractT .
   optional {
     ?abstractT :workTranslationOf ?abstractI .
   }

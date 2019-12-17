@@ -21,7 +21,7 @@ construct {
  ?r owl:sameAs ?sameA .
  ?r owl:sameAs ?sameB .
 
- ?r tmp:siblingExpressions ?sibling .
+ ?r tmp:siblingInstances ?sibling .
 
  ?ro tmp:withSameAs ?roSame .
  ?ro tmp:withSameAs ?roSame2 .
@@ -70,7 +70,7 @@ construct {
     # we don't return all the adminAbout, they can be in large quantities
     FILTER(?qp != adm:adminAbout)
   } union {
-    ?parent bdo:workHasExpression ?r ; bdo:workHasExpression ?sibling .
+    ?parent bdo:workHasInstance ?r ; bdo:workHasInstance ?sibling .
     filter( str(?r) != str(?sibling) ) .
   }
 }

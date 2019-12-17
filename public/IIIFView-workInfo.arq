@@ -33,8 +33,8 @@ select distinct ?hasParts ?nbVolumes where {
   }
   optional {
     ?R_RES :workLinkTo?/:workPartOf* ?rw .
-    ?rw :workHasItem ?item .
-    ?item a bdo:ItemImageAsset .
+    ?rw :itemHasReproduction ?item .
+    ?item a bdo:ImageInstance .
     ?item :itemVolumes ?nbVolumes .
     FILTER ( NOT EXISTS{?R_RES :workLinkTo?/:workHasPart ?part} )
   }

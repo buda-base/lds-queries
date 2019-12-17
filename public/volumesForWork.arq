@@ -9,8 +9,8 @@
 #param.R_RES.desc=the Work on which info is needed
 
 select ?volnum ?volid ?imgList where {
-  ?R_RES :workHasItem ?i .
-  ?i a bdo:ItemImageAsset ;
+  ?R_RES :instanceHasReproduction ?i .
+  ?i a bdo:ImageInstance ;
      :itemHasVolume ?volid .
   ?volid :volumeNumber ?volnum ;
          :imageList ?imgList .

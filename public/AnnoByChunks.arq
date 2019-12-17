@@ -44,7 +44,7 @@ where {
     union
     { filter( ?R_COL = tmp:any ) . }
     # ... this volume
-    ?aWork :workHasItemEtext/:itemHasVolume ?iVol .
+    ?aWork :workHasInstance/:instanceHasVolume ?iVol .
     ?iVol :volumeHasEtext ?R_RES .
     ?iVol :volumeNumber ?aVol .
     ?anno oa:hasTarget/:workLocationVolume ?aVol .

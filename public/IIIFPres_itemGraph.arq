@@ -5,7 +5,7 @@
 #QueryUrl=/IIIFPres_itemGraph?R_RES=bdr:I22084
 
 #param.R_RES.type=URI
-#param.R_RES.subtype=bdo:Item
+#param.R_RES.subtype=bdo:ImageInstance
 #param.R_RES.desc=the item on which info is needed
 
 construct {
@@ -21,7 +21,7 @@ construct {
     ?s adm:contentLegal ?cl .
     ?cl ?clp ?clo .
   } union {
-    ?R_RES :itemHasVolume ?s .
+    ?R_RES :instanceHasVolume ?s .
     ?s ?p ?o .
     FILTER (sameTerm(?p, :volumeNumber) || sameTerm(?p, skos:prefLabel) || sameTerm(?p, :hasIIIFManifest))
   }

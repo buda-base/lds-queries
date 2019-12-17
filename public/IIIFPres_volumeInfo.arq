@@ -4,10 +4,10 @@
 #QueryParams=R_RES
 #QueryUrl=/IIIFPres_volumeInfo?R_RES=bdr:V22084_I0886
 
-#output.?workId.type=URI
-#output.?workId.desc=the work expressed by this volume
-#output.?itemId.type=URI
-#output.?itemId.desc=the item this volume belongs to
+#output.?instanceId.type=URI
+#output.?instanceId.desc=the work expressed by this volume
+#output.?iinstanceId.type=URI
+#output.?iinstanceId.desc=the item this volume belongs to
 #output.?access.type=URI
 #output.?access.desc=the access policy of the item
 #output.?license.type=URI
@@ -35,7 +35,7 @@
 #param.R_RES.subtype=:Volume
 #param.R_RES.desc=the URI of the volume being investigated
 
-select distinct ?workId ?itemId ?access ?ric ?license ?imageGroup ?imageList ?totalPages ?pagesIntroTbrc ?volumeNumber ?volumeLabel ?iiifManifest ?status where {
+select distinct ?instanceId ?iinstanceId ?access ?ric ?license ?imageGroup ?imageList ?totalPages ?pagesIntroTbrc ?volumeNumber ?volumeLabel ?iiifManifest ?status where {
   {
     ?R_RES a :VolumeImageAsset .
     optional { ?R_RES :volumeNumber ?volumeNumber . }
@@ -44,13 +44,13 @@ select distinct ?workId ?itemId ?access ?ric ?license ?imageGroup ?imageList ?to
     optional { ?R_RES bdo:volumePagesTotal ?totalPages . }
     optional { ?R_RES skos:prefLabel ?volumeLabel . }
     optional { ?R_RES :hasIIIFManifest ?iiifManifest . }
-    ?itemId :itemForWork ?workId ;
-        :itemHasVolume ?R_RES .
+    ?iinstanceId :instanceReproductionOf ?instanceId ;
+        :instanceHasVolume ?R_RES .
     optional {
       ?admVol adm:adminAbout ?R_RES .
       ?admVol adm:legacyImageGroupRID ?imageGroup .
     }
-    ?admItem adm:adminAbout ?itemId .
+    ?admItem adm:adminAbout ?iinstanceId .
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
     ?admItem adm:restrictedInChina ?ric .

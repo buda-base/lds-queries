@@ -12,14 +12,14 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 construct { 
   ?R_RES ?p ?o .
-  ?item :itemForWork ?work .
+  ?iinstance :instanceOf ?instance .
   ?R_RES tmp:rootAccess ?access .
   ?R_RES tmp:rootStatus ?status .
   ?R_RES tmp:rootRestrictedInChina ?ric .
   ?R_RES tmp:rootLicense ?license .
   ?R_RES tmp:legacyImageGroupRID ?imageGroupId .
-  ?work adm:access ?wa .
-  ?work :workHasPart ?wp .
+  ?instance adm:access ?wa .
+  ?instance :workHasPart ?wp .
   #?part ?pp ?op .
   ?ascPart ?pap ?oap .
   ?loc ?pl ?ol .
@@ -27,14 +27,14 @@ construct {
 where {
   {
     {
-      ?R_RES :volumeOf/:itemForWork ?work ;
+      ?R_RES :volumeOf/:instanceReproductionOf ?instance ;
              :volumeNumber ?volnum .
-      ?loc :workLocationWork ?work .
+      ?loc :workLocationWork ?instance .
       ?loc :workLocationVolume ?bvol .
       # see https://lists.apache.org/thread.html/ec4c7fb703748e7d0d70d8e3baa1c2fbb04842b7494c9097df7dfd0f@%3Cusers.jena.apache.org%3E
       FILTER ((?bvol <= ?volnum && NOT EXISTS {?loc :workLocationEndVolume ?evol}) || (?bvol <= ?volnum  && EXISTS {?loc :workLocationEndVolume ?evol FILTER (?evol <= ?volnum)}))
     }
-    ?work :workHasPart ?wp .
+    ?instance :workHasPart ?wp .
     ?loc ?pl ?ol .
     ?part :workLocation ?loc .
     #?part ?pp ?op .
@@ -43,12 +43,12 @@ where {
     filter (bound(?wpo))
     ?ascPart ?pap ?oap .
   } union {
-    ?R_RES :volumeOf ?item .
+    ?R_RES :volumeOf ?iinstance .
     ?R_RES ?p ?o .
-    ?item :itemForWork ?work .
+    ?iinstance :itemForWork ?instance .
     ?admVol adm:adminAbout ?R_RES .
     ?admVol adm:legacyImageGroupRID ?imageGroupId .
-    ?admItem adm:adminAbout ?item .
+    ?admItem adm:adminAbout ?iinstance .
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
     ?admItem adm:restrictedInChina ?ric .
