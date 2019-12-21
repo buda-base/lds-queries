@@ -149,9 +149,9 @@ where {
   union
   {
     ?R_RES :volumeNumber ?volNum .
-    ?R_RES :volumeOf/:itemForWork/:workHasItem ?voli .
-    ?voli a :ItemEtext .
-    ?voli :itemHasVolume ?etextvol .
+    ?R_RES :volumeOf/:instanceReproductionOf/:instanceHasReproduction ?voli .
+    ?voli a :EtextInstance .
+    ?voli :instanceHasVolume ?etextvol .
     ?etextvol :volumeNumber ?volNum .
     optional {
       ?etextvol :volumeHasEtext/:eTextResource ?etextres .
