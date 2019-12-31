@@ -13,114 +13,83 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 CONSTRUCT
   {
-    ?res adm:license ?license .
     ?res adm:status ?st .
     ?res a ?type .
-    ?res adm:access ?access .
     ?res bdo:workIsAbout ?t .
     ?res bdo:workGenre ?g .
     ?res bdo:workIsAbout ?rootT .
     ?res bdo:workGenre ?rootG .
-    ?res bdo:workLangScript ?ls .
-    ?res bdo:workLangScript ?lssub .
     ?res skos:prefLabel ?l .
-    ?res tmp:titleMatch ?lit .
     ?res tmp:matchScore ?sc .
     ?res tmp:labelMatch ?labelMatch.
-    ?res bdo:workObjectType ?wOT .
+    ?res  bdo:language ?lang .
 
+    ?res bdo:workPartType ?wPT .
+    ?res bdo:workHasPart ?wHP .    
+    ?res bdo:workHasInstance ?instance .
 
-    # redundant with rootSearch
-    #?res bdo:workPartType ?wPT .
-    #?res bdo:workHasPart ?wHP .    
-    #?res bdo:workExpressionOf ?wE .
-    #?res tmp:prefLabelExpressionOf ?litE .
-    #?res bdo:workHasExpression ?wH .
-    #?res tmp:prefLabelHasExpression ?litH .
+    ?instance bdo:workHasRoot ?instanceroot .
+    ?instance tmp:rootPrefLabel ?instancerootPL .
 
-    ?res bdo:workHasRoot ?rw .
-    ?res tmp:rootPrefLabel ?rwO .
+    ?instance ?instancep ?instanceo .
 
-    ?res ?creaRole ?litA.
+    ?res tmp:instanceAccess ?instanceAccess .
+    ?res tmp:instanceType ?instancetype .
+
+    ?res tmp:author ?author .
+
+    ?res bdo:creator ?creator .
+    ?creator ?creatorp ?creatoro .
+    ?agent skos:prefLabel ?agentL .
+
+    ?event ?eventp ?evento .
+
   }
 WHERE 
   {
-    {
-      (?res ?sc ?lit) text:query ( skos:prefLabel ?L_NAME "highlight:" ) .
-      ?res a ?wtype . 
-      ?wtype rdfs:subClassOf* bdo:Work .
-    }
-    union 
-    {
-      (?title ?sc ?lit) text:query ( rdfs:label ?L_NAME "highlight:" ) .
-      ?res :workTitle ?title .
-    }
-    union 
-    {
-      (?author ?sc ?litA) text:query ( rdfs:label ?L_NAME "highlight:" ) .
-      {
-        ?author ^:eventWho ?anypropobj .
-        ?res ?anyprop ?anypropobj .
-        ?anypropobj a ?creaRole .
-      }
-      union 
-      {
-        ?res :creator ?agent . 
-        ?agent :agent/:personName ?author ; :role ?creaRole .
-      }      
-    }
+    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    ?res a ?type . 
+    ?type rdfs:subClassOf* bdo:Work .
     
     optional { ?res bdo:workGenre ?g . optional { ?g ^:taxHasSubClass+ ?rootG . } . }
     optional { ?res bdo:workIsAbout ?t . ?t a :Topic . optional { ?t ^:taxHasSubClass+ ?rootT . } . }
 
-    # good idea (but needs to be tested in a real case)
-    #optional { 
-    #  FILTER(!EXISTS { 
-    #    { ?res bdo:workGenre ?g } union { ?res bdo:workIsAbout ?t . }
-    #  })
-    #  ?rootRes (:workHasPart)+ ?res .
-    #  optional { ?rootRes bdo:workGenre ?g . }
-    #  optional { ?rootRes bdo:workIsAbout ?t . ?t a :Topic . }
-    #}
+    ?res ?resp ?reso .
 
-    ?res a ?type .
-    ?res skos:prefLabel ?l .
-    optional {
-      ?res skos:prefLabel ?labelMatch.
-      Filter ( str(?labelMatch) = str(?lit) )
-    }
-    ?res bdo:workPartOf* ?rw .
-    optional {
-      ?rw :isRoot true .
-      ?rw skos:prefLabel ?rwO .
-    }
-    ?resAdm adm:adminAbout ?rw ;
+    ?resAdm adm:adminAbout ?res ;
             adm:status ?st .
-    optional {
-        ?rw  bdo:workLangScript ?ls . 
-        optional {
-          ?ls rdfs:subClassOf+ ?lssub .
-          ?lssub bdo:language ?lssublang .
-          filter(bound(?lssublang))
-        }
-    } .
-    optional { ?res bdo:workObjectType ?wOT . } .
 
-
-    # redundant with rootSearch
-    #optional { ?res bdo:workHasPart ?wHP . } .
-    #optional { ?res bdo:workPartType ?wPT . } .
-    #optional {
-    #  ?res bdo:workHasExpression ?wH .
-    #  ?wH skos:prefLabel ?litH .
-    #} .
+    # TODO: add years or quarter centuries associated with work
 
     optional {
-      ?rw :workHasItem ?item .
-      ?item a :ItemImageAsset .
-      ?itemAdm adm:adminAbout ?item .
-      ?itemAdm adm:access ?access .
-      ?itemAdm adm:contentLegal/adm:license ?license .
+        ?res bdo:creator ?creator .
+        ?creator ?creatorp ?creatoro .
+        ?creator bdo:agent ?agent .
+        ?agent skos:prefLabel ?agentL .
+    }
+
+    optional {
+        ?res bdo:creator ?acreator .
+        ?acreator bdo:role ?role .
+        FILTER(?role = bdr:R0ER0014 || ?role = bdr:R0ER0016 || ?role = bdr:R0ER0019 || ?role = bdr:R0ER0025)
+        ?acreator bdo:agent ?author .
+    }
+
+    optional {
+        ?res bdo:workEvent ?event .
+        ?event ?eventp ?evento .
+    }
+
+    optional {
+      ?res :workHasInstance ?instance .
+      ?instanceAdm adm:adminAbout ?instance .
+      ?instanceAdm adm:access ?instanceAccess .
+      ?instance ?instancep ?instanceo .
+      ?instance a ?instancetype .
+      optional {
+        ?instance bdo:workPartOf+ ?instanceroot .
+        ?instanceroot :isRoot true ;
+                      skos:prefLabel ?instancerootPL .
+      }
     } .
   }
-order by desc(?sc)
