@@ -56,8 +56,10 @@ WHERE
 
     ?res ?resp ?reso .
 
-    ?resAdm adm:adminAbout ?res ;
-            adm:status ?st .
+    optional {
+      ?resAdm adm:adminAbout ?res ;
+              adm:status ?st .
+    }
 
     # TODO: add years or quarter centuries associated with work
 
