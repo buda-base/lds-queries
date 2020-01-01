@@ -37,7 +37,7 @@ WHERE
     (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
     ?res a/rdfs:subClassOf* bdo:Work .
     ?res ?resp ?reso .
-    FILTER (?resp = bdo:langage || ?resp = skos:altLabel || ?resp = skos:prefLabel )
+    FILTER (?resp = bdo:langage || ?resp = skos:altLabel || ?resp = skos:prefLabel || ?resp = rdf:type)
     
   } union {
     
