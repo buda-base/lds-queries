@@ -18,6 +18,5 @@
 
 select (count(?chunk) as ?c) 
 where {
-   (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:") .
-   ?txt :eTextHasChunk ?chunk .
+   (?chunk) text:query ( :chunkContents ?L_NAME) .
 } 
