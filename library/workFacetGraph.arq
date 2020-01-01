@@ -34,7 +34,7 @@ CONSTRUCT
 WHERE 
 {
   {
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels "\"spyod 'jug\"" "highlight:" ) .
+    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
     ?res a/rdfs:subClassOf* bdo:Work .
     ?res ?resp ?reso .
     FILTER (?resp = bdo:langage || ?resp = skos:altLabel || ?resp = skos:prefLabel )
@@ -53,7 +53,7 @@ WHERE
 
   } union {
     
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels "\"spyod 'jug\"" "highlight:" ) .
+    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
     ?res a/rdfs:subClassOf* bdo:Work .
     
     ?res ?respp ?resoo .
@@ -62,7 +62,7 @@ WHERE
 
   } union {
     
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels "\"spyod 'jug\"" "highlight:" ) .
+    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
 
     ?res ?instancep ?instance .
     FILTER(?instancep = bdo:workHasInstance || ?instancep = bdo:serialHasInstance)
