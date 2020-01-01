@@ -12,86 +12,60 @@
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 CONSTRUCT
-  {
+{
     ?res adm:status ?st .
-    ?res a ?type .
-    ?res bdo:workIsAbout ?t .
-    ?res bdo:workGenre ?g .
-    ?res bdo:workIsAbout ?rootT .
-    ?res bdo:workGenre ?rootG .
-    ?res skos:prefLabel ?l .
     ?res tmp:matchScore ?sc .
     ?res tmp:labelMatch ?labelMatch.
-    ?res  bdo:language ?lang .
-
-    ?res bdo:workPartType ?wPT .
-    ?res bdo:workHasPart ?wHP .    
-    ?res bdo:workHasInstance ?instance .
-
-    ?instance bdo:workHasRoot ?instanceroot .
-    ?instance tmp:rootPrefLabel ?instancerootPL .
-
-    ?instance ?instancep ?instanceo .
-
-    ?res tmp:instanceAccess ?instanceAccess .
-    ?res tmp:instanceType ?instancetype .
-
-    ?res tmp:author ?author .
-
-    ?res bdo:creator ?creator .
-    ?creator ?creatorp ?creatoro .
-    ?agent skos:prefLabel ?agentL .
-
-    ?event ?eventp ?evento .
-
-  }
-WHERE 
-  {
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
-    ?res a ?type . 
-    ?type rdfs:subClassOf* bdo:Work .
-    
-    optional { ?res bdo:workGenre ?g . optional { ?g ^:taxHasSubClass+ ?rootG . } . }
-    optional { ?res bdo:workIsAbout ?t . ?t a :Topic . optional { ?t ^:taxHasSubClass+ ?rootT . } . }
-
+  
     ?res ?resp ?reso .
 
-    optional {
-      ?resAdm adm:adminAbout ?res ;
-              adm:status ?st .
-    }
+    ?instance skos:prefLabel ?instancel .
+    ?instance a ?instancetype .
+    ?instance tmp:instanceAccess ?instanceAccess .
+ 
+    ?res tmp:author ?author .
+    ?agent skos:prefLabel ?agentL .
+  
+    ?reso skos:prefLabel ?ol .
 
-    # TODO: add years or quarter centuries associated with work
+}
+WHERE 
+{
+  {
+    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels "\"spyod 'jug\"" "highlight:" ) .
+    ?res a/rdfs:subClassOf* bdo:Work .
+    ?res ?resp ?reso .
+    
+  } union {
+    
+    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels "\"spyod 'jug\"" "highlight:" ) .
+    
+    ?res bdo:creator ?creator .
+    ?creator ?creatorp ?creatoro .
+    ?creator bdo:role ?role .
+    ?creator bdo:agent ?agent .
+    ?agent skos:prefLabel ?agentL .
+    
+    bind( if(?role = bdr:R0ER0014 || ?role = bdr:R0ER0016 || ?role = bdr:R0ER0019 || ?role = bdr:R0ER0025, ?agent, false) as ?author)
 
-    optional {
-        ?res bdo:creator ?creator .
-        ?creator ?creatorp ?creatoro .
-        ?creator bdo:agent ?agent .
-        ?agent skos:prefLabel ?agentL .
-    }
+  } union {
+    
+    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels "\"spyod 'jug\"" "highlight:" ) .
+    ?res a/rdfs:subClassOf* bdo:Work .
+    
+    ?res ?resp ?reso .
+    FILTER(?resp = bdo:workTranslationOf || ?resp = bdo:serialMemberOf)
+    ?reso skos:prefLabel ?ol .
 
-    optional {
-        ?res bdo:creator ?acreator .
-        ?acreator bdo:role ?role .
-        FILTER(?role = bdr:R0ER0014 || ?role = bdr:R0ER0016 || ?role = bdr:R0ER0019 || ?role = bdr:R0ER0025)
-        ?acreator bdo:agent ?author .
-    }
+  } union {
+    
+    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels "\"spyod 'jug\"" "highlight:" ) .
 
-    optional {
-        ?res bdo:workEvent ?event .
-        ?event ?eventp ?evento .
-    }
-
-    optional {
-      ?res :workHasInstance ?instance .
-      ?instanceAdm adm:adminAbout ?instance .
-      ?instanceAdm adm:access ?instanceAccess .
-      ?instance ?instancep ?instanceo .
-      ?instance a ?instancetype .
-      optional {
-        ?instance bdo:workPartOf+ ?instanceroot .
-        ?instanceroot :isRoot true ;
-                      skos:prefLabel ?instancerootPL .
-      }
-    } .
+    ?res ?resp ?instance .
+    FILTER(?resp = bdo:workHasInstance || ?resp = bdo:serialHasInstance)
+    ?instance skos:prefLabel ?instancel .
+    ?instance a ?instancetype .
+    ?instanceAdm adm:adminAbout ?instance .
+    ?instanceAdm adm:access ?instanceAccess .
   }
+}
