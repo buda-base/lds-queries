@@ -18,6 +18,8 @@ CONSTRUCT
     ?res tmp:labelMatch ?labelMatch.
   
     ?res ?resp ?reso .
+    ?res ?respp ?resoo .
+    ?res ?instancep ?instance .
 
     ?instance skos:prefLabel ?instancel .
     ?instance a ?instancetype .
@@ -26,7 +28,7 @@ CONSTRUCT
     ?res tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
   
-    ?reso skos:prefLabel ?ol .
+    ?resoo skos:prefLabel ?ol .
 
 }
 WHERE 
@@ -35,6 +37,7 @@ WHERE
     (?res ?sc ?labelMatch) text:query ( bdo:skosLabels "\"spyod 'jug\"" "highlight:" ) .
     ?res a/rdfs:subClassOf* bdo:Work .
     ?res ?resp ?reso .
+    FILTER (?resp = bdo:langage || ?resp = skos:altLabel || ?resp = skos:prefLabel )
     
   } union {
     
@@ -53,19 +56,19 @@ WHERE
     (?res ?sc ?labelMatch) text:query ( bdo:skosLabels "\"spyod 'jug\"" "highlight:" ) .
     ?res a/rdfs:subClassOf* bdo:Work .
     
-    ?res ?resp ?reso .
-    FILTER(?resp = bdo:workTranslationOf || ?resp = bdo:serialMemberOf)
-    ?reso skos:prefLabel ?ol .
+    ?res ?respp ?resoo .
+    FILTER(?respp = bdo:workTranslationOf || ?respp = bdo:serialMemberOf  || ?respp = bdo:workIsAbout || ?respp = bdo:workGenre)
+    ?resoo skos:prefLabel ?ol .
 
   } union {
     
     (?res ?sc ?labelMatch) text:query ( bdo:skosLabels "\"spyod 'jug\"" "highlight:" ) .
 
-    ?res ?resp ?instance .
-    FILTER(?resp = bdo:workHasInstance || ?resp = bdo:serialHasInstance)
+    ?res ?instancep ?instance .
+    FILTER(?instancep = bdo:workHasInstance || ?instancep = bdo:serialHasInstance)
     ?instance skos:prefLabel ?instancel .
     ?instance a ?instancetype .
     ?instanceAdm adm:adminAbout ?instance .
-    ?instanceAdm adm:access ?instanceAccess .
+    #?instanceAdm adm:access ?instanceAccess .
   }
 }
