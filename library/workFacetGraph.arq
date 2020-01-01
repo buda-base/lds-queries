@@ -41,7 +41,7 @@ WHERE
     
   } union {
     
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels "\"spyod 'jug\"" "highlight:" ) .
+    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
     
     ?res bdo:creator ?creator .
     ?creator ?creatorp ?creatoro .
