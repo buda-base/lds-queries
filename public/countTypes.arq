@@ -18,7 +18,7 @@ select ?type (count (distinct ?e) as ?count) where {
 	} union {
 		# personName + rdfslabel 
 		(?l) text:query ( rdfs:label ?L_NAME) .
-		?e bdo:personName ?e .
+		?e bdo:personName ?l .
 		bind(bdo:Person as ?type)
 	} union {
 		# chunks
