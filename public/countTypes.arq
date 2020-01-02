@@ -21,10 +21,13 @@ select ?type (count (distinct ?e) as ?count) where {
 		?e bdo:personName ?l .
 		bind(bdo:Person as ?type)
 	} union {
+		# workTitle + rdfslabel 
+		(?l) text:query ( rdfs:label ?L_NAME) .
+		?e bdo:workTitle ?l .
+		bind(bdo:Instance as ?type)
+	} union {
 		# chunks
         (?e) text:query ( bdo:chunkContents ?L_NAME) .
         bind (bdo:Chunk as ?type) .
 	}
 } group by ?type 
-
-
