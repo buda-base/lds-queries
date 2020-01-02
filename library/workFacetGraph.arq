@@ -23,7 +23,7 @@ CONSTRUCT
 
     ?instance skos:prefLabel ?instancel .
     ?instance a ?instancetype .
-    ?instance tmp:instanceAccess ?instanceAccess .
+    ?instance tmp:instanceAccessOpen ?instanceAccessOpen .
  
     ?res tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
@@ -69,6 +69,6 @@ WHERE
     ?instance skos:prefLabel ?instancel .
     ?instance a ?instancetype .
     ?instanceAdm adm:adminAbout ?instance .
-    #?instanceAdm adm:access ?instanceAccess .
+    bind( exists {?instanceAdm adm:access bda:AccessOpen} as ?instanceAccessOpen)
   }
 }
