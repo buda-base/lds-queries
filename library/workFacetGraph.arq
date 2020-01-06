@@ -13,7 +13,7 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 CONSTRUCT
 {
-    ?res adm:status ?st .
+    ?res tmp:status ?st .
     ?res tmp:matchScore ?sc .
     ?res tmp:labelMatch ?labelMatch.
   
@@ -38,6 +38,8 @@ WHERE
     ?res a/rdfs:subClassOf* bdo:Work .
     ?res ?resp ?reso .
     FILTER (?resp = bdo:langage || ?resp = skos:altLabel || ?resp = skos:prefLabel || ?resp = rdf:type)
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
     
   } union {
     
@@ -65,7 +67,7 @@ WHERE
     (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
 
     ?res ?instancep ?instance .
-    FILTER(?instancep = bdo:workHasInstance || ?instancep = bdo:serialHasInstance)
+    FILTER(?instancep = bdo:workHasInstance || ?instancep = bdo:serialHasInstance || ?instancep = bdo:instanceHasReproduction  || ?instancep = bdo:instanceReproductionOf)
     ?instance skos:prefLabel ?instancel .
     ?instance a ?instancetype .
     ?instanceAdm adm:adminAbout ?instance .
