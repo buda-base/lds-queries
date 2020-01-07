@@ -1,0 +1,16 @@
+#QueryScope=Users
+#QueryReturnType=Table
+#QueryResults=List all buda users
+#QueryParams=NONE
+#QueryUrl=/resource-nc/users
+
+select * 
+where {
+    ?user a bdou:User { 
+    ?user bdou:hasUserProfile ?userProfile .
+    ?user skos:prefLabel ?label.
+    ?user foaf:mbox ?email.
+    ?user bdou:mainResidenceArea ?residenceArea.
+    ?user bdou:isActive ?isActive.
+    ?user :personGender ?gender.}
+}
