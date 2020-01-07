@@ -51,7 +51,7 @@ WHERE
     ?creator bdo:agent ?agent .
     ?agent skos:prefLabel ?agentL .
     
-    bind( if(?role = bdr:R0ER0014 || ?role = bdr:R0ER0016 || ?role = bdr:R0ER0019 || ?role = bdr:R0ER0025, ?agent, false) as ?author)
+    bind( if(?role = bdr:R0ER0014 || ?role = bdr:R0ER0016 || ?role = bdr:R0ER0019 || ?role = bdr:R0ER0025, ?agent, 1/0) as ?author)
 
   } union {
     
