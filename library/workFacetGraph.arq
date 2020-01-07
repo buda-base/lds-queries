@@ -16,14 +16,14 @@ CONSTRUCT
     ?res tmp:status ?st .
     ?res tmp:matchScore ?sc .
     ?res tmp:labelMatch ?labelMatch.
+
+    ?res tmp:nbInstance ?nbinstances .
+    ?res tmp:hasOpen ?hasopen .
+    ?res tmp:hasImage ?hasimage .
+    ?res tmp:hasEtext ?hasetext .
   
     ?res ?resp ?reso .
     ?res ?respp ?resoo .
-    ?res ?instancep ?instance .
-
-    ?instance skos:prefLabel ?instancel .
-    ?instance a ?instancetype .
-    ?instance tmp:instanceAccessOpen ?instanceAccessOpen .
  
     ?res tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
@@ -64,13 +64,23 @@ WHERE
 
   } union {
     
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    select ?res 
+           (sum (?isRootInstance) as ?nbinstances) 
+           (count (?instance) as ?nbinstance) 
+           (max(?instanceAccessOpen) as ?hasopen) 
+           (max(?instanceImage) as ?hasimage) 
+           (max(?instanceEtext) as ?hasetext) 
+    where {
+      
+      (?res) text:query ( bdo:skosLabels ?L_NAME) .
 
-    ?res ?instancep ?instance .
-    FILTER(?instancep = bdo:workHasInstance || ?instancep = bdo:serialHasInstance || ?instancep = bdo:instanceHasReproduction  || ?instancep = bdo:instanceReproductionOf)
-    ?instance skos:prefLabel ?instancel .
-    ?instance a ?instancetype .
-    ?instanceAdm adm:adminAbout ?instance .
-    bind( exists {?instanceAdm adm:access bda:AccessOpen} as ?instanceAccessOpen)
+      ?res bdo:workHasInstance/bdo:partRoot? ?instance .
+      ?instanceAdm adm:adminAbout ?instance .
+      ?instanceAdm adm:status bda:StatusReleased .
+      bind( if (exists {?instance bdo:instanceReproductionOf ?reprodof}, 0, 1) as ?isRootInstance)
+      bind( exists {?instanceAdm adm:access bda:AccessOpen} as ?instanceAccessOpen)
+      bind( exists {?instance a bdo:ImageInstance} as ?instanceImage)
+      bind( exists {?instance a bdo:EtextInstance} as ?instanceEtext)
+    } group by ?res 
   }
 }
