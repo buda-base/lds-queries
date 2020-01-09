@@ -13,6 +13,7 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 CONSTRUCT {
 
 	?instance ?evtp ?evto .
+	?instance a bdo:Instance .
 	?instance tmp:status ?status .
 	?instance ?instancep ?instanceo .
 	?instance :partRoot ?instanceR .
