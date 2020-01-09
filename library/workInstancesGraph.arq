@@ -48,8 +48,9 @@ CONSTRUCT {
 
 	} union {
 
-		?R_RES :workHasInstance/:partRoot? ?instance .
-		?instance :workEvent ?evt .
+		?R_RES :workHasInstance ?instance .
+		?instance :partRoot? ?instanceR .
+		?instanceR :workEvent ?evt .
 		?evt ?evtp ?evto .
 		FILTER(?evtp = bdo:onYear || ?evtp = bdo:notBefore || ?evtp = bdo:notAfter)
     
