@@ -12,7 +12,8 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 CONSTRUCT {
 
-	?instance ?evtp ?evto .
+    ?instance tmp:yearStart ?yearStart .
+    ?instance tmp:yearEnd ?yearEnd .
 	?instance a bdo:Instance .
 	?instance tmp:status ?status .
 	?instance ?instancep ?instanceo .
@@ -52,7 +53,8 @@ CONSTRUCT {
 		?instance :partRoot? ?instanceR .
 		?instanceR :workEvent ?evt .
 		?evt ?evtp ?evto .
-		FILTER(?evtp = bdo:onYear || ?evtp = bdo:notBefore || ?evtp = bdo:notAfter)
+		BIND (IF(?evtp = bdo:onYear || ?evtp = bdo:notBefore, ?evto, 1/0) as ?yearStart)
+        BIND (IF(?evtp = bdo:notAfter, ?evto, 1/0) as ?yearEnd)
     
     } union {
 
