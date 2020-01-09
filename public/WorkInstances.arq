@@ -1,0 +1,75 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All instances linked to the work, 
+#QueryParams=L_NAME,LG_NAME
+#QueryUrl=/lib/workInstance?R_RES=bdr:W0RTT3216
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=bdo:Work
+#param.R_RES.desc=the work on which we want to list the instances
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT {
+
+	?instance ?evtp ?evto .
+	?instance tmp:status ?status .
+	?instance ?instancep ?instanceo .
+	?instance :partRoot ?instanceR .
+	?instanceR skos:prefLabel ?instanceRl .
+	?instance ?instanceRp ?instanceRo .
+	?instance ?instancep ?instanceo .
+
+    ?instance tmp:hasOpen ?hasopen .
+    ?instance tmp:hasImage ?hasimage .
+    ?instance tmp:hasEtext ?hasetext .
+
+} where {
+
+    {
+
+		?R_RES :workHasInstance ?instance .
+		FILTER ( NOT EXISTS {?instance :instanceReproductionOf ?reprof })
+		?instanceAdm adm:adminAbout ?instance .
+		?instanceAdm adm:status ?status .
+		?instance ?instancep ?instanceo .
+		FILTER (?instancep != bdo:note && ?instancep != bdo:workEvent && ?instanceP != bdo:workTitle)
+
+    } union {
+	    
+	    ?R_RES :workHasInstance ?instance .
+	    ?instance :partRoot ?instanceR .
+		?instanceRAdm adm:adminAbout ?instanceR .
+		?instanceRAdm adm:status ?status .
+		?instanceR skos:prefLabel ?instanceRl .
+		?instanceR ?instanceRp ?instanceRo .
+		FILTER (?instanceRp = bdo:script || ?instanceRp = bdo:printMethod || ?instanceP = bdo:workPublisherLocation || ?instanceRp = bdo:workPublisherName)
+
+	} union {
+
+		?R_RES :workHasInstance/:partRoot?/:workEvent ?evt .
+		?evt ?evtp ?evto .
+		FILTER(?evtp = bdo:onYear || ?evtp = bdo:notBefore || ?evtp = bdo:notAfter)
+    
+    } union {
+
+		select ?instance 
+	           (max(?instanceAccessOpen) as ?hasopen) 
+	           (max(?instanceImage) as ?hasimage) 
+	           (max(?instanceEtext) as ?hasetext) 
+	    where {
+	      
+	      ?R_RES :workHasInstance ?instance .
+	      FILTER ( NOT EXISTS {?instance :instanceReproductionOf ?reprof })
+		  ?instance :partRoot?/:instanceHasReproduction ?instanceRep .
+
+	      ?instanceRepAdm adm:adminAbout ?instanceRep .
+	      ?instanceRepAdm adm:status bda:StatusReleased .
+	      bind( exists {?instanceRepAdm adm:access bda:AccessOpen} as ?instanceAccessOpen)
+	      bind( exists {?instanceRep a bdo:ImageInstance} as ?instanceImage)
+	      bind( exists {?instanceRep a bdo:EtextInstance} as ?instanceEtext)
+	    } group by ?instance 
+
+    }
+
+}
