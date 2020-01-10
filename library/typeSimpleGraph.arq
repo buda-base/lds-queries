@@ -1,0 +1,34 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All places whose various literals contain the given L_NAME parameter value.
+#QueryParams=L_NAME,LG_NAME,R_TYPE
+#QueryUrl=/lib/placeGraph?L_NAME="'od zer"&LG_NAME=bo-x-ewts&R_TYPE=bdo:Topic
+
+#param.L_NAME.type=string
+#param.L_NAME.langTag=LG_NAME
+#param.L_NAME.isLucene=true
+#param.L_NAME.example="ye shes"
+
+#param.R_TYPE.type=URI
+#param.R_TYPE.subtype=bdo:Entity
+#param.R_TYPE.desc=the type of results that should be returned
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT
+{
+    ?res tmp:status ?st .
+    ?res tmp:matchScore ?sc .
+    ?res tmp:labelMatch ?labelMatch.
+    ?res tmp:isMain true .
+    ?res ?resp ?reso .
+}
+WHERE 
+{
+    (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+    
+    ?res a ?R_TYPE .
+    ?res ?resp ?reso .
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+}
