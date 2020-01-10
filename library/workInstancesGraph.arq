@@ -14,7 +14,7 @@ CONSTRUCT {
 
     ?instance tmp:yearStart ?yearStart .
     ?instance tmp:yearEnd ?yearEnd .
-	?instance a bdo:Instance .
+	?instance tmp:isMain true.
 	?instance tmp:status ?status .
 	?instance ?instancep ?instanceo .
 	?instance :partRoot ?instanceR .
