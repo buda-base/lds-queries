@@ -37,7 +37,7 @@ WHERE
     (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
     ?res a/rdfs:subClassOf* bdo:Work .
     ?res ?resp ?reso .
-    FILTER (?resp = bdo:language || ?resp = skos:altLabel || ?resp = skos:prefLabel || ?resp = rdf:type)
+    FILTER (?resp = bdo:language || ?resp = skos:altLabel || ?resp = skos:prefLabel || ?resp = rdf:type || ?resp = owl:sameAs || ?resp = tmp:entityScore)
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
     

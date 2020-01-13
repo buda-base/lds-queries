@@ -31,7 +31,7 @@ WHERE
     
     ?res a bdo:Place .
     ?res ?resp ?reso .
-    FILTER (?resp = bdo:altLabel || ?resp = skos:prefLabel || ?resp = bdo:placeLat || ?resp = bdo:placeLong || ?resp = bdo:placeType || ?resp = bdo:placeLocatedIn)
+    FILTER (?resp = bdo:altLabel || ?resp = skos:prefLabel || ?resp = bdo:placeLat || ?resp = bdo:placeLong || ?resp = bdo:placeType || ?resp = bdo:placeLocatedIn || ?resp = owl:sameAs || ?resp = tmp:entityScore)
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
     
