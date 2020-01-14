@@ -19,6 +19,8 @@ CONSTRUCT
     ?res tmp:isMain true .
     ?res ?resp ?reso .
     ?res tmp:placeAffiliation ?trad .
+    ?res tmp:provider ?provider .
+    ?res tmp:originalRecord ?originalRecord .
 
     ?locatedin skos:prefLabel ?locatedinL .
 
@@ -34,6 +36,9 @@ WHERE
     FILTER (?resp = bdo:altLabel || ?resp = skos:prefLabel || ?resp = bdo:placeLat || ?resp = bdo:placeLong || ?resp = bdo:placeType || ?resp = bdo:placeLocatedIn || ?resp = owl:sameAs || ?resp = tmp:entityScore)
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
+    ?resAdm ?resAdmP ?originalRecord .
+    FILTER(?resAdm = adm:originalRecord)
     
   } union {
     

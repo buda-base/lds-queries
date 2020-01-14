@@ -18,6 +18,8 @@ CONSTRUCT
     ?res tmp:labelMatch ?labelMatch.
 
     ?res tmp:nbInstance ?nbinstances .
+    ?res tmp:provider ?provider .
+    ?res tmp:originalRecord ?originalRecord .
     ?res tmp:hasOpen ?hasopen .
     ?res tmp:hasImage ?hasimage .
     ?res tmp:hasEtext ?hasetext .
@@ -40,6 +42,7 @@ WHERE
     FILTER (?resp = bdo:language || ?resp = skos:altLabel || ?resp = skos:prefLabel || ?resp = rdf:type || ?resp = owl:sameAs || ?resp = tmp:entityScore)
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
     
   } union {
     

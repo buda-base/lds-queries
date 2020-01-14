@@ -17,6 +17,7 @@ CONSTRUCT {
 	?instance tmp:isMain true .
 	?instance tmp:status ?status .
 	?instance tmp:provider ?provider .
+	?instance tmp:originalRecord ?originalRecord .
 	?instance ?instancep ?instanceo .
 	?instance :partRoot ?instanceR .
 	?instanceR skos:prefLabel ?instanceRl .
@@ -36,6 +37,9 @@ CONSTRUCT {
 		?instanceAdm adm:adminAbout ?instance .
 		?instanceAdm adm:status ?status .
 		?instanceAdm adm:metadataLegal/adm:provider ?provider .
+		?instanceAdm ?instanceAdmP ?originalRecord .
+		FILTER(?instanceAdmP = adm:originalRecord)
+
 		?instance ?instancep ?instanceo .
 		FILTER (?instancep != bdo:note && ?instancep != bdo:workEvent && ?instancep != bdo:workTitle)
 

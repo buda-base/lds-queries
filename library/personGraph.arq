@@ -20,6 +20,8 @@ CONSTRUCT
     ?res tmp:isCreator ?isCreator .
     ?res ?resp ?reso .
     ?res tmp:yearStart ?yearStart .
+    ?res tmp:provider ?provider .
+    ?res tmp:originalRecord ?originalRecord .
 
     ?evt ?evtp ?evto .
     ?name ?namep ?nameo .
@@ -36,6 +38,9 @@ WHERE
     FILTER (?resp = bdo:altLabel || ?resp = skos:prefLabel || ?resp = bdo:personName || ?resp = bdo:personEvent || ?resp = owl:sameAs || ?resp = tmp:entityScore)
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
+    ?resAdm ?resAdmP ?originalRecord .
+    FILTER(?resAdm = adm:originalRecord)
     ?name ?namep ?nameo .
     bind ( exists {?tmp bdo:agent ?res} as ?isCreator )
     
