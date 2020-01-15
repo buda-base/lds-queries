@@ -37,8 +37,6 @@ CONSTRUCT {
 		?instanceAdm adm:adminAbout ?instance .
 		?instanceAdm adm:status ?status .
 		?instanceAdm adm:metadataLegal/adm:provider ?provider .
-		?instanceAdm ?instanceAdmP ?originalRecord .
-		FILTER(?instanceAdmP = adm:originalRecord)
 
 		?instance ?instancep ?instanceo .
 		FILTER (?instancep != bdo:note && ?instancep != bdo:workEvent && ?instancep != bdo:workTitle)
@@ -49,9 +47,14 @@ CONSTRUCT {
 	    ?instance :partRoot ?instanceR .
 		?instanceRAdm adm:adminAbout ?instanceR .
 		?instanceRAdm adm:status ?status .
+		?instanceRAdm adm:metadataLegal/adm:provider ?provider .
+
 		?instanceR skos:prefLabel ?instanceRl .
 		?instanceR ?instanceRp ?instanceRo .
 		FILTER (?instanceRp = bdo:script || ?instanceRp = bdo:printMethod || ?instanceRp = bdo:workPublisherLocation || ?instanceRp = bdo:workPublisherName)
+
+		?instance ?instancep ?instanceo .
+		FILTER (?instancep != bdo:note && ?instancep != bdo:workEvent && ?instancep != bdo:workTitle)
 
 	} union {
 
