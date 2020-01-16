@@ -35,7 +35,7 @@ WHERE
     
     ?res bdo:personName ?name .
     ?res ?resp ?reso .
-    FILTER (?resp = bdo:altLabel || ?resp = skos:prefLabel || ?resp = bdo:personName || ?resp = bdo:personEvent || ?resp = owl:sameAs || ?resp = tmp:entityScore)
+    FILTER (?resp = bdo:altLabel || ?resp = skos:prefLabel || ?resp = skos:placeEvent || ?resp = bdo:personName || ?resp = bdo:personEvent || ?resp = owl:sameAs || ?resp = tmp:entityScore)
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
     ?resAdm adm:metadataLegal/adm:provider ?provider .
