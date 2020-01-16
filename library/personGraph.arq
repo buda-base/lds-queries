@@ -39,8 +39,6 @@ WHERE
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
     ?resAdm adm:metadataLegal/adm:provider ?provider .
-    ?resAdm ?resAdmP ?originalRecord .
-    FILTER(?resAdm = adm:originalRecord)
     ?name ?namep ?nameo .
     bind ( exists {?tmp bdo:agent ?res} as ?isCreator )
     

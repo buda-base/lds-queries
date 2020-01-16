@@ -37,8 +37,6 @@ WHERE
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
     ?resAdm adm:metadataLegal/adm:provider ?provider .
-    ?resAdm ?resAdmP ?originalRecord .
-    FILTER(?resAdm = adm:originalRecord)
     
   } union {
     
