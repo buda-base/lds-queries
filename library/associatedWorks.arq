@@ -1,7 +1,7 @@
 #QueryScope=General
 #QueryReturnType=Graph
 #QueryResults=All works whose various literals contain the given L_NAME parameter value, along with their LICENSE + ACCESS + LANGSCRIPT + STATUS facets.
-#QueryParams=L_NAME,LG_NAME
+#QueryParams=R_RES
 #QueryUrl=/lib/associatedWorks?R_RES=bdr:W19740
 
 #param.R_RES.type=resource
@@ -48,7 +48,7 @@ WHERE
       ?res ?rel2 ?R_RES .
       ?res a/rdfs:subClassOf* bdo:Work .
     } union {
-      ?res bdo:creator/bdo:agent ?R_RES .
+      ?res bdo:creator/bdo:agent ?R_RES . 
       BIND(bdo:creator as ?rel3)
     }
     
