@@ -1,0 +1,46 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All resources associated with the given entity and the given type, which can be anything but work, instance, person or place
+#QueryParams=R_RES
+#QueryUrl=/lib/associatedSimpleTypes?R_RES=bdr:W19740&R_TYPE=bdo:Lineage
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced entity
+
+#param.R_TYPE.type=URI
+#param.R_TYPE.subtype=bdo:Entity
+#param.R_TYPE.desc=the type of results that should be returned
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+construct {
+    ?ar tmp:relationType ?rel .
+    ?ar ?arp ?aro .
+    ?ar tmp:status ?st .
+    ?ar tmp:isMain true .
+}
+where {
+  #associated Lineages
+  {
+    FILTER(?R_TYPE = bdo:Lineage)
+    
+    ?hold ?rel ?R_RES .
+    ?ar bdo:lineageHolder ?hold .
+    ?ar skos:prefLabel ?aro .
+    BIND(skos:prefLabel as ?arp) .
+    ?resAdm adm:adminAbout ?ar .
+    ?resAdm adm:status ?st .
+  }
+  union
+  {
+    # general association, nothing more is needed
+    ?ar ?rel ?R_RES .
+    ?ar a ?R_TYPE .
+    ?ar skos:prefLabel ?aro .
+    ?ar skos:prefLabel ?aro .
+    BIND(skos:prefLabel as ?arp) .
+    ?resAdm adm:adminAbout ?ar .
+    ?resAdm adm:status ?st .
+  }
+}
