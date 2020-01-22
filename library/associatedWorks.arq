@@ -2,12 +2,11 @@
 #QueryReturnType=Graph
 #QueryResults=All works whose various literals contain the given L_NAME parameter value, along with their LICENSE + ACCESS + LANGSCRIPT + STATUS facets.
 #QueryParams=L_NAME,LG_NAME
-#QueryUrl=/lib/workFacetGraph?L_NAME="'od zer"&LG_NAME=bo-x-ewts
+#QueryUrl=/lib/associatedWorks?R_RES=bdr:W19740
 
-#param.L_NAME.type=string
-#param.L_NAME.langTag=LG_NAME
-#param.L_NAME.isLucene=true
-#param.L_NAME.example="ye shes"
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced entity
 
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
@@ -23,6 +22,9 @@ CONSTRUCT
     ?res tmp:hasOpen ?hasopen .
     ?res tmp:hasImage ?hasimage .
     ?res tmp:hasEtext ?hasetext .
+    ?res tmp:relationType ?rel1 .
+    ?res tmp:relationType ?rel2 .
+    ?res tmp:relationType ?rel3 .
   
     ?res ?resp ?reso .
     ?res ?respp ?resoo .
@@ -35,9 +37,21 @@ CONSTRUCT
 }
 WHERE 
 {
+  # We have the following ways a work can be related to another thing:
+  #  - direct relation to/from
+  #  - work has creator R_RES
   {
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
-    ?res a/rdfs:subClassOf* bdo:Work .
+    {
+      ?R_RES ?rel1 ?res .
+      ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+      ?res ?rel2 ?R_RES .
+      ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+      ?res bdo:creator/bdo:agent ?R_RES .
+      BIND(bdo:creator as ?rel3)
+    }
+    
     #VALUES ?resp {bdo:language skos:altLabel skos:prefLabel rdf:type owl:sameAs tmp:entityScore}
     ?res ?resp ?reso .
     FILTER (?resp IN(bdo:language , skos:altLabel , skos:prefLabel , rdf:type , owl:sameAs , tmp:entityScore))
@@ -47,7 +61,16 @@ WHERE
     
   } union {
     
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    {
+      ?R_RES ?rel1 ?res .
+      ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+      ?res ?rel2 ?R_RES .
+      ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+      ?res bdo:creator/bdo:agent ?R_RES .
+      BIND(bdo:creator as ?rel3)
+    }
     
     ?res bdo:creator ?creator .
     ?creator bdo:role ?role .
@@ -58,8 +81,16 @@ WHERE
 
   } union {
     
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
-    ?res a/rdfs:subClassOf* bdo:Work .
+    {
+      ?R_RES ?rel1 ?res .
+      ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+      ?res ?rel2 ?R_RES .
+      ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+      ?res bdo:creator/bdo:agent ?R_RES .
+      BIND(bdo:creator as ?rel3)
+    }
     
     ?res ?respp ?resoo .
     FILTER(?respp IN(bdo:workTranslationOf , bdo:serialMemberOf , bdo:workIsAbout , bdo:workGenre))
@@ -75,7 +106,15 @@ WHERE
            (max(?instanceEtext) as ?hasetext) 
     where {
       
-      (?res) text:query ( bdo:skosLabels ?L_NAME) .
+      {
+        ?R_RES ?rel1 ?res .
+        ?res a/rdfs:subClassOf* bdo:Work .
+      } union {
+        ?res ?rel2 ?R_RES .
+        ?res a/rdfs:subClassOf* bdo:Work .
+      } union {
+        ?res bdo:creator/bdo:agent ?R_RES .
+      }
 
       ?res bdo:workHasInstance/bdo:partRoot? ?instance .
       ?instanceAdm adm:adminAbout ?instance .

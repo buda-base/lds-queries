@@ -15,31 +15,35 @@ construct {
     ?res tmp:isMain true .
     ?res ?resp ?reso .
 
-    # let's ignore the place affiliation for now
-    #?res tmp:placeAffiliation ?trad .
+    ?res tmp:placeAffiliation ?trad .
     ?res tmp:provider ?provider .
-    ?res tmp:relationType ?rel .
+    ?res tmp:relationType ?rel1 .
+    ?res tmp:relationType ?rel2 .
+    ?res tmp:relationTypeInv ?relInv .
 
     ?locatedin skos:prefLabel ?locatedinL .
 }
 where {
-  # We have for each type of match two unions (we would have 3 if we wanted the place affiliations)
-  #   * the direct properties of the place
-  #   * the locatedIn + locatedInL
-  #
-  #
-  # And we have 3 types of matches:
-  #   * isAbout a place
+  # And we have 4 types of matches:
+  #   * direct relation from/to
   #   * an entity having an event with an eventWhere
   #   * a person in an eventWho, with an eventWhere
-  #
-  # That makes 3x2 = 6 unions
-  #
-  # First, places a work is about:
   {
-    ?R_RES ?rel ?res .
+    {
+      ?R_RES ?relInv ?res .
+      ?res a bdo:Place .
+    } union {
+      ?res ?rel1 ?R_RES .
+      ?res a bdo:Place .
+    } union {
+      ?R_RES ?evtp ?evt .
+      ?evt bdo:eventWhere ?res .
+      BIND(tmp:commonEvents as ?rel2)
+    } union {
+      ?evt bdo:eventWho ?R_RES .
+      ?evt bdo:eventWhere ?res .
+    }
     
-    ?res a bdo:Place .
     VALUES ?resp {bdo:altLabel skos:prefLabel skos:placeEvent bdo:placeLat bdo:placeLong bdo:placeType bdo:placeLocatedIn owl:sameAs tmp:entityScore}
     ?res ?resp ?reso .
     #FILTER (?resp IN(bdo:altLabel , skos:prefLabel , skos:placeEvent , bdo:placeLat , bdo:placeLong , bdo:placeType , bdo:placeLocatedIn , owl:sameAs , tmp:entityScore))
@@ -49,59 +53,39 @@ where {
 
   } union {
     
-    ?R_RES ?rel ?res .
+    {
+      ?R_RES ?relInv ?res .
+      ?res a bdo:Place .
+    } union {
+      ?res ?rel1 ?R_RES .
+      ?res a bdo:Place .
+    } union {
+      ?R_RES ?evtp ?evt .
+      ?evt bdo:eventWhere ?res .
+      BIND(tmp:commonEvents as ?rel2)
+    } union {
+      ?evt bdo:eventWho ?R_RES .
+      ?evt bdo:eventWhere ?res .
+    }
     
-    ?res bdo:placeLocatedIn ?locatedin .
-    ?locatedinAdm adm:adminAbout ?locatedin .
-    ?locatedinAdm adm:status bda:StatusReleased .
-    ?locatedin skos:prefLabel ?locatedinL .
-  }
-  #
-  # Second, places from entity events
-  #
-  union 
-  {
-    ?R_RES ?evtp ?evt .
-    ?evt bdo:eventWhere ?res .
-
-    VALUES ?resp {bdo:altLabel skos:prefLabel skos:placeEvent bdo:placeLat bdo:placeLong bdo:placeType bdo:placeLocatedIn owl:sameAs tmp:entityScore}
-    ?res ?resp ?reso .
-    #FILTER (?resp IN(bdo:altLabel , skos:prefLabel , skos:placeEvent , bdo:placeLat , bdo:placeLong , bdo:placeType , bdo:placeLocatedIn , owl:sameAs , tmp:entityScore))
-    ?resAdm adm:adminAbout ?res .
-    ?resAdm adm:status ?st .
-    ?resAdm adm:metadataLegal/adm:provider ?provider .
-    BIND(tmp:commonEvents as ?rel)
+    ?res bdo:placeEvent/bdo:placeEventAffiliation ?trad .
 
   } union {
     
-    ?R_RES ?evtp ?evt .
-    ?evt bdo:eventWhere ?res .
-    
-    ?res bdo:placeLocatedIn ?locatedin .
-    ?locatedinAdm adm:adminAbout ?locatedin .
-    ?locatedinAdm adm:status bda:StatusReleased .
-    ?locatedin skos:prefLabel ?locatedinL .
-  }
-  #
-  # Third, places from events associated with person
-  #
-  union 
-  {
-    ?evt bdo:eventWho ?R_RES .
-    ?evt bdo:eventWhere ?res .
-
-    VALUES ?resp {bdo:altLabel skos:prefLabel skos:placeEvent bdo:placeLat bdo:placeLong bdo:placeType bdo:placeLocatedIn owl:sameAs tmp:entityScore}
-    ?res ?resp ?reso .
-    #FILTER (?resp IN(bdo:altLabel , skos:prefLabel , skos:placeEvent , bdo:placeLat , bdo:placeLong , bdo:placeType , bdo:placeLocatedIn , owl:sameAs , tmp:entityScore))
-    ?resAdm adm:adminAbout ?res .
-    ?resAdm adm:status ?st .
-    ?resAdm adm:metadataLegal/adm:provider ?provider .
-    BIND(tmp:commonEvents as ?rel)
-
-  } union {
-    
-    ?evt bdo:eventWho ?R_RES .
-    ?evt bdo:eventWhere ?res .
+    {
+      ?R_RES ?relInv ?res .
+      ?res a bdo:Place .
+    } union {
+      ?res ?rel1 ?R_RES .
+      ?res a bdo:Place .
+    } union {
+      ?R_RES ?evtp ?evt .
+      ?evt bdo:eventWhere ?res .
+      BIND(tmp:commonEvents as ?rel2)
+    } union {
+      ?evt bdo:eventWho ?R_RES .
+      ?evt bdo:eventWhere ?res .
+    }
     
     ?res bdo:placeLocatedIn ?locatedin .
     ?locatedinAdm adm:adminAbout ?locatedin .
