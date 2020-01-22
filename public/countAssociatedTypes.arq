@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=All entities and chunks matching the name
 #QueryParams=R_RES
-#QueryUrl=/countAssociatedTypes?L_NAME="spyod 'jug"&LG_NAME=bo-x-ewts
+#QueryUrl=/countAssociatedTypes?R_RES=bdr:W19740
 
 #param.R_RES.type=URI
 #param.R_RES.subtype=bdo:Entity
@@ -11,7 +11,7 @@
 select ?type (count (distinct ?e) as ?count) where {
 	{
 		?R_RES ?ep ?e .
-		?eo a/rdfs:subClassOf+ bdo:Entity .
+		?e a/rdfs:subClassOf+ bdo:Entity .
 	} union {
 		?e ?ep ?R_RES .
 		?e a/rdfs:subClassOf+ bdo:Entity .

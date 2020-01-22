@@ -38,8 +38,9 @@ WHERE
   {
     (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
     ?res a/rdfs:subClassOf* bdo:Work .
+    #VALUES ?resp {bdo:language skos:altLabel skos:prefLabel rdf:type owl:sameAs tmp:entityScore}
     ?res ?resp ?reso .
-    FILTER (?resp = bdo:language || ?resp = skos:altLabel || ?resp = skos:prefLabel || ?resp = rdf:type || ?resp = owl:sameAs || ?resp = tmp:entityScore)
+    FILTER (?resp IN(bdo:language , skos:altLabel , skos:prefLabel , rdf:type , owl:sameAs , tmp:entityScore))
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
     ?resAdm adm:metadataLegal/adm:provider ?provider .
@@ -54,7 +55,7 @@ WHERE
     ?creator bdo:agent ?agent .
     ?agent skos:prefLabel ?agentL .
     
-    bind( if(?role = bdr:R0ER0014 || ?role = bdr:R0ER0016 || ?role = bdr:R0ER0019 || ?role = bdr:R0ER0025, ?agent, 1/0) as ?author)
+    bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
 
   } union {
     
@@ -62,7 +63,7 @@ WHERE
     ?res a/rdfs:subClassOf* bdo:Work .
     
     ?res ?respp ?resoo .
-    FILTER(?respp = bdo:workTranslationOf || ?respp = bdo:serialMemberOf  || ?respp = bdo:workIsAbout || ?respp = bdo:workGenre)
+    FILTER(?respp IN(bdo:workTranslationOf , bdo:serialMemberOf , bdo:workIsAbout , bdo:workGenre))
     ?resoo skos:prefLabel ?ol .
 
   } union {

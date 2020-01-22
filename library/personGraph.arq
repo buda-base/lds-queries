@@ -34,8 +34,8 @@ WHERE
     (?name ?sc ?nameMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
     
     ?res bdo:personName ?name .
+    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore}
     ?res ?resp ?reso .
-    FILTER (?resp = bdo:altLabel || ?resp = skos:prefLabel || ?resp = skos:placeEvent || ?resp = bdo:personGender || ?resp = bdo:personName || ?resp = bdo:personEvent || ?resp = owl:sameAs || ?resp = tmp:entityScore)
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
     ?resAdm adm:metadataLegal/adm:provider ?provider .
@@ -59,7 +59,7 @@ WHERE
     ?res bdo:personName ?name .
     ?res bdo:personEvent ?evt .
     ?evt a ?evtType .
-    FILTER (?evtType = bdo:PersonBirth || ?evtType = bdo:PersonDeath)
+    FILTER (?evtType IN(bdo:PersonBirth , bdo:PersonDeath))
     ?evt ?evtp ?evto .
 
   }
