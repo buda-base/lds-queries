@@ -1,0 +1,111 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All places associated with the given entity
+#QueryParams=R_RES
+#QueryUrl=/lib/associatedPlaces?R_RES=bdr:W19740
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced entity
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+construct {
+    ?res tmp:status ?st .
+    ?res tmp:matchScore ?sc .
+    ?res tmp:nameMatch ?nameMatch.
+    ?res tmp:isMain true .
+    ?res tmp:isCreator ?isCreator .
+    ?res ?resp ?reso .
+    ?res tmp:yearStart ?yearStart .
+    ?res tmp:provider ?provider .
+    ?res tmp:originalRecord ?originalRecord .
+    ?res tmp:relationType ?rel .
+
+    ?evt ?evtp ?evto .
+}
+where {
+  # We have for each type of match 2 unions
+  #   * the direct properties of the person
+  #   * some properties of the events (birth & death)
+  #
+  #
+  # And we have 3 types of matches:
+  #   * isAbout a person
+  #   * an entity having an event with a bdo:eventWho
+  #   * an entity have a creator with a bdo:agent
+  #
+  # That makes 3x2 = 6 unions
+  #
+  # First, places a work is about:
+  {
+    ?R_RES ?rel ?res .
+    ?res a bdo:Person .
+    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore}
+    ?res ?resp ?reso .
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
+    bind ( exists {?tmp bdo:agent ?res} as ?isCreator )
+    
+  } union {
+
+    ?R_RES ?rel ?res .
+    ?res bdo:personEvent ?evt .
+    ?evt a ?evtType .
+    FILTER (?evtType IN(bdo:PersonBirth , bdo:PersonDeath))
+    ?evt ?evtp ?evto .
+    BIND (IF(?evtType = bdo:PersonBirth && (?evtp = bdo:onYear || ?evtp = bdo:notBefore), ?evto, 1/0) as ?yearStart)
+
+  }
+  #
+  # Second, persons from entity events
+  #
+  union 
+  {
+    ?R_RES ?evtp ?evtMatch .
+    ?evtMatch bdo:eventWho ?res .
+    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore}
+    ?res ?resp ?reso .
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
+    bind ( exists {?tmp bdo:agent ?res} as ?isCreator )
+    
+  } union {
+
+    ?R_RES ?evtp ?evtMatch .
+    ?evtMatch bdo:eventWho ?res .
+    ?res bdo:personEvent ?evt .
+    ?evt a ?evtType .
+    FILTER (?evtType IN(bdo:PersonBirth , bdo:PersonDeath))
+    ?evt ?evtp ?evto .
+    BIND (IF(?evtType = bdo:PersonBirth && (?evtp = bdo:onYear || ?evtp = bdo:notBefore), ?evto, 1/0) as ?yearStart)
+
+  }
+  #
+  # Third, entities with an agent as creator
+  #
+  union 
+  {
+    ?R_RES bdo:creator ?creatorNode .
+    ?creatorNode bdo:agent ?res .
+    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore}
+    ?res ?resp ?reso .
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
+    bind ( exists {?tmp bdo:agent ?res} as ?isCreator )
+    
+  } union {
+
+    ?R_RES bdo:creator ?creatorNode .
+    ?creatorNode bdo:agent ?res .
+    ?res bdo:personEvent ?evt .
+    ?evt a ?evtType .
+    FILTER (?evtType IN(bdo:PersonBirth , bdo:PersonDeath))
+    ?evt ?evtp ?evto .
+    BIND (IF(?evtType = bdo:PersonBirth && (?evtp = bdo:onYear || ?evtp = bdo:notBefore), ?evto, 1/0) as ?yearStart)
+
+  }
+}

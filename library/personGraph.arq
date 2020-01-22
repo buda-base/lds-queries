@@ -43,16 +43,6 @@ WHERE
     bind ( exists {?tmp bdo:agent ?res} as ?isCreator )
     
   } union {
-    
-    (?name ?sc ?nameMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
-    
-    ?res bdo:personName ?name .
-    ?res bdo:personEvent ?evt .
-    ?evt a bdo:PersonBirth .
-    ?evt ?evtp ?evto .
-    BIND (IF(?evtp = bdo:onYear || ?evtp = bdo:notBefore, ?evto, 1/0) as ?yearStart)
-    
-  } union {
 
     (?name ?sc ?nameMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
     
@@ -61,6 +51,7 @@ WHERE
     ?evt a ?evtType .
     FILTER (?evtType IN(bdo:PersonBirth , bdo:PersonDeath))
     ?evt ?evtp ?evto .
+    BIND (IF(?evtType = bdo:PersonBirth && (?evtp = bdo:onYear || ?evtp = bdo:notBefore), ?evto, 1/0) as ?yearStart)
 
   }
 }
