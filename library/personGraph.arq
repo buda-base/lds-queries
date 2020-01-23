@@ -44,7 +44,7 @@ WHERE
     
   } union {
 
-    (?name ?sc ?nameMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+    (?name) text:query ( rdfs:label ?L_NAME ) .
     
     ?res bdo:personName ?name .
     ?res bdo:personEvent ?evt .

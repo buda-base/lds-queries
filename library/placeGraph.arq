@@ -40,13 +40,13 @@ WHERE
     
   } union {
     
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    (?res) text:query ( bdo:skosLabels ?L_NAME ) .
     
     ?res bdo:placeEvent/bdo:placeEventAffiliation ?trad .
 
   } union {
     
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    (?res) text:query ( bdo:skosLabels ?L_NAME ) .
     
     ?res bdo:placeLocatedIn ?locatedin .
     ?locatedinAdm adm:adminAbout ?locatedin .

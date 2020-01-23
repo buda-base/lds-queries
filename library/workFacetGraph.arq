@@ -47,7 +47,7 @@ WHERE
     
   } union {
     
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    (?res) text:query ( bdo:skosLabels ?L_NAME ) .
     
     ?res bdo:creator ?creator .
     ?creator bdo:role ?role .
@@ -58,7 +58,7 @@ WHERE
 
   } union {
     
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    (?res) text:query ( bdo:skosLabels ?L_NAME ) .
     ?res a/rdfs:subClassOf* bdo:Work .
     
     ?res ?respp ?resoo .
@@ -75,7 +75,7 @@ WHERE
            (max(?instanceEtext) as ?hasetext) 
     where {
       
-      (?res) text:query ( bdo:skosLabels ?L_NAME) .
+      (?res) text:query ( bdo:skosLabels ?L_NAME ) .
 
       ?res bdo:workHasInstance/bdo:partRoot? ?instance .
       ?instanceAdm adm:adminAbout ?instance .
