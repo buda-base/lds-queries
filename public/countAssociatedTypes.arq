@@ -8,21 +8,28 @@
 #param.R_RES.subtype=bdo:Entity
 #param.R_RES.desc=the resource on which we want to list the associations
 
+# TODO: look at all the queries for more cases, some are missing
+
 select ?type (count (distinct ?e) as ?count) where {
 	{
 		?R_RES ?ep ?e .
-		?e a/rdfs:subClassOf+ bdo:Entity .
+		?e a ?type .
+		?type rdfs:subClassOf+ bdo:Entity .
 	} union {
 		?e ?ep ?R_RES .
-		?e a/rdfs:subClassOf+ bdo:Entity .
+		?e a ?type .
+		?type rdfs:subClassOf+ bdo:Entity .
 	} union {
 		?evt ?evtp ?R_RES .
 		?e bdo:personEvent ?evt .
+		bind(bdo:Person as ?type)
 	} union {
 		?evt ?evtp ?R_RES .
 		?e bdo:placeEvent ?evt .
+		bind(bdo:Place as ?type)
 	} union {
 		?evt ?evtp ?R_RES .
 		?e bdo:creator ?evt .
+		?e a ?type .
 	}
 } group by ?type 
