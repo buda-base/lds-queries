@@ -10,18 +10,24 @@
 #param.L_NAME.example="ye shes"
 
 construct {
-  ?chunk tmp:isMain true .
+  ?etext tmp:isMain true .
+  ?etext skos:prefLabel ?etextL .
+  ?etext bdo:eTextHasChunk ?chunk .
+
   ?chunk bdo:chunkContents ?lit .
   ?chunk bdo:sliceStartChar ?startChar .
   ?chunk bdo:sliceEndChar ?endChar .
   ?chunk tmp:matchScore ?score .
-  ?chunk tmp:provider ?provider .
+  ?etext tmp:provider ?provider .
   
-  ?chunk tmp:forWork ?w .
+  ?etext tmp:forWork ?w .
   ?w ?wp ?wo .
 
-  ?chunk tmp:author ?author .
+  ?etext tmp:author ?author .
   ?agent skos:prefLabel ?agentL .
+
+  ?etext tmp:maxScore ?maxScore .
+  ?etext tmp:nbChunks ?nbchunks .
 }
 where
 {
@@ -54,5 +60,12 @@ where
     ?agent skos:prefLabel ?agentL .
       
     bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+  } union {
+
+    select ?etext (count (?chunk) as ?nbchunks) (max (?score) as ?maxScore) where {
+      (?chunk ?score) text:query ( :chunkContents ?L_NAME) .
+      ?etext bdo:eTextHasChunk ?chunk .  
+    } group by ?etext 
   }
+
 }
