@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=A small list of entities matching L_NAME (only the most relevant ones)
 #QueryParams=L_NAME,LG_NAME
-#QueryUrl=/lib/imLuckySearchGraph?L_NAME="'od zer"&LG_NAME=bo-x-ewts
+#QueryUrl=/lib/imLuckySearchGraph?L_NAME="'od zer"&LG_NAME=bo-x-ewts&LI_NAME=300
 
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME
@@ -29,30 +29,28 @@ WHERE
     where {
           (?name ?sc ?match) text:query ( rdfs:label ?L_NAME "highlight:" ) .
            ?res bdo:personName ?name .
-           #?res skos:prefLabel ?resL .
            ?res tmp:entityScore ?eScore .
-           VALUES ?resp {bdo:language}
-           ?res ?resp ?lang .
            ?resAdm adm:adminAbout ?res .
            ?resAdm adm:status bda:StatusReleased .
            ?resAdm adm:metadataLegal/adm:provider ?provider .
            BIND(bdo:Person as ?type)
-    } order by desc(?eScore) desc(?sc) limit 10 
+    } order by desc(?eScore) desc(?sc) limit 15 
   } union {
-    select 
+    # we need distinct because we have ?res ?resp ?reso
+    select distinct 
        ?res ?sc ?match ?eScore ?type ?provider ?language
     where {
           (?res ?sc ?match) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
            ?res a ?type .
            ?type rdfs:subClassOf+ bdo:Entity .
-           #?res skos:prefLabel ?resL .
            ?res tmp:entityScore ?eScore .
            ?res ?resp ?reso .
            BIND(IF(?resp = bdo:language, ?reso, 1/0) as ?lang)
            ?resAdm adm:adminAbout ?res .
            ?resAdm adm:status bda:StatusReleased .
            ?resAdm adm:metadataLegal/adm:provider ?provider .
-    } order by desc(?eScore) desc(?sc) limit 10 
+    } order by desc(?eScore) desc(?sc) limit 15 
   }
+  # we take the prefLabel out of the select, it can takes too many rows otherwise (and we limit them)
   ?res skos:prefLabel ?resL .
 }
