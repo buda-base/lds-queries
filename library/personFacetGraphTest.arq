@@ -2,13 +2,18 @@
 #QueryReturnType=Graph
 #QueryResults=All core resources whose various names contain the given L_NAME parameter value
 #QueryParams=L_NAME,LG_NAME
-#QueryOptionalParams=R_g
+#QueryOptionalParams=R_g,L_l,LG_l
 #QueryUrl=/personFacetGraphTest?L_NAME="'od zer"&LG_NAME=bo-x-ewts
 
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME
 #param.L_NAME.isLucene=true
 #param.L_NAME.example="ye shes"
+
+#param.L_l.type=string
+#param.L_l.langTag=LG_l
+#param.L_l.isLucene=false
+#param.L_l.example="ye shes"
 
 #param.R_g.type=resource
 #param.R_g.subtype=a Resource IRI
@@ -21,7 +26,7 @@ CONSTRUCT
   {
     ?res ?pp ?lit .
     ?res tmp:matchScore ?sc .
-    ?res skos:prefLabel ?l.
+    ?res skos:prefLabel ?L_l.
     ?res skos:prefLabel ?ll.
     ?res tmp:prefLabelMatch ?lit1.
     ?res :personGender ?R_g.
@@ -33,11 +38,11 @@ WHERE {
     ?res ?p ?s.
     OPTIONAL{?res :personGender ?R_g}.
     ?s rdf:type ?pp .
-    OPTIONAL{?res skos:prefLabel ?l}.
+    OPTIONAL{?res skos:prefLabel ?L_l}.
     }
   union
   { (?res ?sc ?lit) text:query ( skos:altLabel ?L_NAME "highlight:" ).
-    ?res skos:prefLabel ?l.
+    ?res skos:prefLabel ?L_l.
     ?res :personGender ?R_g.
   }
   union
