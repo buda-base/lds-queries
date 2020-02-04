@@ -11,15 +11,10 @@
 #output.?lit.type=string
 #output.?lit.desc=matching content with highlight codes
 
-
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME
 #param.L_NAME.isLucene=true
 #param.L_NAME.example=("འོད་ཟེར་" OR "ཡེ་ཤེས་")
-
-#param.I_LIM.type=int
-#param.I_LIM.desc=the maximum number of results
-#param.I_LIM.example=25
 
 select ?txt ?chunk ?startChar ?endChar ?score ?lit
 where {

@@ -1,0 +1,86 @@
+#QueryScope=Etexts
+#QueryReturnType=Graph
+#QueryResults=etext chunks containing the given expression
+#QueryUrl=/chunkContext?R_ETEXT=bdr:UT4CZ5369_I1KG9127_0000&I_START=1000&I_END=1300
+#QueryParams=R_UT,I_START,I_END
+
+#param.R_UT.type=resource
+#param.R_UT.example=bdr:UT4CZ5369_I1KG9127_0000
+#param.R_UT.desc=the etext in which we operate
+
+#param.I_START.type=int
+#param.I_START.example=1000
+
+#param.I_END.type=int
+#param.I_END.example=1300
+
+construct {
+    ?R_UT :eTextHasChunk ?c .
+    ?c :chunkContents ?chunkcontent ;
+       :sliceStartChar ?chunkstart ;
+       :sliceEndChar ?chunkend .
+    ?R_UT :eTextHasPage ?p .
+	?p :sliceStartChar  ?pstart ;
+       :sliceEndChar    ?pend ;
+       :seqNum ?pagenum ;
+       a bdo:EtextPage ;
+       tmp:inImageGroup ?imgv ;
+       tmp:inInstance ?instL ;
+       tmp:inInstancePart ?instpartL .
+    ?R_UT :eTextIsVolume ?vnum .
+    ?R_UT skos:prefLabel ?etextL .
+} where {
+   {
+	   ?R_UT :eTextHasChunk ?c .
+	   ?c :sliceStartChar ?chunkstart ;
+	      :sliceEndChar ?chunkend .
+	   FILTER (?chunkstart <= ?I_END && ?chunkend >= ?I_START)
+	   ?c :chunkContents ?chunkcontent .
+	   ?R_UT skos:prefLabel ?etextL .
+   } union {
+   	   # for passages with a page number
+   	   ?R_UT :eTextHasPage ?p .
+   	   # TODO: is it more efficient to get ?pstart, filter on it and then take ?pend ?
+	   ?p :sliceStartChar  ?pstart ;
+          :sliceEndChar    ?pend .
+	   FILTER (?pstart <= ?I_END && ?pend >= ?I_START)
+	   ?p :seqNum ?pagenum .
+   } union {
+   	   # for passages with a page number and images
+   	   ?R_UT :eTextHasPage ?p .
+	   ?p :sliceStartChar  ?pstart ;
+          :sliceEndChar    ?pend .
+       # taking only one page for this exercise:
+	   FILTER (?pstart <= ?I_START && ?pend >= ?I_START)
+	   ?R_UT :eTextInInstance ?ie_inst .
+	   ?ie_inst :instanceReproductionOf ?w_inst .
+	   ?w_inst a :ImageInstance .
+	   ?R_UT :eTextIsVolume ?vnum .
+	   ?p :seqNum ?pagenum .
+	   ?w_inst :instanceHasVolume ?imgv .
+	   ?imgv :volumeNumber ?vnum .
+   } union {
+   	   # for passages with a corresponding location
+   	   ?R_UT :eTextHasPage ?p .
+	   ?p :sliceStartChar  ?pstart ;
+          :sliceEndChar    ?pend .
+       # taking only one page for this exercise:
+	   FILTER (?pstart <= ?I_START && ?pend >= ?I_START)
+	   ?R_UT :eTextInInstance ?ie_inst .
+	   ?ie_inst :instanceReproductionOf+ ?inst .
+   	   ?inst a ?instType .
+       FILTER(?instType != :ImageInstance)
+	   ?R_UT :eTextIsVolume ?vnum .
+	   ?inst skos:prefLabel ?instL .
+	   ?loc :workLocationWork ?inst ;
+            :workLocationVolume ?vnum .
+       FILTER ((?bvol <= ?vnum && NOT EXISTS {?loc :workLocationEndVolume ?evol}) || (?bvol <= ?vnum  && EXISTS {?loc :workLocationEndVolume ?evol FILTER (?evol <= ?vnum)}))
+       # TODO: is it more efficient to get ?bpage, filter on it and then take ?epage ?
+       ?p :seqNum ?pagenum .
+       ?loc :workLocationPage ?bpage ;
+            :workLocationEndPage ?epage .
+       FILTER (?bpage <= ?pagenum && ?epage >= ?pagenum)
+       ?instpart :workLocation ?loc .
+       ?instpart skos:prefLabel ?instpartL .
+   }
+}
