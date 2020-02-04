@@ -1,7 +1,7 @@
 #QueryScope=Etexts
 #QueryReturnType=Graph
 #QueryResults=etext chunks containing the given expression
-#QueryUrl=/chunkContext?R_ETEXT=bdr:UT4CZ5369_I1KG9127_0000&I_START=1000&I_END=1300
+#QueryUrl=/chunkContext?R_UT=bdr:UT4CZ5369_I1KG9127_0000&I_START=1000&I_END=1300
 #QueryParams=R_UT,I_START,I_END
 
 #param.R_UT.type=resource
@@ -25,10 +25,11 @@ construct {
        :seqNum ?pagenum ;
        a bdo:EtextPage ;
        tmp:inImageGroup ?imgv ;
-       tmp:inInstance ?instL ;
-       tmp:inInstancePart ?instpartL .
+       tmp:inInstancePart ?instpart .
+    ?instpart skos:prefLabel ?instpartL .
     ?R_UT :eTextIsVolume ?vnum .
     ?R_UT skos:prefLabel ?etextL .
+
 } where {
    {
 	   ?R_UT :eTextHasChunk ?c .
@@ -71,7 +72,7 @@ construct {
    	   ?inst a ?instType .
        FILTER(?instType != :ImageInstance)
 	   ?R_UT :eTextIsVolume ?vnum .
-	   ?inst skos:prefLabel ?instL .
+	   #?inst skos:prefLabel ?instL .
 	   ?loc :workLocationWork ?inst ;
             :workLocationVolume ?vnum .
        FILTER ((?bvol <= ?vnum && NOT EXISTS {?loc :workLocationEndVolume ?evol}) || (?bvol <= ?vnum  && EXISTS {?loc :workLocationEndVolume ?evol FILTER (?evol <= ?vnum)}))
