@@ -19,6 +19,8 @@ construct {
   ?chunk bdo:sliceEndChar ?endChar .
   ?chunk tmp:matchScore ?score .
   ?etext tmp:provider ?provider .
+
+  ?etext ?etextp ?etexto .
   
   ?etext tmp:forWork ?w .
   ?w ?wp ?wo .
@@ -45,11 +47,15 @@ where
     ?eAdm adm:metadataLegal/adm:provider ?provider .
     ?w ?wp ?wo .
     FILTER (?wp IN(skos:altLabel , skos:prefLabel , rdf:type , owl:sameAs , tmp:entityScore))
-    # a bit artificial...
-    ?etext bdo:eTextTitle ?etextL .
 
   } union {
 
+    (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:") .
+    ?etext bdo:eTextHasChunk ?chunk .
+    VALUES ?etextp { skos:prefLabel bdo:eTextIsVolume }
+    ?etext ?etextp ?etexto .
+
+  } union {
     ?chunk text:query ( :chunkContents ?L_NAME ) .
     ?etext bdo:eTextHasChunk ?chunk .
     ?etext bdo:eTextInInstance ?einstance .
