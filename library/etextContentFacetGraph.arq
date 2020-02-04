@@ -35,6 +35,7 @@ where
     (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:") .
     ?etext bdo:eTextHasChunk ?chunk .
     ?etext bdo:eTextInInstance ?einstance .
+
     ?eAdm adm:adminAbout ?einstance .
     ?eAdm adm:status bda:StatusReleased .
     ?w :workHasInstance ?einstance .
@@ -44,6 +45,8 @@ where
     ?eAdm adm:metadataLegal/adm:provider ?provider .
     ?w ?wp ?wo .
     FILTER (?wp IN(skos:altLabel , skos:prefLabel , rdf:type , owl:sameAs , tmp:entityScore))
+    # a bit artificial...
+    ?etext bdo:eTextTitle ?etextL .
 
   } union {
 
