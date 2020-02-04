@@ -25,8 +25,10 @@ construct {
        :seqNum ?pagenum ;
        a bdo:EtextPage ;
        tmp:inImageGroup ?imgv ;
+       tmp:inInstance ?inst ;
        tmp:inInstancePart ?instpart .
     ?instpart skos:prefLabel ?instpartL .
+    ?inst skos:prefLabel ?instL .
     ?R_UT :eTextIsVolume ?vnum .
     ?R_UT skos:prefLabel ?etextL .
 
@@ -72,9 +74,9 @@ construct {
    	   ?inst a ?instType .
        FILTER(?instType != :ImageInstance)
 	   ?R_UT :eTextIsVolume ?vnum .
-	   #?inst skos:prefLabel ?instL .
+	   ?inst skos:prefLabel ?instL .
 	   ?loc :workLocationWork ?inst ;
-            :workLocationVolume ?vnum .
+            :workLocationVolume ?bvol .
        FILTER ((?bvol <= ?vnum && NOT EXISTS {?loc :workLocationEndVolume ?evol}) || (?bvol <= ?vnum  && EXISTS {?loc :workLocationEndVolume ?evol FILTER (?evol <= ?vnum)}))
        # TODO: is it more efficient to get ?bpage, filter on it and then take ?epage ?
        ?p :seqNum ?pagenum .
