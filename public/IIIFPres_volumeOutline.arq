@@ -45,7 +45,7 @@ where {
   } union {
     ?R_RES :volumeOf ?iinstance .
     ?R_RES ?p ?o .
-    ?iinstance :itemForWork ?instance .
+    ?iinstance :instanceReproductionOf ?instance .
     ?admVol adm:adminAbout ?R_RES .
     ?admVol adm:legacyImageGroupRID ?imageGroupId .
     ?admItem adm:adminAbout ?iinstance .

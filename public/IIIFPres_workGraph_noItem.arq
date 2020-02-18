@@ -19,8 +19,8 @@ construct {
   ?R_RES tmp:rootRestrictedInChina ?ric .
   ?R_RES tmp:rootLicense ?license .
   ?R_RES tmp:rootStatus ?status .
-  ?R_RES tmp:inImageItem ?iinstance .
-  ?R_RES tmp:firstVolume ?vol .
+  ?R_RES tmp:inImageInstance ?iinstance .
+  ?R_RES tmp:firstImageGroup ?vol .
 }
 where {
   { 

@@ -14,7 +14,7 @@ construct {
   ?loc ?pl ?ol .
   ?wp skos:prefLabel ?wpl .
   ?wp :workPartIndex ?wpi .
-  ?R_RES tmp:firstVolume ?vol .
+  ?R_RES tmp:firstImageGroup ?vol .
 }
 where {
   {
@@ -32,16 +32,16 @@ where {
     }
   } union {
     ?R_RES :workLinkTo?/bdo:workPartOf* ?rw .
-    ?rw :workHasItem ?item .
-    ?item a bdo:ImageInstance .
+    ?rw :instanceHasReproduction ?iinstance .
+    ?iinstance a bdo:ImageInstance .
     ?R_RES :workLinkTo?/:workLocation ?loc .
     ?loc :workLocationVolume ?bvol .
-    ?item :instanceHasVolume ?vol .
+    ?iinstance :instanceHasVolume ?vol .
     ?vol :volumeNumber ?bvol .
   } union {
-    ?R_RES :workLinkTo?/:workHasItem ?item .
-    ?item a bdo:ImageInstance .
-    ?item :instanceHasVolume ?vol .
+    ?R_RES :workLinkTo?/:instanceHasReproduction ?iinstance .
+    ?iinstance a bdo:ImageInstance .
+    ?iinstance :instanceHasVolume ?vol .
     ?vol :volumeNumber 1 .
   }
 

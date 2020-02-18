@@ -18,12 +18,8 @@
 #output.?imageList.desc=the image list of the given volume
 #output.?totalPages.type=int
 #output.?totalPages.desc=the number of pages in this volume
-#output.?pagesText.type=int
-#output.?pagesText.desc=the number of pages of text in this volume
 #output.?pagesIntroTbrc.type=int
 #output.?pagesIntroTbrc.desc=the number of pages of tbrc intro for this volume
-#output.?pagesIntro.type=string
-#output.?pagesIntro.desc=the number of pages of the general intro for this volume
 #output.?volumeNumber.type=int
 #output.?volumeNumber.desc=the volume number
 #output.?iiifManifest.type=URI
