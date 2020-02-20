@@ -54,6 +54,6 @@ where {
   union
   { ?RID  :note ?nt .
     optional { ?nt :noteText ?noteText . }
-    optional { ?nt :noteWork ?ntWrk . }
-    optional { ?nt :noteLocationStatement ?noteLocation . } }
+    optional { ?nt :noteSource ?ntWrk . }
+    optional { ?nt :locationStatement ?noteLocation . } }
 } order by ?RID

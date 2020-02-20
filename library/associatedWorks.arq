@@ -116,7 +116,7 @@ WHERE
         ?res bdo:creator/bdo:agent ?R_RES .
       }
 
-      ?res bdo:workHasInstance/bdo:partRoot? ?instance .
+      ?res bdo:workHasInstance/bdo:inRootInstance? ?instance .
       ?instanceAdm adm:adminAbout ?instance .
       ?instanceAdm adm:status bda:StatusReleased .
       bind( if (exists {?instance bdo:instanceReproductionOf ?reprodof}, 0, 1) as ?isRootInstance)

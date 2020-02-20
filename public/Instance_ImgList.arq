@@ -1,15 +1,15 @@
-#QueryScope=Work
+#QueryScope=Instance
 #QueryReturnType=Table
-#QueryResults=Return the imagList and the legacy Image GroupRID for the given Work resource Id
+#QueryResults=Return the imageList and the Image GroupRID for the given Instance
 #QueryParams=R_RES
-#QueryUrl=/Work_ImgList?R_RES=bdr:W29329
+#QueryUrl=/Instance_ImgList?R_RES=bdr:MW29329
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=a Resource ID
 #param.R_RES.desc=the ID of the work we are interested in
 
 #output.?item.type=URI
-#output.?item.desc=the URI of an image asset for the work
+#output.?item.desc=the URI of an image instance for the instance
 #output.?list.type=string
 #output.?list.desc=the list of images for the image asset of the work
 #output.?grId.type=string
@@ -18,7 +18,7 @@
 select ?item ?list ?grId where{  
   ?R_RES :instanceHasReproduction ?item .
   ?item  a bdo:ImageInstance ;
-         :itemHasVolume ?v .
+         :instanceHasVolume ?v .
   optional {
     ?v :imageList ?list .
   }

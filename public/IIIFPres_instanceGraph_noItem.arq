@@ -1,11 +1,11 @@
-#QueryScope=Work
+#QueryScope=Instance
 #QueryReturnType=Graph
-#QueryResults=Info about a work for the IIIF Presentation API
+#QueryResults=Info about an instance for the IIIF Presentation API
 #QueryParams=R_RES
-#QueryUrl=/IIIFPres_workGraph_noItem?R_RES=bdr:W22084
+#QueryUrl=/IIIFPres_instanceGraph_noItem?R_RES=bdr:MW22084
 
 #param.R_RES.type=URI
-#param.R_RES.subtype=bdo:Work
+#param.R_RES.subtype=bdo:Instance
 #param.R_RES.desc=the work on which info is needed
 
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
@@ -27,20 +27,20 @@ where {
     ?R_RES ?p ?o .
     BIND (?R_RES as ?s)
   } union { 
-    ?R_RES :workLinkTo ?s .
+    ?R_RES :virtualLinkTo ?s .
     ?s ?p ?o .
   } union { 
-    ?R_RES :workLocation/:workLocationWork ?s .
+    ?R_RES :contentLocation/:contentLocationInstance ?s .
     ?s ?p ?o .
   } union {
-    ?R_RES :workLinkTo?/:instanceOf/:workCreator/skos:prefLabel ?o .
+    ?R_RES :virtualLinkTo?/:instanceOf/:creator/skos:prefLabel ?o .
     BIND (?R_RES as ?s)
     BIND (tmp:workCreatorLit as ?p)
   } union {
-    ?R_RES :workLinkTo?/:workLocation ?s .
+    ?R_RES :virtualLinkTo?/:contentLocation ?s .
     ?s ?p ?o .
   } union {
-    ?R_RES :workLinkTo?/bdo:workPartOf*/:instanceHasReproduction ?iinstance .
+    ?R_RES :virtualLinkTo?/bdo:partOf*/:instanceHasReproduction ?iinstance .
     ?iinstance a :ImageInstance .
     ?admItem adm:adminAbout ?iinstance .
     ?admItem adm:access ?access .
@@ -48,7 +48,7 @@ where {
     ?admItem adm:restrictedInChina ?ric .
     ?admItem adm:contentLegal/adm:license ?license .
   } union {
-    ?R_RES :workLocation/:workLocationWork/:instanceHasReproduction ?iinstance .
+    ?R_RES :contentLocation/:contentLocationInstance/:instanceHasReproduction ?iinstance .
     ?iinstance a :ImageInstance .
     ?admItem adm:adminAbout ?iinstance .
     ?admItem adm:access ?access .
@@ -56,25 +56,25 @@ where {
     ?admItem adm:restrictedInChina ?ric .
     ?admItem adm:contentLegal/adm:license ?license .
   } union {
-    ?R_RES :workLinkTo?/bdo:workPartOf* ?rw .
+    ?R_RES :virtualLinkTo?/bdo:partOf* ?rw .
     ?rw :instanceHasReproduction ?iinstance .
     ?iinstance a :ImageInstance .
-    ?R_RES :workLinkTo?/:workLocation ?loc .
-    ?loc :workLocationVolume ?bvol .
-    ?iinstance :itemHasVolume ?vol .
+    ?R_RES :virtualLinkTo?/:contentLocation ?loc .
+    ?loc :contentLocationVolume ?bvol .
+    ?iinstance :instanceHasVolume ?vol .
     ?vol :volumeNumber ?bvol .
   } union {
-    ?R_RES :workLinkTo?/:instanceHasReproduction ?iinstance .
+    ?R_RES :virtualLinkTo?/:instanceHasReproduction ?iinstance .
     ?rw :work ?iinstance .
     ?iinstance a :ImageInstance .
-    ?iinstance :itemHasVolume ?vol .
+    ?iinstance :instanceHasVolume ?vol .
     ?vol :volumeNumber 1 .
   } union {
-    ?R_RES :workLinkTo?/:workHasPart ?s .
+    ?R_RES :virtualLinkTo?/:hasPart ?s .
     ?s ?p ?o .
   } union {
-    ?R_RES :workHasPart ?s .
-    ?s :workLinkTo ?o .
+    ?R_RES :hasPart ?s .
+    ?s :virtualLinkTo ?o .
     ?o a ?ot .
     ?o skos:prefLabel ?ol .
   }

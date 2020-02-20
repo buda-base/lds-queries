@@ -29,9 +29,9 @@ where {
   } union {
     # get image volume ID (for iiif)
     ?R_RES :eTextIsVolume ?volNum .
-    ?R_RES :eTextInItem/:itemForWork ?work .
-    ?work :workHasItem/:itemHasVolume ?imagevol .
-    ?imagevol a :VolumeImageAsset .
+    ?R_RES :eTextInInstance/:instanceOf ?work .
+    ?work :workHasInstance/:instanceHasVolume ?imagevol .
+    ?imagevol a :ImageGroup .
     ?imagevol :volumeNumber ?volNum .
     ?work skos:prefLabel ?workpl .
   }

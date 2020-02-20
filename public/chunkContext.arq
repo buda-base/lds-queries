@@ -75,15 +75,15 @@ construct {
        FILTER(?instType != :ImageInstance)
 	   ?R_UT :eTextIsVolume ?vnum .
 	   ?inst skos:prefLabel ?instL .
-	   ?loc :workLocationWork ?inst ;
-            :workLocationVolume ?bvol .
-       FILTER ((?bvol <= ?vnum && NOT EXISTS {?loc :workLocationEndVolume ?evol}) || (?bvol <= ?vnum  && EXISTS {?loc :workLocationEndVolume ?evol FILTER (?evol <= ?vnum)}))
+	   ?loc :contentLocationInstance ?inst ;
+            :contentLocationVolume ?bvol .
+       FILTER ((?bvol <= ?vnum && NOT EXISTS {?loc :contentLocationEndVolume ?evol}) || (?bvol <= ?vnum  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol <= ?vnum)}))
        # TODO: is it more efficient to get ?bpage, filter on it and then take ?epage ?
        ?p :seqNum ?pagenum .
-       ?loc :workLocationPage ?bpage ;
-            :workLocationEndPage ?epage .
+       ?loc :contentLocationPage ?bpage ;
+            :contentLocationEndPage ?epage .
        FILTER (?bpage <= ?pagenum && ?epage >= ?pagenum)
-       ?instpart :workLocation ?loc .
+       ?instpart :contentLocation ?loc .
        ?instpart skos:prefLabel ?instpartL .
    }
 }

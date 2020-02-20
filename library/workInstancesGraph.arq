@@ -19,7 +19,7 @@ CONSTRUCT {
 	?instance tmp:provider ?provider .
 	?instance tmp:originalRecord ?originalRecord .
 	?instance ?instancep ?instanceo .
-	?instance :partRoot ?instanceR .
+	?instance :inRootInstance ?instanceR .
 	?instanceR skos:prefLabel ?instanceRl .
 	?instance ?instanceRp ?instanceRo .
 	?instance ?instancep ?instanceo .
@@ -44,23 +44,23 @@ CONSTRUCT {
     } union {
 	    
 	    ?R_RES :workHasInstance ?instance .
-	    ?instance :partRoot ?instanceR .
+	    ?instance :inRootInstance ?instanceR .
 		?instanceRAdm adm:adminAbout ?instanceR .
 		?instanceRAdm adm:status ?status .
 		?instanceRAdm adm:metadataLegal/adm:provider ?provider .
 
 		?instanceR skos:prefLabel ?instanceRl .
 		?instanceR ?instanceRp ?instanceRo .
-		FILTER (?instanceRp = bdo:script || ?instanceRp = bdo:printMethod || ?instanceRp = bdo:workPublisherLocation || ?instanceRp = bdo:workPublisherName)
+		FILTER (?instanceRp = bdo:script || ?instanceRp = bdo:printMethod || ?instanceRp = bdo:publisherLocation || ?instanceRp = bdo:publisherName)
 
 		?instance ?instancep ?instanceo .
-		FILTER (?instancep != bdo:note && ?instancep != bdo:workEvent && ?instancep != bdo:workTitle)
+		FILTER (?instancep != bdo:note && ?instancep != bdo:instanceEvent && ?instancep != bdo:hasTitle)
 
 	} union {
 
 		?R_RES :workHasInstance ?instance .
-		?instance :partRoot? ?instanceR .
-		?instanceR :workEvent ?evt .
+		?instance :inRootInstance? ?instanceR .
+		?instanceR :instanceEvent ?evt .
 		?evt ?evtp ?evto .
 		BIND (IF(?evtp = bdo:onYear || ?evtp = bdo:notBefore, ?evto, 1/0) as ?yearStart)
         BIND (IF(?evtp = bdo:notAfter, ?evto, 1/0) as ?yearEnd)
@@ -75,7 +75,7 @@ CONSTRUCT {
 	      
 	      ?R_RES :workHasInstance ?instance .
 	      FILTER ( NOT EXISTS {?instance :instanceReproductionOf ?reprof })
-		  ?instance :partRoot?/:instanceHasReproduction ?instanceRep .
+		  ?instance :inRootInstance?/:instanceHasReproduction ?instanceRep .
 
 	      ?instanceRepAdm adm:adminAbout ?instanceRep .
 	      ?instanceRepAdm adm:status bda:StatusReleased .

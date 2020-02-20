@@ -28,9 +28,9 @@
 select distinct ?idx ?abstractI ?abstractT ?expr where {
   ?R_RES a :Instance .
   ?R_IdxProp rdfs:subPropertyOf :workRefs .
-  ?expr :workPartOf+ ?R_RES ;
+  ?expr :partOf+ ?R_RES ;
         ?R_IdxProp ?idx ;
-        :workInstanceOf ?abstractT .
+        :instanceOf ?abstractT .
   optional {
     ?abstractT :workTranslationOf ?abstractI .
   }

@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=Basic info about a work for the IIIF view route
 #QueryParams=R_RES
-#QueryUrl=/IIIFPres_volumeInfo?R_RES=bdr:W22084
+#QueryUrl=/IIIFPres_volumeInfo?R_RES=bdr:MW22084
 
 #output.?hasParts.type=boolean
 #output.?hasParts.desc=if the work has parts
@@ -14,28 +14,28 @@
 #output.?firstVolume.desc=the URI of the first volume
 
 #param.R_RES.type=URI
-#param.R_RES.subtype=:Work
+#param.R_RES.subtype=:Instance
 #param.R_RES.desc=the URI of the work being investigated
 
 select distinct ?hasParts ?nbVolumes where {
-  ?R_RES a :Work .
-  BIND(EXISTS{?R_RES :workLinkTo?/:workHasPart ?part} AS ?hasParts)
+  ?R_RES a :Instance .
+  BIND(EXISTS{?R_RES :virtualLinkTo?/:hasPart ?part} AS ?hasParts)
   optional {
-    ?R_RES :workLinkTo?/:workLocation ?loc .
+    ?R_RES :virtualLinkTo?/:workLocation ?loc .
     FILTER( NOT EXISTS {?loc :workLocationEndVolume ?evol} )
     BIND(1 as ?nbVolumes)
   }
   optional {
-    ?R_RES :workLinkTo?/:workLocation ?loc .
+    ?R_RES :virtualLinkTo?/:workLocation ?loc .
     ?loc :workLocationVolume ?bvol ;
          :workLocationEndVolume ?evol .
     BIND((?evol - ?bvol) as ?nbVolumes)
   }
   optional {
-    ?R_RES :workLinkTo?/:workPartOf* ?rw .
-    ?rw :itemHasReproduction ?item .
+    ?R_RES :virtualLinkTo?/:workPartOf* ?rw .
+    ?rw :instanceHasReproduction ?item .
     ?item a bdo:ImageInstance .
-    ?item :itemVolumes ?nbVolumes .
-    FILTER ( NOT EXISTS{?R_RES :workLinkTo?/:workHasPart ?part} )
+    ?item :instanceVolumes ?nbVolumes .
+    FILTER ( NOT EXISTS{?R_RES :virtualLinkTo?/:workHasPart ?part} )
   }
 }

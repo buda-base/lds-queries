@@ -1,0 +1,17 @@
+#QueryScope=Instance
+#QueryReturnType=Table
+#QueryResults=The volume ID and number associated with an Instance, by ascending volume number
+#QueryParams=R_RES
+#QueryUrl=/volumesForInstance?R_RES=bdr:MW23703
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=bdo:Instance
+#param.R_RES.desc=the Instance on which info is needed
+
+select ?volnum ?volid ?imgList where {
+  ?R_RES :instanceHasReproduction ?i .
+  ?i a bdo:ImageInstance ;
+     :instanceHasVolume ?volid .
+  ?volid :volumeNumber ?volnum ;
+         :imageList ?imgList .
+} order by asc(?volnum)

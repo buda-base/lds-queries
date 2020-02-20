@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=Outline of a volume for IIIF presentation API
 #QueryParams=R_RES
-#QueryUrl=/IIIFPres_volumeOutline?R_RES=bdr:V22084_I0886
+#QueryUrl=/IIIFPres_volumeOutline?R_RES=bdr:I0886
 
 #param.R_RES.type=URI
 #param.R_RES.subtype=:Volume
@@ -19,7 +19,7 @@ construct {
   ?R_RES tmp:rootLicense ?license .
   ?R_RES tmp:legacyImageGroupRID ?imageGroupId .
   ?instance adm:access ?wa .
-  ?instance :workHasPart ?wp .
+  ?instance :hasPart ?wp .
   #?part ?pp ?op .
   ?ascPart ?pap ?oap .
   ?loc ?pl ?ol .
@@ -29,17 +29,17 @@ where {
     {
       ?R_RES :volumeOf/:instanceReproductionOf ?instance ;
              :volumeNumber ?volnum .
-      ?loc :workLocationWork ?instance .
-      ?loc :workLocationVolume ?bvol .
+      ?loc :contentLocationInstance ?instance .
+      ?loc :contentLocationVolume ?bvol .
       # see https://lists.apache.org/thread.html/ec4c7fb703748e7d0d70d8e3baa1c2fbb04842b7494c9097df7dfd0f@%3Cusers.jena.apache.org%3E
-      FILTER ((?bvol <= ?volnum && NOT EXISTS {?loc :workLocationEndVolume ?evol}) || (?bvol <= ?volnum  && EXISTS {?loc :workLocationEndVolume ?evol FILTER (?evol <= ?volnum)}))
+      FILTER ((?bvol <= ?volnum && NOT EXISTS {?loc :contentLocationEndVolume ?evol}) || (?bvol <= ?volnum  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol <= ?volnum)}))
     }
-    ?instance :workHasPart ?wp .
+    ?instance :hasPart ?wp .
     ?loc ?pl ?ol .
-    ?part :workLocation ?loc .
+    ?part :contentLocation ?loc .
     #?part ?pp ?op .
-    ?part :workPartOf* ?ascPart .
-    optional {?ascPart :workPartOf ?wpo}
+    ?part :partOf* ?ascPart .
+    optional {?ascPart :partOf ?wpo}
     filter (bound(?wpo))
     ?ascPart ?pap ?oap .
   } union {

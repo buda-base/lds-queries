@@ -1,24 +1,24 @@
-#QueryScope=Volume
+#QueryScope=Instance
 #QueryReturnType=Graph
-#QueryResults=Outline of a work for the IIIF presentation API
+#QueryResults=Outline of an instance for the IIIF presentation API
 #QueryParams=R_RES
-#QueryUrl=/IIIFPres_volumeOutline?R_RES=bdr:W25094
+#QueryUrl=/IIIFPres_instanceOutline?R_RES=bdr:MW25094
 
 #param.R_RES.type=URI
-#param.R_RES.subtype=:Work
-#param.R_RES.desc=the URI of the work
+#param.R_RES.subtype=:Instance
+#param.R_RES.desc=the URI of the instance
 
 construct { 
-  ?wp :workLocation ?loc .
-  ?wp :workHasPart ?wpp .
+  ?wp :contentLocation ?loc .
+  ?wp :hasPart ?wpp .
   ?loc ?pl ?ol .
   ?wp skos:prefLabel ?wpl .
-  ?wp :workPartIndex ?wpi .
+  ?wp :partIndex ?wpi .
   ?R_RES tmp:firstImageGroup ?vol .
 }
 where {
   {
-    ?R_RES :workLinkTo?/:workHasPart* ?wp .
+    ?R_RES :virtualLinkTo?/:hasPart* ?wp .
     ?wp skos:prefLabel ?wpl .
     optional {
       ?wp :workPartIndex ?wpi .
@@ -31,15 +31,15 @@ where {
       ?wp :workHasPart ?wpp .
     }
   } union {
-    ?R_RES :workLinkTo?/bdo:workPartOf* ?rw .
+    ?R_RES :virtualLinkTo?/bdo:workPartOf* ?rw .
     ?rw :instanceHasReproduction ?iinstance .
     ?iinstance a bdo:ImageInstance .
-    ?R_RES :workLinkTo?/:workLocation ?loc .
+    ?R_RES :virtualLinkTo?/:workLocation ?loc .
     ?loc :workLocationVolume ?bvol .
     ?iinstance :instanceHasVolume ?vol .
     ?vol :volumeNumber ?bvol .
   } union {
-    ?R_RES :workLinkTo?/:instanceHasReproduction ?iinstance .
+    ?R_RES :virtualLinkTo?/:instanceHasReproduction ?iinstance .
     ?iinstance a bdo:ImageInstance .
     ?iinstance :instanceHasVolume ?vol .
     ?vol :volumeNumber 1 .

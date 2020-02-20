@@ -77,7 +77,7 @@ WHERE
       
       (?res) text:query ( bdo:skosLabels ?L_NAME ) .
 
-      ?res bdo:workHasInstance/bdo:partRoot? ?instance .
+      ?res bdo:workHasInstance/bdo:inRootInstance? ?instance .
       ?instanceAdm adm:adminAbout ?instance .
       ?instanceAdm adm:status bda:StatusReleased .
       bind( if (exists {?instance bdo:instanceReproductionOf ?reprodof}, 0, 1) as ?isRootInstance)
