@@ -26,6 +26,8 @@ construct {
  ?ro tmp:withSameAs ?roSame .
  ?ro tmp:withSameAs ?roSame2 .
 
+ ?ro skos:prefLabel ?roLabel .
+
 } where {
 
   { ?r owl:sameAs* ?R_RES . }
@@ -42,6 +44,10 @@ construct {
     }
     optional {
       ?roSame2 owl:sameAs+ ?ro .
+    }
+    optional {
+      ?r ?rp ?ro .
+      ?ro skos:prefLabel ?roLabel .
     }
   } union {
     ?r ?rp2 ?ro2 .
