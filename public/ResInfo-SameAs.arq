@@ -28,6 +28,7 @@ construct {
 
  ?ro skos:prefLabel ?roLabel .
  ?roTCL ?roTCLp ?roTCLo .
+ ?roTCLo skos:prefLabel ?roTCLoLabel .
 
 } where {
 
@@ -81,7 +82,12 @@ construct {
     filter( str(?r) != str(?sibling) ) .
   } union {
     ?r ?rpTCL ?roTCL .
-    { ?roTCL a :Title . } union { ?roTCL a :ContentLocation }
+    { ?roTCL a :Title . } union { ?roTCL a :ContentLocation } union { ?roTCL a :AgentAsCreator }
     ?roTCL ?roTCLp ?roTCLo .
+    optional {
+     ?r ?rpTCL ?roTCL .
+     ?roTCL ?roTCLp ?roTCLo .
+     ?roTCLo skos:prefLabel ?roTCLoLabel .
+    }
   }
 }
