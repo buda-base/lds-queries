@@ -34,6 +34,9 @@ construct {
  ?roTCL ?roTCLp ?roTCLo .
  ?roTCLo skos:prefLabel ?roTCLoLabel .
 
+ # add prefLabel for Event subproperties
+ ?ro6o skos:prefLabel ?ro6oLabel . 
+
 } where {
 
   { ?r owl:sameAs* ?R_RES . }
@@ -77,6 +80,13 @@ construct {
     ?ro5 ?ro5p ?ro5o .
     ?ro5o rdf:type/rdfs:subClassOf+ :Event .
     ?ro5o ?ro6p ?ro6o .
+  } union {
+    # add prefLabel for Event subproperties
+    ?r ?rp5 ?ro5 .
+    ?ro5 ?ro5p ?ro5o .
+    ?ro5o rdf:type/rdfs:subClassOf+ :Event .
+    ?ro5o ?ro6p ?ro6o .
+    ?ro6o skos:prefLabel ?ro6oLabel . 
   } union {
     ?q adm:adminAbout ?r .
     ?q ?qp ?qo .
