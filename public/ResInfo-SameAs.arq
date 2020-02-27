@@ -30,7 +30,7 @@ construct {
  ?ro skos:prefLabel ?roLabel .
 
  # add Title/ContentLocation nodes
- # + prefLabel for AgentAsCreator
+ # + prefLabel for AgentAsCreator & :Note/:NoteSource
  ?roTCL ?roTCLp ?roTCLo .
  ?roTCLo skos:prefLabel ?roTCLoLabel .
 
@@ -97,9 +97,9 @@ construct {
     filter( str(?r) != str(?sibling) ) .
   } union {
     # add Title/ContentLocation nodes
-    # + prefLabel for AgentAsCreator
+    # + prefLabel for AgentAsCreator & :Note/:NoteSource
     ?r ?rpTCL ?roTCL .
-    { ?roTCL a :Title . } union { ?roTCL a :ContentLocation } union { ?roTCL a :AgentAsCreator }
+    { ?roTCL a :Title . } union { ?roTCL a :ContentLocation } union { ?roTCL a :AgentAsCreator } union { ?roTCL a :Note } 
     ?roTCL ?roTCLp ?roTCLo .
     optional {
      ?r ?rpTCL ?roTCL .
