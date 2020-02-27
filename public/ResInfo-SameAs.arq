@@ -26,7 +26,11 @@ construct {
  ?ro tmp:withSameAs ?roSame .
  ?ro tmp:withSameAs ?roSame2 .
 
+ # add prefLabel for any related resource
  ?ro skos:prefLabel ?roLabel .
+
+ # add Title/ContentLocation nodes
+ # + prefLabel for AgentAsCreator
  ?roTCL ?roTCLp ?roTCLo .
  ?roTCLo skos:prefLabel ?roTCLoLabel .
 
@@ -48,6 +52,7 @@ construct {
       ?roSame2 owl:sameAs+ ?ro .
     }
     optional {
+      # add prefLabel for any related resource
       ?r ?rp ?ro .
       ?ro skos:prefLabel ?roLabel .
     }
@@ -81,6 +86,8 @@ construct {
     ?parent bdo:workHasInstance ?r ; bdo:workHasInstance ?sibling .
     filter( str(?r) != str(?sibling) ) .
   } union {
+    # add Title/ContentLocation nodes
+    # + prefLabel for AgentAsCreator
     ?r ?rpTCL ?roTCL .
     { ?roTCL a :Title . } union { ?roTCL a :ContentLocation } union { ?roTCL a :AgentAsCreator }
     ?roTCL ?roTCLp ?roTCLo .
