@@ -27,6 +27,7 @@ construct {
  ?ro tmp:withSameAs ?roSame2 .
 
  ?ro skos:prefLabel ?roLabel .
+ ?roTCL ?roTCLp ?roTCLo .
 
 } where {
 
@@ -78,6 +79,9 @@ construct {
   } union {
     ?parent bdo:workHasInstance ?r ; bdo:workHasInstance ?sibling .
     filter( str(?r) != str(?sibling) ) .
+  } union {
+    ?r ?rpTCL ?roTCL .
+    { ?roTCL a :Title . } union { ?roTCL a :ContentLocation }
+    ?roTCL ?roTCLp ?roTCLo .
   }
 }
-
