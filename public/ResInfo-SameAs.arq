@@ -25,21 +25,19 @@ construct {
 
  ?ro tmp:withSameAs ?roSame .
  ?ro tmp:withSameAs ?roSame2 .
+ 
+ # misc props needed to fix display:
 
- # add prefLabel for any related resource
- # + inRootInstance & prefLabel
- # + language
  ?ro skos:prefLabel ?roLabel .
+
  ?ro bdo:inRootInstance ?roRoot .
  ?roRoot skos:prefLabel ?roRootLabel .
+
  ?ro bdo:language ?roLang .
 
- # add Title/ContentLocation nodes
- # + prefLabel for AgentAsCreator & :Note/:NoteSource
  ?roTCL ?roTCLp ?roTCLo .
  ?roTCLo skos:prefLabel ?roTCLoLabel .
 
- # add prefLabel for Event subproperties
  ?ro6o skos:prefLabel ?ro6oLabel . 
 
 } where {
@@ -64,18 +62,18 @@ construct {
       ?ro skos:prefLabel ?roLabel .
     }
     optional {
-      # add inRootInstance
+      # display inRootInstance (used to sort instances)
       ?r ?rp ?ro .
       ?ro bdo:inRootInstance ?roRoot .
     }
     optional {
-      # add inRootInstance prefLabel
+      # displayinRootInstance's prefLabel 
       ?r ?rp ?ro .
       ?ro bdo:inRootInstance ?roRoot .
       ?roRoot skos:prefLabel ?roRootLabel .
     }
     optional {
-      # add language
+      # add language (used to sort translations)
       ?r ?rp ?ro .
       ?ro bdo:language ?roLang .
     }
@@ -119,8 +117,9 @@ construct {
     ?parent bdo:workHasInstance ?r ; bdo:workHasInstance ?sibling .
     filter( str(?r) != str(?sibling) ) .
   } union {
-    # add Title/ContentLocation nodes
-    # + prefLabel for AgentAsCreator & :Note/:NoteSource
+    # add Title/ContentLocation nodes that were missing
+    # + display prefLabel for AgentAsCreator 
+    # + add Note subnodes
     ?r ?rpTCL ?roTCL .
     { ?roTCL a :Title . } union { ?roTCL a :ContentLocation } union { ?roTCL a :AgentAsCreator } union { ?roTCL a :Note } 
     ?roTCL ?roTCLp ?roTCLo .
