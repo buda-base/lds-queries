@@ -27,9 +27,10 @@ construct {
  ?ro tmp:withSameAs ?roSame2 .
 
  # add prefLabel for any related resource
- # + inRootInstance
+ # + inRootInstance & prefLabel
  ?ro skos:prefLabel ?roLabel .
  ?ro bdo:inRootInstance ?roRoot .
+ ?roRoot skos:prefLabel ?roRootLabel .
 
  # add Title/ContentLocation nodes
  # + prefLabel for AgentAsCreator & :Note/:NoteSource
@@ -65,6 +66,12 @@ construct {
       ?r ?rp ?ro .
       ?ro bdo:inRootInstance ?roRoot .
     }
+    optional {
+      # add inRootInstance prefLabel
+      ?r ?rp ?ro .
+      ?ro bdo:inRootInstance ?roRoot .
+      ?roRoot skos:prefLabel ?roRootLabel .
+    }
   } union {
     ?r ?rp2 ?ro2 .
     ?ro2 rdf:type/rdfs:subClassOf+ :Facet .
@@ -82,6 +89,9 @@ construct {
       ?ro3o ?ro4p ?ro4o .
     }
   } union {
+    # TODO
+    # - returns too much person events
+    # - needed to return events related to lineages
     ?r ?rp5 ?ro5 .
     ?ro5 ?ro5p ?ro5o .
     ?ro5o rdf:type/rdfs:subClassOf+ :Event .
