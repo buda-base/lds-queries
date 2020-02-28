@@ -27,7 +27,9 @@ construct {
  ?ro tmp:withSameAs ?roSame2 .
 
  # add prefLabel for any related resource
+ # + inRootInstance
  ?ro skos:prefLabel ?roLabel .
+ ?ro bdo:inRootInstance ?roRoot .
 
  # add Title/ContentLocation nodes
  # + prefLabel for AgentAsCreator & :Note/:NoteSource
@@ -38,7 +40,6 @@ construct {
  ?ro6o skos:prefLabel ?ro6oLabel . 
 
 } where {
-
   { ?r owl:sameAs* ?R_RES . }
   union
   { ?R_RES owl:sameAs* ?r . }
@@ -58,6 +59,11 @@ construct {
       # add prefLabel for any related resource
       ?r ?rp ?ro .
       ?ro skos:prefLabel ?roLabel .
+    }
+    optional {
+      # add inRootInstance
+      ?r ?rp ?ro .
+      ?ro bdo:inRootInstance ?roRoot .
     }
   } union {
     ?r ?rp2 ?ro2 .
