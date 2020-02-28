@@ -74,7 +74,7 @@ construct {
     }
     optional {
       # add language (used to sort translations)
-      ?r ?rp ?ro .
+      ?r :workHasTranslation ?ro .
       ?ro bdo:language ?roLang .
     }
   } union {
