@@ -33,6 +33,10 @@ construct {
  ?ro bdo:inRootInstance ?roRoot .
  ?roRoot skos:prefLabel ?roRootLabel .
 
+ ?sibling skos:prefLabel ?siblingLabel .
+ ?sibling bdo:inRootInstance ?siblingRoot .
+ ?siblingRoot skos:prefLabel ?siblingRootLabel .
+
  ?ro bdo:language ?roLang .
 
  ?roTCL ?roTCLp ?roTCLo .
@@ -67,7 +71,7 @@ construct {
       ?ro bdo:inRootInstance ?roRoot .
     }
     optional {
-      # displayinRootInstance's prefLabel 
+      # display inRootInstance's prefLabel
       ?r ?rp ?ro .
       ?ro bdo:inRootInstance ?roRoot .
       ?roRoot skos:prefLabel ?roRootLabel .
@@ -116,6 +120,25 @@ construct {
   } union {
     ?parent bdo:workHasInstance ?r ; bdo:workHasInstance ?sibling .
     filter( str(?r) != str(?sibling) ) .
+    optional {
+      # display siblings' prefLabel
+      ?parent bdo:workHasInstance ?r ; bdo:workHasInstance ?sibling .
+      filter( str(?r) != str(?sibling) ) .
+      ?sibling skos:prefLabel ?siblingLabel .
+    }
+    optional {
+      # display siblings' inRootInstance
+      ?parent bdo:workHasInstance ?r ; bdo:workHasInstance ?sibling .
+      filter( str(?r) != str(?sibling) ) .
+      ?sibling bdo:inRootInstance ?siblingRoot .
+    }
+    optional {
+      # display siblings' inRootInstance's prefLabel
+      ?parent bdo:workHasInstance ?r ; bdo:workHasInstance ?sibling .
+      filter( str(?r) != str(?sibling) ) .
+      ?sibling bdo:inRootInstance ?siblingRoot .
+      ?siblingRoot skos:prefLabel ?siblingRootLabel .
+    }
   } union {
     # add Title/ContentLocation nodes that were missing
     # + display prefLabel for AgentAsCreator 
