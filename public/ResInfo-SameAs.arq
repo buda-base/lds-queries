@@ -28,9 +28,11 @@ construct {
 
  # add prefLabel for any related resource
  # + inRootInstance & prefLabel
+ # + language
  ?ro skos:prefLabel ?roLabel .
  ?ro bdo:inRootInstance ?roRoot .
  ?roRoot skos:prefLabel ?roRootLabel .
+ ?ro bdo:language ?roLang .
 
  # add Title/ContentLocation nodes
  # + prefLabel for AgentAsCreator & :Note/:NoteSource
@@ -71,6 +73,11 @@ construct {
       ?r ?rp ?ro .
       ?ro bdo:inRootInstance ?roRoot .
       ?roRoot skos:prefLabel ?roRootLabel .
+    }
+    optional {
+      # add language
+      ?r ?rp ?ro .
+      ?ro bdo:language ?roLang .
     }
   } union {
     ?r ?rp2 ?ro2 .
