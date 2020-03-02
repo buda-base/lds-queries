@@ -48,6 +48,8 @@ construct {
 
  ?qo skos:prefLabel ?qoLab .
 
+ ?ro adm:canonicalHtml ?roCanonHtml .
+
 } where {
   { ?r owl:sameAs* ?R_RES . }
   union
@@ -91,6 +93,11 @@ construct {
       { ?ro rdf:type/rdfs:subClassOf+ :Event } union { ?ro rdf:type/rdfs:subClassOf* :LineageHolder }
       ?ro ?rpEv ?roEv .
       ?roEv skos:prefLabel ?roEvLab .
+    }
+    optional {
+      # get canonicalHtml for related resources
+      ?r ?rp ?ro .
+      ?ro adm:canonicalHtml ?roCanonHtml .
     }
   } union {
     ?r ?rp2 ?ro2 .
