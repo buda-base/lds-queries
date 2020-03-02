@@ -42,6 +42,8 @@ construct {
  ?roTCL ?roTCLp ?roTCLo .
  ?roTCLo skos:prefLabel ?roTCLoLabel .
 
+ ?roEv skos:prefLabel ?roEvLab . 
+
  ?ro6o skos:prefLabel ?ro6oLabel . 
 
  ?qo skos:prefLabel ?qoLab .
@@ -83,6 +85,13 @@ construct {
       ?r :workHasTranslation ?ro .
       ?ro bdo:language ?roLang .
     }
+    optional {
+      # add prefLabel for Event subproperties
+      ?r ?rp ?ro .
+      ?ro rdf:type/rdfs:subClassOf+ :Event .
+      ?ro ?rpEv ?roEv .
+      ?roEv skos:prefLabel ?roEvLab .
+    }
   } union {
     ?r ?rp2 ?ro2 .
     ?ro2 rdf:type/rdfs:subClassOf+ :Facet .
@@ -100,15 +109,15 @@ construct {
       ?ro3o ?ro4p ?ro4o .
     }
   } union {
-    # TODO
-    # - returns too much person events
-    # - needed to return events related to lineages
+    # return sub-events related to lineages
+    ?r rdf:type/rdfs:subClassOf* :Lineage .
     ?r ?rp5 ?ro5 .
     ?ro5 ?ro5p ?ro5o .
     ?ro5o rdf:type/rdfs:subClassOf+ :Event .
     ?ro5o ?ro6p ?ro6o .
   } union {
-    # add prefLabel for Event subproperties
+    # return prefLabels for sub-events related to lineages
+    ?r rdf:type/rdfs:subClassOf* :Lineage .
     ?r ?rp5 ?ro5 .
     ?ro5 ?ro5p ?ro5o .
     ?ro5o rdf:type/rdfs:subClassOf+ :Event .
