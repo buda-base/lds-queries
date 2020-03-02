@@ -44,6 +44,8 @@ construct {
 
  ?ro6o skos:prefLabel ?ro6oLabel . 
 
+ ?qo skos:prefLabel ?qoLab .
+
 } where {
   { ?r owl:sameAs* ?R_RES . }
   union
@@ -117,6 +119,11 @@ construct {
     ?q ?qp ?qo .
     # we don't return all the adminAbout, they can be in large quantities
     FILTER(?qp != adm:adminAbout)
+  } union {
+    # return legalData labels
+    ?q adm:adminAbout ?r .
+    ?q adm:metadataLegal ?qo .
+    ?qo skos:prefLabel ?qoLab .
   } union {
     ?parent bdo:workHasInstance ?r ; bdo:workHasInstance ?sibling .
     filter( str(?r) != str(?sibling) ) .
