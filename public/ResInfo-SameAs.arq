@@ -86,9 +86,9 @@ construct {
       ?ro bdo:language ?roLang .
     }
     optional {
-      # add prefLabel for Event subproperties
+      # add prefLabel for Event subproperties or LineageHolder
       ?r ?rp ?ro .
-      ?ro rdf:type/rdfs:subClassOf+ :Event .
+      { ?ro rdf:type/rdfs:subClassOf+ :Event } union { ?ro rdf:type/rdfs:subClassOf* :LineageHolder }
       ?ro ?rpEv ?roEv .
       ?roEv skos:prefLabel ?roEvLab .
     }
