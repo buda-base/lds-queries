@@ -38,3 +38,9 @@ prefix bdgu: <http://purl.bdrc.io/graph-nc/user/>
 prefix bdu: <http://purl.bdrc.io/resource-nc/user/>
 prefix bdgup: <http://purl.bdrc.io/graph-nc/user-private/>
 prefix eftr: <http://purl.84000.co/resource/core/>
+prefix srcpe: <https://sakyaresearch.org/persons/>
+prefix srcpl: <https://sakyaresearch.org/places/>
+prefix srcs: <https://sakyaresearch.org/sources/>
+prefix srcd: <https://sakyaresearch.org/deities/>
+prefix srcl: <https://sakyaresearch.org/literary_forms/>
+prefix srct: <https://sakyaresearch.org/topics/>
