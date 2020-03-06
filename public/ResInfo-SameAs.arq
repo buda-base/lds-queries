@@ -50,6 +50,8 @@ construct {
 
  ?ro adm:canonicalHtml ?roCanonHtml .
 
+ ?roP :partIndex ?roPi .
+
 } where {
   { ?r owl:sameAs* ?R_RES . }
   union
@@ -174,5 +176,9 @@ construct {
      ?roTCL ?roTCLp ?roTCLo .
      ?roTCLo skos:prefLabel ?roTCLoLabel .
     }
+  } union {
+    # add parts indexes
+    ?r :hasPart ?roP .
+    ?roP :partIndex ?roPi .
   }
 }
