@@ -51,6 +51,7 @@ construct {
  ?ro adm:canonicalHtml ?roCanonHtml .
 
  ?roP :partIndex ?roPi .
+ ?roV :volumeNumber ?roVi .
 
 } where {
   { ?r owl:sameAs* ?R_RES . }
@@ -180,5 +181,9 @@ construct {
     # add parts indexes
     ?r :hasPart ?roP .
     ?roP :partIndex ?roPi .
+  } union {
+    # add volume numbers
+    ?r :instanceHasVolume ?roV .
+    ?roV :volumeNumber ?roVi .
   }
 }
