@@ -21,7 +21,8 @@ construct {
  ?r owl:sameAs ?sameA .
  ?r owl:sameAs ?sameB .
 
- ?r tmp:siblingInstances ?sibling .
+ ?r tmp:siblingInstances ?siblingNonRepro .
+ ?r tmp:siblingReproInstances ?siblingRepro .
 
  ?ro tmp:withSameAs ?roSame .
  ?ro tmp:withSameAs ?roSame2 .
@@ -33,8 +34,8 @@ construct {
  ?ro bdo:inRootInstance ?roRoot .
  ?roRoot skos:prefLabel ?roRootLabel .
 
- ?sibling skos:prefLabel ?siblingLabel .
- ?sibling bdo:inRootInstance ?siblingRoot .
+ ?siblingNonRepro skos:prefLabel ?siblingNonReproLabel .
+ ?siblingNonRepro bdo:inRootInstance ?siblingRoot .
  ?siblingRoot skos:prefLabel ?siblingRootLabel .
 
  ?ro bdo:language ?roLang .
@@ -151,27 +152,29 @@ construct {
     ?q adm:metadataLegal ?qo .
     ?qo skos:prefLabel ?qoLab .
   } union {
-    ?parent bdo:workHasInstance ?r ; bdo:workHasInstance ?sibling .
-    filter( str(?r) != str(?sibling) ) .
-    optional {
-      # display siblings' prefLabel
-      ?parent bdo:workHasInstance ?r ; bdo:workHasInstance ?sibling .
-      filter( str(?r) != str(?sibling) ) .
-      ?sibling skos:prefLabel ?siblingLabel .
-    }
-    optional {
-      # display siblings' inRootInstance
-      ?parent bdo:workHasInstance ?r ; bdo:workHasInstance ?sibling .
-      filter( str(?r) != str(?sibling) ) .
-      ?sibling bdo:inRootInstance ?siblingRoot .
-    }
-    optional {
-      # display siblings' inRootInstance's prefLabel
-      ?parent bdo:workHasInstance ?r ; bdo:workHasInstance ?sibling .
-      filter( str(?r) != str(?sibling) ) .
-      ?sibling bdo:inRootInstance ?siblingRoot .
-      ?siblingRoot skos:prefLabel ?siblingRootLabel .
-    }
+    # non-reproduction siblings for regular instances:
+    ?r owl:sameAs* ?R_RES .
+    filter(not exists {?r bdo:instanceReproductionOf ?any})
+    ?parent bdo:workHasInstance ?r ; 
+            bdo:workHasInstance ?siblingNonRepro .
+    filter(not exists {?siblingNonRepro bdo:instanceReproductionOf ?any} && ?r != ?sibling)
+    ?siblingNonRepro skos:prefLabel ?siblingNonReproLabel .
+  } union {
+    # non-reproduction siblings's root instance for regular instances:
+    ?r owl:sameAs* ?R_RES .
+    filter(not exists {?r bdo:instanceReproductionOf ?any})
+    ?parent bdo:workHasInstance ?r ; 
+            bdo:workHasInstance ?siblingNonRepro .
+    filter(not exists {?siblingNonRepro bdo:instanceReproductionOf ?any} && ?r != ?sibling)
+    ?siblingNonRepro skos:prefLabel ?siblingLabel .
+    ?siblingNonRepro bdo:inRootInstance ?siblingRoot .
+    ?siblingRoot skos:prefLabel ?siblingRootLabel .
+  } union {
+    # reproduction siblings for reproduction instances:
+    ?r owl:sameAs* ?R_RES .
+    ?r bdo:instanceReproductionOf ?rep .
+    ?siblingRepro bdo:instanceReproductionOf ?rep .
+    # sibling repro don't have labels... let's display just their URI
   } union {
     # add Title/ContentLocation nodes that were missing
     # + display prefLabel for AgentAsCreator 
