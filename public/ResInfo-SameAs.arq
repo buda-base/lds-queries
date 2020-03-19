@@ -157,7 +157,7 @@ construct {
     filter(not exists {?r bdo:instanceReproductionOf ?any})
     ?parent bdo:workHasInstance ?r ; 
             bdo:workHasInstance ?siblingNonRepro .
-    filter(not exists {?siblingNonRepro bdo:instanceReproductionOf ?any} && ?r != ?sibling)
+    filter((not exists {?siblingNonRepro bdo:instanceReproductionOf ?any}) && ?r != ?siblingNonRepro)
     ?siblingNonRepro skos:prefLabel ?siblingNonReproLabel .
   } union {
     # non-reproduction siblings's root instance for regular instances:
@@ -165,8 +165,7 @@ construct {
     filter(not exists {?r bdo:instanceReproductionOf ?any})
     ?parent bdo:workHasInstance ?r ; 
             bdo:workHasInstance ?siblingNonRepro .
-    filter(not exists {?siblingNonRepro bdo:instanceReproductionOf ?any} && ?r != ?sibling)
-    ?siblingNonRepro skos:prefLabel ?siblingLabel .
+    filter((not exists {?siblingNonRepro bdo:instanceReproductionOf ?any}) && ?r != ?siblingNonRepro)
     ?siblingNonRepro bdo:inRootInstance ?siblingRoot .
     ?siblingRoot skos:prefLabel ?siblingRootLabel .
   } union {
