@@ -217,6 +217,3 @@ construct {
 
 # TODO:
 #   - add works from which the person is the author
-#   - filter siblings so that:
-#      * on a reproduction, only other reproductions of the same instance are returned
-#      * on a non-reproduction, only other non-reproduction instances are returned
