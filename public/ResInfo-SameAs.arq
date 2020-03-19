@@ -213,13 +213,12 @@ construct {
     # 10 works about the entity
     # TODO: add also 10 works created by the entity
     select 
-       ?resAbout ?resAbouteScore ?resAboutType ?resAboutProvider
+       ?resAbout ?resAbouteScore ?resAboutLabel ?resAboutProvider
     where {
            ?r owl:sameAs* ?R_RES .
            ?resAbout bdo:workIsAbout ?r ;
                      tmp:entityScore ?resAbouteScore ;
-                     skos:prefLabel ?resAboutLabel ;
-                     .
+                     skos:prefLabel ?resAboutLabel .
            ?resAdm adm:adminAbout ?resAbout ;
                    adm:status bda:StatusReleased ;
                    adm:metadataLegal/adm:provider ?resAboutProvider .
