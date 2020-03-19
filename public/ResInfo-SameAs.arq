@@ -53,6 +53,13 @@ construct {
  ?roP :partIndex ?roPi .
  ?roV :volumeNumber ?roVi .
 
+ ?id ?idp ?ido .
+
+ ?resAbout bdo:isAbout ?R_RES ;
+           skos:prefLabel ?resAboutLabel ;
+           tmp:entityScore ?resAbouteScore ;
+           tmp:provider ?resAboutProvider .
+
 } where {
   { ?r owl:sameAs* ?R_RES . }
   union
@@ -185,5 +192,29 @@ construct {
     # add volume numbers
     ?r :instanceHasVolume ?roV .
     ?roV :volumeNumber ?roVi .
+  } union {
+    ?r owl:sameAs* ?R_RES ;
+       bf:identifiedBy ?id .
+    ?id ?idp ?ido .
+  } union {
+    # 10 works about the entity
+    select 
+       ?resAbout ?resAbouteScore ?resAboutType ?resAboutProvider
+    where {
+           ?r owl:sameAs* ?R_RES .
+           ?resAbout bdo:workIsAbout ?r ;
+                     tmp:entityScore ?resAbouteScore ;
+                     skos:prefLabel ?resAboutLabel ;
+                     .
+           ?resAdm adm:adminAbout ?resAbout ;
+                   adm:status bda:StatusReleased ;
+                   adm:metadataLegal/adm:provider ?resAboutProvider .
+    } order by desc(?resAbouteScore) limit 10
   }
 }
+
+# TODO:
+#   - add works from which the person is the author
+#   - filter siblings so that:
+#      * on a reproduction, only other reproductions of the same instance are returned
+#      * on a non-reproduction, only other non-reproduction instances are returned
