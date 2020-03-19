@@ -8,6 +8,7 @@
 #param.R_RES.subtype=a Resource ID
 #param.R_RES.desc=the unique resource ID of the chosen resource
 
+
 construct {
  ?r ?rp ?ro .
  ?ro2 ?ro2p ?ro2o .
@@ -17,9 +18,6 @@ construct {
 
  ?q ?qp ?qo .
  ?r tmp:hasAdminData ?q .
-
- ?r owl:sameAs ?sameA .
- ?r owl:sameAs ?sameB .
 
  ?r tmp:siblingInstances ?siblingNonRepro .
  ?r tmp:siblingReproInstances ?siblingRepro .
@@ -56,78 +54,81 @@ construct {
 
  ?id ?idp ?ido .
 
- ?resAbout bdo:isAbout ?R_RES ;
+ ?resAbout bdo:workIsAbout ?R_RES ;
            skos:prefLabel ?resAboutLabel ;
-           tmp:entityScore ?resAbouteScore ;
+           tmp:entityScore ?resAboutScore ;
            tmp:provider ?resAboutProvider .
 
 } where {
-  { ?r owl:sameAs* ?R_RES . }
-  union
-  { ?R_RES owl:sameAs* ?r . }
-
-  optional { ?r owl:sameAs+ ?sameA . } 
-  optional { ?sameB owl:sameAs+ ?r . }
-
   {
+    ?r owl:sameAs* ?R_RES .
     ?r ?rp ?ro .
-    optional {
-      ?ro owl:sameAs+ ?roSame .
-    }
-    optional {
-      ?roSame2 owl:sameAs+ ?ro .
-    }
-    optional {
-      # add prefLabel for any related resource
-      ?r ?rp ?ro .
-      ?ro skos:prefLabel ?roLabel .
-    }
-    optional {
-      # display inRootInstance (used to sort instances)
-      ?r ?rp ?ro .
-      ?ro bdo:inRootInstance ?roRoot .
-    }
-    optional {
-      # display inRootInstance's prefLabel
-      ?r ?rp ?ro .
-      ?ro bdo:inRootInstance ?roRoot .
-      ?roRoot skos:prefLabel ?roRootLabel .
-    }
-    optional {
-      # add language (used to sort translations)
-      ?r :workHasTranslation ?ro .
-      ?ro bdo:language ?roLang .
-    }
-    optional {
-      # add prefLabel for Event subproperties or LineageHolder
-      ?r ?rp ?ro .
-      { ?ro rdf:type/rdfs:subClassOf+ :Event } union { ?ro rdf:type/rdfs:subClassOf* :LineageHolder }
-      ?ro ?rpEv ?roEv .
-      ?roEv skos:prefLabel ?roEvLab .
-    }
-    optional {
-      # get canonicalHtml for related resources
-      ?r ?rp ?ro .
-      ?ro adm:canonicalHtml ?roCanonHtml .
-    }
+  } union  {
+    ?r owl:sameAs* ?R_RES .
+    ?r ?rp ?ro .
+    ?ro owl:sameAs+ ?roSame .
   } union {
+    # add prefLabel for any related resource
+    ?r owl:sameAs* ?R_RES .
+    ?r ?rp ?ro .
+    ?ro skos:prefLabel ?roLabel .
+  } union {
+    # display inRootInstance (used to sort instances)
+    ?r owl:sameAs* ?R_RES .
+    ?r ?rp ?ro .
+    ?ro bdo:inRootInstance ?roRoot .
+    ?roRoot skos:prefLabel ?roRootLabel .
+  } union {
+    # add language (used to sort translations)
+    ?r owl:sameAs* ?R_RES .
+    ?r :workHasTranslation ?ro .
+    ?ro bdo:language ?roLang .
+  } union {
+    # add prefLabel for Event subclasses objects
+    ?r owl:sameAs* ?R_RES .
+    ?r ?rp ?ro .
+    ?ro rdf:type/rdfs:subClassOf+ :Event .
+    ?ro ?rpEv ?roEv .
+    ?roEv skos:prefLabel ?roEvLab .
+  } union {
+    # add prefLabel for LineageHolder objects
+    ?r owl:sameAs* ?R_RES .
+    ?r ?rp ?ro .
+    ?ro rdf:type/rdfs:subClassOf* :LineageHolder .
+    ?ro ?rpEv ?roEv .
+    ?roEv skos:prefLabel ?roEvLab .
+  } union  {
+    # get canonicalHtml for related resources
+    ?r owl:sameAs* ?R_RES .
+    ?r ?rp ?ro .
+    ?ro adm:canonicalHtml ?roCanonHtml .
+  } union {
+    ?r owl:sameAs* ?R_RES .
     ?r ?rp2 ?ro2 .
     ?ro2 rdf:type/rdfs:subClassOf+ :Facet .
     ?ro2 ?ro2p ?ro2o .
   } union {
+    ?r owl:sameAs* ?R_RES .
     ?r ?rp3 ?ro3 .
     ?ro3 rdf:type/rdfs:subClassOf+ :Event .
     ?ro3 ?ro3p ?ro3o .
-    optional {
-      ?ro3o rdf:type/rdfs:subClassOf+ :Facet .
-      ?ro3o ?ro4p ?ro4o .
-    } 
-    optional {
-      ?ro3o a bdo:DateIndication .
-      ?ro3o ?ro4p ?ro4o .
-    }
+  } union {
+    ?r owl:sameAs* ?R_RES .
+    ?r ?rp3 ?ro3 .
+    ?ro3 rdf:type/rdfs:subClassOf+ :Event .
+    ?ro3 ?ro3p ?ro3o .
+    ?ro3o rdf:type/rdfs:subClassOf+ :Facet .
+    ?ro3o ?ro4p ?ro4o .
+  } union {
+    ?r owl:sameAs* ?R_RES .
+    ?r ?rp3 ?ro3 .
+    ?ro3 rdf:type/rdfs:subClassOf+ :Event .
+    ?ro3 ?ro3p ?ro3o .
+    ?ro3o a bdo:DateIndication .
+    ?ro3o ?ro4p ?ro4o .
   } union {
     # return sub-events related to lineages
+    ?r owl:sameAs* ?R_RES .
     ?r rdf:type/rdfs:subClassOf* :Lineage .
     ?r ?rp5 ?ro5 .
     ?ro5 ?ro5p ?ro5o .
@@ -135,6 +136,7 @@ construct {
     ?ro5o ?ro6p ?ro6o .
   } union {
     # return prefLabels for sub-events related to lineages
+    ?r owl:sameAs* ?R_RES .
     ?r rdf:type/rdfs:subClassOf* :Lineage .
     ?r ?rp5 ?ro5 .
     ?ro5 ?ro5p ?ro5o .
@@ -142,12 +144,14 @@ construct {
     ?ro5o ?ro6p ?ro6o .
     ?ro6o skos:prefLabel ?ro6oLabel . 
   } union {
+    ?r owl:sameAs* ?R_RES .
     ?q adm:adminAbout ?r .
     ?q ?qp ?qo .
     # we don't return all the adminAbout, they can be in large quantities
     FILTER(?qp != adm:adminAbout)
   } union {
     # return legalData labels
+    ?r owl:sameAs* ?R_RES .
     ?q adm:adminAbout ?r .
     ?q adm:metadataLegal ?qo .
     ?qo skos:prefLabel ?qoLab .
@@ -178,20 +182,27 @@ construct {
     # add Title/ContentLocation nodes that were missing
     # + display prefLabel for AgentAsCreator 
     # + add Note subnodes
+    ?r owl:sameAs* ?R_RES .
     ?r ?rpTCL ?roTCL .
-    { ?roTCL a :Title . } union { ?roTCL a :ContentLocation } union { ?roTCL a :AgentAsCreator } union { ?roTCL a :Note } 
+    VALUES ?roTCLtype { :Title :ContentLocation :AgentAsCreator :Note }
+    ?roTCL a ?roTCLtype .
     ?roTCL ?roTCLp ?roTCLo .
-    optional {
-     ?r ?rpTCL ?roTCL .
-     ?roTCL ?roTCLp ?roTCLo .
-     ?roTCLo skos:prefLabel ?roTCLoLabel .
-    }
+  } union {
+    # label for previous:
+    ?r owl:sameAs* ?R_RES .
+    ?r ?rpTCL ?roTCL .
+    VALUES ?roTCLtype { :ContentLocation :AgentAsCreator :Note }
+    ?roTCL a ?roTCLtype .
+    ?roTCL ?roTCLp ?roTCLo .
+    ?roTCLo skos:prefLabel ?roTCLoLabel .
   } union {
     # add parts indexes
+    ?r owl:sameAs* ?R_RES .
     ?r :hasPart ?roP .
     ?roP :partIndex ?roPi .
   } union {
     # add volume numbers
+    ?r owl:sameAs* ?R_RES .
     ?r :instanceHasVolume ?roV .
     ?roV :volumeNumber ?roVi .
   } union {
@@ -200,6 +211,7 @@ construct {
     ?id ?idp ?ido .
   } union {
     # 10 works about the entity
+    # TODO: add also 10 works created by the entity
     select 
        ?resAbout ?resAbouteScore ?resAboutType ?resAboutProvider
     where {
@@ -214,6 +226,3 @@ construct {
     } order by desc(?resAbouteScore) limit 10
   }
 }
-
-# TODO:
-#   - add works from which the person is the author
