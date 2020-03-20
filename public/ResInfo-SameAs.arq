@@ -177,7 +177,7 @@ construct {
     ?r owl:sameAs* ?R_RES .
     ?r bdo:instanceReproductionOf ?rep .
     ?siblingRepro bdo:instanceReproductionOf ?rep .
-    filter(str(?siblingRepro) != str(?r)) .
+    filter(?siblingRepro != ?r) .
     # sibling repro don't have labels... let's display just their URI
   } union {
     # add Title/ContentLocation nodes that were missing
