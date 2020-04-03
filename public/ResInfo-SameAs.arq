@@ -156,30 +156,6 @@ construct {
     ?q adm:metadataLegal ?qo .
     ?qo skos:prefLabel ?qoLab .
   } union {
-    # non-reproduction siblings for regular instances:
-    ?r owl:sameAs* ?R_RES .
-    filter(not exists {?r bdo:instanceReproductionOf ?any})
-    ?parent bdo:workHasInstance ?r ; 
-            bdo:workHasInstance ?siblingNonRepro .
-    filter((not exists {?siblingNonRepro bdo:instanceReproductionOf ?any}) && ?r != ?siblingNonRepro)
-    ?siblingNonRepro skos:prefLabel ?siblingNonReproLabel .
-  } union {
-    # non-reproduction siblings's root instance for regular instances:
-    ?r owl:sameAs* ?R_RES .
-    filter(not exists {?r bdo:instanceReproductionOf ?any})
-    ?parent bdo:workHasInstance ?r ; 
-            bdo:workHasInstance ?siblingNonRepro .
-    filter((not exists {?siblingNonRepro bdo:instanceReproductionOf ?any}) && ?r != ?siblingNonRepro)
-    ?siblingNonRepro bdo:inRootInstance ?siblingRoot .
-    ?siblingRoot skos:prefLabel ?siblingRootLabel .
-  } union {
-    # reproduction siblings for reproduction instances:
-    ?r owl:sameAs* ?R_RES .
-    ?r bdo:instanceReproductionOf ?rep .
-    ?siblingRepro bdo:instanceReproductionOf ?rep .
-    filter(?siblingRepro != ?r) .
-    # sibling repro don't have labels... let's display just their URI
-  } union {
     # add Title/ContentLocation nodes that were missing
     # + display prefLabel for AgentAsCreator 
     # + add Note subnodes
