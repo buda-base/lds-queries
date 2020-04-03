@@ -48,6 +48,11 @@ WHERE
     ?resAdm adm:metadataLegal/adm:provider ?provider .
     
   } union {
+    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME  "highlight:" ) .
+    ?res a/rdfs:subClassOf* bdo:Work .
+    ?res owl:sameAs ?reSame .
+    ?reSame adm:canonicalHtml ?resCanoHtml .    
+  } union {
     
     (?res) text:query ( bdo:skosLabels ?L_NAME ) .
     
