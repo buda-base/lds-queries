@@ -53,6 +53,7 @@ construct {
  ?roV :volumeNumber ?roVi .
 
  ?id ?idp ?ido .
+ ?title ?titlep ?titleo .
 
  ?resAbout bdo:workIsAbout ?R_RES ;
            skos:prefLabel ?resAboutLabel ;
@@ -156,12 +157,12 @@ construct {
     ?q adm:metadataLegal ?qo .
     ?qo skos:prefLabel ?qoLab .
   } union {
-    # add Title/ContentLocation nodes that were missing
+    # add ContentLocation nodes that were missing
     # + display prefLabel for AgentAsCreator 
     # + add Note subnodes
     ?r owl:sameAs* ?R_RES .
     ?r ?rpTCL ?roTCL .
-    VALUES ?roTCLtype { :Title :ContentLocation :AgentAsCreator :Note }
+    VALUES ?roTCLtype { :ContentLocation :AgentAsCreator :Note }
     ?roTCL a ?roTCLtype .
     ?roTCL ?roTCLp ?roTCLo .
   } union {
@@ -186,6 +187,10 @@ construct {
     ?r owl:sameAs* ?R_RES ;
        bf:identifiedBy ?id .
     ?id ?idp ?ido .
+  } union {
+    ?r owl:sameAs* ?R_RES ;
+       bdo:hasTitle ?title .
+    ?title ?titlep ?titleo .
   } union {
     # 10 works about the entity
     # TODO: add also 10 works created by the entity
