@@ -45,6 +45,7 @@ CONSTRUCT {
     {
 
 		(?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+		?res a bdo:Instance .
 		FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
 		?resAdm adm:adminAbout ?res .
 		?resAdm adm:status ?status .
@@ -56,6 +57,7 @@ CONSTRUCT {
   } union {
 
     (?res) text:query ( bdo:skosLabels ?L_NAME  "highlight:" ) .
+    ?res a bdo:Instance .
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
     ?res bdo:instanceOf ?resW .
     
@@ -69,6 +71,7 @@ CONSTRUCT {
   } union {
     
     (?res) text:query ( bdo:skosLabels ?L_NAME  "highlight:" ) .
+    ?res a bdo:Instance .
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
     ?res bdo:instanceOf ?resW .
     
@@ -79,6 +82,7 @@ CONSTRUCT {
     } union {
 	    
 	    (?res) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+	    ?res a bdo:Instance .
 		FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
 	    ?res :inRootInstance ?resR .
 		?resRAdm adm:adminAbout ?resR .
