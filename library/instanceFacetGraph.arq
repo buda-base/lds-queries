@@ -93,6 +93,26 @@ CONSTRUCT {
 		?resR ?resRp ?resRo .
 		FILTER (?resRp = bdo:script || ?resRp = bdo:printMethod || ?resRp = bdo:publisherLocation || ?resRp = bdo:publisherName)
 
-	}
+	} union {
+
+		select ?res 
+	           (max(?resAccessOpen) as ?hasopen) 
+	           (max(?resImage) as ?hasimage) 
+	           (max(?resEtext) as ?hasetext) 
+	    where {
+	      
+	      (?res) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+	      ?res a bdo:Instance .
+		  FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
+		  ?res :inRootInstance?/:instanceHasReproduction ?resRep .
+
+	      ?resRepAdm adm:adminAbout ?resRep .
+	      ?resRepAdm adm:status bda:StatusReleased .
+	      bind( exists {?resRepAdm adm:access bda:AccessOpen} as ?resAccessOpen)
+	      bind( exists {?resRep a bdo:ImageInstance} as ?resImage)
+	      bind( exists {?resRep a bdo:EtextInstance} as ?resEtext)
+	    } group by ?res 
+
+    }
 
 }
