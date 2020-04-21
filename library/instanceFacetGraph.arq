@@ -29,9 +29,13 @@ CONSTRUCT {
 
     ?res bdo:instanceOf ?resW .
     ?resW ?resWp ?resWo .
-    ?resW ?resWpp ?resWoo .
+
+    # We cheat a bit and attache the topic to the instance instead
+    # of the corresponding work
+    ?res ?resWpp ?resWoo .
  
-    ?resW tmp:author ?author .
+ 	# Same for the author
+    ?res tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
   
     ?resoo skos:prefLabel ?ol .
@@ -69,7 +73,7 @@ CONSTRUCT {
     ?res bdo:instanceOf ?resW .
     
     ?resW ?resWpp ?resWoo .
-    FILTER(?resWpp IN(bdo:serialMemberOf , bdo:workIsAbout , bdo:workGenre))
+    FILTER(?resWpp IN(bdo:workIsAbout , bdo:workGenre))
     ?resWoo skos:prefLabel ?resWol .
 
     } union {
