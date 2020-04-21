@@ -34,9 +34,12 @@ CONSTRUCT {
     # of the corresponding work
     ?res ?resWpp ?resWoo .
  
- 	# Same for the author
+ 	# Same for the author, entity score and language
     ?res tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
+
+    ?res  tmp:entityScore ?eScore ;
+          bdo:language ?wLang .
   
     ?resoo skos:prefLabel ?ol .
 
@@ -67,6 +70,16 @@ CONSTRUCT {
     ?agent skos:prefLabel ?agentL .
     
     bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+
+  } union {
+    
+    (?res) text:query ( bdo:skosLabels ?L_NAME  "highlight:" ) .
+    ?res a bdo:Instance .
+    FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
+    ?res bdo:instanceOf ?resW .
+    
+    ?resW tmp:entityScore ?eScore ;
+          bdo:language ?wLang .
 
   } union {
     
