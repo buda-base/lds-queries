@@ -1,0 +1,90 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All instances matching a certain term
+#QueryParams=L_NAME,LG_NAME
+#QueryUrl=/lib/instanceFacetGraph?L_NAME="'od zer"&LG_NAME=bo-x-ewts
+
+#param.L_NAME.type=string
+#param.L_NAME.langTag=LG_NAME
+#param.L_NAME.isLucene=true
+#param.L_NAME.example="ye shes"
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT {
+
+	?res tmp:isMain true .
+	?res tmp:status ?status .
+	?res tmp:provider ?provider .
+	?res tmp:originalRecord ?originalRecord .
+	?res ?resp ?reso .
+	?res :inRootInstance ?resR .
+	?resR skos:prefLabel ?resRl .
+	?res ?resRp ?resRo .
+	?res ?resp ?reso .
+
+    ?res tmp:hasOpen ?hasopen .
+    ?res tmp:hasImage ?hasimage .
+    ?res tmp:hasEtext ?hasetext .
+
+    ?res bdo:instanceOf ?resW .
+    ?resW ?resWp ?resWo .
+    ?resW ?resWpp ?resWoo .
+ 
+    ?resW tmp:author ?author .
+    ?agent skos:prefLabel ?agentL .
+  
+    ?resoo skos:prefLabel ?ol .
+
+} where {
+
+    {
+
+		(?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+		FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
+		?resAdm adm:adminAbout ?res .
+		?resAdm adm:status ?status .
+		?resAdm adm:metadataLegal/adm:provider ?provider .
+
+		?res ?resp ?reso .
+		FILTER (?resp != bdo:note && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle)
+
+  } union {
+
+    (?res) text:query ( bdo:skosLabels ?L_NAME  "highlight:" ) .
+    FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
+    ?res bdo:instanceOf ?resW .
+    
+    ?resW bdo:creator ?creator .
+    ?creator bdo:role ?role .
+    ?creator bdo:agent ?agent .
+    ?agent skos:prefLabel ?agentL .
+    
+    bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+
+  } union {
+    
+    (?res) text:query ( bdo:skosLabels ?L_NAME  "highlight:" ) .
+    FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
+    ?res bdo:instanceOf ?resW .
+    
+    ?resW ?resWpp ?resWoo .
+    FILTER(?resWpp IN(bdo:serialMemberOf , bdo:workIsAbout , bdo:workGenre))
+    ?resWoo skos:prefLabel ?resWol .
+
+    } union {
+	    
+	    (?res) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+		FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
+	    ?res :inRootInstance ?resR .
+		?resRAdm adm:adminAbout ?resR .
+		?resRAdm adm:status ?status .
+		?resRAdm adm:metadataLegal/adm:provider ?provider .
+
+		?resR skos:prefLabel ?resRl .
+		?resR ?resRp ?resRo .
+		FILTER (?resRp = bdo:script || ?resRp = bdo:printMethod || ?resRp = bdo:publisherLocation || ?resRp = bdo:publisherName)
+
+	}
+
+}

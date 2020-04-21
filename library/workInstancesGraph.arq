@@ -1,6 +1,6 @@
 #QueryScope=General
 #QueryReturnType=Graph
-#QueryResults=All instances linked to the work, 
+#QueryResults=All instances linked to the work
 #QueryParams=R_RES
 #QueryUrl=/lib/workInstance?R_RES=bdr:W0RTT3216
 
