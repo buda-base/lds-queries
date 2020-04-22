@@ -96,7 +96,7 @@ CONSTRUCT {
 
     } union {
 	    
-	    (?res) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+	    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
 	    ?res a bdo:Instance .
 		FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
 	    ?res :inRootInstance ?resR .
