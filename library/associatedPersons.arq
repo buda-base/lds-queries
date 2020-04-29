@@ -23,6 +23,9 @@ construct {
     ?res tmp:relationType ?rel1 .
     ?res tmp:relationType ?rel2 .
     ?res tmp:relationType ?rel3 .
+    ?res tmp:relationType ?rel4 .
+    ?res tmp:relatedEventType ?evtType .
+    ?res tmp:relatedEventType ?evtType2 .
 
     ?evt ?evtp ?evto .
 }
@@ -30,6 +33,7 @@ where {
   # We have 3 types of matches:
   #   * isAbout a person
   #   * an entity having an event with a bdo:eventWho
+  #   * a person having an eventWhere where the bdo:eventWhere is the resource
   #   * an entity have a creator with a bdo:agent
   {
     {
@@ -37,12 +41,18 @@ where {
       ?res a bdo:Person .
     } union {
       ?R_RES ?evtp ?evtMatch .
-      ?evtMatch bdo:eventWho ?res .
+      ?evtMatch bdo:eventWho ?res ;
+                a ?evtType .
       BIND(tmp:eventRelatedTo as ?rel2)
+    } union {
+      ?evtMatch2 bdo:eventWhere ?R_RES ;
+                bdo:eventWho ?res ;
+                a ?evtType2 .
+      BIND(tmp:eventConnectedTo as ?rel3)
     } union {
       ?R_RES bdo:creator ?creatorNode .
       ?creatorNode bdo:agent ?res .
-      BIND(bdo:creator as ?rel3)
+      BIND(bdo:creator as ?rel4)
     }
     
     VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore}
