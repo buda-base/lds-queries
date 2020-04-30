@@ -14,6 +14,7 @@ construct {
    ?s ?p ?o .
    ?R_RES tmp:imageVolumeId ?imagevol .
    ?imagevol tmp:workLabel ?workpl .
+   ?R_RES tmp:hasEtextInstance ?hasRepro .
   }
 where {
   { 
@@ -35,5 +36,9 @@ where {
     ?imagevol a :ImageGroup .
     ?imagevol :volumeNumber ?volNum .
     ?work skos:prefLabel ?workpl .
+  } union {
+    #useful info to display etext in mirador
+    ?R_RES :volumeOf/:instanceHasReproduction ?hasRepro .
+    ?hasRepro a bdo:EtextInstance .
   }
 }
