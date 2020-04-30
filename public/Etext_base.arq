@@ -14,7 +14,7 @@ construct {
    ?s ?p ?o .
    ?R_RES tmp:imageVolumeId ?imagevol .
    ?imagevol tmp:workLabel ?workpl .
-   ?R_RES tmp:hasEtextInstance ?hasRepro .
+   ?R_RES tmp:hasEtextRes ?etextRes .
   }
 where {
   { 
@@ -39,6 +39,9 @@ where {
   } union {
     #useful info to display etext in mirador
     ?R_RES :volumeOf/:instanceHasReproduction ?hasRepro .
+    ?R_RES :volumeNumber ?volNB .
     ?hasRepro a bdo:EtextInstance .
+    ?hasRepro :instanceHasVolume ?etextVol .
+    ?etextVol :volumeNumber ?volNB ; :volumeHasEtext/:eTextResource ?etextRes .
   }
 }
