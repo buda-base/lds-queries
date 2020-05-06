@@ -24,8 +24,6 @@ construct {
     ?res tmp:relationType ?rel2 .
     ?res tmp:relationType ?rel3 .
     ?res tmp:relationType ?rel4 .
-    ?res tmp:relatedEventType ?evtType .
-    ?res tmp:relatedEventType ?evtType2 .
 
     ?evt ?evtp ?evto .
 }
@@ -44,14 +42,14 @@ where {
     {
       ?R_RES ?evtp ?evtMatch .
       ?evtMatch bdo:eventWho ?res ;
-                a ?evtType .
-      BIND(tmp:eventRelatedTo as ?rel2)
+                # /!\ binding the event type as the relation
+                a ?rel2 .
     } union {
       # example: persons born in a place
       ?evtMatch2 bdo:eventWhere ?R_RES ;
-                a ?evtType2 .
+                # /!\ binding the event type as the relation
+                a ?rel3 .
       ?res :personEvent ?evtMatch2 .
-      BIND(tmp:eventConnectedTo as ?rel3)
     } union {
       ?R_RES bdo:creator ?creatorNode .
       ?creatorNode bdo:agent ?res .
