@@ -1,0 +1,25 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All labels related to a given resource
+#QueryParams=R_RES
+#QueryUrl=/getAssociatedLabels?R_RES=bdr:P1583
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=bdo:Entity
+#param.R_RES.desc=the resource on which info is needed
+
+construct {  
+  ?s skos:preflabel ?o. 
+  ?s rdfs:label ?o. 
+} 
+  where { 
+    { 
+       ?R_RES  ?resp ?s .   
+    {  
+       ?s skos:prefLabel ?o.
+    }
+    union{
+      ?s rdfs:label ?o. 
+    }
+  }
+}
