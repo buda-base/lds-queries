@@ -14,6 +14,7 @@ construct {
    ?s ?p ?o .
    ?R_RES tmp:imageVolumeId ?imagevol .
    ?imagevol tmp:workLabel ?workpl .
+   ?R_RES tmp:hasEtextRes ?etextRes .
   }
 where {
   { 
@@ -29,11 +30,18 @@ where {
   } union {
     # get image volume ID (for iiif)
     ?R_RES :eTextIsVolume ?volNum .
-    ?R_RES :eTextInInstance/:instanceOf ?work .
-    ?work :workHasInstance/:instanceHasVolume ?imagevol .
+    ?R_RES :eTextInInstance ?inInst .
+    ?inInst :instanceReproductionOf ?isRepro ; :instanceOf ?work .
+    ?isRepro :instanceHasVolume ?imagevol .
     ?imagevol a :ImageGroup .
     ?imagevol :volumeNumber ?volNum .
     ?work skos:prefLabel ?workpl .
+  } union {
+    #useful info to display etext in mirador
+    ?R_RES :volumeOf/:instanceHasReproduction ?hasRepro .
+    ?R_RES :volumeNumber ?volNB .
+    ?hasRepro a bdo:EtextInstance .
+    ?hasRepro :instanceHasVolume ?etextVol .
+    ?etextVol :volumeNumber ?volNB ; :volumeHasEtext/:eTextResource ?etextRes .
   }
 }
-
