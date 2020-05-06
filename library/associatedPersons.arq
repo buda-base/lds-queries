@@ -65,17 +65,19 @@ where {
     
   } union {
 
+    # first part is a copy paste of the part of the union
     {
-      ?R_RES ?rel1 ?res .
-      ?res a bdo:Person .
-    } union {
       ?R_RES ?evtp ?evtMatch .
-      ?evtMatch bdo:eventWho ?res .
-      BIND(tmp:eventRelatedTo as ?rel2)
+      ?evtMatch bdo:eventWho ?res ;
+                a ?rel2 .
+    } union {
+      ?evtMatch2 bdo:eventWhere ?R_RES ;
+                a ?rel3 .
+      ?res :personEvent ?evtMatch2 .
     } union {
       ?R_RES bdo:creator ?creatorNode .
       ?creatorNode bdo:agent ?res .
-      BIND(bdo:creator as ?rel3)
+      BIND(bdo:creator as ?rel4)
     }
     ?res bdo:personEvent ?evt .
     ?evt a ?evtType .
