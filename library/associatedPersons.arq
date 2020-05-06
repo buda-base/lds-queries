@@ -33,21 +33,24 @@ where {
   # We have 3 types of matches:
   #   * isAbout a person
   #   * an entity having an event with a bdo:eventWho
-  #   * a person having an eventWhere where the bdo:eventWhere is the resource
+  #   * a person having an event where the bdo:eventWhere is the resource
   #   * an entity have a creator with a bdo:agent
   {
+    # this is very slow, and I'm not sure it's really useful...?
+    #{
+    #  ?R_RES ?rel1 ?res .
+    #  ?res a bdo:Person .
+    #} union 
     {
-      ?R_RES ?rel1 ?res .
-      ?res a bdo:Person .
-    } union {
       ?R_RES ?evtp ?evtMatch .
       ?evtMatch bdo:eventWho ?res ;
                 a ?evtType .
       BIND(tmp:eventRelatedTo as ?rel2)
     } union {
+      # example: persons born in a place
       ?evtMatch2 bdo:eventWhere ?R_RES ;
-                bdo:eventWho ?res ;
                 a ?evtType2 .
+      ?res :personEvent ?evtMatch2 .
       BIND(tmp:eventConnectedTo as ?rel3)
     } union {
       ?R_RES bdo:creator ?creatorNode .
