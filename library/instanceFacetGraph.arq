@@ -106,7 +106,7 @@ CONSTRUCT {
 
 		?resR skos:prefLabel ?resRl .
 		?resR ?resRp ?resRo .
-		FILTER (?resRp = bdo:script || ?resRp = bdo:printMethod || ?resRp = bdo:publisherLocation || ?resRp = bdo:publisherName)
+		FILTER (?resRp = bdo:script || ?resRp = bdo:printMethod || ?resRp = tmp:thumbnailIIIFService || ?resRp = bdo:publisherLocation || ?resRp = bdo:publisherName)
 
 	} union {
 

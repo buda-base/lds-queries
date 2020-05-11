@@ -51,7 +51,7 @@ CONSTRUCT {
 
 		?instanceR skos:prefLabel ?instanceRl .
 		?instanceR ?instanceRp ?instanceRo .
-		FILTER (?instanceRp = bdo:script || ?instanceRp = bdo:printMethod || ?instanceRp = bdo:publisherLocation || ?instanceRp = bdo:publisherName)
+		FILTER (?instanceRp = bdo:script || ?instanceRp = bdo:printMethod || ?instanceRp = tmp:thumbnailIIIFService || ?instanceRp = bdo:publisherLocation || ?instanceRp = bdo:publisherName)
 
 		?instance ?instancep ?instanceo .
 		FILTER (?instancep != bdo:note && ?instancep != bdo:instanceEvent && ?instancep != bdo:hasTitle)
