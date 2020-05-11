@@ -45,6 +45,8 @@ CONSTRUCT {
   
     ?resoo skos:prefLabel ?ol .
 
+    ?res tmp:hasReproAccess ?resRepAccess .
+
 } where {
 
     {
@@ -93,6 +95,18 @@ CONSTRUCT {
     ?resW ?resWpp ?resWoo .
     FILTER(?resWpp IN(bdo:workIsAbout , bdo:workGenre))
     ?resWoo skos:prefLabel ?resWol .
+
+  } union {
+
+  	# get access of reproductions
+    
+    (?res) text:query ( bdo:skosLabels ?L_NAME  "highlight:" ) .
+    ?res a bdo:Instance .
+    FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
+    ?res :inRootInstance?/:instanceHasReproduction ?resRep .
+    ?resRepAdm adm:adminAbout ?resRep ;
+               adm:access ?resRepAccess .
+
 
     } union {
 	    

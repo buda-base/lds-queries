@@ -28,6 +28,8 @@ CONSTRUCT {
     ?instance tmp:hasImage ?hasimage .
     ?instance tmp:hasEtext ?hasetext .
 
+    ?instance tmp:hasReproAccess ?instanceRepAccess .
+
 } where {
 
     {
@@ -55,6 +57,15 @@ CONSTRUCT {
 
 		?instance ?instancep ?instanceo .
 		FILTER (?instancep != bdo:note && ?instancep != bdo:instanceEvent && ?instancep != bdo:hasTitle)
+
+  	} union {
+
+  	# get access of reproductions
+    
+    ?R_RES :workHasInstance ?instance .
+    ?instance :inRootInstance?/:instanceHasReproduction ?instanceRep .
+    ?instanceRepAdm adm:adminAbout ?instanceRep ;
+               adm:access ?instanceRepAccess .
 
 	} union {
 
