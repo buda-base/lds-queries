@@ -1,0 +1,18 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=the labels of a given resource
+#QueryParams=R_RES
+#QueryUrl=/getLabels?R_RES=bdr:P1583
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=bdo:Entity
+#param.R_RES.desc=the resource on which info is needed
+
+construct {  
+  ?R_RES skos:preflabel ?o. 
+  ?R_RES rdfs:label ?o. 
+} 
+  where { 
+    OPTIONAL{?R_RES skos:prefLabel ?o}.
+    OPTIONAL{?R_RES rdfs:label ?o. }
+}
