@@ -35,6 +35,7 @@ CONSTRUCT {
     # We cheat a bit and attache the topic to the instance instead
     # of the corresponding work
     ?res ?resWpp ?resWoo .
+    ?resWoo skos:prefLabel ?resWol .
  
  	# Same for the author, entity score and language
     ?res tmp:author ?author .
