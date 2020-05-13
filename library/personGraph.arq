@@ -46,7 +46,7 @@ WHERE
 
     # look in prefLabel, as sometimes it's the only thing we have from the database
     
-    (?name ?sc ?nameMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    (?res ?sc ?nameMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
     
     ?res a :Person .
     VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore}
@@ -74,7 +74,7 @@ WHERE
 
     # events from preflabel matches
     
-    (?name ?sc ?nameMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    (?res ?sc ?nameMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
     
     ?res a :Person .
     ?res bdo:personEvent ?evt .
