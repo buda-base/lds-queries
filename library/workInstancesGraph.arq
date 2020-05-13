@@ -70,8 +70,8 @@ CONSTRUCT {
 	} union {
 
 		?R_RES :workHasInstance ?instance .
-		?instance :inRootInstance? ?instanceR .
-		?instanceR :instanceEvent ?evt .
+		?instance :inRootInstance? ?instanceR2 .
+		?instanceR2 :instanceEvent ?evt .
 		?evt ?evtp ?evto .
 		BIND (IF(?evtp = bdo:onYear || ?evtp = bdo:notBefore, ?evto, 1/0) as ?yearStart)
         BIND (IF(?evtp = bdo:notAfter, ?evto, 1/0) as ?yearEnd)
