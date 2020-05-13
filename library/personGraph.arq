@@ -44,6 +44,23 @@ WHERE
     
   } union {
 
+    # look in prefLabel, as sometimes it's the only thing we have from the database
+    
+    (?name ?sc ?nameMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    
+    ?res a :Person .
+    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore}
+    ?res ?resp ?reso .
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
+    ?name ?namep ?nameo .
+    bind ( exists {?tmp bdo:agent ?res} as ?isCreator )
+    
+  } union {
+
+    # get events
+
     (?name) text:query ( rdfs:label ?L_NAME ) .
     
     ?res bdo:personName ?name .
@@ -53,5 +70,18 @@ WHERE
     ?evt ?evtp ?evto .
     BIND (IF(?evtType = bdo:PersonBirth && (?evtp = bdo:onYear || ?evtp = bdo:notBefore), ?evto, 1/0) as ?yearStart)
 
+  } union {
+
+    # events from preflabel matches
+    
+    (?name ?sc ?nameMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    
+    ?res a :Person .
+    ?res bdo:personEvent ?evt .
+    ?evt a ?evtType .
+    FILTER (?evtType IN(bdo:PersonBirth , bdo:PersonDeath))
+    ?evt ?evtp ?evto .
+    BIND (IF(?evtType = bdo:PersonBirth && (?evtp = bdo:onYear || ?evtp = bdo:notBefore), ?evto, 1/0) as ?yearStart)
+    
   }
 }
