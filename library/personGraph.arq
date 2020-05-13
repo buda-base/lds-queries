@@ -54,7 +54,6 @@ WHERE
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
     ?resAdm adm:metadataLegal/adm:provider ?provider .
-    ?name ?namep ?nameo .
     bind ( exists {?tmp bdo:agent ?res} as ?isCreator )
     
   } union {
@@ -74,7 +73,7 @@ WHERE
 
     # events from preflabel matches
     
-    (?res ?sc ?nameMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    (?res) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
     
     ?res a :Person .
     ?res bdo:personEvent ?evt .
