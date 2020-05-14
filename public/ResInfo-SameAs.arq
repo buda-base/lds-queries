@@ -200,7 +200,7 @@ construct {
   } union {
     # 10 works about the entity
     # TODO: add also 10 works created by the entity
-    select 
+    select
        ?resAbout ?resAbouteScore ?resAboutLabel ?resAboutProvider
     where {
            ?r owl:sameAs* ?R_RES .
@@ -210,7 +210,7 @@ construct {
            ?resAdm adm:adminAbout ?resAbout ;
                    adm:status bda:StatusReleased ;
                    adm:metadataLegal/adm:provider ?resAboutProvider .
-    } order by desc(?resAbouteScore) limit 10
+    } order by desc(?resAbouteScore) limit 20
   } union {
     # 10 works about the entity
     # TODO: add also 10 works created by the entity
@@ -225,6 +225,6 @@ construct {
            ?resAdm adm:adminAbout ?resBy ;
                    adm:status bda:StatusReleased ;
                    adm:metadataLegal/adm:provider ?resByProvider .
-    } order by desc(?resByScore) limit 10
+    } order by desc(?resByScore) limit 20
   }
 }
