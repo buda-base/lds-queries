@@ -34,7 +34,7 @@ WHERE
     (?name ?sc ?nameMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
     
     ?res bdo:personName ?name .
-    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore}
+    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs rdfs:seeAlso tmp:entityScore}
     ?res ?resp ?reso .
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
@@ -49,7 +49,7 @@ WHERE
     (?res ?sc ?nameMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
     
     ?res a :Person .
-    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore}
+    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs rdfs:seeAlso tmp:entityScore}
     ?res ?resp ?reso .
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .

@@ -33,7 +33,7 @@ WHERE
     
     ?res a bdo:Place .
     ?res ?resp ?reso .
-    FILTER (?resp = skos:altLabel || ?resp = skos:prefLabel || ?resp = skos:placeEvent || ?resp = bdo:placeLat || ?resp = bdo:placeLong || ?resp = bdo:placeType || ?resp = bdo:placeLocatedIn || ?resp = owl:sameAs || ?resp = tmp:entityScore)
+    FILTER (?resp = skos:altLabel || ?resp = skos:prefLabel || ?resp = skos:placeEvent || ?resp = bdo:placeLat || ?resp = bdo:placeLong || ?resp = bdo:placeType || ?resp = bdo:placeLocatedIn || ?resp = owl:sameAs || ?resp = rdfs:seeAlso || ?resp = tmp:entityScore)
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
     ?resAdm adm:metadataLegal/adm:provider ?provider .
