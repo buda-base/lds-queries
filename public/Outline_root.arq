@@ -1,0 +1,70 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All works whose various literals contain the given L_NAME parameter value, along with their LICENSE + ACCESS + LANGSCRIPT + STATUS facets.
+#QueryParams=L_NAME,LG_NAME,R_RES
+#QueryUrl=/Outline_root?L_NAME="'od zer"&LG_NAME=bo-x-ewts&R_RES=bdr:MW12827
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=Instance Resource ID
+#param.R_RES.desc=Instance resource ID (can be a part of an instance)
+#param.R_RES.example=bdr:MW12827
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT
+{
+  ?R_RES :instanceHasReproduction ?repr .
+  ?repr :instanceHasVolume ?vol .
+  ?vol ?volp ?volo .
+  ?R_RES :hasPart ?part .
+  ?part skos:prefLabel ?partL ;
+  	      :partTreeIndex ?partPti ;
+  	      :partType ?partType ;
+  	      :partIndex ?partIdx ;
+  	      :hasTitle ?partT ;
+  	      :instanceOf ?partW ;
+  	      :contentLocation ?cl .
+  ?partT ?partTp ?partTo .
+  ?cl ?clp ?clo .
+  ?partW skos:prefLabel ?partWL ;
+  		 :creator ?partWc .
+  ?partWc skos:prefLabel ?partWcL .
+}
+WHERE 
+{
+  {
+  	# get volumes
+  	?R_RES :instanceHasReproduction ?repr .
+  	?repr :instanceHasVolume ?vol .
+  	?vol ?volp ?volo .
+    FILTER (?volp IN(bdo:volumeNumber , skos:prefLabel ))
+  } union {
+  	# get parts: essential triples
+  	?R_RES :hasPart ?part .
+  	?part skos:prefLabel ?partL ;
+  	      :partTreeIndex ?partPti ;
+  	      :partType ?partType ;
+  	      :partIndex ?partIdx .
+  } union {
+  	# get parts: title
+  	?R_RES :hasPart ?part .
+  	?part  :hasTitle ?partT .
+  	?partT ?partTp ?partTo .
+  } union {
+  	# get parts: work triples
+  	?R_RES :hasPart ?part .
+  	?part  :instanceOf ?partW .
+  	?partW skos:prefLabel ?partWL .
+  } union {
+  	# get parts: work creator triples
+  	?R_RES :hasPart ?part .
+  	?part :instanceOf ?partW .
+  	?partW :creator ?partWc .
+  	?partWc skos:prefLabel ?partWcL .
+  } union {
+  	# get parts: location triples
+  	?R_RES :hasPart ?part .
+  	?part :contentLocation ?cl .
+  	?cl ?clp ?clo .
+  }
+}
