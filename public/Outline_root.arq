@@ -1,8 +1,8 @@
 #QueryScope=General
 #QueryReturnType=Graph
 #QueryResults=All works whose various literals contain the given L_NAME parameter value, along with their LICENSE + ACCESS + LANGSCRIPT + STATUS facets.
-#QueryParams=L_NAME,LG_NAME,R_RES
-#QueryUrl=/Outline_root?L_NAME="'od zer"&LG_NAME=bo-x-ewts&R_RES=bdr:MW12827
+#QueryParams=R_RES
+#QueryUrl=/Outline_root?R_RES=bdr:MW12827
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=Instance Resource ID
