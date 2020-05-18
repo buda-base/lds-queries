@@ -1,0 +1,158 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All works whose various literals contain the given L_NAME parameter value, along with their LICENSE + ACCESS + LANGSCRIPT + STATUS facets.
+#QueryParams=L_NAME,LG_NAME,R_RES
+#QueryUrl=/Outline_search?L_NAME="'od zer"&LG_NAME=bo-x-ewts&R_RES=bdr:MW12827
+
+#param.L_NAME.type=string
+#param.L_NAME.langTag=LG_NAME
+#param.L_NAME.isLucene=true
+#param.L_NAME.example="spyod 'jug"
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=Instance Resource ID
+#param.R_RES.desc=Instance resource ID (can be a part of an instance)
+#param.R_RES.example=bdr:MW23703
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT
+{
+
+    ?inst ?instp ?insto .
+    ?t ?tp ?to .
+    ?id ?idp ?ido .
+    ?inst tmp:matchScore ?titleSc .
+    ?inst tmp:titleMatch ?titleMatch.
+    ?work ?workp ?worko .
+    ?work tmp:matchScore ?workSc .
+    ?work tmp:labelMatch ?labelMatch .
+    ?workaac ?workaacp ?workaaco .
+    ?author ?authorp ?authoro .
+
+}
+WHERE 
+{
+  {
+    # search in titles in graph
+
+    ?R_RES :inRootInstance? ?root .
+    ?rootAdm adm:adminAbout ?root ;
+             adm:graphId ?rootGraph .
+    # I checked on http://sparql.org and there is no join when using the quad optimizations
+    # so theoretically no performance problem
+    graph ?rootGraph {
+        (?title ?titleSc ?titleMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        ?inst :hasTitle ?title .
+        # TODO: here we could check that
+        # ?inst :partOf+ ?R_RES .
+        # so that we only return results that are sub parts of the requested part
+    }
+    
+    ?inst ?instp ?insto .
+    ?inst :hasTitle ?t .
+    ?t ?tp ?to .
+    
+  } union {
+    
+    # same with work info
+    
+    ?R_RES :inRootInstance? ?root .
+    ?rootAdm adm:adminAbout ?root ;
+             adm:graphId ?rootGraph .
+    # I checked on http://sparql.org and there is no join when using the quad optimizations
+    # so theoretically no performance problem
+    graph ?rootGraph {
+        (?title ?titleSc ?titleMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        ?inst :hasTitle ?title .
+    }
+    
+    ?inst :instanceOf ?work .
+    ?work ?workp ?worko .
+
+  } union {
+    
+    # same with work info
+    
+    ?R_RES :inRootInstance? ?root .
+    ?rootAdm adm:adminAbout ?root ;
+             adm:graphId ?rootGraph .
+    # I checked on http://sparql.org and there is no join when using the quad optimizations
+    # so theoretically no performance problem
+    graph ?rootGraph {
+        (?title ?titleSc ?titleMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        ?inst :hasTitle ?title .
+    }
+    
+    ?inst :instanceOf ?work .
+    ?work :creator ?workaac .
+    ?workaac ?workaacp ?workaaco .
+    ?workaac :agent ?author .
+    ?author ?authorp ?authoro .
+
+  } union {
+    
+    # same with identifiers
+    
+    ?R_RES :inRootInstance? ?root .
+    ?rootAdm adm:adminAbout ?root ;
+             adm:graphId ?rootGraph .
+    # I checked on http://sparql.org and there is no join when using the quad optimizations
+    # so theoretically no performance problem
+    graph ?rootGraph {
+        (?title ?titleSc ?titleMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        ?inst :hasTitle ?title .
+    }
+    
+    ?inst bf:identifiedBy ?id .
+    ?id ?idp ?ido .
+
+  } union {
+
+    # more general search in works with instance in parts
+
+    ?R_RES :inRootInstance? ?root .
+    (?work ?workSc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    ?work :workHasInstance ?inst .
+    ?inst :inRootInstance ?root .
+    # here again we could check
+    # ?inst :partOf+ ?R_RES .
+
+    ?inst ?instp ?insto .
+    ?inst :hasTitle ?t .
+    ?t ?tp ?to .
+
+    ?work ?workp ?worko .
+
+  } union {
+
+    # same with identifiers
+
+    ?R_RES :inRootInstance? ?root .
+    (?work ?workSc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    ?work :workHasInstance ?inst .
+    ?inst :inRootInstance ?root .
+    # here again we could check
+    # ?inst :partOf+ ?R_RES .
+
+    ?inst bf:identifiedBy ?id .
+    ?id ?idp ?ido .
+
+  } union {
+
+    # same with authors
+    
+    ?R_RES :inRootInstance? ?root .
+    (?work ?workSc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    ?work :workHasInstance ?inst .
+    ?inst :inRootInstance ?root .
+    # here again we could check
+    # ?inst :partOf+ ?R_RES .
+
+    ?work :creator ?workaac .
+    ?workaac ?workaacp ?workaaco .
+    ?workaac :agent ?author .
+    ?author ?authorp ?authoro .
+
+  }
+}

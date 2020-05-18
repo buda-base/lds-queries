@@ -23,9 +23,11 @@ CONSTRUCT
   	      :partIndex ?partIdx ;
   	      :hasTitle ?partT ;
   	      :instanceOf ?partW ;
-  	      :contentLocation ?cl .
+  	      :contentLocation ?cl ;
+          bf:identifiedBy ?id .
   ?partT ?partTp ?partTo .
   ?cl ?clp ?clo .
+  ?id ?idp ?ido .
   ?partW skos:prefLabel ?partWL ;
   		 :creator ?partWc .
   ?partWc skos:prefLabel ?partWcL .
@@ -50,6 +52,11 @@ WHERE
   	?R_RES :hasPart ?part .
   	?part  :hasTitle ?partT .
   	?partT ?partTp ?partTo .
+  } union {
+    # get parts: title
+    ?R_RES :hasPart ?part .
+    ?part  bf:identifiedBy ?id .
+    ?id ?idp ?ido .
   } union {
   	# get parts: work triples
   	?R_RES :hasPart ?part .
