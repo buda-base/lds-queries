@@ -51,6 +51,7 @@ These parameters must be defined for all the queries, at the top of the file:
 | `QueryReturnType` | `Table` or `Graph` | Indicates if the (resp.) `SELECT` or `CONSTRUCT` keyword is used. |
 | `QueryResults` | Example: "all the works of a given author" | a description of the returned results |
 | `QueryParams` | the names of all the params expected by the query | comma separated list of the name of the params expected by the query |
+| `QueryOptParams` | the names of optional params accepted by the query- these param follow the same naming conventions as normal param but they can be ommitted in which case they are not bopund to any value in the query | comma separated list of the name of the optional params expected by the query |
 | `QueryUrl` | any Url using that template | eventually used on the index page to run a valid example |
 | `QueryLimit` | an integer | overrides the default (500) allowed number of results |
 
@@ -72,7 +73,7 @@ The format is made so that lds-pdi can perform a parameter evaluation in order t
 
 #### Input variables
 
-For each input variable, there must be definitions in the form:
+For each input variable, optional or not, there must be definitions in the form:
 
 ```sparql
 #{metadata_type}.{variable_name}.{key}={value}
