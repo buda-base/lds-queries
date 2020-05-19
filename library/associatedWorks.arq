@@ -15,6 +15,7 @@ CONSTRUCT
     ?res tmp:status ?st .
     ?res tmp:matchScore ?sc .
     ?res tmp:labelMatch ?labelMatch.
+    ?res tmp:isMain true .
 
     ?res tmp:nbInstance ?nbinstances .
     ?res tmp:provider ?provider .
