@@ -1,8 +1,8 @@
-#QueryScope=Work
+#QueryScope=Instance
 #QueryReturnType=Table
 #QueryResults=(used by 84000) info on catalog indexes in a specific edition of a collection
-#QueryParams=R_RES
-#QueryUrl=/Cat_idx_info?R_RES=bdr:W22084&R_IdxProp=bdo:workKaTenSiglaD
+#QueryParams=R_RES,R_Idx
+#QueryUrl=/Cat_idx_info?R_RES=bdr:MW22084&R_Idx=bdr:KaTenSiglaD
 #QueryLimit=5000
 
 #output.?idx.type=string
@@ -18,20 +18,23 @@
 #output.?expr.desc=the URI of the expression in the edition
 
 #param.R_RES.type=URI
-#param.R_RES.subtype=:Work
+#param.R_RES.subtype=:Instance
 #param.R_RES.desc=the URI of the collection being investigated
 
-#param.R_IdxProp.type=URI
-#param.R_IdxProp.subtype=:workRefs
-#param.R_IdxProp.desc=the URI of the collection being investigated
+#param.R_Idx.type=URI
+#param.R_Idx.subtype=:Identifier
+#param.R_Idx.desc=the URI of the requested identifier type
 
 select distinct ?idx ?abstractI ?abstractT ?expr where {
   ?R_RES a :Instance .
-  ?R_IdxProp rdfs:subPropertyOf :workRefs .
+  ?R_Idx a :Identifier .
   ?expr :partOf+ ?R_RES ;
-        ?R_IdxProp ?idx ;
+        bf:identifiedBy ?id ;
         :instanceOf ?abstractT .
-  optional {
-    ?abstractT :workTranslationOf ?abstractI .
-  }
+  ?id a ?R_Idx ;
+      rdf:value ?idx .
+     
+  ?abstractT ?abstractTp ?abstractI .
+  FILTER(?abstractTp = :workTranslationOf)   
+
 } order by ?idx
