@@ -28,10 +28,16 @@ CONSTRUCT
   ?partW skos:prefLabel ?partWL ;
   		 :creator ?partWc .
   ?partWc skos:prefLabel ?partWcL .
+  ?ancestor ?ancestorp ?ancestoro .
 }
 WHERE 
 {
   {
+    # get ancestors label, test with bdr:MW12827_891768 to see some results
+    ?R_RES :partOf+ ?ancestor .
+    ?ancestor ?ancestorp ?ancestoro .
+    FILTER (?ancestorp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
+  } union {
   	# get volumes
   	?R_RES :instanceHasReproduction ?repr .
   	?repr :instanceHasVolume ?vol .
