@@ -29,6 +29,7 @@ CONSTRUCT
     ?work tmp:labelMatch ?labelMatch .
     ?workaac ?workaacp ?workaaco .
     ?author ?authorp ?authoro .
+    ?ancestor ?ancestorp ?ancestoro .
 
 }
 WHERE 
@@ -52,6 +53,10 @@ WHERE
     ?inst ?instp ?insto .
     ?inst :hasTitle ?t .
     ?t ?tp ?to .
+
+    ?inst :partOf+ ?ancestor .
+    ?ancestor ?ancestorp ?ancestoro .
+    FILTER (?ancestorp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
     
   } union {
     
@@ -121,6 +126,10 @@ WHERE
     ?inst ?instp ?insto .
     ?inst :hasTitle ?t .
     ?t ?tp ?to .
+
+    ?inst :partOf+ ?ancestor .
+    ?ancestor ?ancestorp ?ancestoro .
+    FILTER (?ancestorp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
 
     ?work ?workp ?worko .
 
