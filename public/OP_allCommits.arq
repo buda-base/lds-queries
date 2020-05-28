@@ -1,7 +1,6 @@
 #QueryScope=Etexts
 #QueryReturnType=Table
 #QueryResults=all commits of the Openpecha graphs
-#QueryParams=NONE
 #QueryUrl=/OP_allCommits
 
 select ?op ?commit where {
