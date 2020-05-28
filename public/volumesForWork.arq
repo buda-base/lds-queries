@@ -9,7 +9,6 @@
 #param.R_RES.desc=the Work on which info is needed
 
 select ?volnum ?volid where {
-  ?R_RES a bdo:ImageInstance ;
-     :instanceHasVolume ?volid .
+  ?R_RES :instanceHasVolume ?volid .
   ?volid :volumeNumber ?volnum .
 } order by asc(?volnum)
