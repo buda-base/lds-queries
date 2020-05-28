@@ -1,0 +1,22 @@
+#QueryScope=Entity
+#QueryReturnType=Table
+#QueryResults=Commit string of a graph or entity
+#QueryParams=R_RES
+#QueryUrl=/getCommit?R_RES=bdr:W12827
+
+#output.?commit.type=String
+#output.?commit.desc=the commit string of the resource in the database
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=:Entity
+#param.R_RES.desc=the URI of the entity or graph
+
+select ?commit where {
+	{
+		?adm adm:adminAbout  ?R_RES ;
+             adm:gitRevision ?commit .
+	} union {
+        ?adm adm:graphId     ?R_RES ;
+             adm:gitRevision ?commit .
+	}
+}
