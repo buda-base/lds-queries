@@ -1,0 +1,11 @@
+#QueryScope=Etexts
+#QueryReturnType=Table
+#QueryResults=all commits of the Openpecha graphs
+#QueryParams=
+#QueryUrl=/OP_allCommits
+
+select ?op ?commit where {
+	?adm adm:syncAgent bdr:SAOPT ;
+	     adm:adminAbout ?op ;
+	     adm:gitRevision ?commit .
+}
