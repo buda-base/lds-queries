@@ -8,12 +8,8 @@
 #param.R_RES.subtype=bdo:Work
 #param.R_RES.desc=the Work on which info is needed
 
-select ?volnum ?volid ?imggroup ?imgList where {
-  ?R_RES :workHasItem ?i .
-  ?i a bdo:ItemImageAsset ;
-     :itemHasVolume ?volid .
-  ?volid :volumeNumber ?volnum ;
-         :imageList ?imgList .
-  ?va adm:adminAbout  ?volid .
-  ?va adm:legacyImageGroupRID ?imggroup .
+select ?volnum ?volid where {
+  ?R_RES a bdo:ImageInstance ;
+     :instanceHasVolume ?volid .
+  ?volid :volumeNumber ?volnum .
 } order by asc(?volnum)
