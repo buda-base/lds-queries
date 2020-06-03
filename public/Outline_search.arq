@@ -30,6 +30,7 @@ CONSTRUCT
     ?workaac ?workaacp ?workaaco .
     ?author ?authorp ?authoro .
     ?ancestor ?ancestorp ?ancestoro .
+    ?cl ?clp ?clo .
 
 }
 WHERE 
@@ -60,7 +61,7 @@ WHERE
     
   } union {
     
-    # same with work info
+    # same with content location
     
     ?R_RES :inRootInstance? ?root .
     ?rootAdm adm:adminAbout ?root ;
@@ -68,12 +69,12 @@ WHERE
     # I checked on http://sparql.org and there is no join when using the quad optimizations
     # so theoretically no performance problem
     graph ?rootGraph {
-        (?title ?titleSc ?titleMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
         ?inst :hasTitle ?title .
     }
     
-    ?inst :instanceOf ?work .
-    ?work ?workp ?worko .
+    ?inst :contentLocation ?cl .
+    ?cl ?clp ?clo .
 
   } union {
     
@@ -85,7 +86,24 @@ WHERE
     # I checked on http://sparql.org and there is no join when using the quad optimizations
     # so theoretically no performance problem
     graph ?rootGraph {
-        (?title ?titleSc ?titleMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        ?inst :hasTitle ?title .
+    }
+    
+    ?inst :instanceOf ?work .
+    ?work ?workp ?worko .
+
+  } union {
+    
+    # same with creator info
+    
+    ?R_RES :inRootInstance? ?root .
+    ?rootAdm adm:adminAbout ?root ;
+             adm:graphId ?rootGraph .
+    # I checked on http://sparql.org and there is no join when using the quad optimizations
+    # so theoretically no performance problem
+    graph ?rootGraph {
+        (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
         ?inst :hasTitle ?title .
     }
     
@@ -105,7 +123,7 @@ WHERE
     # I checked on http://sparql.org and there is no join when using the quad optimizations
     # so theoretically no performance problem
     graph ?rootGraph {
-        (?title ?titleSc ?titleMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
         ?inst :hasTitle ?title .
     }
     
@@ -138,7 +156,7 @@ WHERE
     # same with identifiers
 
     ?R_RES :inRootInstance? ?root .
-    (?work ?workSc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    (?work) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
     ?work :workHasInstance ?inst .
     ?inst :inRootInstance ?root .
     # here again we could check
@@ -149,10 +167,24 @@ WHERE
 
   } union {
 
+    # same with content location
+
+    ?R_RES :inRootInstance? ?root .
+    (?work) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    ?work :workHasInstance ?inst .
+    ?inst :inRootInstance ?root .
+    # here again we could check
+    # ?inst :partOf+ ?R_RES .
+
+    ?inst :contentLocation ?cl .
+    ?cl ?clp ?clo .
+
+  } union {
+
     # same with authors
     
     ?R_RES :inRootInstance? ?root .
-    (?work ?workSc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    (?work) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
     ?work :workHasInstance ?inst .
     ?inst :inRootInstance ?root .
     # here again we could check
