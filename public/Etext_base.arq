@@ -13,7 +13,6 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 construct { 
    ?s ?p ?o .
    ?R_RES tmp:imageVolumeId ?imagevol .
-   ?imagevol tmp:workLabel ?workpl .
    ?R_RES tmp:hasEtextRes ?etextRes .
   }
 where {
@@ -21,21 +20,20 @@ where {
     ?R_RES ?p ?o .
     BIND (?R_RES as ?s)
   } union {
-    ?R_RES bdo:eTextInItem  ?s .
+    ?R_RES bdo:eTextInInstance  ?s .
     ?s ?p ?o .
   } union {
-    ?R_RES bdo:eTextInItem/bdo:itemForWork  ?s .
+    ?R_RES bdo:eTextInInstance/bdo:instanceOf  ?s .
     ?s skos:prefLabel ?o .
     BIND (skos:prefLabel as ?p)
   } union {
     # get image volume ID (for iiif)
     ?R_RES :eTextIsVolume ?volNum .
     ?R_RES :eTextInInstance ?inInst .
-    ?inInst :instanceReproductionOf ?isRepro ; :instanceOf ?work .
+    ?inInst :instanceReproductionOf ?isRepro .
     ?isRepro :instanceHasVolume ?imagevol .
     ?imagevol a :ImageGroup .
     ?imagevol :volumeNumber ?volNum .
-    ?work skos:prefLabel ?workpl .
   } union {
     #useful info to display etext in mirador
     ?R_RES :volumeOf/:instanceHasReproduction ?hasRepro .
