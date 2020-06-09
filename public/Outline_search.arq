@@ -45,10 +45,9 @@ WHERE
     # so theoretically no performance problem
     graph ?rootGraph {
         (?title ?titleSc ?titleMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        # only return results that are sub parts of the requested part
         ?inst :hasTitle ?title .
-        # TODO: here we could check that
-        # ?inst :partOf+ ?R_RES .
-        # so that we only return results that are sub parts of the requested part
+        ?inst :partOf+ ?R_RES .
     }
     
     ?inst ?instp ?insto .
@@ -71,6 +70,7 @@ WHERE
     graph ?rootGraph {
         (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
         ?inst :hasTitle ?title .
+        ?inst :partOf+ ?R_RES .
     }
     
     ?inst :contentLocation ?cl .
@@ -88,6 +88,7 @@ WHERE
     graph ?rootGraph {
         (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
         ?inst :hasTitle ?title .
+        ?inst :partOf+ ?R_RES .
     }
     
     ?inst :instanceOf ?work .
@@ -105,6 +106,7 @@ WHERE
     graph ?rootGraph {
         (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
         ?inst :hasTitle ?title .
+        ?inst :partOf+ ?R_RES .
     }
     
     ?inst :instanceOf ?work .
@@ -125,6 +127,7 @@ WHERE
     graph ?rootGraph {
         (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
         ?inst :hasTitle ?title .
+        ?inst :partOf+ ?R_RES .
     }
     
     ?inst bf:identifiedBy ?id .
