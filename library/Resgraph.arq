@@ -1,6 +1,6 @@
 #QueryScope=General
 #QueryReturnType=Graph
-#QueryResults=A graph for the given resource.
+#QueryResults=A graph for the given resource, except if the resource is a non-open access etext
 #QueryParams=R_RES
 #QueryUrl=/lib/Resgraph?R_RES=bdr:P360
 
@@ -8,6 +8,9 @@
 #param.R_RES.subtype=a Resource ID
 #param.R_RES.desc=the unique resource ID of the chosen resource
 
-construct { ?s ?p ?o } where { 
+construct { ?s ?p ?o } where {
+	?rAdm adm:graphId ?R_RES ;
+	      adm:adminAbout ?entity .
+	FILTER ((NOT EXISTS {?entity :eTextInInstance ?inst }) || (EXISTS {?entity :eTextInInstance/^adm:adminAbout/adm:access bda:AccessOpen}))
     graph ?R_RES { ?s ?p ?o }
 }

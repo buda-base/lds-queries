@@ -1,6 +1,6 @@
 #QueryScope=Etexts
 #QueryReturnType=Table
-#QueryResults=etext chunks containing the given expression
+#QueryResults=etext chunks containing the given expression (only in open access instances with no geoblocking)
 #QueryUrl=/Etexts_chunks?L_NAME=("མཁན་ཆེན་" AND ("འོད་ཟེར་" OR "ཡེ་ཤེས་"))&LG_NAME=bo&LI_NAME=45
 #QueryParams=L_NAME,LG_NAME
 
@@ -20,6 +20,11 @@ select ?txt ?chunk ?startChar ?endChar ?score ?lit
 where {
    (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:") .
    ?txt :eTextHasChunk ?chunk .
+   ?txt :eTextInInstance ?ei .
+   ?eiadm adm:adminAbout ?ei ;
+          adm:access bda:AccessOpen ;
+          adm:status bda:StatusReleased .
+   FILTER (NOT EXISTS {?eiadm adm:restrictedInChina true.})
    ?chunk :sliceStartChar ?startChar .
    ?chunk :sliceEndChar ?endChar .
 } 
