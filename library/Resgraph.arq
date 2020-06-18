@@ -17,7 +17,9 @@ construct { ?s ?p ?o } where {
     graph ?R_RES { ?s ?p ?o }
   } union {
   	# for non-resources:
-  	FILTER (NOT EXISTS{?a adm:adminAbout ?entity})
-  	graph ?R_RES { ?s ?p ?o }
+  	graph ?R_RES { 
+      FILTER (NOT EXISTS{?a adm:adminAbout ?e})
+      ?s ?p ?o .
+    }
   }
 }
