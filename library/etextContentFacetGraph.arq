@@ -38,8 +38,10 @@ where
     ?etext bdo:eTextHasChunk ?chunk .
     ?etext bdo:eTextInInstance ?einstance .
 
-    ?eAdm adm:adminAbout ?einstance .
-    ?eAdm adm:status bda:StatusReleased .
+    ?eAdm adm:adminAbout ?einstance ;
+          adm:status bda:StatusReleased ;
+          adm:access bda:AccessOpen .
+    FILTER (NOT EXISTS {?eAdm adm:restrictedInChina true.})
     ?w :workHasInstance ?einstance .
 
     ?chunk bdo:sliceStartChar ?startChar .
@@ -62,8 +64,10 @@ where
     ?chunk text:query ( :chunkContents ?L_NAME ) .
     ?etext bdo:eTextHasChunk ?chunk .
     ?etext bdo:eTextInInstance ?einstance .
-    ?eAdm adm:adminAbout ?einstance .
-    ?eAdm adm:status bda:StatusReleased .
+    ?eAdm adm:adminAbout ?einstance ;
+          adm:status bda:StatusReleased ;
+          adm:access bda:AccessOpen .
+    FILTER (NOT EXISTS {?eAdm adm:restrictedInChina true.})
     ?w :workHasInstance ?einstance .
     
     ?chunk bdo:sliceStartChar ?startChar .
