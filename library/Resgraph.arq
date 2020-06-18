@@ -9,8 +9,15 @@
 #param.R_RES.desc=the unique resource ID of the chosen resource
 
 construct { ?s ?p ?o } where {
+  {
+  	# for resources
 	?rAdm adm:graphId ?R_RES ;
 	      adm:adminAbout ?entity .
 	FILTER ((NOT EXISTS {?entity :eTextInInstance ?inst }) || (EXISTS {?entity :eTextInInstance/^adm:adminAbout/adm:access bda:AccessOpen}))
     graph ?R_RES { ?s ?p ?o }
+  } union {
+  	# for non-resources:
+  	FILTER (NOT EXISTS{?a adm:adminAbout ?entity})
+  	graph ?R_RES { ?s ?p ?o }
+  }
 }
