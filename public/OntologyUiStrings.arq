@@ -1,7 +1,7 @@
 #QueryScope=General
 #QueryReturnType=Graph
 #QueryResults=Ontology user strings, in a specific language
-#QueryParams=L_LNG
+#QueryOptParams=L_LNG
 #QueryUrl=/OntologyUiStrings?L_LNG=en
 
 #param.L_LNG.type=string
@@ -14,6 +14,6 @@ where {
   graph bdg:ontologySchema { 
     VALUES ?p { skos:altLabel skos:prefLabel rdfs:label adm:userTooltip }
     ?s ?p ?o .
-    FILTER(lang(?o) = ?L_LNG)
+    FILTER(!BOUND(?L_LNG) || lang(?o) = ?L_LNG)
   }
 }
