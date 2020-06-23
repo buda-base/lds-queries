@@ -1,0 +1,58 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All works having etext whose chunks contain the given L_NAME parameter value, along with Topic and WorkMainAuthor facets
+#QueryParams=L_NAME,LG_NAME
+#QueryUrl=/lib/chunksFacetGraph?L_NAME="de bzhin gshegs"&LG_NAME=bo-x-ewts
+
+#param.L_NAME.type=string
+#param.L_NAME.langTag=LG_NAME
+#param.L_NAME.isLucene=true
+#param.L_NAME.example="ye shes"
+
+construct {
+  ?chunk tmp:isMain true .
+  ?chunk bdo:chunkContents ?lit .
+  ?chunk bdo:sliceStartChar ?startChar .
+  ?chunk bdo:sliceEndChar ?endChar .
+  ?chunk tmp:matchScore ?score .
+  ?chunk tmp:provider ?provider .
+  
+  ?chunk tmp:forWork ?w .
+  ?w ?wp ?wo .
+
+  ?chunk tmp:author ?author .
+  ?agent skos:prefLabel ?agentL .
+}
+where
+{
+  {
+    (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:") .
+    ?etext bdo:eTextHasChunk ?chunk .
+    ?etext bdo:eTextInInstance ?einstance .
+    ?eAdm adm:adminAbout ?einstance .
+    ?eAdm adm:status bda:StatusReleased .
+    ?w :workHasInstance ?einstance .
+
+    ?chunk bdo:sliceStartChar ?startChar .
+    ?chunk bdo:sliceEndChar ?endChar .
+    ?eAdm adm:metadataLegal/adm:provider ?provider .
+    ?w ?wp ?wo .
+    FILTER (?wp IN(skos:altLabel , skos:prefLabel , rdf:type , owl:sameAs , tmp:entityScore))
+
+  } union {
+
+    ?chunk text:query ( :chunkContents ?L_NAME ) .
+    ?etext bdo:eTextHasChunk ?chunk .
+    ?etext bdo:eTextInInstance ?einstance .
+    ?eAdm adm:adminAbout ?einstance .
+    ?eAdm adm:status bda:StatusReleased .
+    ?w :workHasInstance ?einstance .
+
+    ?w bdo:creator ?creator .
+    ?creator bdo:role ?role .
+    ?creator bdo:agent ?agent .
+    ?agent skos:prefLabel ?agentL .
+      
+    bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+  }
+}
