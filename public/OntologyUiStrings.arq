@@ -1,0 +1,19 @@
+#QueryScope=Etexts
+#QueryReturnType=Graph
+#QueryResults=Basic Info about an etext
+#QueryParams=R_RES
+#QueryUrl=/OntologyUiStrings?L_LNG=en
+
+#param.L_LNG.type=string
+#param.L_LNG.desc=the language of the strings
+
+construct { 
+   ?s ?p ?o .
+  }
+where {
+  graph bdg:ontologySchema { 
+    VALUES ?book { skos:altLabel skos:prefLabel rdfs:label adm:userTooltip }
+    ?s ?p ?o .
+    FILTER(lang(?o) = 'en')
+  }
+}
