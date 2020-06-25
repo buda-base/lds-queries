@@ -15,9 +15,8 @@
 #output.?grId.type=string
 #output.?grId.desc=the legacyImageGroupRID of the image list
 
-select ?item ?list ?grId where{  
-  ?R_RES :instanceHasReproduction ?item .
-  ?item  a bdo:ImageInstance ;
+select ?grId ?list where {  
+  ?R_RES a bdo:ImageInstance ;
          :instanceHasVolume ?v .
   optional {
     ?v :imageList ?list .
