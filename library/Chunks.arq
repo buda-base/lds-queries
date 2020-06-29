@@ -22,6 +22,7 @@ construct {
   ?line ?lineP ?lineO .
   ?einstAdm adm:adminAbout ?einst .
   ?einstAdm adm:access ?access .
+  ?einstAdm adm:status ?status .
   ?einstAdm adm:restrictedInChina ?ric .
 }
 where {
@@ -34,6 +35,7 @@ where {
     ?R_RES :eTextInInstance ?einst .
     ?einstAdm adm:adminAbout ?einst .
     ?einstAdm adm:access ?access .
+    ?einstAdm adm:status ?status .
     BIND(EXISTS{?einstAdm adm:restrictedInChina true} as ?ric)
   } union {
     ?R_RES :eTextHasPage ?page .
