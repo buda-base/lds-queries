@@ -37,12 +37,12 @@ WHERE
     ?R_RES :partOf+ ?ancestor .
     ?ancestor ?ancestorp ?ancestoro .
     FILTER (?ancestorp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
-  } union {
+  #} union {
   	# get volumes
-  	?R_RES :instanceHasReproduction ?repr .
-  	?repr :instanceHasVolume ?vol .
-  	?vol ?volp ?volo .
-    FILTER (?volp IN(bdo:volumeNumber , skos:prefLabel ))
+  #	?R_RES :instanceHasReproduction ?repr .
+  #	?repr :instanceHasVolume ?vol .
+  # ?vol ?volp ?volo .
+  # FILTER (?volp IN(bdo:volumeNumber , skos:prefLabel ))
   } union {
   	# get parts: essential triples
   	?R_RES :hasPart ?part .
