@@ -14,6 +14,8 @@ select ?type (count (distinct ?e) as ?count) where {
 		# (rdfslabel, skoslabels) + type subclassof entity = all direct entities
 		{
 			(?e) text:query ( bdo:labels ?L_NAME ) .
+		 } union {
+			(?e) text:query ( bdo:extendedStmts ?L_NAME ) .
 		} union {
 			(?note) text:query ( bdo:noteText ?L_NAME ) .
     		?e bdo:note ?note .
