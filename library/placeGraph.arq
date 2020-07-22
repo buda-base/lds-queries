@@ -15,7 +15,8 @@ CONSTRUCT
 {
     ?res tmp:status ?st .
     ?res tmp:matchScore ?sc .
-    ?res tmp:labelMatch ?labelMatch.
+    ?res tmp:labelMatch ?labelMatch .
+    ?res tmp:noteMatch ?noteMatch .
     ?res tmp:isMain true .
     ?res ?resp ?reso .
     ?res tmp:placeAffiliation ?trad .
@@ -28,8 +29,13 @@ CONSTRUCT
 WHERE 
 {
   {
-    
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    {
+        (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    } union {
+        (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+        ?res bdo:note ?note .
+        ?res a :place .
+    }
     
     ?res a bdo:Place .
     ?res ?resp ?reso .
@@ -40,13 +46,25 @@ WHERE
     
   } union {
     
-    (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+    {
+        (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+    } union {
+        (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+        ?res bdo:note ?note .
+        ?res a :place .
+    }
     
     ?res bdo:placeEvent/bdo:placeEventAffiliation ?trad .
 
   } union {
     
-    (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+    {
+        (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+    } union {
+        (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+        ?res bdo:note ?note .
+        ?res a :place .
+    }
     
     ?res bdo:placeLocatedIn ?locatedin .
     ?locatedinAdm adm:adminAbout ?locatedin .

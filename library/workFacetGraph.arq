@@ -16,7 +16,8 @@ CONSTRUCT
     ?res tmp:status ?st .
     ?res tmp:isMain true .
     ?res tmp:matchScore ?sc .
-    ?res tmp:labelMatch ?labelMatch.
+    ?res tmp:labelMatch ?labelMatch .
+    ?res tmp:noteMatch ?noteMatch .
 
     ?res tmp:nbInstance ?nbinstances .
     ?res tmp:provider ?provider .
@@ -39,8 +40,14 @@ CONSTRUCT
 WHERE 
 {
   {
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
-    ?res a/rdfs:subClassOf* bdo:Work .
+    {
+        (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+        ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+        (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+        ?res bdo:note ?note .
+        ?res a/rdfs:subClassOf* bdo:Work .
+    }
     #VALUES ?resp {bdo:language skos:altLabel skos:prefLabel rdf:type owl:sameAs tmp:entityScore}
     ?res ?resp ?reso .
     FILTER (?resp IN(bdo:language , skos:altLabel , skos:prefLabel , rdf:type , owl:sameAs , tmp:entityScore , rdfs:seeAlso ))
@@ -49,13 +56,28 @@ WHERE
     ?resAdm adm:metadataLegal/adm:provider ?provider .
     
   } union {
-    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME  "highlight:" ) .
-    ?res a/rdfs:subClassOf* bdo:Work .
+
+    {
+        (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+        ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+        (?note) text:query ( bdo:noteText ?L_NAME ) .
+        ?res bdo:note ?note .
+        ?res a/rdfs:subClassOf* bdo:Work .
+    }
     ?res owl:sameAs ?reSame .
     ?reSame adm:canonicalHtml ?resCanoHtml .    
+
   } union {
     
-    (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+    {
+        (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+        ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+        (?note) text:query ( bdo:noteText ?L_NAME ) .
+        ?res bdo:note ?note .
+        ?res a/rdfs:subClassOf* bdo:Work .
+    }
     
     ?res bdo:creator ?creator .
     ?creator bdo:role ?role .
@@ -66,17 +88,18 @@ WHERE
 
   } union {
     
-    (?res) text:query ( bdo:skosLabels ?L_NAME ) .
-    ?res a/rdfs:subClassOf* bdo:Work .
+    {
+        (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+        ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+        (?note) text:query ( bdo:noteText ?L_NAME ) .
+        ?res bdo:note ?note .
+        ?res a/rdfs:subClassOf* bdo:Work .
+    }
     
     ?res ?respp ?resoo .
     FILTER(?respp IN(bdo:workTranslationOf , bdo:serialMemberOf , bdo:workIsAbout , bdo:workGenre))
     ?resoo skos:prefLabel ?ol .
-
-  }  union {
-    
-    (?res) text:query ( bdo:skosLabels ?L_NAME ) .
-    ?res adm:canonicalHtml ?resCanoHtml .
 
   } union {
     
@@ -88,7 +111,14 @@ WHERE
            (max(?instanceEtext) as ?hasetext) 
     where {
       
-      (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+      {
+        (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+        ?res a/rdfs:subClassOf* bdo:Work .
+      } union {
+          (?note) text:query ( bdo:noteText ?L_NAME ) .
+          ?res bdo:note ?note .
+          ?res a/rdfs:subClassOf* bdo:Work .
+      }
 
       ?res bdo:workHasInstance/bdo:inRootInstance? ?instance .
       ?instanceAdm adm:adminAbout ?instance .

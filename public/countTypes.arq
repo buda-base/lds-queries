@@ -12,7 +12,13 @@
 select ?type (count (distinct ?e) as ?count) where {
 	{
 		# (rdfslabel, skoslabels) + type subclassof entity = all direct entities
-		(?e) text:query ( bdo:labels ?L_NAME) .
+		{
+			(?e) text:query ( bdo:labels ?L_NAME) .
+		} union {
+			(?note) text:query ( bdo:noteText ?L_NAME ) .
+    		?res bdo:note ?note .
+    		?e rdf:type ?type .
+		}
 		?e rdf:type ?type .
 		?type rdfs:subClassOf+ bdo:Entity .
 	} union {
@@ -23,7 +29,7 @@ select ?type (count (distinct ?e) as ?count) where {
 	} union {
 		# workTitle + rdfslabel 
 		(?l) text:query ( rdfs:label ?L_NAME) .
-		?e bdo:workTitle ?l .
+		?e bdo:hasTitle ?l .
 		bind(bdo:Instance as ?type)
 	} union {
 		# chunks

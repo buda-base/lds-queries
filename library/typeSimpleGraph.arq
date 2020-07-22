@@ -19,13 +19,22 @@ CONSTRUCT
 {
     ?res tmp:status ?st .
     ?res tmp:matchScore ?sc .
-    ?res tmp:labelMatch ?labelMatch.
+    ?res tmp:labelMatch ?labelMatch .
+    ?res tmp:noteMatch ?noteMatch .
     ?res tmp:isMain true .
     ?res ?resp ?reso .
 }
 WHERE 
 {
-    (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+
+    {
+        (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+        ?res a ?R_TYPE .
+    } union {
+        (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+        ?res bdo:note ?note .
+        ?res a ?R_TYPE .
+    }
     
     ?res a ?R_TYPE .
     ?res ?resp ?reso .

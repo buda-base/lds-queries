@@ -13,17 +13,19 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 CONSTRUCT {
 
-	?res tmp:isMain true .
-	?res tmp:status ?status .
+  ?res tmp:isMain true .
+  ?res tmp:status ?status .
     ?res tmp:matchScore ?sc .
     ?res tmp:labelMatch ?labelMatch.
-	?res tmp:provider ?provider .
-	?res tmp:originalRecord ?originalRecord .
-	?res ?resp ?reso .
-	?res :inRootInstance ?resR .
-	?resR skos:prefLabel ?resRl .
-	?res ?resRp ?resRo .
-	?res ?resp ?reso .
+    ?res tmp:noteMatch ?noteMatch .
+    ?res tmp:extendedMatch ?extMatch .
+  ?res tmp:provider ?provider .
+  ?res tmp:originalRecord ?originalRecord .
+  ?res ?resp ?reso .
+  ?res :inRootInstance ?resR .
+  ?resR skos:prefLabel ?resRl .
+  ?res ?resRp ?resRo .
+  ?res ?resp ?reso .
 
     ?res tmp:hasOpen ?hasopen .
     ?res tmp:hasImage ?hasimage .
@@ -37,7 +39,7 @@ CONSTRUCT {
     ?res ?resWpp ?resWoo .
     ?resWoo skos:prefLabel ?resWol .
  
- 	# Same for the author, entity score and language
+  # Same for the author, entity score and language
     ?res tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
 
@@ -50,22 +52,42 @@ CONSTRUCT {
 
 } where {
 
+  {
+
     {
+      (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+      ?res a bdo:Instance .
+    } union {
+      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      ?res bdo:note ?note .
+      ?res a bdo:Instance .
+    } union {
+      (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      ?res a bdo:Instance .
+    }
+    # we could imagine adding also the scanInfo of the reproduction...
 
-		(?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
-		?res a bdo:Instance .
-		FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
-		?resAdm adm:adminAbout ?res .
-		?resAdm adm:status ?status .
-		?resAdm adm:metadataLegal/adm:provider ?provider .
+    FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?status .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
 
-		?res ?resp ?reso .
-		FILTER (?resp != bdo:note && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle)
+    ?res ?resp ?reso .
+    FILTER (?resp != bdo:note && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle)
 
   } union {
 
-    (?res) text:query ( bdo:skosLabels ?L_NAME  "highlight:" ) .
-    ?res a bdo:Instance .
+    {
+      (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+      ?res a bdo:Instance .
+    } union {
+      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      ?res bdo:note ?note .
+      ?res a bdo:Instance .
+    } union {
+      (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      ?res a bdo:Instance .
+    }
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
     ?res bdo:instanceOf ?resW .
     
@@ -78,8 +100,17 @@ CONSTRUCT {
 
   } union {
     
-    (?res) text:query ( bdo:skosLabels ?L_NAME  "highlight:" ) .
-    ?res a bdo:Instance .
+        {
+      (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+      ?res a bdo:Instance .
+    } union {
+      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      ?res bdo:note ?note .
+      ?res a bdo:Instance .
+    } union {
+      (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      ?res a bdo:Instance .
+    }
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
     ?res bdo:instanceOf ?resW .
     
@@ -88,8 +119,17 @@ CONSTRUCT {
 
   } union {
     
-    (?res) text:query ( bdo:skosLabels ?L_NAME  "highlight:" ) .
-    ?res a bdo:Instance .
+    {
+      (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+      ?res a bdo:Instance .
+    } union {
+      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      ?res bdo:note ?note .
+      ?res a bdo:Instance .
+    } union {
+      (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      ?res a bdo:Instance .
+    }
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
     ?res bdo:instanceOf ?resW .
     
@@ -99,10 +139,19 @@ CONSTRUCT {
 
   } union {
 
-  	# get access of reproductions
+    # get access of reproductions
     
-    (?res) text:query ( bdo:skosLabels ?L_NAME  "highlight:" ) .
-    ?res a bdo:Instance .
+    {
+      (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+      ?res a bdo:Instance .
+    } union {
+      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      ?res bdo:note ?note .
+      ?res a bdo:Instance .
+    } union {
+      (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      ?res a bdo:Instance .
+    }
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
     ?res :inRootInstance?/:instanceHasReproduction ?resRep .
     ?resRepAdm adm:adminAbout ?resRep ;
@@ -110,38 +159,56 @@ CONSTRUCT {
 
 
     } union {
-	    
-	    (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
-	    ?res a bdo:Instance .
-		FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
-	    ?res :inRootInstance ?resR .
-		?resRAdm adm:adminAbout ?resR .
-		?resRAdm adm:status ?status .
-		?resRAdm adm:metadataLegal/adm:provider ?provider .
+      
+    {
+      (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+      ?res a bdo:Instance .
+    } union {
+      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      ?res bdo:note ?note .
+      ?res a bdo:Instance .
+    } union {
+      (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      ?res a bdo:Instance .
+    }
+    FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
+    ?res :inRootInstance ?resR .
+    ?resRAdm adm:adminAbout ?resR .
+    ?resRAdm adm:status ?status .
+    ?resRAdm adm:metadataLegal/adm:provider ?provider .
 
-		?resR skos:prefLabel ?resRl .
-		?resR ?resRp ?resRo .
-		FILTER (?resRp = bdo:script || ?resRp = bdo:printMethod || ?resRp = tmp:thumbnailIIIFService || ?resRp = bdo:publisherLocation || ?resRp = bdo:publisherName)
+    ?resR skos:prefLabel ?resRl .
+    ?resR ?resRp ?resRo .
+    FILTER (?resRp = bdo:script || ?resRp = bdo:printMethod || ?resRp = tmp:thumbnailIIIFService || ?resRp = bdo:publisherLocation || ?resRp = bdo:publisherName)
 
-	} union {
+  } union {
 
-		select ?res 
-	           (max(?resAccessOpen) as ?hasopen) 
-	           (max(?resImage) as ?hasimage) 
-	           (max(?resEtext) as ?hasetext) 
-	    where {
-	      
-	      (?res) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
-	      ?res a bdo:Instance .
-		  FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
-		  ?res :inRootInstance?/:instanceHasReproduction ?resRep .
+    select ?res 
+             (max(?resAccessOpen) as ?hasopen) 
+             (max(?resImage) as ?hasimage) 
+             (max(?resEtext) as ?hasetext) 
+      where {
+        
+        {
+          (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+          ?res a bdo:Instance .
+        } union {
+          (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+          ?res bdo:note ?note .
+          ?res a bdo:Instance .
+        } union {
+          (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+          ?res a bdo:Instance .
+        }
+        FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
+        ?res :inRootInstance?/:instanceHasReproduction ?resRep .
 
-	      ?resRepAdm adm:adminAbout ?resRep .
-	      ?resRepAdm adm:status bda:StatusReleased .
-	      bind( exists {?resRepAdm adm:access bda:AccessOpen} as ?resAccessOpen)
-	      bind( exists {?resRep a bdo:ImageInstance} as ?resImage)
-	      bind( exists {?resRep a bdo:EtextInstance} as ?resEtext)
-	    } group by ?res 
+        ?resRepAdm adm:adminAbout ?resRep .
+        ?resRepAdm adm:status bda:StatusReleased .
+        bind( exists {?resRepAdm adm:access bda:AccessOpen} as ?resAccessOpen)
+        bind( exists {?resRep a bdo:ImageInstance} as ?resImage)
+        bind( exists {?resRep a bdo:EtextInstance} as ?resEtext)
+      } group by ?res 
 
     }
 
