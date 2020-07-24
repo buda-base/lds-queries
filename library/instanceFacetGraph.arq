@@ -15,10 +15,10 @@ CONSTRUCT {
 
   ?res tmp:isMain true .
   ?res tmp:status ?status .
-    ?res tmp:matchScore ?sc .
-    ?res tmp:labelMatch ?labelMatch.
-    ?res tmp:noteMatch ?noteMatch .
-    ?res tmp:extendedMatch ?extMatch .
+  ?res tmp:matchScore ?sc .
+  ?res tmp:labelMatch ?labelMatch.
+  ?res tmp:noteMatch ?noteMatch .
+  ?res ?extMatchP ?extMatch .
   ?res tmp:provider ?provider .
   ?res tmp:originalRecord ?originalRecord .
   ?res ?resp ?reso .
@@ -62,7 +62,7 @@ CONSTRUCT {
       ?res bdo:note ?note .
       ?res a bdo:Instance .
     } union {
-      (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      (?res ?sc ?extMatch ?graph ?extMatchP) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
       ?res a bdo:Instance .
     }
     # we could imagine adding also the scanInfo of the reproduction...
@@ -73,19 +73,19 @@ CONSTRUCT {
     ?resAdm adm:metadataLegal/adm:provider ?provider .
 
     ?res ?resp ?reso .
-    FILTER (?resp != bdo:note && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle)
+    FILTER (?resp != bdo:note && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle && ?resp != bdo:hasPart && ?resp != bdo:colophon && ?resp != bdo:incipit && ?resp != ?extMatchP)
 
   } union {
 
     {
-      (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+      (?res) text:query ( bdo:labels ?L_NAME ) .
       ?res a bdo:Instance .
     } union {
-      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      (?note) text:query ( bdo:noteText ?L_NAME ) .
       ?res bdo:note ?note .
       ?res a bdo:Instance .
     } union {
-      (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      (?res) text:query ( bdo:extendedStmts ?L_NAME ) .
       ?res a bdo:Instance .
     }
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
@@ -101,14 +101,14 @@ CONSTRUCT {
   } union {
     
         {
-      (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+      (?res) text:query ( bdo:labels ?L_NAME ) .
       ?res a bdo:Instance .
     } union {
-      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      (?note) text:query ( bdo:noteText ?L_NAME ) .
       ?res bdo:note ?note .
       ?res a bdo:Instance .
     } union {
-      (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      (?res) text:query ( bdo:extendedStmts ?L_NAME ) .
       ?res a bdo:Instance .
     }
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
@@ -120,14 +120,14 @@ CONSTRUCT {
   } union {
     
     {
-      (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+      (?res) text:query ( bdo:labels ?L_NAME ) .
       ?res a bdo:Instance .
     } union {
-      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      (?note) text:query ( bdo:noteText ?L_NAME ) .
       ?res bdo:note ?note .
       ?res a bdo:Instance .
     } union {
-      (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      (?res) text:query ( bdo:extendedStmts ?L_NAME ) .
       ?res a bdo:Instance .
     }
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
@@ -142,14 +142,14 @@ CONSTRUCT {
     # get access of reproductions
     
     {
-      (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+      (?res) text:query ( bdo:labels ?L_NAME ) .
       ?res a bdo:Instance .
     } union {
-      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      (?note) text:query ( bdo:noteText ?L_NAME ) .
       ?res bdo:note ?note .
       ?res a bdo:Instance .
     } union {
-      (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      (?res) text:query ( bdo:extendedStmts ?L_NAME ) .
       ?res a bdo:Instance .
     }
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
@@ -161,14 +161,14 @@ CONSTRUCT {
     } union {
       
     {
-      (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+      (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME ) .
       ?res a bdo:Instance .
     } union {
-      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME ) .
       ?res bdo:note ?note .
       ?res a bdo:Instance .
     } union {
-      (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME ) .
       ?res a bdo:Instance .
     }
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
@@ -190,14 +190,14 @@ CONSTRUCT {
       where {
         
         {
-          (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+          (?res) text:query ( bdo:labels ?L_NAME ) .
           ?res a bdo:Instance .
         } union {
-          (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+          (?note) text:query ( bdo:noteText ?L_NAME ) .
           ?res bdo:note ?note .
           ?res a bdo:Instance .
         } union {
-          (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+          (?res) text:query ( bdo:extendedStmts ?L_NAME ) .
           ?res a bdo:Instance .
         }
         FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
