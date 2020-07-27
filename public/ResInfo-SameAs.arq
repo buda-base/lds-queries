@@ -54,6 +54,7 @@ construct {
 
  ?id ?idp ?ido .
  ?title ?titlep ?titleo .
+ ?cm skos:prefLabel ?cmL .
 
  ?resAbout bdo:workIsAbout ?R_RES ;
            skos:prefLabel ?resAboutLabel ;
@@ -197,6 +198,10 @@ construct {
     ?r owl:sameAs* ?R_RES ;
        bdo:hasTitle ?title .
     ?title ?titlep ?titleo .
+  } union {
+    ?r owl:sameAs* ?R_RES ;
+       bdo:corporationHasMember/bdo:corporationMember ?cm .
+    ?cm skos:prefLabel ?cmL .
   } union {
     # 10 works about the entity
     # TODO: add also 10 works created by the entity
