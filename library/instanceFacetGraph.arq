@@ -73,7 +73,8 @@ CONSTRUCT {
     ?resAdm adm:metadataLegal/adm:provider ?provider .
 
     ?res ?resp ?reso .
-    FILTER (?resp != bdo:note && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle && ?resp != bdo:hasPart && ?resp != bdo:colophon && ?resp != bdo:incipit && ?resp != ?extMatchP)
+    FILTER (?resp != bdo:note && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle && ?resp != bdo:hasPart
+      && ?resp != bdo:colophon && ?resp != bdo:incipit && (!BOUND(?extMatchP) || ?resp != ?extMatchP))
 
   } union {
 
