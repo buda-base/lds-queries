@@ -34,7 +34,7 @@ CONSTRUCT {
     ?res bdo:instanceOf ?resW .
     ?resW ?resWp ?resWo .
 
-    # We cheat a bit and attache the topic to the instance instead
+    # We cheat a bit and attach the topic to the instance instead
     # of the corresponding work
     ?res ?resWpp ?resWoo .
     ?resWoo skos:prefLabel ?resWol .
@@ -169,7 +169,7 @@ CONSTRUCT {
       ?res bdo:note ?note .
       ?res a bdo:Instance .
     } union {
-      (?res ?sc ?extMatch) text:query ( bdo:extendedStmts ?L_NAME ) .
+      (?res ?sc ?extMatch ?graph ?extMatchP) text:query ( bdo:extendedStmts ?L_NAME ) .
       ?res a bdo:Instance .
     }
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
@@ -180,7 +180,11 @@ CONSTRUCT {
 
     ?resR skos:prefLabel ?resRl .
     ?resR ?resRp ?resRo .
-    FILTER (?resRp = bdo:script || ?resRp = bdo:printMethod || ?resRp = tmp:thumbnailIIIFService || ?resRp = bdo:publisherLocation || ?resRp = bdo:publisherName)
+    FILTER (?resRp = skos:prefLabel || ?resRp = bdo:script || ?resRp = bdo:printMethod || ?resRp = tmp:thumbnailIIIFService || ?resRp = bdo:publisherLocation || ?resRp = bdo:publisherName)
+
+    ?res ?resp ?reso .
+    FILTER (?resp != bdo:note && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle && ?resp != bdo:hasPart
+      && ?resp != bdo:colophon && ?resp != bdo:incipit && (!BOUND(?extMatchP) || ?resp != ?extMatchP))
 
   } union {
 
