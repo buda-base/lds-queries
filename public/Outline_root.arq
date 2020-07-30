@@ -11,22 +11,23 @@
 
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
+
+
 CONSTRUCT
 {
-  ?R_RES :instanceHasReproduction ?repr .
   ?repr :instanceHasVolume ?vol .
   ?vol ?volp ?volo .
-  ?R_RES :hasPart ?part .
   ?part ?partp ?parto .
   ?part   :hasTitle ?partT ;
-  	      :instanceOf ?partW ;
-  	      :contentLocation ?cl ;
-          bf:identifiedBy ?id .
+          :instanceOf ?partW ;
+          :contentLocation ?cl ;
+          bf:identifiedBy ?id ;
+          :instanceHasReproduction ?repr .
   ?partT ?partTp ?partTo .
   ?cl ?clp ?clo .
   ?id ?idp ?ido .
   ?partW skos:prefLabel ?partWL ;
-  		 :creator ?partWc .
+       :creator ?partWc .
   ?partWc skos:prefLabel ?partWcL .
   ?ancestor ?ancestorp ?ancestoro .
 }
@@ -45,33 +46,38 @@ WHERE
   # FILTER (?volp IN(bdo:volumeNumber , skos:prefLabel ))
   } union {
   	# get parts: essential triples
-  	?R_RES :hasPart ?part .
+  	?R_RES :hasPart? ?part .
     ?part ?partp ?parto .
     FILTER (?partp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
   } union {
+    # get parts: essential triples
+    ?R_RES :hasPart? ?part .
+    ?part :instanceHasReproduction ?repr .
+    ?repr a :ImageInstance .
+  } union {
   	# get parts: title
-  	?R_RES :hasPart ?part .
+  	?R_RES :hasPart? ?part .
   	?part  :hasTitle ?partT .
   	?partT ?partTp ?partTo .
   } union {
     # get parts: title
-    ?R_RES :hasPart ?part .
+    ?R_RES :hasPart? ?part .
     ?part  bf:identifiedBy ?id .
     ?id ?idp ?ido .
   } union {
   	# get parts: work triples
-  	?R_RES :hasPart ?part .
+  	?R_RES :hasPart? ?part .
   	?part  :instanceOf ?partW .
   	?partW skos:prefLabel ?partWL .
   } union {
   	# get parts: work creator triples
-  	?R_RES :hasPart ?part .
+  	?R_RES :hasPart? ?part .
   	?part :instanceOf ?partW .
   	?partW :creator ?partWc .
   	?partWc skos:prefLabel ?partWcL .
   } union {
   	# get parts: location triples
-  	?R_RES :hasPart ?part .
+  	?R_RES :hasPart? ?part .
   	?part :contentLocation ?cl .
   	?cl ?clp ?clo .
   }
