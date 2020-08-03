@@ -34,7 +34,7 @@ WHERE
     } union {
         (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
         ?res bdo:note ?note .
-        ?res a :place .
+        ?res a :Place .
     }
     
     ?res a bdo:Place .
@@ -51,7 +51,7 @@ WHERE
     } union {
         (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
         ?res bdo:note ?note .
-        ?res a :place .
+        ?res a :Place .
     }
     
     ?res bdo:placeEvent/bdo:placeEventAffiliation ?trad .
@@ -63,7 +63,7 @@ WHERE
     } union {
         (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
         ?res bdo:note ?note .
-        ?res a :place .
+        ?res a :Place .
     }
     
     ?res bdo:placeLocatedIn ?locatedin .
