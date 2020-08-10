@@ -21,6 +21,7 @@ CONSTRUCT
   ?part   :hasTitle ?partT ;
           :instanceOf ?partW ;
           :contentLocation ?cl ;
+          :contentLocationStatement ?cls ;
           bf:identifiedBy ?id ;
           :instanceHasReproduction ?repr .
   ?partT ?partTp ?partTo .
@@ -80,5 +81,9 @@ WHERE
   	?R_RES :hasPart? ?part .
   	?part :contentLocation ?cl .
   	?cl ?clp ?clo .
+  } union {
+  	# get parts: locationstatement triples
+  	?R_RES :hasPart? ?part .
+  	?part :contentLocationStatement ?cls .
   }
 }
