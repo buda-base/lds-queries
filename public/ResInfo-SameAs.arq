@@ -67,6 +67,9 @@ construct {
            tmp:entityScore ?resByScore ;
            tmp:provider ?resByProvider .
 
+#thumbnail for versions
+?version tmp:thumbnailIIIFService ?vThumb
+
 } where {
   {
     ?r owl:sameAs* ?R_RES .
@@ -190,6 +193,11 @@ construct {
     ?r owl:sameAs* ?R_RES .
     ?r :instanceHasVolume ?roV .
     ?roV :volumeNumber ?roVi .
+  } union {
+    # add thumbnail for versions
+    ?r owl:sameAs* ?R_RES .
+    ?r :workHasInstance ?version .
+    ?version tmp:thumbnailIIIFService ?vThumb .
   } union {
     ?r owl:sameAs* ?R_RES ;
        bf:identifiedBy ?id .
