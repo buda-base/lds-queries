@@ -203,6 +203,13 @@ construct {
              tmp:thumbnailIIIFService ?vThumb .
     ?repro a bdo:ImageInstance .
   } union {
+    # add thumbnail for versions with inRootInstance
+    ?r owl:sameAs* ?R_RES .
+    ?r :workHasInstance ?subver .
+    ?subver :inRootInstance+ ?version .
+    ?version :instanceHasReproduction ?repro ;
+             tmp:thumbnailIIIFService ?vThumb .
+  } union {
     ?r owl:sameAs* ?R_RES ;
        bf:identifiedBy ?id .
     ?id ?idp ?ido .
