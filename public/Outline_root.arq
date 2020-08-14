@@ -49,7 +49,7 @@ WHERE
   	# get parts: essential triples
   	?R_RES :hasPart? ?part .
     ?part ?partp ?parto .
-    FILTER (?partp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart, owl:sameAs, rdfs:seeAlso))
+    FILTER (?partp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart, rdfs:seeAlso))
   } union {
     # get parts: essential triples
     ?R_RES :hasPart? ?part .
