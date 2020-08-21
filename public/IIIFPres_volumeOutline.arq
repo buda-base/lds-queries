@@ -17,7 +17,6 @@ construct {
   ?R_RES tmp:rootStatus ?status .
   ?R_RES tmp:rootRestrictedInChina ?ric .
   ?R_RES tmp:rootLicense ?license .
-  ?R_RES tmp:legacyImageGroupRID ?imageGroupId .
   ?instance adm:access ?wa .
   ?instance :hasPart ?wp .
   #?part ?pp ?op .
@@ -47,7 +46,6 @@ where {
     ?R_RES ?p ?o .
     ?iinstance :instanceReproductionOf ?instance .
     ?admVol adm:adminAbout ?R_RES .
-    ?admVol adm:legacyImageGroupRID ?imageGroupId .
     ?admItem adm:adminAbout ?iinstance .
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .

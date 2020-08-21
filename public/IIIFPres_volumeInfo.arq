@@ -31,21 +31,15 @@
 #param.R_RES.subtype=:Volume
 #param.R_RES.desc=the URI of the volume being investigated
 
-select distinct ?instanceId ?iinstanceId ?access ?ric ?license ?imageGroup ?imageList ?totalPages ?pagesIntroTbrc ?volumeNumber ?volumeLabel ?iiifManifest ?status where {
+select distinct ?instanceId ?iinstanceId ?access ?ric ?license ?pagesIntroTbrc ?volumeNumber ?volumeLabel ?iiifManifest ?status where {
   {
     ?R_RES a :ImageGroup .
     optional { ?R_RES :volumeNumber ?volumeNumber . }
-    optional { ?R_RES bdo:imageList ?imageList . }
     optional { ?R_RES bdo:volumePagesTbrcIntro ?pagesIntroTbrc . }
-    optional { ?R_RES bdo:volumePagesTotal ?totalPages . }
     optional { ?R_RES skos:prefLabel ?volumeLabel . }
     optional { ?R_RES :hasIIIFManifest ?iiifManifest . }
     ?iinstanceId :instanceHasVolume ?R_RES ;
          :instanceReproductionOf ?instanceId .
-    optional {
-      ?admVol adm:adminAbout ?R_RES .
-      ?admVol adm:legacyImageGroupRID ?imageGroup .
-    }
     ?admItem adm:adminAbout ?iinstanceId .
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
