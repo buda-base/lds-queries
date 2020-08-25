@@ -180,7 +180,7 @@ CONSTRUCT {
 
     ?resR skos:prefLabel ?resRl .
     ?resR ?resRp ?resRo .
-    FILTER (?resRp = skos:prefLabel || ?resRp = bdo:script || ?resRp = bdo:printMethod || ?resRp = tmp:thumbnailIIIFService || ?resRp = bdo:publisherLocation || ?resRp = bdo:publisherName)
+    FILTER (?resRp = bdo:script || ?resRp = bdo:printMethod || ?resRp = tmp:thumbnailIIIFService || ?resRp = bdo:publisherLocation || ?resRp = bdo:publisherName)
 
     ?res ?resp ?reso .
     FILTER (?resp != bdo:note && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle && ?resp != bdo:hasPart
