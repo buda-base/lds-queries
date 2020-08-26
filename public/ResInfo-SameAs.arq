@@ -199,16 +199,21 @@ construct {
     # add repro+thumbnail for versions
     ?r owl:sameAs* ?R_RES .
     ?r :workHasInstance ?version .
-    ?version :instanceHasReproduction ?repro ;
-             tmp:thumbnailIIIFService ?vThumb .
+    ?version :instanceHasReproduction ?repro .
     ?repro a bdo:ImageInstance .
   } union {
-    # add thumbnail for versions with inRootInstance
+    # add repro for versions with inRootInstance
     ?r owl:sameAs* ?R_RES .
     ?r :workHasInstance ?version .
     ?version :inRootInstance+ ?rootV .
-    ?rootV :instanceHasReproduction ?repro ;
-             tmp:thumbnailIIIFService ?vThumb .
+    ?rootV :instanceHasReproduction ?repro .
+    ?repro a bdo:ImageInstance .
+  } union {
+    # add thumbnail (in some edge cases there is a thumbnail but no reproduction)
+    ?r owl:sameAs* ?R_RES .
+    ?r :workHasInstance ?version .
+    ?version :inRootInstance+ ?rootV .
+    ?rootV tmp:thumbnailIIIFService ?vThumb .
   } union {
     ?r owl:sameAs* ?R_RES ;
        bf:identifiedBy ?id .
