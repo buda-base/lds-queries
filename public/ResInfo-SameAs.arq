@@ -262,8 +262,8 @@ construct {
        ?par (count(distinct ?trans) as ?nbtrans) 
     where {
            ?r owl:sameAs* ?R_RES .
-           ?r bdo:workHasParallelsIn/owl:sameAs* ?par .
-           ?par bdo:workHasTranslation ?trans .
+           ?r bdo:workHasParallelsIn ?par .
+           ?par owl:sameAs*/bdo:workHasTranslation ?trans .
     } group by ?par
   }
 }
