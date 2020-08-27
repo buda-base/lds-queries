@@ -255,5 +255,14 @@ construct {
                    adm:status bda:StatusReleased ;
                    adm:metadataLegal/adm:provider ?resByProvider .
     } order by desc(?resByScore) limit 20
+  } union {
+    # number of translations by parallel
+    select 
+       ?par (count(distinct ?trans) as ?nbtrans) 
+    where {
+           ?r owl:sameAs* ?R_RES .
+           ?r bdo:workHasParallelsIn/owl:sameAs* ?par .
+           ?par bdo:workHasTranslation ?trans .
+    } group by ?par
   }
 }
