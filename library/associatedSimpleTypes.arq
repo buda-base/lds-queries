@@ -1,7 +1,7 @@
 #QueryScope=General
 #QueryReturnType=Graph
 #QueryResults=All resources associated with the given entity and the given type, which can be anything but work, instance, person or place
-#QueryParams=R_RES
+#QueryParams=R_RES,R_TYPE
 #QueryUrl=/lib/associatedSimpleTypes?R_RES=bdr:W19740&R_TYPE=bdo:Lineage
 
 #param.R_RES.type=resource
@@ -37,7 +37,6 @@ where {
     # general association, nothing more is needed
     ?ar ?rel ?R_RES .
     ?ar a ?R_TYPE .
-    ?ar skos:prefLabel ?aro .
     ?ar skos:prefLabel ?aro .
     BIND(skos:prefLabel as ?arp) .
     ?resAdm adm:adminAbout ?ar .
