@@ -71,6 +71,7 @@ construct {
 ?version  :instanceHasReproduction ?repro ;
           tmp:thumbnailIIIFService ?vThumb.
 
+?par tmp:nbTranslations ?nbtrans .
 
 } where {
   {
