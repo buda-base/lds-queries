@@ -1,0 +1,29 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=10 last synced image instances
+#QueryParams=D_SINCE
+#QueryUrl=/latestsyncssince?D_SINCE=2020-08-20T00:00:00
+
+#param.D_SINCE.type=datetime
+#param.D_SINCE.subtype=xsd:dateTime
+#param.D_SINCE.desc=the past bound of the searched log entries
+
+construct {
+     ?iinstance ?ip ?io ;
+                tmp:datesync ?d .
+  } where {
+    {
+      select ?iinstance (max(?sdate) as ?d)
+      where {
+        ?le adm:logDate ?sdate .
+        FILTER(?sdate > ?D_SINCE)
+        ?le a adm:Synced .
+        ?va adm:logEntry ?le ;
+            adm:adminAbout ?v .
+        ?v bdo:volumeOf ?iinstance .
+      } group by ?iinstance order by desc(?d) limit 10
+    }
+    ?iinstance bdo:instanceReproductionOf ?i .
+    ?i ?ip ?io .
+    FILTER (?ip = tmp:thumbnailIIIFService || ?ip = skos:prefLabel)
+}
