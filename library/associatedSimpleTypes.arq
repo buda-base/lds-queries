@@ -42,4 +42,14 @@ where {
     ?resAdm adm:adminAbout ?ar .
     ?resAdm adm:status ?st .
   }
+  union
+  {
+    # general association, nothing more is needed
+    ?R_RES ?rel ?ar .
+    ?ar a ?R_TYPE .
+    ?ar skos:prefLabel ?aro .
+    BIND(skos:prefLabel as ?arp) .
+    ?resAdm adm:adminAbout ?ar .
+    ?resAdm adm:status ?st .
+  }
 }
