@@ -1,0 +1,29 @@
+#QueryScope=General
+#QueryReturnType=Table
+#QueryResults=Count of latest syncs
+#QueryParams=D_SINCE
+#QueryUrl=/latestsyncssince?D_SINCE=2020-08-20T00:00:00
+
+#param.D_SINCE.type=datetime
+#param.D_SINCE.subtype=xsd:dateTime
+#param.D_SINCE.desc=the past bound of the searched log entries
+
+select ?type (count (distinct ?e) as ?count) where {
+	{
+		?le adm:logDate ?sdate .
+        FILTER(?sdate > ?D_SINCE)
+        ?le a adm:InitialDataCreation .
+        ?va adm:logEntry ?le ;
+            adm:adminAbout ?e .
+        ?e a ?type .
+        FILTER (?type != bdo:ImageGroup)
+	} union {
+		?le adm:logDate ?sdate .
+        FILTER(?sdate > ?D_SINCE)
+        ?le a adm:Synced .
+        ?va adm:logEntry ?le ;
+            adm:adminAbout ?v .
+        ?v bdo:volumeOf ?e .
+        BIND(bdo:ImageInstance as ?type)
+	}
+} group by ?type 

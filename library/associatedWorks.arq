@@ -94,7 +94,7 @@ WHERE
     }
     
     ?res ?respp ?resoo .
-    FILTER(?respp IN(bdo:workTranslationOf , bdo:serialMemberOf , bdo:workIsAbout , bdo:workGenre))
+    FILTER(?respp IN(bdo:serialMemberOf , bdo:workIsAbout , bdo:workGenre))
     ?resoo skos:prefLabel ?ol .
 
   } union {
