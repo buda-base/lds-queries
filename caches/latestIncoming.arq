@@ -1,0 +1,38 @@
+#QueryScope=Entity
+#QueryReturnType=Update
+#QueryResults=Update
+#QueryParams=
+#QueryUrl=/latestIncoming
+
+CLEAR GRAPH bdg:CacheLatest ;
+
+INSERT
+  { GRAPH bdg:CacheLatest { ?eadm tmp:lastSync ?d } }
+WHERE
+  { 
+  	{
+  	  select ?eadm (max(?sdate) as ?d)
+      where {
+        ?le adm:logDate ?sdate .
+        FILTER(?sdate > "2020-08-20T00:00:00"^^xsd:dateTime)
+        ?le a adm:Synced .
+        ?va adm:logEntry ?le ;
+            adm:adminAbout ?v .
+        ?v bdo:volumeOf ?iinstance .
+        ?eadm adm:adminAbout ?iinstance .
+      } group by ?eadm
+
+    }
+  } ;
+INSERT
+  { GRAPH bdg:CacheLatest { ?eadm tmp:dateCreated ?sdate } }
+WHERE
+  {
+    	?le adm:logDate ?sdate .
+        FILTER(?sdate > "2020-08-20T00:00:00"^^xsd:dateTime)
+        ?le a adm:InitialDataCreation .
+        ?eadm adm:logEntry ?le ;
+            adm:adminAbout ?e .
+        ?e a ?type .
+        FILTER (?type != bdo:ImageGroup)
+    }
