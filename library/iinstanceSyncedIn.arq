@@ -1,0 +1,73 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=10 last synced image instances
+#QueryParams=D_START,D_END
+#QueryUrl=/latestsyncssince?D_START=2020-08-20T00:00:00&D_END=2020-08-27T00:00:00
+
+#param.D_START.type=datetime
+#param.D_START.subtype=xsd:dateTime
+#param.D_START.desc=the start of the interval we're searching
+#param.D_END.type=datetime
+#param.D_END.subtype=xsd:dateTime
+#param.D_END.desc=the end of the interval we're searching
+
+construct {
+    ?res tmp:isMain true .
+    ?res tmp:lastSync ?sdate .
+    ?res tmp:status ?status .
+    ?res tmp:provider ?provider .
+    ?res tmp:hasOpen ?resAccessOpen .
+    ?res tmp:hasReproAccess ?access .
+    ?res tmp:hasImage true .
+    ?res tmp:hasEtext false .
+    ?res ?resp ?reso .
+
+    # We cheat a bit and attach the topic to the instance instead
+    # of the corresponding work
+    ?res ?wp ?wo .
+    ?wo skos:prefLabel ?wol .
+
+    # Same for the author, entity score and language
+    ?res tmp:author ?author .
+    ?agent skos:prefLabel ?agentL .
+
+    ?res  tmp:entityScore ?eScore ;
+          bdo:language ?wLang .
+
+  } where {
+    {
+      ?iiAdm tmp:lastSync ?sdate .
+      FILTER(?sdate > ?D_START && ?sdate < ?D_END)
+      bind( exists {?iiAdm adm:access bda:AccessOpen} as ?resAccessOpen)
+      ?iiAdm adm:status ?status .
+      ?iiAdm adm:access ?access .
+      ?iiAdm adm:metadataLegal/adm:provider ?provider .
+      ?iiAdm adm:adminAbout ?ii .
+      ?ii :instanceReproductionOf ?res .
+      ?res ?resp ?reso .
+      FILTER (?resp != bdo:note && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle && ?resp != bdo:hasPart
+        && ?resp != bdo:colophon && ?resp != bdo:incipit)
+    } union {
+      ?iiAdm tmp:lastSync ?sdate .
+      FILTER(?sdate > ?D_START && ?sdate < ?D_END)
+      ?iiAdm adm:adminAbout/bdo:instanceReproductionOf/bdo:instanceOf ?w .
+      ?w bdo:creator ?creator .
+      ?creator bdo:role ?role .
+      ?creator bdo:agent ?agent .
+      ?agent skos:prefLabel ?agentL .
+      bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+    } union {
+      ?iiAdm tmp:lastSync ?sdate .
+      FILTER(?sdate > ?D_START && ?sdate < ?D_END)
+      ?iiAdm adm:adminAbout/bdo:instanceReproductionOf/bdo:instanceOf ?w .
+      ?w tmp:entityScore ?eScore ;
+            bdo:language ?wLang .
+    } union {
+      ?iiAdm tmp:lastSync ?sdate .
+      FILTER(?sdate > ?D_START && ?sdate < ?D_END)
+      ?iiAdm adm:adminAbout/bdo:instanceReproductionOf/bdo:instanceOf ?w .
+      ?w ?wp ?wo .
+      FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
+      ?wo skos:prefLabel ?wol .
+    }
+}
