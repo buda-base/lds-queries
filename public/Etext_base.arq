@@ -14,9 +14,7 @@ construct {
    ?s ?p ?o .
    ?R_RES tmp:imageVolumeId ?imagevol .
    ?R_RES tmp:hasEtextRes ?etextRes .
-   ?R_RES tmp:firstPage ?pmin .
-   ?R_RES tmp:lastPage ?pmax .
-}
+  }
 where {
   { 
     ?R_RES ?p ?o .
@@ -42,21 +40,6 @@ where {
     ?R_RES :volumeNumber ?volNB .
     ?hasRepro a bdo:EtextInstance .
     ?hasRepro :instanceHasVolume ?etextVol .
-    ?etextVol :volumeNumber ?volNB ; :volumeHasEtext/:eTextResource ?etextRes .   
-    {
-      # get first and last page with actual content
-      select (min(?pnum) as ?pmin) (max(?pnum) as ?pmax)
-      where {
-        ?R_RES :volumeOf/:instanceHasReproduction ?hasRepro .
-        ?R_RES :volumeNumber ?volNB .
-        ?hasRepro a bdo:EtextInstance .
-        ?hasRepro :instanceHasVolume ?etextVol .
-        ?etextVol :volumeNumber ?volNB ; :volumeHasEtext/:eTextResource ?etextRes .
-        ?etextRes bdo:eTextHasPage ?page ; bdo:eTextHasChunk ?chunk .
-        ?chunk bdo:sliceStartChar ?cstart ; bdo:sliceEndChar ?cend .
-        ?page bdo:seqNum ?pnum ; bdo:sliceStartChar ?pstart ; bdo:sliceEndChar ?pend .
-        filter( ( ?pstart > ?cstart && ?cstart < ?pend ) || ( ?pstart > ?cend && ?cend < ?pend ) ).        
-      }    
-    }
+    ?etextVol :volumeNumber ?volNB ; :volumeHasEtext/:eTextResource ?etextRes .
   }
 }
