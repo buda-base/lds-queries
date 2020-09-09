@@ -1,4 +1,4 @@
-#QueryScope=General
+#QueryScope=Instance
 #QueryReturnType=Graph
 #QueryResults=All instances matching a certain term
 #QueryParams=L_NAME,LG_NAME

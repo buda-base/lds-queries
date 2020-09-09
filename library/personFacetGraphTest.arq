@@ -1,4 +1,4 @@
-#QueryScope=General
+#QueryScope=Person
 #QueryReturnType=Graph
 #QueryResults=All core resources whose various names contain the given L_NAME parameter value
 #QueryParams=L_NAME,LG_NAME
