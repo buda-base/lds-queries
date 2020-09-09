@@ -23,38 +23,38 @@ construct {
 } 
 where {
   {
-  {
-    ?R_RES :eTextHasPage ?p .
-    ?p :seqNum ?pnum
-    FILTER (?pnum <= ?I_END && ?pnum >= ?I_START)
-  }
-  {
-    ?R_RES :eTextInInstance ?einst .
-    ?einstAdm adm:adminAbout  ?einst .
-    ?einstAdm adm:access ?access .
-    ?einstAdm adm:status ?status .
-    BIND(EXISTS{?einstAdm adm:restrictedInChina true} as ?ric)
-  }
-  {
-    select (min(?pnum) as ?pstartnum) (max(?pnum) as ?pendnum)
-      where {
-        ?R_RES bdo:eTextHasPage ?page .
-        ?page bdo:seqNum ?pnum .
-        filter(?pnum <= ?I_END && ?pnum >= ?I_START).
-      }
-  }
-  ?p ?pp ?po .
-  ?R_RES :eTextHasPage ?pfirst .
-  ?pfirst :seqNum ??pstartnum .
-  ?pfirst :sliceStartChar ?pfirstStartChar .
-  ?R_RES :eTextHasPage ?plast .
-  ?plast :seqNum ?pendnum .
-  ?plast :sliceEndChar ?pendEndChar .
-  ?R_RES :eTextHasChunk ?cc .
-  ?cc  :sliceStartChar ?chunkstart ;
-       :sliceEndChar ?chunkend .
-  FILTER (?chunkstart <= ?pendEndChar && ?chunkend >= ?pfirstStartChar)
-  ?cc ?ccp ?cco .
+    {
+      ?R_RES :eTextHasPage ?p .
+      ?p :seqNum ?pnum
+      FILTER (?pnum <= ?I_END && ?pnum >= ?I_START)
+    }
+    {
+      ?R_RES :eTextInInstance ?einst .
+      ?einstAdm adm:adminAbout  ?einst .
+      ?einstAdm adm:access ?access .
+      ?einstAdm adm:status ?status .
+      BIND(EXISTS{?einstAdm adm:restrictedInChina true} as ?ric)
+    }
+    {
+      select (min(?pnum) as ?pstartnum) (max(?pnum) as ?pendnum)
+        where {
+          ?R_RES bdo:eTextHasPage ?page .
+          ?page bdo:seqNum ?pnum .
+          filter(?pnum <= ?I_END && ?pnum >= ?I_START).
+        }
+    }
+    ?p ?pp ?po .
+    ?R_RES :eTextHasPage ?pfirst .
+    ?pfirst :seqNum ??pstartnum .
+    ?pfirst :sliceStartChar ?pfirstStartChar .
+    ?R_RES :eTextHasPage ?plast .
+    ?plast :seqNum ?pendnum .
+    ?plast :sliceEndChar ?pendEndChar .
+    ?R_RES :eTextHasChunk ?cc .
+    ?cc  :sliceStartChar ?chunkstart ;
+         :sliceEndChar ?chunkend .
+    FILTER (?chunkstart <= ?pendEndChar && ?chunkend >= ?pfirstStartChar)
+    ?cc ?ccp ?cco .
   } union {
     ?R_RES :eTextHasPage ?p .
     ?p :seqNum ?pnum
