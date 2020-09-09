@@ -23,6 +23,7 @@ construct {
     ?ii a bdo:ImageInstance .
     ?ii :instanceReproductionOf ?i .
     ?ii ?ip ?io .
+    ?ii ?iip ?iio .
 
     # We cheat a bit and attach the topic to the instance instead
     # of the corresponding work
