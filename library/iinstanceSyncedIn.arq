@@ -1,6 +1,6 @@
-#QueryScope=Instance
+#QueryScope=ImageInstance
 #QueryReturnType=Graph
-#QueryResults=10 last synced image instances
+#QueryResults=image instances synced in interval
 #QueryParams=D_START,D_END
 #QueryUrl=/iinstanceSyncedIn?D_START=2020-08-20T00:00:00&D_END=2020-08-27T00:00:00
 
@@ -12,45 +12,49 @@
 #param.D_END.desc=the end of the interval we're searching
 
 construct {
-    ?res tmp:isMain true .
-    ?res tmp:lastSync ?sdate .
-    ?res tmp:status ?status .
-    ?res tmp:provider ?provider .
-    ?res tmp:hasOpen ?resAccessOpen .
-    ?res tmp:hasReproAccess ?access .
-    ?res tmp:hasImage true .
-    ?res tmp:hasEtext false .
-    ?res ?resp ?reso .
+    ?ii tmp:isMain true .
+    ?ii tmp:lastSync ?sdate .
+    ?ii tmp:status ?status .
+    ?ii tmp:provider ?provider .
+    ?ii tmp:hasOpen ?iAccessOpen .
+    ?ii tmp:hasReproAccess ?access .
+    ?ii tmp:hasImage true .
+    ?ii tmp:hasEtext false .
+    ?ii a bdo:ImageInstance .
+    ?ii :instanceReproductionOf ?i .
+    ?ii ?ip ?io .
 
     # We cheat a bit and attach the topic to the instance instead
     # of the corresponding work
-    ?res ?wp ?wo .
+    ?ii ?wp ?wo .
     ?wo skos:prefLabel ?wol .
 
     # Same for the author, entity score and language
-    ?res tmp:author ?author .
+    ?ii tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
 
-    ?res  tmp:entityScore ?eScore ;
-          bdo:language ?wLang .
+    ?ii  bdo:language ?wLang .
 
   } where {
     {
       ?iiAdm tmp:lastSync ?sdate .
       FILTER(?sdate > ?D_START && ?sdate < ?D_END)
-      bind( exists {?iiAdm adm:access bda:AccessOpen} as ?resAccessOpen)
+      bind( exists {?iiAdm adm:access bda:AccessOpen} as ?iAccessOpen)
       ?iiAdm adm:status ?status .
       ?iiAdm adm:access ?access .
       ?iiAdm adm:metadataLegal/adm:provider ?provider .
       ?iiAdm adm:adminAbout ?ii .
-      ?ii :instanceReproductionOf ?res .
-      ?res ?resp ?reso .
-      FILTER (?resp != bdo:note && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle && ?resp != bdo:hasPart
-        && ?resp != bdo:colophon && ?resp != bdo:incipit)
+      ?ii ?iip ?iio .
+      FILTER (?iip = tmp:thumbnailIIIFService || ?iip = bdo:scanInfo)
+      ?ii :instanceReproductionOf ?i .
+      ?i ?ip ?io .
+      FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
+        && ?ip != bdo:colophon && ?ip != bdo:incipit)
     } union {
       ?iiAdm tmp:lastSync ?sdate .
       FILTER(?sdate > ?D_START && ?sdate < ?D_END)
-      ?iiAdm adm:adminAbout/bdo:instanceReproductionOf/bdo:instanceOf ?w .
+      ?iiAdm adm:adminAbout ?ii .
+      ?ii bdo:instanceReproductionOf/bdo:instanceOf ?w .
       ?w bdo:creator ?creator .
       ?creator bdo:role ?role .
       ?creator bdo:agent ?agent .
@@ -59,13 +63,14 @@ construct {
     } union {
       ?iiAdm tmp:lastSync ?sdate .
       FILTER(?sdate > ?D_START && ?sdate < ?D_END)
-      ?iiAdm adm:adminAbout/bdo:instanceReproductionOf/bdo:instanceOf ?w .
-      ?w tmp:entityScore ?eScore ;
-            bdo:language ?wLang .
+      ?iiAdm adm:adminAbout ?ii .
+      ?ii bdo:instanceReproductionOf/bdo:instanceOf ?w .
+      ?w bdo:language ?wLang .
     } union {
       ?iiAdm tmp:lastSync ?sdate .
       FILTER(?sdate > ?D_START && ?sdate < ?D_END)
-      ?iiAdm adm:adminAbout/bdo:instanceReproductionOf/bdo:instanceOf ?w .
+      ?iiAdm adm:adminAbout ?ii .
+      ?ii bdo:instanceReproductionOf/bdo:instanceOf ?w .
       ?w ?wp ?wo .
       FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
       ?wo skos:prefLabel ?wol .
