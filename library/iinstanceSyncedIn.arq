@@ -20,6 +20,8 @@ construct {
     ?ii tmp:hasReproAccess ?access .
     ?ii tmp:hasImage true .
     ?ii tmp:hasEtext false .
+    ?ii tmp:yearStart ?yearStart .
+    ?ii tmp:yearEnd ?yearEnd .
     ?ii a bdo:ImageInstance .
     ?ii :instanceReproductionOf ?i .
     ?ii ?ip ?io .
@@ -75,5 +77,13 @@ construct {
       ?w ?wp ?wo .
       FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
       ?wo skos:prefLabel ?wol .
+    } union {
+      ?iiAdm tmp:lastSync ?sdate .
+      FILTER(?sdate > ?D_START && ?sdate < ?D_END)
+      ?iiAdm adm:adminAbout ?ii .
+      ?ii bdo:instanceReproductionOf/:instanceEvent ?evt .
+      ?evt ?evtp ?evto .
+      BIND (IF(?evtp = bdo:onYear || ?evtp = bdo:notBefore, ?evto, 1/0) as ?yearStart)
+      BIND (IF(?evtp = bdo:notAfter, ?evto, 1/0) as ?yearEnd)
     }
 }
