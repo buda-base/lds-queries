@@ -29,5 +29,10 @@ construct {
         FILTER(?sdate > ?D_SINCE)
       }
     }
+    ?ii ?iip ?iio .
+    FILTER (?iip = tmp:thumbnailIIIFService)
+    ?ii bdo:instanceReproductionOf ?i .
+    ?i ?ip ?io .
+    FILTER (?ip = skos:prefLabel)
 }
 
