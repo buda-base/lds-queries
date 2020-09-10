@@ -1,0 +1,116 @@
+#QueryScope=Instance
+#QueryReturnType=Graph
+#QueryResults=All works whose various literals contain the given L_NAME parameter value, along with their LICENSE + ACCESS + LANGSCRIPT + STATUS facets.
+#QueryParams=R_RES
+#QueryUrl=/lib/associatedWorks?R_RES=bdr:W19740
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced entity
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+
+CONSTRUCT
+{
+    ?i tmp:isMain true .
+    ?i tmp:lastSync ?sdate .
+    ?i tmp:status ?status .
+    ?i tmp:provider ?provider .
+    ?i tmp:hasOpen ?iAccessOpen .
+    ?i tmp:hasReproAccess ?access .
+    ?i ?ip ?io .
+
+    # We cheat a bit and attach the topic to the instance instead
+    # of the corresponding work
+    ?i ?wp ?wo .
+    ?wo skos:prefLabel ?wol .
+
+    # Same for the author, entity score and language
+    ?i tmp:author ?author .
+    ?agent skos:prefLabel ?agentL .
+
+    ?i  bdo:language ?wLang .
+
+    ?i tmp:relationType ?rel2 .
+    ?i tmp:relationTypeInv ?rel1 .
+
+}
+WHERE 
+{
+  {
+      {
+        ?R_RES ?rel1 ?i .
+      } union {
+        ?i ?rel2 ?R_RES .
+      }
+      ?i a bdo:Instance .
+      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+      ?i ?ip ?io .
+      FILTER (?ip != bdo:note && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
+        && ?ip != bdo:colophon && ?ip != bdo:incipit)
+    } union {
+      {
+        ?R_RES ?rel1 ?i .
+      } union {
+        ?i ?rel2 ?R_RES .
+      }
+      ?i :instanceHasReproduction ?ii .
+      ?iiAdm adm:adminAbout ?ii ;
+               adm:access ?access .
+    } union {
+      {
+        ?R_RES ?rel1 ?i .
+      } union {
+        ?i ?rel2 ?R_RES .
+      }
+      ?i bdo:instanceOf ?w .
+      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+      ?w bdo:creator ?creator .
+      ?creator bdo:role ?role .
+      ?creator bdo:agent ?agent .
+      ?agent skos:prefLabel ?agentL .
+      bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+    } union {
+      {
+        ?R_RES ?rel1 ?i .
+      } union {
+        ?i ?rel2 ?R_RES .
+      }
+      ?i bdo:instanceOf ?w .
+      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+      ?w bdo:language ?wLang .
+    } union {
+      {
+        ?R_RES ?rel1 ?i .
+      } union {
+        ?i ?rel2 ?R_RES .
+      }
+      ?i bdo:instanceOf ?w .
+      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+      ?w ?wp ?wo .
+      FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
+      ?wo skos:prefLabel ?wol .
+    } union {
+      select ?i 
+             (max(?iAccessOpen) as ?hasopen) 
+             (max(?iImage) as ?hasimage) 
+             (max(?iEtext) as ?hasetext) 
+      where {
+        {
+          ?R_RES ?rel1 ?i .
+        } union {
+          ?i ?rel2 ?R_RES .
+        }
+        FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+        ?i :instanceHasReproduction ?iRep .
+
+        ?iRepAdm adm:adminAbout ?iRep .
+        ?iRepAdm adm:status bda:StatusReleased .
+        bind( exists {?iRepAdm adm:access bda:AccessOpen} as ?iAccessOpen)
+        bind( exists {?iRep a bdo:ImageInstance} as ?iImage)
+        bind( exists {?iRep a bdo:EtextInstance} as ?iEtext)
+      } group by ?i 
+    }
+
+}
