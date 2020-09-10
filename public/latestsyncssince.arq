@@ -9,21 +9,22 @@
 #param.D_SINCE.desc=the past bound of the searched log entries
 
 construct {
-     ?iinstance ?ip ?io ;
-                tmp:datesync ?d .
+     ?ii ?ip ?io ;
+         ?iip ?iio ;
+         tmp:datesync ?sdate .
   } where {
     {
-      select ?iinstance (max(?sdate) as ?d)
+      select ?ii ?sdate
       where {
-        ?le adm:logDate ?sdate .
+        ?iiAdm tmp:lastSync ?sdate .
         FILTER(?sdate > ?D_SINCE)
-        ?le a adm:Synced .
-        ?va adm:logEntry ?le ;
-            adm:adminAbout ?v .
-        ?v bdo:volumeOf ?iinstance .
-      } group by ?iinstance order by desc(?d) limit 10
+        ?iiAdm adm:adminAbout ?ii .
+      } order by desc(?sdate) limit 10
     }
-    ?iinstance bdo:instanceReproductionOf ?i .
+    
+    ?ii ?iip ?iio .
+    FILTER (?iip = tmp:thumbnailIIIFService)
+    ?ii bdo:instanceReproductionOf ?i .
     ?i ?ip ?io .
-    FILTER (?ip = tmp:thumbnailIIIFService || ?ip = skos:prefLabel)
+    FILTER (?ip = skos:prefLabel)
 }
