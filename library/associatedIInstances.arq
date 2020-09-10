@@ -1,8 +1,8 @@
-#QueryScope=Instance
+#QueryScope=ImageInstance
 #QueryReturnType=Graph
-#QueryResults=All works whose various literals contain the given L_NAME parameter value, along with their LICENSE + ACCESS + LANGSCRIPT + STATUS facets.
+#QueryResults=All image instances associated with a resource (usually a product)
 #QueryParams=R_RES
-#QueryUrl=/lib/associatedIInstances?R_RES=bdr:W19740
+#QueryUrl=/lib/associatedIInstances?R_RES=bda:PR1CTC17
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=a Resource ID
