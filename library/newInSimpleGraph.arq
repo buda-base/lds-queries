@@ -1,0 +1,37 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All entities of a certain type manually created during an interval
+#QueryParams=D_START,D_END,R_TYPE
+#QueryUrl=/lib/placeGraph?D_START=2020-08-20T00:00:00&D_END=2020-09-10T00:00:00&R_TYPE=adm:Product
+
+#param.D_START.type=datetime
+#param.D_START.subtype=xsd:dateTime
+#param.D_START.desc=the start of the interval we're searching
+#param.D_END.type=datetime
+#param.D_END.subtype=xsd:dateTime
+#param.D_END.desc=the end of the interval we're searching
+
+#param.R_TYPE.type=URI
+#param.R_TYPE.subtype=bdo:Entity
+#param.R_TYPE.desc=the type of results that should be returned
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT
+{
+    ?res tmp:status ?st .
+    ?res tmp:isMain true .
+    ?res tmp:dateCreated ?sdate .
+    ?res ?resp ?reso .
+}
+WHERE 
+{
+
+    ?resAdm tmp:dateCreated ?sdate .
+    FILTER(?sdate > ?D_START && ?sdate < ?D_END)
+    ?resAdm adm:adminAbout ?res .
+    ?res a ?R_TYPE .
+    ?res ?resp ?reso .
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+}

@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=Count of latest created records (only manual creations)
 #QueryParams=D_START,D_END
-#QueryUrl=/countNewIn?D_START=2020-08-20T00:00:00&D_END=2020-08-27T00:00:00
+#QueryUrl=/countNewIn?D_START=2020-08-20T00:00:00&D_END=2020-09-10T00:00:00
 
 #param.D_START.type=datetime
 #param.D_START.subtype=xsd:dateTime

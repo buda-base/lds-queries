@@ -1,6 +1,6 @@
 #QueryScope=General
 #QueryReturnType=Graph
-#QueryResults=All places whose various literals contain the given L_NAME parameter value.
+#QueryResults=All entities of certain type whose various literals contain the given L_NAME parameter value.
 #QueryParams=L_NAME,LG_NAME,R_TYPE
 #QueryUrl=/lib/placeGraph?L_NAME="'od zer"&LG_NAME=bo-x-ewts&R_TYPE=bdo:Topic
 
