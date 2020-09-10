@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=All works whose various literals contain the given L_NAME parameter value, along with their LICENSE + ACCESS + LANGSCRIPT + STATUS facets.
 #QueryParams=R_RES
-#QueryUrl=/lib/associatedWorks?R_RES=bdr:W19740
+#QueryUrl=/lib/associatedInstances?R_RES=bdr:G1657
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=a Resource ID
@@ -17,9 +17,15 @@ CONSTRUCT
     ?i tmp:lastSync ?sdate .
     ?i tmp:status ?status .
     ?i tmp:provider ?provider .
-    ?i tmp:hasOpen ?iAccessOpen .
     ?i tmp:hasReproAccess ?access .
     ?i ?ip ?io .
+
+    ?i tmp:yearStart ?yearStart .
+    ?i tmp:yearEnd ?yearEnd .
+
+    ?i tmp:hasOpen ?hasopen .
+    ?i tmp:hasImage ?hasimage .
+    ?i tmp:hasEtext ?hasetext .
 
     # We cheat a bit and attach the topic to the instance instead
     # of the corresponding work
@@ -49,6 +55,9 @@ WHERE
       ?i ?ip ?io .
       FILTER (?ip != bdo:note && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
         && ?ip != bdo:colophon && ?ip != bdo:incipit)
+      ?iAdm adm:adminAbout ?i .
+      ?iAdm adm:status ?status .
+      ?iAdm adm:metadataLegal/adm:provider ?provider .
     } union {
       {
         ?R_RES ?rel1 ?i .
@@ -56,8 +65,21 @@ WHERE
         ?i ?rel2 ?R_RES .
       }
       ?i :instanceHasReproduction ?ii .
+      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
       ?iiAdm adm:adminAbout ?ii ;
                adm:access ?access .
+    } union {
+      {
+        ?R_RES ?rel1 ?i .
+      } union {
+        ?i ?rel2 ?R_RES .
+      }
+      ?i bdo:instanceOf ?w .
+      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+      ?i :instanceEvent ?evt .
+      ?evt ?evtp ?evto .
+      BIND (IF(?evtp = bdo:onYear || ?evtp = bdo:notBefore, ?evto, 1/0) as ?yearStart)
+      BIND (IF(?evtp = bdo:notAfter, ?evto, 1/0) as ?yearEnd)
     } union {
       {
         ?R_RES ?rel1 ?i .
@@ -103,13 +125,13 @@ WHERE
           ?i ?rel2 ?R_RES .
         }
         FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
-        ?i :instanceHasReproduction ?iRep .
+        ?i :instanceHasReproduction ?ii .
 
-        ?iRepAdm adm:adminAbout ?iRep .
-        ?iRepAdm adm:status bda:StatusReleased .
-        bind( exists {?iRepAdm adm:access bda:AccessOpen} as ?iAccessOpen)
-        bind( exists {?iRep a bdo:ImageInstance} as ?iImage)
-        bind( exists {?iRep a bdo:EtextInstance} as ?iEtext)
+        ?iiAdm adm:adminAbout ?ii .
+        ?iiAdm adm:status bda:StatusReleased .
+        bind( exists {?iiAdm adm:access bda:AccessOpen} as ?iAccessOpen)
+        bind( exists {?ii a bdo:ImageInstance} as ?iImage)
+        bind( exists {?ii a bdo:EtextInstance} as ?iEtext)
       } group by ?i 
     }
 

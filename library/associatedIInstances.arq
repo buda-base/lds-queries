@@ -65,7 +65,8 @@ WHERE
       } union {
         ?ii ?rel2 ?R_RES .
       }
-      ?ii bdo:instanceReproductionOf/bdo:instanceOf ?w .
+      ?ii a bdo:ImageInstance .
+      ?ii bdo:instanceOf ?w .
       ?w bdo:creator ?creator .
       ?creator bdo:role ?role .
       ?creator bdo:agent ?agent .
@@ -77,7 +78,8 @@ WHERE
       } union {
         ?ii ?rel2 ?R_RES .
       }
-      ?ii bdo:instanceReproductionOf/bdo:instanceOf ?w .
+      ?ii a bdo:ImageInstance .
+      ?ii bdo:instanceOf ?w .
       ?w bdo:language ?wLang .
     } union {
       {
@@ -85,7 +87,8 @@ WHERE
       } union {
         ?ii ?rel2 ?R_RES .
       }
-      ?ii bdo:instanceReproductionOf/bdo:instanceOf ?w .
+      ?ii a bdo:ImageInstance .
+      ?ii bdo:instanceOf ?w .
       ?w ?wp ?wo .
       FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
       ?wo skos:prefLabel ?wol .
