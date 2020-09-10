@@ -1,0 +1,93 @@
+#QueryScope=Instance
+#QueryReturnType=Graph
+#QueryResults=All works whose various literals contain the given L_NAME parameter value, along with their LICENSE + ACCESS + LANGSCRIPT + STATUS facets.
+#QueryParams=R_RES
+#QueryUrl=/lib/associatedIInstances?R_RES=bdr:W19740
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced entity
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT
+{
+    ?ii tmp:isMain true .
+    ?ii tmp:lastSync ?sdate .
+    ?ii tmp:status ?status .
+    ?ii tmp:provider ?provider .
+    ?ii tmp:hasOpen ?iAccessOpen .
+    ?ii tmp:hasReproAccess ?access .
+    ?ii tmp:hasImage true .
+    ?ii tmp:hasEtext false .
+    ?ii a bdo:ImageInstance .
+    ?ii :instanceReproductionOf ?i .
+    ?ii ?ip ?io .
+    ?ii ?iip ?iio .
+
+    # We cheat a bit and attach the topic to the instance instead
+    # of the corresponding work
+    ?ii ?wp ?wo .
+    ?wo skos:prefLabel ?wol .
+
+    # Same for the author, entity score and language
+    ?ii tmp:author ?author .
+    ?agent skos:prefLabel ?agentL .
+
+    ?ii  bdo:language ?wLang .
+
+    ?ii tmp:relationType ?rel2 .
+    ?ii tmp:relationTypeInv ?rel1 .
+
+}
+WHERE 
+{
+  {
+      {
+        ?R_RES ?rel1 ?ii .
+      } union {
+        ?ii ?rel2 ?R_RES .
+      }
+      ?iiAdm adm:adminAbout ?ii .
+      bind( exists {?iiAdm adm:access bda:AccessOpen} as ?iAccessOpen)
+      ?iiAdm adm:status ?status .
+      ?iiAdm adm:access ?access .
+      ?iiAdm adm:metadataLegal/adm:provider ?provider .
+      ?ii ?iip ?iio .
+      FILTER (?iip = tmp:thumbnailIIIFService || ?iip = bdo:scanInfo)
+      ?ii :instanceReproductionOf ?i .
+      ?i ?ip ?io .
+      FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
+        && ?ip != bdo:colophon && ?ip != bdo:incipit)
+    } union {
+      {
+        ?R_RES ?rel1 ?ii .
+      } union {
+        ?ii ?rel2 ?R_RES .
+      }
+      ?ii bdo:instanceReproductionOf/bdo:instanceOf ?w .
+      ?w bdo:creator ?creator .
+      ?creator bdo:role ?role .
+      ?creator bdo:agent ?agent .
+      ?agent skos:prefLabel ?agentL .
+      bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+    } union {
+      {
+        ?R_RES ?rel1 ?ii .
+      } union {
+        ?ii ?rel2 ?R_RES .
+      }
+      ?ii bdo:instanceReproductionOf/bdo:instanceOf ?w .
+      ?w bdo:language ?wLang .
+    } union {
+      {
+        ?R_RES ?rel1 ?ii .
+      } union {
+        ?ii ?rel2 ?R_RES .
+      }
+      ?ii bdo:instanceReproductionOf/bdo:instanceOf ?w .
+      ?w ?wp ?wo .
+      FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
+      ?wo skos:prefLabel ?wol .
+    }
+}
