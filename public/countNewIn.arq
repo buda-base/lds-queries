@@ -1,0 +1,22 @@
+#QueryScope=General
+#QueryReturnType=Table
+#QueryResults=Count of latest created records (only manual creations)
+#QueryParams=D_START,D_END
+#QueryUrl=/countNewIn?D_START=2020-08-20T00:00:00&D_END=2020-08-27T00:00:00
+
+#param.D_START.type=datetime
+#param.D_START.subtype=xsd:dateTime
+#param.D_START.desc=the start of the interval we're searching
+#param.D_END.type=datetime
+#param.D_END.subtype=xsd:dateTime
+#param.D_END.desc=the end of the interval we're searching
+
+select ?type (count (distinct ?e) as ?count) where {
+	{
+		?eadm tmp:dateCreated ?sdate .
+        FILTER(?sdate > ?D_START && ?sdate < ?D_END)
+        ?eadm adm:adminAbout ?e .
+        ?e a ?type .
+        FILTER (?type != bdo:ImageGroup)
+	}
+} group by ?type 
