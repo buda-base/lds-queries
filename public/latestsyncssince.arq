@@ -12,6 +12,7 @@ construct {
      ?ii ?ip ?io ;
          ?iip ?iio ;
          tmp:datesync ?sdate .
+     tmp:totalRes tmp:total ?nbii .
   } where {
     {
       select ?ii ?sdate
@@ -21,10 +22,12 @@ construct {
         ?iiAdm adm:adminAbout ?ii .
       } order by desc(?sdate) limit 10
     }
-    
-    ?ii ?iip ?iio .
-    FILTER (?iip = tmp:thumbnailIIIFService)
-    ?ii bdo:instanceReproductionOf ?i .
-    ?i ?ip ?io .
-    FILTER (?ip = skos:prefLabel)
+    {
+    select (count(?iiAdm) as ?nbii)
+      where {
+        ?iiAdm tmp:lastSync ?sdate .
+        FILTER(?sdate > ?D_SINCE)
+      }
+    }
 }
+
