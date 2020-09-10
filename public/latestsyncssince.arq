@@ -12,7 +12,7 @@ construct {
      ?ii ?ip ?io ;
          ?iip ?iio ;
          tmp:datesync ?sdate .
-     tmp:totalRes tmp:total ?nbii .
+     tmp:totalRes tmp:totalSyncs ?nbii .
   } where {
     {
       select ?ii ?sdate
