@@ -25,7 +25,8 @@ construct {
     {
     select (count(?iiAdm) as ?nbii)
       where {
-        ?iiAdm tmp:lastSync ?sdate .
+        ?iiAdm tmp:lastSync ?sdate ;
+               adm:status bda:StatusReleased .
         FILTER(?sdate > ?D_SINCE)
       }
     }
@@ -35,4 +36,3 @@ construct {
     ?i ?ip ?io .
     FILTER (?ip = skos:prefLabel)
 }
-
