@@ -37,12 +37,11 @@ where {
   {
     ?R_RES skos:prefLabel ?resL .
   } union {
-    # this is very slow, and I'm not sure it's really useful...?
-    #{
-    #  ?R_RES ?rel1 ?res .
-    #  ?res a bdo:Person .
-    #} union 
+    # this is very slow if there's no none.opts file in the fuseki database folder
     {
+      ?R_RES ?rel1 ?res .
+      ?res a bdo:Person .
+    } union {
       ?R_RES ?evtp ?evtMatch .
       ?evtMatch bdo:eventWho ?res ;
                 # /!\ binding the event type as the relation
