@@ -11,6 +11,7 @@
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 construct {
+    ?R_RES skos:prefLabel ?resL .
     ?res tmp:status ?st .
     ?res tmp:matchScore ?sc .
     ?res tmp:nameMatch ?nameMatch.
@@ -40,6 +41,8 @@ where {
     #  ?res a bdo:Person .
     #} union 
     {
+      ?R_RES skos:prefLabel ?resL .
+    } union {
       ?R_RES ?evtp ?evtMatch .
       ?evtMatch bdo:eventWho ?res ;
                 # /!\ binding the event type as the relation

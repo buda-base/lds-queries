@@ -15,6 +15,7 @@
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 construct {
+    ?R_RES skos:prefLabel ?resL .
     ?ar tmp:relationType ?rel .
     ?ar ?arp ?aro .
     ?ar tmp:status ?st .
@@ -23,6 +24,8 @@ construct {
 where {
   #associated Lineages
   {
+    ?R_RES skos:prefLabel ?resL .
+  } union {
     FILTER(?R_TYPE = bdo:Lineage)
     
     ?hold ?rel ?R_RES .
