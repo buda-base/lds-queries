@@ -96,5 +96,4 @@ WHERE
       FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
       ?wo skos:prefLabel ?wol .
     }
-  }
 }
