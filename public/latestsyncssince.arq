@@ -9,30 +9,37 @@
 #param.D_SINCE.desc=the past bound of the searched log entries
 
 construct {
-     ?ii ?ip ?io ;
-         ?iip ?iio ;
+     ?ii skos:prefLabel ?l ;
+         tmp:thumbnailIIIFService ?th ;
          tmp:datesync ?sdate .
      tmp:totalRes tmp:totalSyncs ?nbii .
   } where {
     {
-      select ?ii ?sdate
-      where {
-        ?iiAdm tmp:lastSync ?sdate .
-        FILTER(?sdate > ?D_SINCE)
-        ?iiAdm adm:adminAbout ?ii .
-      } order by desc(?sdate) limit 10
-    }
-    {
-    select (count(?iiAdm) as ?nbii)
-      where {
-        ?iiAdm tmp:lastSync ?sdate ;
-               adm:status bda:StatusReleased .
-        FILTER(?sdate > ?D_SINCE)
+      select (count(?iiAdm) as ?nbii)
+        where {
+          ?iiAdm tmp:lastSync ?sdate ;
+                 adm:status bda:StatusReleased .
+          FILTER(?sdate > ?D_SINCE)
+        }
+    } union {
+      {
+        select ?ii ?sdate
+        where {
+          ?iiAdm tmp:lastSync ?sdate .
+          FILTER(?sdate > ?D_SINCE)
+          ?iiAdm adm:adminAbout ?ii .
+        } order by desc(?sdate) limit 10
       }
+      ?ii bdo:instanceReproductionOf/skos:prefLabel ?l .
+    } union {
+      {
+        select ?ii ?sdate
+        where {
+          ?iiAdm tmp:lastSync ?sdate .
+          FILTER(?sdate > ?D_SINCE)
+          ?iiAdm adm:adminAbout ?ii .
+        } order by desc(?sdate) limit 10
+      }
+      ?ii tmp:thumbnailIIIFService ?th .
     }
-    ?ii ?iip ?iio .
-    FILTER (?iip = tmp:thumbnailIIIFService)
-    ?ii bdo:instanceReproductionOf ?i .
-    ?i ?ip ?io .
-    FILTER (?ip = skos:prefLabel)
 }
