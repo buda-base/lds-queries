@@ -63,6 +63,7 @@ CONSTRUCT {
   	# get access of reproductions
     
     ?R_RES :workHasInstance ?instance .
+    FILTER ( NOT EXISTS {?instance :instanceReproductionOf ?reprof })
     ?instance :inRootInstance?/:instanceHasReproduction ?instanceRep .
     ?instanceRepAdm adm:adminAbout ?instanceRep ;
                adm:access ?instanceRepAccess .
@@ -70,6 +71,7 @@ CONSTRUCT {
 	} union {
 
 		?R_RES :workHasInstance ?instance .
+		FILTER ( NOT EXISTS {?instance :instanceReproductionOf ?reprof })
 		?instance :inRootInstance? ?instanceR2 .
 		?instanceR2 :instanceEvent ?evt .
 		?evt ?evtp ?evto .
