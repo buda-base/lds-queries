@@ -210,9 +210,15 @@ construct {
     ?rootV :instanceHasReproduction ?repro .
     ?repro a bdo:ImageInstance .
   } union {
-    # add thumbnail (in some edge cases there is a thumbnail but no reproduction)
+    # add thumbnail for work instances
     ?r owl:sameAs* ?R_RES .
     ?r :workHasInstance ?version .
+    ?version :inRootInstance? ?rootV .
+    ?rootV tmp:thumbnailIIIFService ?vThumb .
+  } union {
+    # add thumbnail for instance reproductions
+    ?r owl:sameAs* ?R_RES .
+    ?r :instanceHasReproduction ?version .
     ?version :inRootInstance? ?rootV .
     ?rootV tmp:thumbnailIIIFService ?vThumb .
   } union {
