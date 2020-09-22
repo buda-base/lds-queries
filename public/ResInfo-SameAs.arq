@@ -73,6 +73,10 @@ construct {
 
 ?par tmp:nbTranslations ?nbtrans .
 
+?item ?itemp ?itemo .
+?itemid ?itemidp ?itemido .
+?itemcoll skos:prefLabel ?itemcolll .
+
 } where {
   {
     ?r owl:sameAs* ?R_RES .
@@ -221,6 +225,19 @@ construct {
     ?r :instanceHasReproduction ?version .
     ?version :inRootInstance? ?rootV .
     ?rootV tmp:thumbnailIIIFService ?vThumb .
+  } union {
+    # add items with collections
+    ?r owl:sameAs* ?R_RES .
+    ?r :instanceHasReproduction*/:instanceHasItem ?item .
+    ?item ?itemp ?itemo .
+    ?item :inCollection ?itemcoll .
+    ?itemcoll skos:prefLabel ?itemcolll .
+  } union {
+    # add items with collections
+    ?r owl:sameAs* ?R_RES .
+    ?r :instanceHasReproduction*/:instanceHasItem ?item .
+    ?item bf:identifiedBy ?itemid .
+    ?itemid ?itemidp ?itemido .
   } union {
     ?r owl:sameAs* ?R_RES ;
        bf:identifiedBy ?id .
