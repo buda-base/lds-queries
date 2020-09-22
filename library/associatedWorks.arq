@@ -102,9 +102,8 @@ WHERE
 
   } union {
     
-    select ?res 
-           (sum (?isRootInstance) as ?nbinstances) 
-           (count (?instance) as ?nbinstance) 
+    select ?res
+           (count (distinct ?nrepInstance) as ?nbinstances)
            (max(?instanceAccessOpen) as ?hasopen) 
            (max(?instanceImage) as ?hasimage) 
            (max(?instanceEtext) as ?hasetext) 
@@ -120,13 +119,14 @@ WHERE
         ?res bdo:creator/bdo:agent ?R_RES .
       }
 
-      ?res bdo:workHasInstance/bdo:inRootInstance? ?instance .
-      ?instanceAdm adm:adminAbout ?instance .
+      ?res bdo:workHasInstance ?instance .
+      bind( if (exists {?instance bdo:instanceReproductionOf ?reprodof}, ?reprodof, ?instance) as ?nrepInstance)
+      ?instance bdo:inRootInstance?/bdo:instanceHasReproduction ?rootInstance .
+      ?instanceAdm adm:adminAbout ?rootInstance .
       ?instanceAdm adm:status bda:StatusReleased .
-      bind( if (exists {?instance bdo:instanceReproductionOf ?reprodof}, 0, 1) as ?isRootInstance)
       bind( exists {?instanceAdm adm:access bda:AccessOpen} as ?instanceAccessOpen)
-      bind( exists {?instance a bdo:ImageInstance} as ?instanceImage)
-      bind( exists {?instance a bdo:EtextInstance} as ?instanceEtext)
-    } group by ?res 
+      bind( exists {?rootInstance a bdo:ImageInstance} as ?instanceImage)
+      bind( exists {?rootInstance a bdo:EtextInstance} as ?instanceEtext)
+    } group by ?res
   }
 }
