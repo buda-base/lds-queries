@@ -50,6 +50,7 @@ WHERE
       ?res a/rdfs:subClassOf* bdo:Work .
     } union {
       ?res ?rel2 ?R_RES .
+      FILTER(?rel2 != bdo:serialMemberOf)
       ?res a/rdfs:subClassOf* bdo:Work .
     } union {
       ?res bdo:creator/bdo:agent ?R_RES . 
@@ -70,6 +71,7 @@ WHERE
       ?res a/rdfs:subClassOf* bdo:Work .
     } union {
       ?res ?rel2 ?R_RES .
+      FILTER(?rel2 != bdo:serialMemberOf)
       ?res a/rdfs:subClassOf* bdo:Work .
     } union {
       ?res bdo:creator/bdo:agent ?R_RES .
@@ -90,6 +92,7 @@ WHERE
       ?res a/rdfs:subClassOf* bdo:Work .
     } union {
       ?res ?rel2 ?R_RES .
+      FILTER(?rel2 != bdo:serialMemberOf)
       ?res a/rdfs:subClassOf* bdo:Work .
     } union {
       ?res bdo:creator/bdo:agent ?R_RES .
@@ -114,6 +117,7 @@ WHERE
         ?res a/rdfs:subClassOf* bdo:Work .
       } union {
         ?res ?rel2 ?R_RES .
+        FILTER(?rel2 != bdo:serialMemberOf)
         ?res a/rdfs:subClassOf* bdo:Work .
       } union {
         ?res bdo:creator/bdo:agent ?R_RES .
