@@ -252,7 +252,6 @@ construct {
     ?cm skos:prefLabel ?cmL .
   } union {
     # 10 works about the entity
-    # TODO: add also 10 works created by the entity
     select
        ?resAbout ?resAbouteScore ?resAboutLabel ?resAboutProvider
     where {
@@ -265,8 +264,7 @@ construct {
                    adm:metadataLegal/adm:provider ?resAboutProvider .
     } order by desc(?resAbouteScore) limit 20
   } union {
-    # 10 works about the entity
-    # TODO: add also 10 works created by the entity
+    # 10 works created by the entity
     select 
        ?resBy ?resByType ?resByScore ?resByLabel ?resByProvider
     where {
