@@ -55,8 +55,11 @@ CONSTRUCT {
   {
 
     {
-      (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME "highlight:" ) .
+      (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
       ?res a bdo:Instance .
+    } union {
+      (?title ?sc ?labelMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+      ?res bdo:hasTitle ?title .
     } union {
       (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
       ?res bdo:note ?note .
@@ -79,8 +82,11 @@ CONSTRUCT {
   } union {
 
     {
-      (?res) text:query ( bdo:labels ?L_NAME ) .
+      (?res) text:query ( bdo:skosLabels ?L_NAME ) .
       ?res a bdo:Instance .
+    } union {
+      (?title) text:query ( rdfs:label ?L_NAME ) .
+      ?res bdo:hasTitle ?title .
     } union {
       (?note) text:query ( bdo:noteText ?L_NAME ) .
       ?res bdo:note ?note .
@@ -101,9 +107,12 @@ CONSTRUCT {
 
   } union {
     
-        {
-      (?res) text:query ( bdo:labels ?L_NAME ) .
+    {
+      (?res) text:query ( bdo:skosLabels ?L_NAME ) .
       ?res a bdo:Instance .
+    } union {
+      (?title) text:query ( rdfs:label ?L_NAME ) .
+      ?res bdo:hasTitle ?title .
     } union {
       (?note) text:query ( bdo:noteText ?L_NAME ) .
       ?res bdo:note ?note .
@@ -121,8 +130,11 @@ CONSTRUCT {
   } union {
     
     {
-      (?res) text:query ( bdo:labels ?L_NAME ) .
+      (?res) text:query ( bdo:skosLabels ?L_NAME ) .
       ?res a bdo:Instance .
+    } union {
+      (?title) text:query ( rdfs:label ?L_NAME ) .
+      ?res bdo:hasTitle ?title .
     } union {
       (?note) text:query ( bdo:noteText ?L_NAME ) .
       ?res bdo:note ?note .
@@ -143,8 +155,11 @@ CONSTRUCT {
     # get access of reproductions
     
     {
-      (?res) text:query ( bdo:labels ?L_NAME ) .
+      (?res) text:query ( bdo:skosLabels ?L_NAME ) .
       ?res a bdo:Instance .
+    } union {
+      (?title) text:query ( rdfs:label ?L_NAME ) .
+      ?res bdo:hasTitle ?title .
     } union {
       (?note) text:query ( bdo:noteText ?L_NAME ) .
       ?res bdo:note ?note .
@@ -162,8 +177,11 @@ CONSTRUCT {
     } union {
       
     {
-      (?res ?sc ?labelMatch) text:query ( bdo:labels ?L_NAME ) .
+      (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME ) .
       ?res a bdo:Instance .
+    } union {
+      (?title) text:query ( rdfs:label ?L_NAME ) .
+      ?res bdo:hasTitle ?title .
     } union {
       (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME ) .
       ?res bdo:note ?note .
@@ -195,8 +213,11 @@ CONSTRUCT {
       where {
         
         {
-          (?res) text:query ( bdo:labels ?L_NAME ) .
+          (?res) text:query ( bdo:skosLabels ?L_NAME ) .
           ?res a bdo:Instance .
+        } union {
+          (?title) text:query ( rdfs:label ?L_NAME ) .
+          ?res bdo:hasTitle ?title .
         } union {
           (?note) text:query ( bdo:noteText ?L_NAME ) .
           ?res bdo:note ?note .
