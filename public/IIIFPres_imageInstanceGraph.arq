@@ -22,7 +22,7 @@ construct {
     ?s adm:contentLegal ?cl .
     ?cl ?clp ?clo .
   } union {
-    ?R_RES :instanceHasVolume ?s .
+    ?R_RES :inRootInstance?/:instanceHasVolume ?s .
     ?s ?p ?o .
     FILTER (sameTerm(?p, :volumeNumber) || sameTerm(?p, skos:prefLabel) || sameTerm(?p, :hasIIIFManifest))
   } union {
