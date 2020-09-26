@@ -11,12 +11,13 @@
 construct {
    ?s ?p ?o .
    ?cl ?clp ?clo .
+   ?l ?lp ?lo .
 } where {
   { 
     ?R_RES ?p ?o .
     BIND (?R_RES as ?s)
   } union {
-    ?s adm:adminAbout ?R_RES .
+    ?R_RES :inRootInstance?/^adm:adminAbout ?s .
     ?s ?p ?o .
     ?s adm:contentLegal ?cl .
     ?cl ?clp ?clo .
@@ -24,5 +25,8 @@ construct {
     ?R_RES :instanceHasVolume ?s .
     ?s ?p ?o .
     FILTER (sameTerm(?p, :volumeNumber) || sameTerm(?p, skos:prefLabel) || sameTerm(?p, :hasIIIFManifest))
+  } union {
+    ?R_RES :contentLocation ?l .
+    ?l ?lp ?lo .
   }
 }
