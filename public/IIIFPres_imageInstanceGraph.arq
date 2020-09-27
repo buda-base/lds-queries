@@ -11,6 +11,7 @@
 construct {
    ?s ?p ?o .
    ?cl ?clp ?clo .
+   ?ri :instanceHasVolume ?s .
    ?l ?lp ?lo .
 } where {
   { 
@@ -22,7 +23,8 @@ construct {
     ?s adm:contentLegal ?cl .
     ?cl ?clp ?clo .
   } union {
-    ?R_RES :inRootInstance?/:instanceHasVolume ?s .
+    ?R_RES :inRootInstance? ?ri .
+    ?ri :instanceHasVolume ?s .
     ?s ?p ?o .
     FILTER (sameTerm(?p, :volumeNumber) || sameTerm(?p, skos:prefLabel) || sameTerm(?p, :hasIIIFManifest))
   } union {
