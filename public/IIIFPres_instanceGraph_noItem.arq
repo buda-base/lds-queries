@@ -40,7 +40,13 @@ where {
     ?R_RES :virtualLinkTo?/:contentLocation ?s .
     ?s ?p ?o .
   } union {
-    ?R_RES :virtualLinkTo?/bdo:partOf*/:instanceHasReproduction ?iinstance .
+    {
+      ?R_RES :virtualLinkTo?/:inRootInstance?/:instanceHasReproduction/:inRootInstance? ?iinstance .
+    } union {
+      ?R_RES :contentLocation/:contentLocationInstance/:instanceHasReproduction?/:inRootInstance? ?iinstance .
+    } union {
+      ?R_RES :virtualLinkTo?/:inRootInstance? ?iinstance .
+    }
     ?iinstance a :ImageInstance .
     ?admItem adm:adminAbout ?iinstance .
     ?admItem adm:access ?access .
@@ -48,27 +54,13 @@ where {
     ?admItem adm:restrictedInChina ?ric .
     ?admItem adm:contentLegal/adm:license ?license .
   } union {
-    ?R_RES :contentLocation/:contentLocationInstance/:instanceHasReproduction ?iinstance .
-    ?iinstance a :ImageInstance .
-    ?admItem adm:adminAbout ?iinstance .
-    ?admItem adm:access ?access .
-    ?admItem adm:status ?status .
-    ?admItem adm:restrictedInChina ?ric .
-    ?admItem adm:contentLegal/adm:license ?license .
-  } union {
-    ?R_RES :virtualLinkTo?/bdo:partOf* ?rw .
+    ?R_RES :virtualLinkTo?/:inRootInstance? ?rw .
     ?rw :instanceHasReproduction ?iinstance .
     ?iinstance a :ImageInstance .
     ?R_RES :virtualLinkTo?/:contentLocation ?loc .
     ?loc :contentLocationVolume ?bvol .
     ?iinstance :instanceHasVolume ?vol .
     ?vol :volumeNumber ?bvol .
-  } union {
-    ?R_RES :virtualLinkTo?/:instanceHasReproduction ?iinstance .
-    ?rw :work ?iinstance .
-    ?iinstance a :ImageInstance .
-    ?iinstance :instanceHasVolume ?vol .
-    ?vol :volumeNumber 1 .
   } union {
     ?R_RES :virtualLinkTo?/:hasPart ?s .
     ?s ?p ?o .
