@@ -41,14 +41,13 @@ where {
     ?s ?p ?o .
   } union {
     {
-      ?R_RES :virtualLinkTo?/:inRootInstance?/:instanceHasReproduction/:inRootInstance? ?iinstance .
+      ?R_RES :virtualLinkTo?/:inRootInstance?/:instanceHasReproduction ?iinstance .
     } union {
-      ?R_RES :contentLocation/:contentLocationInstance/:instanceHasReproduction?/:inRootInstance? ?iinstance .
-    } union {
-      ?R_RES :virtualLinkTo?/:inRootInstance? ?iinstance .
+      ?R_RES :contentLocation/:contentLocationInstance/:instanceHasReproduction? ?iinstance .
     }
     ?iinstance a :ImageInstance .
-    ?admItem adm:adminAbout ?iinstance .
+    ?iinstance :inRootInstance? ?iir .
+    ?admItem adm:adminAbout ?iir .
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
     ?admItem adm:restrictedInChina ?ric .
