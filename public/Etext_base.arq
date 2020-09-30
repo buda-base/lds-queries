@@ -35,11 +35,13 @@ where {
     ?imagevol a :ImageGroup .
     ?imagevol :volumeNumber ?volNum .
   } union {
-    #useful info to display etext in mirador
+    # useful info to display etext in mirador
     ?R_RES :volumeOf/:instanceHasReproduction ?hasRepro .
     ?R_RES :volumeNumber ?volNB .
     ?hasRepro a bdo:EtextInstance .
     ?hasRepro :instanceHasVolume ?etextVol .
     ?etextVol :volumeNumber ?volNB ; :volumeHasEtext/:eTextResource ?etextRes .
+    # in mirador we can only use etexts with page numbers
+    filter exists { ?etextRes :eTextHasPage/:seqNum ?num } .
   }
 }
