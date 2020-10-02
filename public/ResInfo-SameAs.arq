@@ -77,12 +77,11 @@ construct {
 ?itemid ?itemidp ?itemido .
 ?itemcoll skos:prefLabel ?itemcolll .
 
-# works on /fuseki not in ldspdi ...
 # first text of first volume of etext
-#?etext tmp:firstVol ?volstart ;
-#       tmp:firstVolN ?vnumstart ; 
-#       tmp:firstText ?rstart ;
-#       tmp:firstTextN ?rnumstart . 
+?etext tmp:firstVol ?volstart ;
+       tmp:firstVolN ?vnumstart ; 
+       tmp:firstText ?rstart ;
+       tmp:firstTextN ?rnumstart . 
   
 } where {
   {
@@ -293,33 +292,33 @@ construct {
            ?r bdo:workHasParallelsIn ?par .
            ?par owl:sameAs*/bdo:workHasTranslation ?trans .
     } group by ?par
-  } 
-  # works on /fuseki not in ldspdi ...
-  #union {    
-  #  # first text of first volume of etext 
-  #  select ?etext ?volstart ?vnumstart ?vtext ?rnumstart ?rstart
-  #  where {
-  #    ?etext owl:sameAs* ?R_RES ;
-  #           :instanceHasVolume ?volstart .
-  #    ?volstart :volumeNumber ?vnumstart ; :volumeHasEtext ?vtext.
-  #    ?vtext :seqNum ?rnumstart ; :eTextResource ?rstart .  
-  # 
-  #    { # find first volume 
-  #      select ?etext ( min(?vnum) as ?vnumstart )  
-  #      where { 
-  #        ?etext owl:sameAs* ?R_RES ;   
-  #               :instanceHasVolume/:volumeNumber ?vnum .
-  #      } group by ?etext
-  #    }  
-  #    { # find first text of first volume
-  #      select ?volstart ( min(?rnum) as ?rnumstart )
-  #      where {
-  #        ?etext owl:sameAs* ?R_RES ;   
-  #               :instanceHasVolume ?volstart . 
-  #        ?volstart :volumeNumber ?vnumstart ;
-  #                  :volumeHasEtext/:seqNum ?rnum .
-  #      } group by ?volstart
-  #    }   
-  #  }
-  # }
+  } union {    
+    # first text of first volume of etext 
+    select ?etext ?volstart ?vnumstart ?vtext ?rnumstart ?rstart
+    where {
+      ?etext owl:sameAs* ?R_RES ;
+             :instanceHasVolume ?volstart .
+      ?volstart :volumeNumber ?vnumstart ; :volumeHasEtext ?vtext.
+      ?vtext :seqNum ?rnumstart ; :eTextResource ?rstart .  
+  
+      # find first volume 
+      { 
+        select ?etext ( min(?vnum) as ?vnumstart )  
+        where { 
+          ?etext owl:sameAs* ?R_RES ;   
+                 :instanceHasVolume/:volumeNumber ?vnum .
+        } group by ?etext
+      }  
+      # find first text of first volume
+      { 
+        select ?volstart ( min(?rnum) as ?rnumstart )
+        where {
+          ?etext owl:sameAs* ?R_RES ;   
+                 :instanceHasVolume ?volstart . 
+          ?volstart :volumeNumber ?vnumstart ;
+                    :volumeHasEtext/:seqNum ?rnum .
+        } group by ?volstart
+      }   
+    }
+  }
 }
