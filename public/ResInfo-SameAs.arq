@@ -9,6 +9,7 @@
 #param.R_RES.desc=the unique resource ID of the chosen resource
 
 
+
 construct {
  ?r ?rp ?ro .
  ?ro2 ?ro2p ?ro2o .
@@ -82,6 +83,12 @@ construct {
        tmp:firstVolN ?vnumstart ; 
        tmp:firstText ?rstart ;
        tmp:firstTextN ?rnumstart . 
+  
+# Instances printed at this place
+?resAt    tmp:printedAt ?R_RES ;
+          a ?resAtType ;
+          skos:prefLabel ?resAtLabel ;
+          tmp:provider ?resAtProvider .
   
 } where {
   {
@@ -320,5 +327,18 @@ construct {
         } group by ?volstart
       }   
     }
+  } union {
+    # select 10 instances printed at this place
+    select ?resAt ?resAtType ?resAtLabel ?resAtProvider
+    where {
+           ?r owl:sameAs* ?R_RES .
+           ?resAt bdo:hasSourcePrintery ?r ;
+                  a ?resAtType ;
+                  skos:prefLabel ?resAtLabel .
+           ?resAdm adm:adminAbout ?resAt ;
+                   adm:status bda:StatusReleased ;
+                   adm:metadataLegal/adm:provider ?resAtProvider .
+    } 
+    limit 20
   }
 }
