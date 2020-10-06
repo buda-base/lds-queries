@@ -9,7 +9,6 @@
 #param.R_RES.desc=the unique resource ID of the chosen resource
 
 
-
 construct {
  ?r ?rp ?ro .
  ?ro2 ?ro2p ?ro2o .
@@ -88,6 +87,7 @@ construct {
 ?resAt    tmp:printedAt ?R_RES ;
           a ?resAtType ;
           skos:prefLabel ?resAtLabel ;
+          tmp:entityScore ?resAtScore ;
           tmp:provider ?resAtProvider ;
           tmp:thumbnailIIIFService ?resAtThumb .
   
@@ -330,7 +330,7 @@ construct {
     }
   } union {
     # select 10 instances printed at this place
-    select ?resAt ?resAtType ?resAtLabel ?resAtProvider ?resAtThumb
+    select ?resAt ?resAtType ?resAtLabel ?resAtProvider ?resAtThumb ?resAtScore
     where {
            ?r owl:sameAs* ?R_RES .
            ?resAt bdo:hasSourcePrintery ?r ;
@@ -340,7 +340,8 @@ construct {
            ?resAdm adm:adminAbout ?resAt ;
                    adm:status bda:StatusReleased ;
                    adm:metadataLegal/adm:provider ?resAtProvider .
-    } 
-    limit 20
+     	   ?wRes   :workHasInstance ?resAt ;
+                   tmp:entityScore ?resAtScore .
+    }  order by desc(?resAtScore) limit 20
   }
 }
