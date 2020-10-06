@@ -88,7 +88,8 @@ construct {
 ?resAt    tmp:printedAt ?R_RES ;
           a ?resAtType ;
           skos:prefLabel ?resAtLabel ;
-          tmp:provider ?resAtProvider .
+          tmp:provider ?resAtProvider ;
+          tmp:thumbnailIIIFService ?resAtThumb .
   
 } where {
   {
@@ -334,7 +335,8 @@ construct {
            ?r owl:sameAs* ?R_RES .
            ?resAt bdo:hasSourcePrintery ?r ;
                   a ?resAtType ;
-                  skos:prefLabel ?resAtLabel .
+                  skos:prefLabel ?resAtLabel ;
+                  :instanceHasReproduction/tmp:thumbnailIIIFService ?resAtThumb .
            ?resAdm adm:adminAbout ?resAt ;
                    adm:status bda:StatusReleased ;
                    adm:metadataLegal/adm:provider ?resAtProvider .
