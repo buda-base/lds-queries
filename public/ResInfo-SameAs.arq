@@ -330,7 +330,7 @@ construct {
     }
   } union {
     # select 10 instances printed at this place
-    select ?resAt ?resAtType ?resAtLabel ?resAtProvider
+    select ?resAt ?resAtType ?resAtLabel ?resAtProvider ?resAtThumb
     where {
            ?r owl:sameAs* ?R_RES .
            ?resAt bdo:hasSourcePrintery ?r ;
