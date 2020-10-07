@@ -26,9 +26,9 @@ construct {
 where {
   {
     {
-      ?R_RES :volumeOf/:instanceReproductionOf ?instance ;
+      ?R_RES :volumeOf ?iinstance ;
              :volumeNumber ?volnum .
-      ?loc :contentLocationInstance ?instance .
+      ?loc :contentLocationInstance ?iinstance .
       ?loc :contentLocationVolume ?bvol .
       # see https://lists.apache.org/thread.html/ec4c7fb703748e7d0d70d8e3baa1c2fbb04842b7494c9097df7dfd0f@%3Cusers.jena.apache.org%3E
       FILTER ((?bvol <= ?volnum && NOT EXISTS {?loc :contentLocationEndVolume ?evol}) || (?bvol <= ?volnum  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol <= ?volnum)}))

@@ -77,7 +77,9 @@ construct {
        FILTER(?instType != :ImageInstance)
      ?R_UT :eTextIsVolume ?vnum .
      ?inst skos:prefLabel ?instL .
-     ?loc :contentLocationInstance ?inst ;
+     ?inst :instanceHasReproduction ?iinst .
+     ?iinst a :ImageInstance .
+     ?loc :contentLocationInstance ?iinst ;
             :contentLocationVolume ?bvol .
        FILTER ((?bvol <= ?vnum && NOT EXISTS {?loc :contentLocationEndVolume ?evol}) || (?bvol <= ?vnum  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol <= ?vnum)}))
        # TODO: is it more efficient to get ?bpage, filter on it and then take ?epage ?
