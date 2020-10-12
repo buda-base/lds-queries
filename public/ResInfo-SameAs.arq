@@ -267,16 +267,16 @@ construct {
   } union {
     # 10 works about the entity
     select
-       ?resAbout ?resAbouteScore ?resAboutLabel ?resAboutProvider
+       ?resAbout ?resAboutScore ?resAboutLabel ?resAboutProvider
     where {
            ?r owl:sameAs* ?R_RES .
            ?resAbout bdo:workIsAbout ?r ;
-                     tmp:entityScore ?resAbouteScore ;
+                     tmp:entityScore ?resAboutScore ;
                      skos:prefLabel ?resAboutLabel .
            ?resAdm adm:adminAbout ?resAbout ;
                    adm:status bda:StatusReleased ;
                    adm:metadataLegal/adm:provider ?resAboutProvider .
-    } order by desc(?resAbouteScore) limit 20
+    } order by desc(?resAboutScore) limit 20
   } union {
     # 10 works created by the entity
     select 
