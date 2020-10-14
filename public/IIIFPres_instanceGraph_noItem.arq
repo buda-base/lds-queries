@@ -30,7 +30,7 @@ where {
     ?R_RES :virtualLinkTo ?s .
     ?s ?p ?o .
   } union { 
-    ?R_RES :contentLocation/:contentLocationInstance ?s .
+    ?R_RES :contentLocation/:contentLocationInstance/:instanceReproductionOf ?s .
     ?s ?p ?o .
   } union {
     ?R_RES :virtualLinkTo?/:instanceOf/:creator/skos:prefLabel ?o .

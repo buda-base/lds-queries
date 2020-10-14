@@ -43,8 +43,7 @@ CONSTRUCT {
     ?res tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
 
-    ?res  tmp:entityScore ?eScore ;
-          bdo:language ?wLang .
+    ?res ?resWiip ?resWiio .
   
     ?resoo skos:prefLabel ?ol .
 
@@ -121,11 +120,12 @@ CONSTRUCT {
       (?res) text:query ( bdo:extendedStmts ?L_NAME ) .
       ?res a bdo:Instance .
     }
-    FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
+
     ?res bdo:instanceOf ?resW .
     
-    ?resW tmp:entityScore ?eScore ;
-          bdo:language ?wLang .
+    ?resW ?resWiip ?resWiio .
+
+    FILTER (?resWiip = tmp:entityScore || ?resWiip = bdo:language || ?resWiip = bdo:catalogInfo)
 
   } union {
     

@@ -37,7 +37,7 @@ CONSTRUCT
     ?i tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
 
-    ?i  bdo:language ?wLang .
+    ?i ?wiip ?wiio .
 
     ?i tmp:relationType ?rel2 .
     ?i tmp:relationTypeInv ?rel1 .
@@ -103,8 +103,8 @@ WHERE
         ?i ?rel2 ?R_RES .
       }
       ?i bdo:instanceOf ?w .
-      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
-      ?w bdo:language ?wLang .
+      ?w ?wiip ?wiio .
+      FILTER(?wiip IN(bdo:language , bdo:catalogInfo))
     } union {
       {
         ?R_RES ?rel1 ?i .

@@ -36,7 +36,8 @@ construct {
     ?ii tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
 
-    ?ii  bdo:language ?wLang .
+    # put some of the work properties into the iinstance
+    ?ii ?wiip ?wiio .
 
   } where {
     {
@@ -68,7 +69,8 @@ construct {
       FILTER(?sdate > ?D_START && ?sdate < ?D_END)
       ?iiAdm adm:adminAbout ?ii .
       ?ii bdo:instanceReproductionOf/bdo:instanceOf ?w .
-      ?w bdo:language ?wLang .
+      ?w ?wiip ?wiio .
+      FILTER(?wiip IN(bdo:language , bdo:catalogInfo))
     } union {
       ?iiAdm tmp:lastSync ?sdate .
       FILTER(?sdate > ?D_START && ?sdate < ?D_END)
