@@ -21,6 +21,10 @@ CONSTRUCT
     ?i tmp:hasReproAccess ?access .
     ?i ?ip ?io .
 
+    ?i :inRootInstance ?iR .
+    ?iR skos:prefLabel ?iRl .
+    ?i ?iRp ?iRo .
+
     ?i tmp:yearStart ?yearStart .
     ?i tmp:yearEnd ?yearEnd .
 
@@ -58,6 +62,7 @@ WHERE
       ?i ?ip ?io .
       FILTER (?ip != bdo:note && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
         && ?ip != bdo:colophon && ?ip != bdo:incipit)
+
       ?iAdm adm:adminAbout ?i .
       ?iAdm adm:status ?status .
       ?iAdm adm:metadataLegal/adm:provider ?provider .
@@ -67,7 +72,26 @@ WHERE
       } union {
         ?i ?rel2 ?R_RES .
       }
-      ?i :instanceHasReproduction ?ii .
+      ?i a bdo:Instance .
+      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+      ?i ?ip ?io .
+      FILTER (?ip != bdo:note && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
+        && ?ip != bdo:colophon && ?ip != bdo:incipit)
+
+      ?i :inRootInstance ?iR .
+      ?iRAdm adm:adminAbout ?iR .
+      ?iRAdm adm:status ?status .
+      ?iRAdm adm:metadataLegal/adm:provider ?provider .
+      ?iR skos:prefLabel ?iRl .
+      ?iR ?iRp ?iRo .
+      FILTER (?iRp = bdo:script || ?iRp = bdo:printMethod || ?iRp = tmp:thumbnailIIIFService || ?iRp = bdo:publisherLocation || ?iRp = bdo:publisherName)
+    } union {
+      {
+        ?R_RES ?rel1 ?i .
+      } union {
+        ?i ?rel2 ?R_RES .
+      }
+      ?i :inRootInstance?/:instanceHasReproduction ?ii .
       FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
       ?iiAdm adm:adminAbout ?ii ;
                adm:access ?access .
