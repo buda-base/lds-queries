@@ -67,9 +67,11 @@ construct {
            tmp:entityScore ?resByScore ;
            tmp:provider ?resByProvider .
 
-#repro+thumbnail for versions
+# repro+thumbnail for versions
+# + provider
 ?version  :instanceHasReproduction ?repro ;
-          tmp:thumbnailIIIFService ?vThumb.
+          tmp:thumbnailIIIFService ?vThumb ;
+          tmp:provider ?qvop .
 
 ?par tmp:nbTranslations ?nbtrans .
 
@@ -233,6 +235,12 @@ construct {
     ?r :workHasInstance ?version .
     ?version :inRootInstance? ?rootV .
     ?rootV tmp:thumbnailIIIFService ?vThumb .
+  } union {
+    # add provider for versions
+    ?r owl:sameAs* ?R_RES .
+    ?r :workHasInstance ?version .
+    ?qv adm:adminAbout ?version .
+    ?qv adm:metadataLegal/adm:provider ?qvop .
   } union {
     # add thumbnail for instance reproductions
     ?r owl:sameAs* ?R_RES .
