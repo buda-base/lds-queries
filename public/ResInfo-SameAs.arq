@@ -8,7 +8,6 @@
 #param.R_RES.subtype=a Resource ID
 #param.R_RES.desc=the unique resource ID of the chosen resource
 
-
 construct {
  ?r ?rp ?ro .
  ?ro2 ?ro2p ?ro2o .
@@ -92,6 +91,9 @@ construct {
           tmp:entityScore ?resAtScore ;
           tmp:provider ?resAtProvider ;
           tmp:thumbnailIIIFService ?resAtThumb .
+  
+# access for outline nodes
+?r adm:access ?nworkacc .
   
 } where {
   {
@@ -189,6 +191,12 @@ construct {
     ?q adm:adminAbout ?r .
     ?q adm:metadataLegal ?qo .
     ?qo skos:prefLabel ?qoLab .
+  } union {
+    # add access for outline nodes
+    ?r owl:sameAs* ?R_RES .
+    ?r :contentLocation/:contentLocationInstance ?nwork .
+    ?nworkadm adm:adminAbout ?nwork ;
+              adm:access ?nworkacc .
   } union {
     # add ContentLocation nodes that were missing
     # + display prefLabel for AgentAsCreator 
