@@ -15,6 +15,7 @@ CONSTRUCT
 {
     ?res tmp:status ?st .
     ?res tmp:matchScore ?sc .
+    ?res tmp:labelMatch ?labelMatch .
     ?res tmp:nameMatch ?nameMatch .
     ?res tmp:noteMatch ?noteMatch .
     ?res tmp:isMain true .
@@ -36,7 +37,7 @@ WHERE
         ?res bdo:personName ?name .
         ?name ?namep ?nameo .
     } union {
-        (?res ?sc ?nameMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+        (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
         ?res a :Person .
     } union {
         (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
@@ -59,7 +60,7 @@ WHERE
         ?res bdo:personName ?name .
         ?name ?namep ?nameo .
     } union {
-        (?res ?sc ?nameMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+        (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
         ?res a :Person .
     } union {
         (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
