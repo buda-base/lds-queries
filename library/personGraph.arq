@@ -24,6 +24,8 @@ CONSTRUCT
     ?res tmp:yearStart ?yearStart .
     ?res tmp:provider ?provider .
     ?res tmp:originalRecord ?originalRecord .
+    ?res bdo:personName ?name .
+    ?res bdo:personEvent ?evt .
 
     ?evt ?evtp ?evto .
     ?name ?namep ?nameo .
@@ -45,25 +47,26 @@ WHERE
         ?res a :Person .
     }
 
-    VALUES ?resp { skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs rdfs:seeAlso tmp:entityScore }
-    ?res ?resp ?reso .
+    ?res owl:sameAs* ?resS .
+    VALUES ?resp { skos:altLabel skos:prefLabel bdo:personGender owl:sameAs rdfs:seeAlso tmp:entityScore }
+    ?resS ?resp ?reso .
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
     ?resAdm adm:metadataLegal/adm:provider ?provider .
-    bind ( exists {?tmp bdo:agent ?res} as ?isCreator )
+    bind ( exists {?tmp bdo:agent ?resS} as ?isCreator )
     
   } union {
 
     # get events
     {
-        (?name ?sc ?nameMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        (?name) text:query ( rdfs:label ?L_NAME ) .
         ?res bdo:personName ?name .
         ?name ?namep ?nameo .
     } union {
-        (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+        (?res) text:query ( bdo:skosLabels ?L_NAME ) .
         ?res a :Person .
     } union {
-        (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+        (?note) text:query ( bdo:noteText ?L_NAME ) .
         ?res bdo:note ?note .
         ?res a :Person .
     }
