@@ -232,10 +232,9 @@ CONSTRUCT {
         ?resRepAdm adm:adminAbout ?resRep .
         ?resRepAdm adm:status bda:StatusReleased .
         bind( exists {?resRepAdm adm:access bda:AccessOpen} as ?resAccessOpen)
-        bind( exists {?resRep a bdo:ImageInstance} as ?resImage)
+        bind( exists {?resRep a bdo:ImageInstance ; tmp:thumbnailIIIFService ?th } as ?resImage)
         bind( exists {?resRep a bdo:EtextInstance} as ?resEtext)
       } group by ?res 
 
     }
-
 }
