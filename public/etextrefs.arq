@@ -1,0 +1,20 @@
+#QueryScope=EtextInstance
+#QueryReturnType=Graph
+#QueryResults=Outline of an etext instance for display
+#QueryParams=R_RES
+#QueryUrl=/etextrefs?R_RES=bdr:IE3JT13307
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=:EtextInstance
+#param.R_RES.desc=the URI of the etext instance
+
+construct {
+	?R_RES :instanceHasVolume ?vol .
+	?vol ?volp ?volo .
+	?eref ?erefp ?erefo .
+} where {
+	?R_RES :instanceHasVolume ?vol .
+	?vol ?volp ?volo .
+	?vol :volumeHasEtext ?eref .
+	?eref ?erefp ?erefo .
+}
