@@ -231,9 +231,9 @@ CONSTRUCT {
 
         ?resRepAdm adm:adminAbout ?resRep .
         ?resRepAdm adm:status bda:StatusReleased .
-        bind( exists {?resRepAdm adm:access bda:AccessOpen} as ?resAccessOpen)
         bind( exists {?resRep a bdo:ImageInstance ; tmp:thumbnailIIIFService ?th } as ?resImage)
         bind( exists {?resRep a bdo:EtextInstance} as ?resEtext)
+        bind( (exists {?resRepAdm adm:access bda:AccessOpen}) && (?resEtext || ?resImage) as ?resAccessOpen)
       } group by ?res 
 
     }
