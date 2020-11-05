@@ -12,9 +12,19 @@ construct {
 	?R_RES :instanceHasVolume ?vol .
 	?vol ?volp ?volo .
 	?eref ?erefp ?erefo .
+	# etextref prefLabel
+	?erefo skos:prefLabel ?erefol .
 } where {
 	?R_RES :instanceHasVolume ?vol .
 	?vol ?volp ?volo .
 	?vol :volumeHasEtext ?eref .
 	?eref ?erefp ?erefo .
+	# get etextref prefLabel
+	optional {
+		?R_RES :instanceHasVolume ?vol .
+		?vol ?volp ?volo .
+		?vol :volumeHasEtext ?eref .
+		?eref ?erefp ?erefo .
+		?erefo skos:prefLabel ?erefol .
+	}
 }
