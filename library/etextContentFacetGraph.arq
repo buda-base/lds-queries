@@ -58,14 +58,11 @@ where
   } union {
 
     # get optional properties skos:prefLabel and bdo:etextisvolume
-    (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:") .
+    (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME) .
     ?etext bdo:eTextHasChunk ?chunk .
     ?etext bdo:eTextInInstance ?R_EINST .
     VALUES ?etextp { skos:prefLabel bdo:eTextIsVolume }
     ?etext ?etextp ?etexto .
-
-    ?chunk bdo:sliceStartChar ?startChar .
-    ?chunk bdo:sliceEndChar ?endChar .
 
   } union {
     ?chunk text:query ( :chunkContents ?L_NAME ) .
@@ -90,7 +87,8 @@ where
 
     select ?etext (count (?chunk) as ?nbchunks) (max (?score) as ?maxScore) where {
       (?chunk ?score) text:query ( :chunkContents ?L_NAME) .
-      ?etext bdo:eTextHasChunk ?chunk .  
+      ?etext bdo:eTextHasChunk ?chunk .
+      ?etext bdo:eTextInInstance ?R_EINST .
     } group by ?etext 
   }
 
