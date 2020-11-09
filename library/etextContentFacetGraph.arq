@@ -61,6 +61,10 @@ where
     (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME) .
     ?etext bdo:eTextHasChunk ?chunk .
     ?etext bdo:eTextInInstance ?R_EINST .
+    ?eAdm adm:adminAbout ?R_EINST ;
+          adm:status bda:StatusReleased ;
+          adm:access bda:AccessOpen .
+    FILTER (NOT EXISTS {?eAdm adm:restrictedInChina true.})
     VALUES ?etextp { skos:prefLabel bdo:eTextIsVolume }
     ?etext ?etextp ?etexto .
 
@@ -89,6 +93,10 @@ where
       (?chunk ?score) text:query ( :chunkContents ?L_NAME) .
       ?etext bdo:eTextHasChunk ?chunk .
       ?etext bdo:eTextInInstance ?R_EINST .
+      ?eAdm adm:adminAbout ?R_EINST ;
+          adm:status bda:StatusReleased ;
+          adm:access bda:AccessOpen .
+    FILTER (NOT EXISTS {?eAdm adm:restrictedInChina true.})
     } group by ?etext 
   }
 

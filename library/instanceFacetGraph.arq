@@ -169,7 +169,7 @@ CONSTRUCT {
       ?res a bdo:Instance .
     }
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
-    ?res :inRootInstance?/:instanceHasReproduction ?resRep .
+    ?res :inRootInstance?/:instanceHasReproduction? ?resRep .
     ?resRepAdm adm:adminAbout ?resRep ;
                adm:access ?resRepAccess .
 
@@ -227,7 +227,7 @@ CONSTRUCT {
           ?res a bdo:Instance .
         }
         FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
-        ?res :inRootInstance?/:instanceHasReproduction ?resRep .
+        ?res :inRootInstance?/:instanceHasReproduction? ?resRep .
 
         ?resRepAdm adm:adminAbout ?resRep .
         ?resRepAdm adm:status bda:StatusReleased .
