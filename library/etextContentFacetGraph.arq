@@ -60,7 +60,7 @@ where
   } union {
 
     # get optional properties skos:prefLabel and bdo:etextisvolume
-    (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME) .
+    (?chunk) text:query ( :chunkContents ?L_NAME) .
     ?etext bdo:eTextHasChunk ?chunk .
     ?etext bdo:eTextInInstance ?R_EINST .
     ?eAdm adm:adminAbout ?R_EINST ;
