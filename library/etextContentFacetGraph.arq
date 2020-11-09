@@ -78,6 +78,7 @@ where
           adm:status bda:StatusReleased ;
           adm:access bda:AccessOpen .
     FILTER (NOT EXISTS {?eAdm adm:restrictedInChina true.})
+    ?R_EINST bdo:instanceReproductionOf? ?einstwithlabel .
     ?einstwithlabel :instanceOf ?w .
 
     ?w bdo:creator ?creator .
