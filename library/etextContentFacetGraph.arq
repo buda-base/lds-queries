@@ -47,7 +47,9 @@ where
           adm:status bda:StatusReleased ;
           adm:access bda:AccessOpen .
     FILTER (NOT EXISTS {?eAdm adm:restrictedInChina true.})
-    ?w :workHasInstance ?R_EINST .
+    # kind of cheating, the issue here is that openpecha don't always have the
+    # work -> etextinstance link
+    ?einstwithlabel :instanceOf ?w .
 
     ?chunk bdo:sliceStartChar ?startChar .
     ?chunk bdo:sliceEndChar ?endChar .
@@ -76,10 +78,7 @@ where
           adm:status bda:StatusReleased ;
           adm:access bda:AccessOpen .
     FILTER (NOT EXISTS {?eAdm adm:restrictedInChina true.})
-    ?w :workHasInstance ?R_EINST .
-    
-    ?chunk bdo:sliceStartChar ?startChar .
-    ?chunk bdo:sliceEndChar ?endChar .
+    ?einstwithlabel :instanceOf ?w .
 
     ?w bdo:creator ?creator .
     ?creator bdo:role ?role .
