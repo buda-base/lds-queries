@@ -31,7 +31,10 @@ where
     ?etext bdo:eTextInInstance ?einstance .
     ?eAdm adm:adminAbout ?einstance .
     ?eAdm adm:status bda:StatusReleased .
-    ?w :workHasInstance ?einstance .
+    # kind of cheating, the issue here is that openpecha don't always have the
+    # work -> etextinstance link
+    ?einstance bdo:instanceReproductionOf? ?einstrepof .
+    ?w :workHasInstance ?einstrepof .
 
     ?chunk bdo:sliceStartChar ?startChar .
     ?chunk bdo:sliceEndChar ?endChar .
@@ -46,7 +49,10 @@ where
     ?etext bdo:eTextInInstance ?einstance .
     ?eAdm adm:adminAbout ?einstance .
     ?eAdm adm:status bda:StatusReleased .
-    ?w :workHasInstance ?einstance .
+    # kind of cheating, the issue here is that openpecha don't always have the
+    # work -> etextinstance link
+    ?einstance bdo:instanceReproductionOf? ?einstrepof .
+    ?w :workHasInstance ?einstrepof .
 
     ?w bdo:creator ?creator .
     ?creator bdo:role ?role .

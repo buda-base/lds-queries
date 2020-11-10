@@ -35,27 +35,25 @@ construct {
 } where {
    ?R_UT :eTextInInstance/^adm:adminAbout/adm:access bda:AccessOpen .
    {
-
      ?R_UT :eTextHasChunk ?c .
      ?c :sliceStartChar ?chunkstart ;
         :sliceEndChar ?chunkend .
-     FILTER (?chunkstart <= ?I_END && ?chunkend >= ?I_START)
+     FILTER (?chunkstart <= ?I_END && ?chunkend >= ?I_START )
      ?c :chunkContents ?chunkcontent .
-     ?R_UT skos:prefLabel ?etextL .
    } union {
-       # for passages with a page number
-       ?R_UT :eTextHasPage ?p .
-       # TODO: is it more efficient to get ?pstart, filter on it and then take ?pend ?
+     # for passages with a page number
+     ?R_UT :eTextHasPage ?p .
+     # TODO: is it more efficient to get ?pstart, filter on it and then take ?pend ?
      ?p :sliceStartChar  ?pstart ;
           :sliceEndChar    ?pend .
      FILTER (?pstart <= ?I_END && ?pend >= ?I_START)
      ?p :seqNum ?pagenum .
    } union {
-       # for passages with a page number and images
-       ?R_UT :eTextHasPage ?p .
+     # for passages with a page number and images
+     ?R_UT :eTextHasPage ?p .
      ?p :sliceStartChar  ?pstart ;
           :sliceEndChar    ?pend .
-       # taking only one page for this exercise:
+     # taking only one page for this exercise:
      FILTER (?pstart <= ?I_START && ?pend >= ?I_START)
      ?R_UT :eTextInInstance ?ie_inst .
      ?ie_inst :instanceReproductionOf ?w_inst .
@@ -65,11 +63,11 @@ construct {
      ?w_inst :instanceHasVolume ?imgv .
      ?imgv :volumeNumber ?vnum .
    } union {
-       # for passages with a corresponding location
-       ?R_UT :eTextHasPage ?p .
+     # for passages with a corresponding location
+     ?R_UT :eTextHasPage ?p .
      ?p :sliceStartChar  ?pstart ;
           :sliceEndChar    ?pend .
-       # taking only one page for this exercise:
+     # taking only one page for this exercise:
      FILTER (?pstart <= ?I_START && ?pend >= ?I_START)
      ?R_UT :eTextInInstance ?ie_inst .
      ?ie_inst :instanceReproductionOf+ ?inst .
@@ -81,13 +79,13 @@ construct {
      ?iinst a :ImageInstance .
      ?loc :contentLocationInstance ?iinst ;
             :contentLocationVolume ?bvol .
-       FILTER ((?bvol <= ?vnum && NOT EXISTS {?loc :contentLocationEndVolume ?evol}) || (?bvol <= ?vnum  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol <= ?vnum)}))
-       # TODO: is it more efficient to get ?bpage, filter on it and then take ?epage ?
-       ?p :seqNum ?pagenum .
-       ?loc :contentLocationPage ?bpage ;
-            :contentLocationEndPage ?epage .
-       FILTER (?bpage <= ?pagenum && ?epage >= ?pagenum)
-       ?instpart :contentLocation ?loc .
-       ?instpart skos:prefLabel ?instpartL .
+     FILTER ((?bvol <= ?vnum && NOT EXISTS {?loc :contentLocationEndVolume ?evol}) || (?bvol <= ?vnum  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol <= ?vnum)}))
+     # TODO: is it more efficient to get ?bpage, filter on it and then take ?epage ?
+     ?p :seqNum ?pagenum .
+     ?loc :contentLocationPage ?bpage ;
+          :contentLocationEndPage ?epage .
+     FILTER (?bpage <= ?pagenum && ?epage >= ?pagenum)
+     ?instpart :contentLocation ?loc .
+     ?instpart skos:prefLabel ?instpartL .
    }
 }
