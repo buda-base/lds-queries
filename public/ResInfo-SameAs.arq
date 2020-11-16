@@ -95,6 +95,10 @@ construct {
 # access for outline nodes
 ?r adm:access ?nworkacc .
   
+# info related to members (series, corporation, collection)
+?mb skos:prefLabel ?mbL ;
+    tmp:entityScore ?mbSc .
+
 } where {
   {
     ?r owl:sameAs* ?R_RES .
@@ -280,6 +284,28 @@ construct {
     ?r owl:sameAs* ?R_RES ;
        bdo:corporationHasMember/bdo:corporationMember ?cm .
     ?cm skos:prefLabel ?cmL .
+  } union {
+    # score for members of series
+    ?r owl:sameAs* ?R_RES ;
+       :serialHasMember ?mb .
+    ?mb tmp:entityScore ?mbSc .
+  } union {
+    # prefLabel for members of collection
+    ?r owl:sameAs* ?R_RES ;
+       :collectionMember ?mb .
+    ?mb :instanceReproductionOf/:instanceOf ?mbW .
+    ?mbW skos:prefLabel ?mbL .
+  } union {
+    # prefLabel+score for members of collection
+    ?r owl:sameAs* ?R_RES ;
+       :collectionMember ?mb .
+    ?mb :instanceReproductionOf/:instanceOf ?mbW .
+    ?mbW tmp:entityScore ?mbSc .  
+  } union {
+    # prefLabel for members of corporation 
+    ?r owl:sameAs* ?R_RES ;
+       :corporationHasMember ?mb .
+    ?mb :corporationMember/skos:prefLabel ?mbL .
   } union {
     # 10 works about the entity
     select
