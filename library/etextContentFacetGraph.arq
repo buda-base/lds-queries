@@ -10,6 +10,10 @@
 #param.L_NAME.isLucene=true
 #param.L_NAME.example="ye shes"
 
+#param.R_EINST.type=URI
+#param.R_EINST.subtype=bdo:EtextInstance
+#param.R_EINST.desc=the etext instance in which the results should be returned
+
 construct {
   ?etext tmp:isMain true .
   ?etext skos:prefLabel ?etextL .

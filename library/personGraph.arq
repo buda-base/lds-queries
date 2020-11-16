@@ -48,7 +48,7 @@ WHERE
     }
 
     ?res owl:sameAs* ?resS .
-    VALUES ?resp { skos:altLabel skos:prefLabel bdo:personGender owl:sameAs rdfs:seeAlso tmp:entityScore }
+    VALUES ?resp { skos:altLabel skos:prefLabel bdo:personGender owl:sameAs rdfs:seeAlso tmp:entityScore tmp:associatedCentury }
     ?resS ?resp ?reso .
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
