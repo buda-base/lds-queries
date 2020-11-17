@@ -33,6 +33,7 @@ CONSTRUCT
  
     ?res tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
+    ?res tmp:associatedCentury ?authorC .
   
     ?resoo skos:prefLabel ?ol .
 
@@ -53,7 +54,8 @@ WHERE
       FILTER(?rel2 != bdo:serialMemberOf)
       ?res a/rdfs:subClassOf* bdo:Work .
     } union {
-      ?res bdo:creator/bdo:agent ?R_RES . 
+      ?aac bdo:agent ?R_RES .
+      ?res bdo:creator ?aac . 
       BIND(bdo:creator as ?rel3)
     }
     
@@ -74,16 +76,20 @@ WHERE
       FILTER(?rel2 != bdo:serialMemberOf)
       ?res a/rdfs:subClassOf* bdo:Work .
     } union {
-      ?res bdo:creator/bdo:agent ?R_RES .
+      ?aac bdo:agent ?R_RES .
+      ?res bdo:creator ?aac . 
       BIND(bdo:creator as ?rel3)
     }
     
     ?res bdo:creator ?creator .
     ?creator bdo:role ?role .
     ?creator bdo:agent ?agent .
-    ?agent skos:prefLabel ?agentL .
+    VALUES ?agentp { skos:prefLabel tmp:associatedCentury }
+    ?agent ?agentp ?agento .
     
     bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+    bind( if(?agentp = skos:prefLabel, ?agento, 1/0) as ?agentL)
+    bind( if(?agentp = tmp:associatedCentury && ?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agento, 1/0) as ?authorC)
 
   } union {
     
@@ -95,7 +101,8 @@ WHERE
       FILTER(?rel2 != bdo:serialMemberOf)
       ?res a/rdfs:subClassOf* bdo:Work .
     } union {
-      ?res bdo:creator/bdo:agent ?R_RES .
+      ?aac bdo:agent ?R_RES .
+      ?res bdo:creator ?aac . 
       BIND(bdo:creator as ?rel3)
     }
     
@@ -120,7 +127,8 @@ WHERE
         FILTER(?rel2 != bdo:serialMemberOf)
         ?res a/rdfs:subClassOf* bdo:Work .
       } union {
-        ?res bdo:creator/bdo:agent ?R_RES .
+        ?aac bdo:agent ?R_RES .
+        ?res bdo:creator ?aac . 
       }
 
       ?res bdo:workHasInstance ?instance .
