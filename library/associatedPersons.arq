@@ -25,6 +25,7 @@ construct {
     ?res tmp:relationType ?rel2 .
     ?res tmp:relationType ?rel3 .
     ?res tmp:relationType ?rel4 .
+    ?res tmp:membershipType ?cmtype .
 
     ?evt ?evtp ?evto .
 }
@@ -56,9 +57,13 @@ where {
       ?R_RES bdo:creator ?creatorNode .
       ?creatorNode bdo:agent ?res .
       BIND(bdo:creator as ?rel4)
+    } union {
+      ?R_RES bdo:corporationHasMember ?cm .
+      ?cm a ?cmtype ;
+          bdo:corporationMember ?res .
     }
     
-    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore}
+    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore tmp:associatedCentury }
     ?res ?resp ?reso .
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
@@ -80,7 +85,12 @@ where {
       ?R_RES bdo:creator ?creatorNode .
       ?creatorNode bdo:agent ?res .
       BIND(bdo:creator as ?rel4)
+    } union {
+      ?R_RES bdo:corporationHasMember ?cm .
+      ?cm a ?cmtype ;
+          bdo:corporationMember ?res .
     }
+
     ?res bdo:personEvent ?evt .
     ?evt a ?evtType .
     FILTER (?evtType IN(bdo:PersonBirth , bdo:PersonDeath))
