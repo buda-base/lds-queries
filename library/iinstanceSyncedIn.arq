@@ -35,6 +35,7 @@ construct {
     # Same for the author, entity score and language
     ?ii tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
+    ?ii tmp:associatedCentury ?authorC .
 
     # put some of the work properties into the iinstance
     ?ii ?wiip ?wiio .
@@ -62,8 +63,12 @@ construct {
       ?w bdo:creator ?creator .
       ?creator bdo:role ?role .
       ?creator bdo:agent ?agent .
-      ?agent skos:prefLabel ?agentL .
+      VALUES ?agentp { skos:prefLabel tmp:associatedCentury }
+      ?agent ?agentp ?agento .
+    
       bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+      bind( if(?agentp = skos:prefLabel, ?agento, 1/0) as ?agentL)
+      bind( if(?agentp = tmp:associatedCentury && ?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agento, 1/0) as ?authorC)
     } union {
       ?iiAdm tmp:lastSync ?sdate .
       FILTER(?sdate > ?D_START && ?sdate < ?D_END)
