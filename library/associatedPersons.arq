@@ -25,7 +25,7 @@ construct {
     ?res tmp:relationType ?rel2 .
     ?res tmp:relationType ?rel3 .
     ?res tmp:relationType ?rel4 .
-    ?res tmp:membershipType ?cmtype .
+    ?res tmp:relationType ?cmtype .
 
     ?evt ?evtp ?evto .
 }
