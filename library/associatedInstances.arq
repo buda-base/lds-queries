@@ -178,10 +178,11 @@ WHERE
           ?i ?rel2 ?R_RES .
         } union {
           ?it :inCollection ?R_RES .
-        ?i :instanceHasItem ?it .
+          ?i :instanceHasItem ?it .
         }
+        ?i a bdo:Instance .
         FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
-        ?i :instanceHasReproduction ?ii .
+        ?i :inRootInstance?/:instanceHasReproduction? ?ii .
 
         ?iiAdm adm:adminAbout ?ii .
         ?iiAdm adm:status bda:StatusReleased .
