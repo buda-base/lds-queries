@@ -1,0 +1,93 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All works having etext whose chunks contain the given L_NAME parameter value, along with Topic and WorkMainAuthor facets
+#QueryParams=L_NAME,LG_NAME,R_EINST
+#QueryUrl=/lib/etextContentFacetGraphInInstance?L_NAME="གལ་ཏེ་བྱང་ཆུབ་སེམས་དཔའསེམས་དཔའ་ཆེན་པོས་འཁྲུགཙང་ནེམ་ནུར་མཁྱེར།"&LG_NAME=bo&R_EINST=bdr:IE0OPP008105
+
+#param.L_NAME.type=string
+#param.L_NAME.langTag=LG_NAME
+#param.L_NAME.isLucene=true
+#param.L_NAME.example="ye shes"
+
+#param.R_EINST.type=URI
+#param.R_EINST.subtype=bdo:EtextInstance
+#param.R_EINST.desc=the etext instance in which the results should be returned
+
+construct {
+  ?etext tmp:isMain true .
+  ?etext bdo:eTextHasChunk ?chunk .
+  ?R_EINST skos:prefLabel ?einstanceL .
+
+  ?chunk bdo:chunkContents ?lit .
+  ?chunk bdo:sliceStartChar ?startChar .
+  ?chunk bdo:sliceEndChar ?endChar .
+  ?chunk tmp:matchScore ?score .
+
+  ?etext ?etextp ?etexto .
+
+  ?etext tmp:maxScore ?maxScore .
+  ?etext tmp:nbChunks ?nbchunks .
+}
+where
+{
+  {
+    # labels
+    ?R_EINST bdo:instanceReproductionOf? ?einst .
+    ?einst skos:prefLabel ?einstanceL .
+
+  } union {
+    # openpecha
+    ?adm adm:adminAbout ?R_EINST ;
+          adm:status bda:StatusReleased ;
+          adm:access bda:AccessOpen ;
+          adm:syncAgent  bdr:SAOPT ;
+          adm:graphId ?g .
+    FILTER (NOT EXISTS {?adm adm:restrictedInChina true.})
+    graph ?g {
+        (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:" ) .
+    }
+    ?etext bdo:eTextHasChunk ?chunk .
+    VALUES ?etextp { skos:prefLabel bdo:eTextIsVolume bdo:eTextInVolume }
+    ?etext ?etextp ?etexto .
+
+  } union {
+
+    # not openpecha
+    ?adm adm:adminAbout ?R_EINST ;
+          adm:status bda:StatusReleased ;
+          adm:access bda:AccessOpen .
+    FILTER (NOT EXISTS {?adm adm:restrictedInChina true.})
+    FILTER (NOT EXISTS {?adm adm:syncAgent  bdr:SAOPT.})
+    (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:" ) .
+    ?etext bdo:eTextHasChunk ?chunk .
+    ?etext bdo:eTextInInstance ?R_EINST .
+    VALUES ?etextp { skos:prefLabel bdo:eTextIsVolume bdo:eTextInVolume }
+    ?etext ?etextp ?etexto .
+
+  } union {
+
+    select ?etext (count (?chunk) as ?nbchunks) (max (?score) as ?maxScore) where {
+      {
+        ?adm adm:adminAbout ?R_EINST ;
+            adm:status bda:StatusReleased ;
+            adm:access bda:AccessOpen ;
+            adm:syncAgent  bdr:SAOPT ;
+            adm:graphId ?g .
+        FILTER (NOT EXISTS {?adm adm:restrictedInChina true.})
+        graph ?g {
+          (?chunk ?score) text:query ( :chunkContents ?L_NAME ) .
+        }
+        ?etext bdo:eTextHasChunk ?chunk .
+      } union {
+        ?adm adm:adminAbout ?R_EINST ;
+          adm:status bda:StatusReleased ;
+          adm:access bda:AccessOpen .
+        FILTER (NOT EXISTS {?adm adm:restrictedInChina true.})
+        FILTER (NOT EXISTS {?adm adm:syncAgent  bdr:SAOPT.})
+        (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME ) .
+        ?etext bdo:eTextHasChunk ?chunk .
+        ?etext bdo:eTextInInstance ?R_EINST .
+      }
+    } group by ?etext 
+  }
+}
