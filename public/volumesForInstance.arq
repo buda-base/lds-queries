@@ -8,10 +8,9 @@
 #param.R_RES.subtype=bdo:Instance
 #param.R_RES.desc=the Instance on which info is needed
 
-select ?volnum ?volid ?imgList where {
-  ?R_RES :instanceHasReproduction ?i .
+select ?volnum ?volid where {
+  ?R_RES :instanceHasReproduction? ?i .
   ?i a bdo:ImageInstance ;
      :instanceHasVolume ?volid .
-  ?volid :volumeNumber ?volnum ;
-         :imageList ?imgList .
+  ?volid :volumeNumber ?volnum .
 } order by asc(?volnum)
