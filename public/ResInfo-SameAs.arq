@@ -9,7 +9,7 @@
 #param.R_RES.desc=the unique resource ID of the chosen resource
 
 construct {
- ?r ?rp ?ro .
+ ?r ?rpkeep ?rokeep .
  ?ro2 ?ro2p ?ro2o .
  ?ro3 ?ro3p ?ro3o .
  ?ro3o ?ro4p ?ro4o .
@@ -54,6 +54,11 @@ construct {
  ?id ?idp ?ido .
  ?title ?titlep ?titleo .
  ?cm skos:prefLabel ?cmL .
+
+
+ ?R_RES bdo:collectionMember ?resInColl .
+ ?resInColl skos:prefLabel ?resInCollLabel ;
+            tmp:thumbnailIIIFService ?resInCollThumbnail .
 
  ?resAbout bdo:workIsAbout ?R_RES ;
            skos:prefLabel ?resAboutLabel ;
@@ -102,7 +107,8 @@ construct {
 } where {
   {
     ?r owl:sameAs* ?R_RES .
-    ?r ?rp ?ro .
+    ?r ?rpkeep ?rokeep .
+    FILTER(?rpkeep != bdo:collectionMember)
   } union  {
     ?r owl:sameAs* ?R_RES .
     ?r ?rp ?ro .
@@ -290,18 +296,6 @@ construct {
        :serialHasMember ?mb .
     ?mb tmp:entityScore ?mbSc .
   } union {
-    # prefLabel for members of collection
-    ?r owl:sameAs* ?R_RES ;
-       :collectionMember ?mb .
-    ?mb :instanceReproductionOf/:instanceOf ?mbW .
-    ?mbW skos:prefLabel ?mbL .
-  } union {
-    # prefLabel+score for members of collection
-    ?r owl:sameAs* ?R_RES ;
-       :collectionMember ?mb .
-    ?mb :instanceReproductionOf/:instanceOf ?mbW .
-    ?mbW tmp:entityScore ?mbSc .  
-  } union {
     # prefLabel for members of corporation 
     ?r owl:sameAs* ?R_RES ;
        :corporationHasMember ?mb .
@@ -319,6 +313,25 @@ construct {
                    adm:status bda:StatusReleased ;
                    adm:metadataLegal/adm:provider ?resAboutProvider .
     } order by desc(?resAboutScore) limit 20
+  } union {
+    # 10 versions in collection, test with bdr:PR1CTC17, bdr:PR0IDP001, bdr:PR0NGMCP0617
+    select
+       ?resInColl ?resInCollLabel ?resInCollThumbnail
+    where {
+      {
+         ?resInCollX bdo:inCollection ?R_RES .
+         ?resInColl bdo:instanceHasItem? ?resInCollX .
+         ?resInColl tmp:thumbnailIIIFService ?resInCollThumbnail .
+         ?resInColl bdo:instanceReproductionOf? ?resWithLabel .
+         ?resWithLabel skos:prefLabel ?resInCollLabel .
+      } union {
+        ?resInCollX bdo:inCollection ?R_RES.
+        ?resInColl bdo:instanceHasItem? ?resInCollX .
+        FILTER(not exists{?resInColl tmp:thumbnailIIIFService ?resInCollThumbnail . })
+        ?resInColl bdo:instanceReproductionOf? ?resWithLabel .
+        ?resWithLabel skos:prefLabel ?resInCollLabel .
+      }
+    } limit 20
   } union {
     # 10 works created by the entity
     select 
@@ -382,7 +395,7 @@ construct {
            ?resAdm adm:adminAbout ?resAt ;
                    adm:status bda:StatusReleased ;
                    adm:metadataLegal/adm:provider ?resAtProvider .
-     	   ?wRes   :workHasInstance ?resAt ;
+         ?wRes   :workHasInstance ?resAt ;
                    tmp:entityScore ?resAtScore .
     }  order by desc(?resAtScore) limit 20
   }
