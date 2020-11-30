@@ -31,5 +31,9 @@ select ?type (count (distinct ?e) as ?count) where {
 		?evt ?evtp ?R_RES .
 		?e bdo:creator ?evt .
 		?e a ?type .
-	}
+	} union {
+        ?it :inCollection ?R_RES .
+        ?e :instanceHasItem ?it .
+        ?e a ?type .
+      }
 } group by ?type 
