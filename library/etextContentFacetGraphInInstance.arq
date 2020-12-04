@@ -49,6 +49,8 @@ where
     ?etext bdo:eTextHasChunk ?chunk .
     VALUES ?etextp { skos:prefLabel bdo:eTextIsVolume bdo:eTextInVolume }
     ?etext ?etextp ?etexto .
+    ?chunk bdo:sliceStartChar ?startChar .
+    ?chunk bdo:sliceEndChar ?endChar .
 
   } union {
 
@@ -63,6 +65,8 @@ where
     ?etext bdo:eTextInInstance ?R_EINST .
     VALUES ?etextp { skos:prefLabel bdo:eTextIsVolume bdo:eTextInVolume }
     ?etext ?etextp ?etexto .
+    ?chunk bdo:sliceStartChar ?startChar .
+    ?chunk bdo:sliceEndChar ?endChar .
 
   } union {
 
