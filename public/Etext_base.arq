@@ -41,7 +41,13 @@ where {
     ?hasRepro a bdo:EtextInstance .
     ?hasRepro :instanceHasVolume ?etextVol .
     ?etextVol :volumeNumber ?volNB ; :volumeHasEtext/:eTextResource ?etextRes .
-    # in mirador we can only use etexts with page numbers
-    filter exists { ?etextRes :eTextHasPage/:seqNum ?num } .
+    filter exists { 
+      # in mirador we can only use etexts with page numbers
+      ?etextRes :eTextHasPage/:seqNum ?num 
+      # etext must not be unpaginated (see bdr:MW1KG14_BED8FE)
+      filter not exists { 
+        ?etextRes rdf:type bdo:EtextNonPaginated .       
+      } 
+    } .
   }
 }
