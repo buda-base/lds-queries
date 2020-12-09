@@ -27,8 +27,8 @@ CONSTRUCT
   ?partT ?partTp ?partTo .
   ?cl ?clp ?clo .
   ?id ?idp ?ido .
-  ?partW skos:prefLabel ?partWL ;
-       :creator ?partWc .
+  ?part tmp:author ?partWc .
+  ?partW skos:prefLabel ?partWL .
   ?partWc skos:prefLabel ?partWcL .
   ?ancestor ?ancestorp ?ancestoro .
 }
@@ -49,7 +49,7 @@ WHERE
   	# get parts: essential triples
   	?R_RES :hasPart? ?part .
     ?part ?partp ?parto .
-    FILTER (?partp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart, rdfs:seeAlso))
+    FILTER (?partp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart, rdfs:seeAlso, :colophon))
   } union {
     # get parts: essential triples
     ?R_RES :hasPart? ?part .
@@ -61,7 +61,7 @@ WHERE
   	?part  :hasTitle ?partT .
   	?partT ?partTp ?partTo .
   } union {
-    # get parts: title
+    # get parts: identifiers
     ?R_RES :hasPart? ?part .
     ?part  bf:identifiedBy ?id .
     ?id ?idp ?ido .
@@ -74,7 +74,7 @@ WHERE
   	# get parts: work creator triples
   	?R_RES :hasPart? ?part .
   	?part :instanceOf ?partW .
-  	?partW :creator ?partWc .
+  	?partW :creator/:agent ?partWc .
   	?partWc skos:prefLabel ?partWcL .
   } union {
   	# get parts: location triples
