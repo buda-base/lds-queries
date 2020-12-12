@@ -19,7 +19,6 @@ CONSTRUCT
     ?res tmp:nameMatch ?nameMatch .
     ?res tmp:noteMatch ?noteMatch .
     ?res tmp:isMain true .
-    ?res tmp:isCreator ?isCreator .
     ?res ?resp ?reso .
     ?res tmp:yearStart ?yearStart .
     ?res tmp:provider ?provider .
@@ -48,12 +47,11 @@ WHERE
     }
 
     ?res owl:sameAs* ?resS .
-    VALUES ?resp { skos:altLabel skos:prefLabel bdo:personGender owl:sameAs rdfs:seeAlso tmp:entityScore tmp:associatedCentury }
+    VALUES ?resp { skos:altLabel skos:prefLabel bdo:personGender owl:sameAs rdfs:seeAlso tmp:entityScore tmp:associatedCentury tmp:hasRole }
     ?resS ?resp ?reso .
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
     ?resAdm adm:metadataLegal/adm:provider ?provider .
-    bind ( exists {?tmp bdo:agent ?resS} as ?isCreator )
     
   } union {
 

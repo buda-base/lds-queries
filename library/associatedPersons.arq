@@ -16,7 +16,6 @@ construct {
     ?res tmp:matchScore ?sc .
     ?res tmp:nameMatch ?nameMatch.
     ?res tmp:isMain true .
-    ?res tmp:isCreator ?isCreator .
     ?res ?resp ?reso .
     ?res tmp:yearStart ?yearStart .
     ?res tmp:provider ?provider .
@@ -63,12 +62,11 @@ where {
           bdo:corporationMember ?res .
     }
     
-    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore tmp:associatedCentury }
+    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore tmp:associatedCentury tmp:hasRole }
     ?res ?resp ?reso .
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
     ?resAdm adm:metadataLegal/adm:provider ?provider .
-    bind ( exists {?tmp bdo:agent ?res} as ?isCreator )
     
   } union {
 
