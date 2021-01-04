@@ -1,11 +1,11 @@
 #QueryScope=Work
 #QueryReturnType=Table
 #QueryResults=All works with a certain id
-#QueryParams=S_ID
-#QueryUrl=/idWorks?S_ID=D1
+#QueryParams=L_ID
+#QueryUrl=/idWorks?L_ID=D1
 
-#param.S_ID.type=string
-#param.S_ID.desc=the id
+#param.L_ID.type=string
+#param.L_ID.desc=the id
 
 CONSTRUCT
 {
@@ -37,7 +37,7 @@ WHERE
   #  - work has creator R_RES
   {
 	{
-	  ?id rdf:value ?S_ID .
+	  ?id rdf:value ?L_ID .
 	  ?res bf:identifiedBy ?id .
 	  ?res a bdo:Work .
 	  ?id a ?idtype .
@@ -52,7 +52,7 @@ WHERE
   } union {
     
 	{
-	  ?id rdf:value ?S_ID .
+	  ?id rdf:value ?L_ID .
 	  ?res bf:identifiedBy ?id .
 	  ?res a bdo:Work .
 	  ?id a ?idtype .
@@ -71,7 +71,7 @@ WHERE
   } union {
     
     {
-	  ?id rdf:value ?S_ID .
+	  ?id rdf:value ?L_ID .
 	  ?res bf:identifiedBy ?id .
 	  ?res a bdo:Work .
 	  ?id a ?idtype .
@@ -91,7 +91,7 @@ WHERE
     where {
       
       {
-		?id rdf:value ?S_ID .
+		?id rdf:value ?L_ID .
 		?res bf:identifiedBy ?id .
 		?res a bdo:Work .
 		?id a ?idtype .

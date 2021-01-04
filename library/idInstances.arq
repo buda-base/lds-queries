@@ -1,11 +1,11 @@
 #QueryScope=Instance
 #QueryReturnType=Table
 #QueryResults=All instances with a certain id
-#QueryParams=S_ID
-#QueryUrl=/idInstances?S_ID=D1
+#QueryParams=L_ID
+#QueryUrl=/idInstances?L_ID=D1
 
-#param.S_ID.type=string
-#param.S_ID.desc=the id
+#param.L_ID.type=string
+#param.L_ID.desc=the id
 
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
@@ -49,7 +49,7 @@ WHERE
 {
     {
       {
-        ?id rdf:value ?S_ID .
+        ?id rdf:value ?L_ID .
         ?i bf:identifiedBy ?id .
         ?i a bdo:Instance .
         ?id a ?idtype .
@@ -65,7 +65,7 @@ WHERE
       ?iAdm adm:metadataLegal/adm:provider ?provider .
     } union {
       {
-        ?id rdf:value ?S_ID .
+        ?id rdf:value ?L_ID .
         ?i bf:identifiedBy ?id .
         ?i a bdo:Instance .
         ?id a ?idtype .
@@ -85,7 +85,7 @@ WHERE
       FILTER (?iRp = bdo:script || ?iRp = bdo:printMethod || ?iRp = tmp:thumbnailIIIFService || ?iRp = bdo:publisherLocation || ?iRp = bdo:publisherName)
     } union {
       {
-        ?id rdf:value ?S_ID .
+        ?id rdf:value ?L_ID .
         ?i bf:identifiedBy ?id .
         ?i a bdo:Instance .
         ?id a ?idtype .
@@ -96,7 +96,7 @@ WHERE
                adm:access ?access .
     } union {
       {
-        ?id rdf:value ?S_ID .
+        ?id rdf:value ?L_ID .
         ?i bf:identifiedBy ?id .
         ?i a bdo:Instance .
         ?id a ?idtype .
@@ -109,7 +109,7 @@ WHERE
       BIND (IF(?evtp = bdo:notAfter, ?evto, 1/0) as ?yearEnd)
     } union {
       {
-        ?id rdf:value ?S_ID .
+        ?id rdf:value ?L_ID .
         ?i bf:identifiedBy ?id .
         ?i a bdo:Instance .
         ?id a ?idtype .
@@ -127,7 +127,7 @@ WHERE
       bind( if(?agentp = tmp:associatedCentury && ?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agento, 1/0) as ?authorC)
     } union {
       {
-        ?id rdf:value ?S_ID .
+        ?id rdf:value ?L_ID .
         ?i bf:identifiedBy ?id .
         ?i a bdo:Instance .
         ?id a ?idtype .
@@ -137,7 +137,7 @@ WHERE
       FILTER(?wiip IN(bdo:language , bdo:catalogInfo))
     } union {
       {
-        ?id rdf:value ?S_ID .
+        ?id rdf:value ?L_ID .
         ?i bf:identifiedBy ?id .
         ?i a bdo:Instance .
         ?id a ?idtype .
@@ -154,7 +154,7 @@ WHERE
              (max(?iEtext) as ?hasetext) 
       where {
         {
-          ?id rdf:value ?S_ID .
+          ?id rdf:value ?L_ID .
           ?i bf:identifiedBy ?id .
           ?i a bdo:Instance .
           ?id a ?idtype .
