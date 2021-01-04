@@ -1,0 +1,26 @@
+#QueryScope=General
+#QueryReturnType=Table
+#QueryResults=All entities and chunks matching the name
+#QueryParams=GY_RES
+#QueryUrl=/countDateTypes?GY_RES=1747
+
+#param.R_RES.type=GYear
+#param.R_RES.desc=the year for which we want associated entities
+
+select ?type (count (distinct ?e) as ?count) where {
+	{
+		?evt bdo:onYear ?GY_RES .
+		?e ?ep ?evt .
+		?e a ?type .
+	} union {
+    	FILTER(!REGEX(?GY_RES,"00$"))
+    	?evt bdo:notBefore ?GY_RES .
+		?e ?ep ?evt .
+		?e a ?type .
+    } union {
+    	FILTER(!REGEX(?GY_RES,"00$"))
+    	?evt bdo:notAfter ?GY_RES .
+		?e ?ep ?evt .
+		?e a ?type .
+    }
+} group by ?type 
