@@ -1,0 +1,74 @@
+#QueryScope=Person
+#QueryReturnType=Table
+#QueryResults=All persons associated with the year
+#QueryParams=GY_RES
+#QueryUrl=/datePersons?GY_RES=1747
+
+#param.GY_RES.type=GYear
+#param.GY_RES.desc=the year for which we want associated persons
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+construct {
+    ?R_RES skos:prefLabel ?resL .
+    ?res tmp:status ?st .
+    ?res tmp:isMain true .
+    ?res ?resp ?reso .
+    ?res tmp:yearStart ?yearStart .
+    ?res tmp:provider ?provider .
+    ?res tmp:originalRecord ?originalRecord .
+    ?res tmp:relationType ?evttype .
+
+    ?evt2 ?evtp ?evto .
+}
+where {
+  {
+    # this is very slow if there's no none.opts file in the fuseki database folder
+    {
+      ?evt bdo:onYear ?GY_RES .
+      ?res bdo:personEvent ?evt .
+      ?evt a ?evttype .
+    } union {
+      FILTER(!REGEX(?GY_RES,"00$"))
+      ?evt bdo:notBefore ?GY_RES .
+      ?res bdo:personEvent ?evt .
+      ?evt a ?evttype .
+    } union {
+      FILTER(!REGEX(?GY_RES,"00$"))
+      ?evt bdo:notAfter ?GY_RES .
+      ?res bdo:personEvent ?evt .
+      ?evt a ?evttype .
+    }
+    
+    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore tmp:associatedCentury tmp:hasRole }
+    ?res ?resp ?reso .
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
+    
+  } union {
+
+    {
+      ?evt bdo:onYear ?GY_RES .
+      ?res bdo:personEvent ?evt .
+      ?evt a ?evttype .
+    } union {
+      FILTER(!REGEX(?GY_RES,"00$"))
+      ?evt bdo:notBefore ?GY_RES .
+      ?res bdo:personEvent ?evt .
+      ?evt a ?evttype .
+    } union {
+      FILTER(!REGEX(?GY_RES,"00$"))
+      ?evt bdo:notAfter ?GY_RES .
+      ?res bdo:personEvent ?evt .
+      ?evt a ?evttype .
+    }
+
+    ?res bdo:personEvent ?evt2 .
+    ?evt2 a ?evt2Type .
+    FILTER (?evt2Type IN(bdo:PersonBirth , bdo:PersonDeath))
+    ?evt2 ?evtp ?evto .
+    BIND (IF(?evt2Type = bdo:PersonBirth && (?evtp = bdo:onYear || ?evtp = bdo:notBefore), ?evto, 1/0) as ?yearStart)
+
+  }
+}

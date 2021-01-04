@@ -1,0 +1,91 @@
+#QueryScope=Place
+#QueryReturnType=Table
+#QueryResults=All places associated with the year
+#QueryParams=GY_RES
+#QueryUrl=/datePlaces?GY_RES=1747
+
+#param.GY_RES.type=GYear
+#param.GY_RES.desc=the year for which we want associated places
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+construct {
+    ?R_RES skos:prefLabel ?resL .
+    ?res tmp:status ?st .
+    ?res tmp:isMain true .
+    ?res ?resp ?reso .
+
+    ?res tmp:placeAffiliation ?trad .
+    ?res tmp:provider ?provider .
+    ?res tmp:relationType ?evttype .
+
+    ?locatedin skos:prefLabel ?locatedinL .
+}
+where {
+  {
+    {
+      ?evt bdo:onYear ?GY_RES .
+      ?res bdo:placeEvent ?evt .
+      ?evt a ?evttype .
+    } union {
+      FILTER(!REGEX(?GY_RES,"00$"))
+      ?evt bdo:notBefore ?GY_RES .
+      ?res bdo:placeEvent ?evt .
+      ?evt a ?evttype .
+    } union {
+      FILTER(!REGEX(?GY_RES,"00$"))
+      ?evt bdo:notAfter ?GY_RES .
+      ?res bdo:placeEvent ?evt .
+      ?evt a ?evttype .
+    }
+    
+    VALUES ?resp {bdo:altLabel skos:prefLabel skos:placeEvent bdo:placeLat bdo:placeLong bdo:placeType bdo:placeLocatedIn owl:sameAs tmp:entityScore}
+    ?res ?resp ?reso .
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
+
+  } union {
+    
+    {
+      ?evt bdo:onYear ?GY_RES .
+      ?res bdo:placeEvent ?evt .
+      ?evt a ?evttype .
+    } union {
+      FILTER(!REGEX(?GY_RES,"00$"))
+      ?evt bdo:notBefore ?GY_RES .
+      ?res bdo:placeEvent ?evt .
+      ?evt a ?evttype .
+    } union {
+      FILTER(!REGEX(?GY_RES,"00$"))
+      ?evt bdo:notAfter ?GY_RES .
+      ?res bdo:placeEvent ?evt .
+      ?evt a ?evttype .
+    }
+    
+    ?res bdo:placeEvent/bdo:placeEventAffiliation ?trad .
+
+  } union {
+    
+    {
+      ?evt bdo:onYear ?GY_RES .
+      ?res bdo:placeEvent ?evt .
+      ?evt a ?evttype .
+    } union {
+      FILTER(!REGEX(?GY_RES,"00$"))
+      ?evt bdo:notBefore ?GY_RES .
+      ?res bdo:placeEvent ?evt .
+      ?evt a ?evttype .
+    } union {
+      FILTER(!REGEX(?GY_RES,"00$"))
+      ?evt bdo:notAfter ?GY_RES .
+      ?res bdo:placeEvent ?evt .
+      ?evt a ?evttype .
+    }
+    
+    ?res bdo:placeLocatedIn ?locatedin .
+    ?locatedinAdm adm:adminAbout ?locatedin .
+    ?locatedinAdm adm:status bda:StatusReleased .
+    ?locatedin skos:prefLabel ?locatedinL .
+  }
+}

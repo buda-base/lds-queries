@@ -1,0 +1,246 @@
+#QueryScope=Instance
+#QueryReturnType=Table
+#QueryResults=All instances associated with the year
+#QueryParams=GY_RES
+#QueryUrl=/dateInstances?GY_RES=1747
+
+#param.GY_RES.type=GYear
+#param.GY_RES.desc=the year for which we want associated instances
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+
+CONSTRUCT
+{
+    ?R_RES skos:prefLabel ?iL .
+    ?i tmp:isMain true .
+    ?i tmp:lastSync ?sdate .
+    ?i tmp:status ?status .
+    ?i tmp:provider ?provider .
+    ?i tmp:hasReproAccess ?access .
+    ?i ?ip ?io .
+
+    ?i :inRootInstance ?iR .
+    ?iR skos:prefLabel ?iRl .
+    ?i ?iRp ?iRo .
+
+    ?i tmp:yearStart ?yearStart .
+    ?i tmp:yearEnd ?yearEnd .
+
+    ?i tmp:hasOpen ?hasopen .
+    ?i tmp:hasImage ?hasimage .
+    ?i tmp:hasEtext ?hasetext .
+
+    # We cheat a bit and attach the topic to the instance instead
+    # of the corresponding work
+    ?i ?wp ?wo .
+    ?wo skos:prefLabel ?wol .
+
+    # Same for the author, entity score and language
+    ?i tmp:author ?author .
+    ?agent skos:prefLabel ?agentL .
+    ?i tmp:associatedCentury ?authorC .
+
+    ?i ?wiip ?wiio .
+
+    ?i tmp:relationType ?evttype .
+
+}
+WHERE 
+{
+    {
+      {
+        ?evt bdo:onYear ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      } union {
+        FILTER(!REGEX(?GY_RES,"00$"))
+        ?evt bdo:notBefore ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      } union {
+        FILTER(!REGEX(?GY_RES,"00$"))
+        ?evt bdo:notAfter ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      }
+      ?i a bdo:Instance .
+      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+      ?i ?ip ?io .
+      FILTER (?ip != bdo:note && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
+        && ?ip != bdo:colophon && ?ip != bdo:incipit)
+
+      ?iAdm adm:adminAbout ?i .
+      ?iAdm adm:status ?status .
+      ?iAdm adm:metadataLegal/adm:provider ?provider .
+    } union {
+      {
+        ?evt bdo:onYear ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      } union {
+        FILTER(!REGEX(?GY_RES,"00$"))
+        ?evt bdo:notBefore ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      } union {
+        FILTER(!REGEX(?GY_RES,"00$"))
+        ?evt bdo:notAfter ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      }
+      ?i a bdo:Instance .
+      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+      ?i ?ip ?io .
+      FILTER (?ip != bdo:note && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
+        && ?ip != bdo:colophon && ?ip != bdo:incipit)
+
+      ?i :inRootInstance ?iR .
+      ?iRAdm adm:adminAbout ?iR .
+      ?iRAdm adm:status ?status .
+      ?iRAdm adm:metadataLegal/adm:provider ?provider .
+      ?iR skos:prefLabel ?iRl .
+      ?iR ?iRp ?iRo .
+      FILTER (?iRp = bdo:script || ?iRp = bdo:printMethod || ?iRp = tmp:thumbnailIIIFService || ?iRp = bdo:publisherLocation || ?iRp = bdo:publisherName)
+    } union {
+      {
+        ?evt bdo:onYear ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      } union {
+        FILTER(!REGEX(?GY_RES,"00$"))
+        ?evt bdo:notBefore ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      } union {
+        FILTER(!REGEX(?GY_RES,"00$"))
+        ?evt bdo:notAfter ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      }
+      ?i :inRootInstance?/:instanceHasReproduction ?ii .
+      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+      ?iiAdm adm:adminAbout ?ii ;
+               adm:access ?access .
+    } union {
+      {
+        ?evt bdo:onYear ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      } union {
+        FILTER(!REGEX(?GY_RES,"00$"))
+        ?evt bdo:notBefore ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      } union {
+        FILTER(!REGEX(?GY_RES,"00$"))
+        ?evt bdo:notAfter ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      }
+      ?i bdo:instanceOf ?w .
+      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+      ?i :instanceEvent ?evt .
+      ?evt ?evtp ?evto .
+      BIND (IF(?evtp = bdo:onYear || ?evtp = bdo:notBefore, ?evto, 1/0) as ?yearStart)
+      BIND (IF(?evtp = bdo:notAfter, ?evto, 1/0) as ?yearEnd)
+    } union {
+      {
+        ?evt bdo:onYear ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      } union {
+        FILTER(!REGEX(?GY_RES,"00$"))
+        ?evt bdo:notBefore ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      } union {
+        FILTER(!REGEX(?GY_RES,"00$"))
+        ?evt bdo:notAfter ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      }
+      ?i bdo:instanceOf ?w .
+      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+      ?w bdo:creator ?creator .
+      ?creator bdo:role ?role .
+      ?creator bdo:agent ?agent .
+      VALUES ?agentp { skos:prefLabel tmp:associatedCentury }
+      ?agent ?agentp ?agento .
+    
+      bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+      bind( if(?agentp = skos:prefLabel, ?agento, 1/0) as ?agentL)
+      bind( if(?agentp = tmp:associatedCentury && ?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agento, 1/0) as ?authorC)
+    } union {
+      {
+        ?evt bdo:onYear ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      } union {
+        FILTER(!REGEX(?GY_RES,"00$"))
+        ?evt bdo:notBefore ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      } union {
+        FILTER(!REGEX(?GY_RES,"00$"))
+        ?evt bdo:notAfter ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      }
+      ?i bdo:instanceOf ?w .
+      ?w ?wiip ?wiio .
+      FILTER(?wiip IN(bdo:language , bdo:catalogInfo))
+    } union {
+      {
+        ?evt bdo:onYear ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      } union {
+        FILTER(!REGEX(?GY_RES,"00$"))
+        ?evt bdo:notBefore ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      } union {
+        FILTER(!REGEX(?GY_RES,"00$"))
+        ?evt bdo:notAfter ?GY_RES .
+        ?i bdo:instanceEvent ?evt .
+        ?evt a ?evttype .
+      }
+      ?i bdo:instanceOf ?w .
+      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+      ?w ?wp ?wo .
+      FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
+      ?wo skos:prefLabel ?wol .
+    } union {
+      select ?i 
+             (max(?iAccessOpen) as ?hasopen) 
+             (max(?iImage) as ?hasimage) 
+             (max(?iEtext) as ?hasetext) 
+      where {
+        {
+          ?evt bdo:onYear ?GY_RES .
+          ?i bdo:instanceEvent ?evt .
+          ?evt a ?evttype .
+        } union {
+          FILTER(!REGEX(?GY_RES,"00$"))
+          ?evt bdo:notBefore ?GY_RES .
+          ?i bdo:instanceEvent ?evt .
+          ?evt a ?evttype .
+        } union {
+          FILTER(!REGEX(?GY_RES,"00$"))
+          ?evt bdo:notAfter ?GY_RES .
+          ?i bdo:instanceEvent ?evt .
+          ?evt a ?evttype .
+        }
+        ?i a bdo:Instance .
+        FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+        ?i :inRootInstance?/:instanceHasReproduction? ?ii .
+
+        ?iiAdm adm:adminAbout ?ii .
+        ?iiAdm adm:status bda:StatusReleased .
+        bind( exists {?iiAdm adm:access bda:AccessOpen} as ?iAccessOpen)
+        bind( exists {?ii a bdo:ImageInstance} as ?iImage)
+        bind( exists {?ii a bdo:EtextInstance} as ?iEtext)
+      } group by ?i 
+    }
+}
