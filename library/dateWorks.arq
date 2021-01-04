@@ -9,7 +9,6 @@
 
 CONSTRUCT
 {
-    ?R_RES skos:prefLabel ?resL .
     ?res tmp:status ?st .
     ?res tmp:isMain true .
 

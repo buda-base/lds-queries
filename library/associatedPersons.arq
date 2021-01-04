@@ -13,8 +13,6 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 construct {
     ?R_RES skos:prefLabel ?resL .
     ?res tmp:status ?st .
-    ?res tmp:matchScore ?sc .
-    ?res tmp:nameMatch ?nameMatch.
     ?res tmp:isMain true .
     ?res ?resp ?reso .
     ?res tmp:yearStart ?yearStart .

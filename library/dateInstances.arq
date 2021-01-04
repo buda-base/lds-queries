@@ -12,7 +12,6 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 CONSTRUCT
 {
-    ?R_RES skos:prefLabel ?iL .
     ?i tmp:isMain true .
     ?i tmp:lastSync ?sdate .
     ?i tmp:status ?status .

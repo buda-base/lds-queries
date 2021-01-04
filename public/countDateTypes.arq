@@ -4,8 +4,8 @@
 #QueryParams=GY_RES
 #QueryUrl=/countDateTypes?GY_RES=1747
 
-#param.R_RES.type=GYear
-#param.R_RES.desc=the year for which we want associated entities
+#param.GY_RES.type=GYear
+#param.GY_RES.desc=the year for which we want associated entities
 
 select ?type (count (distinct ?e) as ?count) where {
 	{
