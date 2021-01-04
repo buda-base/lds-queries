@@ -1,0 +1,16 @@
+#QueryScope=General
+#QueryReturnType=Table
+#QueryResults=All entities with a certain id
+#QueryParams=S_ID
+#QueryUrl=/countIdTypes?S_ID=D1
+
+#param.S_ID.type=string
+#param.S_ID.desc=the id
+
+select ?type (count (distinct ?e) as ?count) where {
+	{
+		?id rdf:value ?S_ID .
+		?e bf:identifiedBy ?id .
+		?e a ?type .
+	}
+} group by ?type 

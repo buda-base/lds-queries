@@ -1,0 +1,110 @@
+#QueryScope=Work
+#QueryReturnType=Table
+#QueryResults=All works with a certain id
+#QueryParams=S_ID
+#QueryUrl=/idWorks?S_ID=D1
+
+#param.S_ID.type=string
+#param.S_ID.desc=the id
+
+CONSTRUCT
+{
+    ?res tmp:status ?st .
+    ?res tmp:isMain true .
+
+    ?res tmp:nbInstance ?nbinstances .
+    ?res tmp:provider ?provider .
+    ?res tmp:originalRecord ?originalRecord .
+    ?res tmp:hasOpen ?hasopen .
+    ?res tmp:hasImage ?hasimage .
+    ?res tmp:hasEtext ?hasetext .
+    ?res tmp:relationType ?evttype .
+  
+    ?res ?resp ?reso .
+    ?res ?respp ?resoo .
+ 
+    ?res tmp:author ?author .
+    ?agent skos:prefLabel ?agentL .
+    ?res tmp:associatedCentury ?authorC .
+  
+    ?resoo skos:prefLabel ?ol .
+
+}
+WHERE 
+{
+  # We have the following ways a work can be related to another thing:
+  #  - direct relation to/from
+  #  - work has creator R_RES
+  {
+	{
+	  ?id rdf:value ?S_ID .
+	  ?res bf:identifiedBy ?id .
+	  ?res a bdo:Work .
+	  ?id a ?idtype .
+    }
+    
+    ?res ?resp ?reso .
+    FILTER (?resp IN(bdo:language , skos:altLabel , skos:prefLabel , rdf:type , bdo:workSeriesNumber , owl:sameAs , tmp:entityScore))
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
+    
+  } union {
+    
+	{
+	  ?id rdf:value ?S_ID .
+	  ?res bf:identifiedBy ?id .
+	  ?res a bdo:Work .
+	  ?id a ?idtype .
+    }
+    
+    ?res bdo:creator ?creator .
+    ?creator bdo:role ?role .
+    ?creator bdo:agent ?agent .
+    VALUES ?agentp { skos:prefLabel tmp:associatedCentury }
+    ?agent ?agentp ?agento .
+    
+    bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+    bind( if(?agentp = skos:prefLabel, ?agento, 1/0) as ?agentL)
+    bind( if(?agentp = tmp:associatedCentury && ?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agento, 1/0) as ?authorC)
+
+  } union {
+    
+    {
+	  ?id rdf:value ?S_ID .
+	  ?res bf:identifiedBy ?id .
+	  ?res a bdo:Work .
+	  ?id a ?idtype .
+    }
+    
+    ?res ?respp ?resoo .
+    FILTER(?respp IN(bdo:serialMemberOf , bdo:workIsAbout , bdo:workGenre))
+    ?resoo skos:prefLabel ?ol .
+
+  } union {
+    
+    select ?res
+           (count (distinct ?nrepInstance) as ?nbinstances)
+           (max(?instanceAccessOpen) as ?hasopen) 
+           (max(?instanceImage) as ?hasimage) 
+           (max(?instanceEtext) as ?hasetext) 
+    where {
+      
+      {
+		?id rdf:value ?S_ID .
+		?res bf:identifiedBy ?id .
+		?res a bdo:Work .
+		?id a ?idtype .
+	  }
+
+      ?res bdo:workHasInstance ?instance .
+      bind( if (exists {?instance bdo:instanceReproductionOf ?reprodof}, ?reprodof, ?instance) as ?nrepInstance)
+      ?instance bdo:inRootInstance?/bdo:instanceHasReproduction ?rootInstance .
+      ?instanceAdm adm:adminAbout ?rootInstance .
+      ?instanceAdm adm:status bda:StatusReleased .
+      bind( exists {?instanceAdm adm:access bda:AccessOpen} as ?instanceAccessOpen)
+      bind( exists {?rootInstance a bdo:ImageInstance} as ?instanceImage)
+      bind( exists {?rootInstance a bdo:EtextInstance} as ?instanceEtext)
+    } group by ?res
+  }
+}
