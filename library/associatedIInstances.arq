@@ -55,7 +55,7 @@ WHERE
       bind( exists {?iiAdm adm:access bda:AccessOpen} as ?iAccessOpen)
       ?iiAdm adm:status ?status .
       ?iiAdm adm:access ?access .
-      ?iiAdm adm:metadataLegal/adm:provider ?provider .
+      ?iiAdm adm:contentLegal/adm:provider ?provider .
       ?ii ?iip ?iio .
       FILTER (?iip = tmp:thumbnailIIIFService || ?iip = bdo:scanInfo)
       ?ii :instanceReproductionOf ?i .
