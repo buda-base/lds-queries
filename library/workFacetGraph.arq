@@ -131,7 +131,7 @@ WHERE
           ?res a/rdfs:subClassOf* bdo:Work .
       }
 
-      ?res bdo:workHasInstance/bdo:inRootInstance? ?instance .
+      ?res bdo:workHasInstance/(bdo:inRootInstance/bdo:instanceHasReproduction)? ?instance .
       ?instanceAdm adm:adminAbout ?instance .
       ?instanceAdm adm:status bda:StatusReleased .
       bind( if (exists {?instance bdo:instanceReproductionOf ?reprodof}, 0, 1) as ?isRootInstance)
