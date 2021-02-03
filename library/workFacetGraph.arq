@@ -115,8 +115,7 @@ WHERE
   } union {
     
     select ?res 
-           (sum (?isRootInstance) as ?nbinstances) 
-           (count (?instance) as ?nbinstance) 
+           (count (?rootInstance) as ?nbinstances) 
            (max(?instanceAccessOpen) as ?hasopen) 
            (max(?instanceImage) as ?hasimage) 
            (max(?instanceEtext) as ?hasetext) 
@@ -131,10 +130,10 @@ WHERE
           ?res a/rdfs:subClassOf* bdo:Work .
       }
 
-      ?res bdo:workHasInstance/(bdo:inRootInstance/bdo:instanceHasReproduction)? ?instance .
+      ?res bdo:workHasInstance/bdo:inRootInstance? ?rootInstance .
+      ?rootInstance bdo:instanceHasReproduction ?instance .
       ?instanceAdm adm:adminAbout ?instance .
       ?instanceAdm adm:status bda:StatusReleased .
-      bind( if (exists {?instance bdo:instanceReproductionOf ?reprodof}, 0, 1) as ?isRootInstance)
       bind( exists {?instanceAdm adm:access bda:AccessOpen} as ?instanceAccessOpen)
       bind( exists {?instance a bdo:ImageInstance} as ?instanceImage)
       bind( exists {?instance a bdo:EtextInstance} as ?instanceEtext)
