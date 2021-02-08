@@ -79,7 +79,7 @@ construct {
      ?iinst a :ImageInstance .
      ?loc :contentLocationInstance ?iinst ;
             :contentLocationVolume ?bvol .
-     FILTER ((?bvol <= ?vnum && NOT EXISTS {?loc :contentLocationEndVolume ?evol}) || (?bvol <= ?vnum  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol <= ?vnum)}))
+     FILTER ((?bvol = ?vnum && NOT EXISTS {?loc :contentLocationEndVolume ?evol}) || (?bvol <= ?vnum  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?vnum)}))
      # TODO: is it more efficient to get ?bpage, filter on it and then take ?epage ?
      ?p :seqNum ?pagenum .
      ?loc :contentLocationPage ?bpage ;
