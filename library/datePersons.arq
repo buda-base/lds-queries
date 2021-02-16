@@ -10,7 +10,6 @@
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 construct {
-    ?R_RES skos:prefLabel ?resL .
     ?res tmp:status ?st .
     ?res tmp:isMain true .
     ?res ?resp ?reso .
@@ -40,7 +39,7 @@ where {
       ?evt a ?evttype .
     }
     
-    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personName bdo:personEvent owl:sameAs tmp:entityScore tmp:associatedCentury tmp:hasRole }
+    VALUES ?resp {skos:altLabel skos:prefLabel bdo:personGender bdo:personEvent owl:sameAs tmp:entityScore tmp:associatedCentury tmp:hasRole }
     ?res ?resp ?reso .
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
