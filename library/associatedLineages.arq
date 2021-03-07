@@ -1,0 +1,50 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All lineages associated with the given entity
+#QueryParams=R_RES
+#QueryUrl=/lib/associatedLineages?R_RES=bdr:P1062
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced entity
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+construct {
+    ?R_RES skos:prefLabel ?resL .
+    ?res tmp:status ?st .
+    ?res tmp:isMain true .
+    ?res ?resp ?reso .
+    ?res tmp:provider ?provider .
+    ?res tmp:relationType ?rel .
+}
+where {
+  # We have 3 types of matches:
+  #   * lineageWho
+  #   * lineageObject
+  #   * lineageFrom
+  {
+    ?R_RES skos:prefLabel ?resL .
+  } union {
+    {
+      ?lh :lineageWho ?R_RES .
+      ?res :lineageHolder ?lh .
+      BIND(tmp:lineageMember as ?rel)
+    } union {
+      ?res :lineageObject ?R_RES .
+      BIND(:lineageObject as ?rel)
+    } union{
+      ?le :lineageFrom ?R_RES .
+      ?lh :lineageReceived ?le .
+      ?res :lineageHolder ?lh .
+      BIND(tmp:lineageMember as ?rel)
+    }
+    
+    VALUES ?resp {skos:altLabel skos:prefLabel :lineageType :lineageObject }
+    ?res ?resp ?reso .
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
+    
+  } 
+}

@@ -31,9 +31,18 @@ select ?type (count (distinct ?e) as ?count) where {
 		?evt ?evtp ?R_RES .
 		?e bdo:creator ?evt .
 		?e a ?type .
+  } union {
+    ?lh :lineageWho ?R_RES .
+    ?e :lineageHolder ?lh .
+    bind(bdo:Lineage as ?type)
+  } union {
+    ?le :lineageFrom ?R_RES .
+    ?lh :lineageReceived ?le .
+    ?e :lineageHolder ?lh .
+    bind(bdo:Lineage as ?type)
 	} union {
-        ?it :inCollection ?R_RES .
-        ?e :instanceHasItem ?it .
-        ?e a ?type .
-      }
+    ?it :inCollection ?R_RES .
+    ?e :instanceHasItem ?it .
+    ?e a ?type .
+  }
 } group by ?type 
