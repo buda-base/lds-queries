@@ -18,7 +18,8 @@ CONSTRUCT
     ?res tmp:labelMatch ?labelMatch .
     ?res tmp:noteMatch ?noteMatch .
     ?res tmp:isMain true .
-    ?res ?resp ?reso .
+    ?resS ?resp ?reso .
+    ?res owl:sameAs ?resS .
     ?res tmp:placeAffiliation ?trad .
     ?res tmp:provider ?provider .
     ?res tmp:originalRecord ?originalRecord .
@@ -31,14 +32,15 @@ WHERE
   {
     {
         (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+        ?res a bdo:Place .
     } union {
         (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
         ?res bdo:note ?note .
         ?res a :Place .
     }
-    
-    ?res a bdo:Place .
-    ?res ?resp ?reso .
+
+    ?res owl:sameAs* ?resS .
+    ?resS ?resp ?reso .
     FILTER (?resp = skos:altLabel || ?resp = skos:prefLabel || ?resp = skos:placeEvent || ?resp = bdo:placeLat || ?resp = bdo:placeLong || ?resp = bdo:placeType || ?resp = bdo:placeLocatedIn || ?resp = owl:sameAs || ?resp = rdfs:seeAlso || ?resp = tmp:entityScore)
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
@@ -48,6 +50,7 @@ WHERE
     
     {
         (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+        ?res a bdo:Place .
     } union {
         (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
         ?res bdo:note ?note .
@@ -60,6 +63,7 @@ WHERE
     
     {
         (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+        ?res a bdo:Place .
     } union {
         (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
         ?res bdo:note ?note .

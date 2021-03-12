@@ -19,7 +19,8 @@ CONSTRUCT
     ?res tmp:nameMatch ?nameMatch .
     ?res tmp:noteMatch ?noteMatch .
     ?res tmp:isMain true .
-    ?res ?resp ?reso .
+    ?resS ?resp ?reso .
+    ?res owl:sameAs ?resS .
     ?res tmp:yearStart ?yearStart .
     ?res tmp:provider ?provider .
     ?res tmp:originalRecord ?originalRecord .
