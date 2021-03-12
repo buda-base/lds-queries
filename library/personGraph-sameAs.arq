@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=All persons whose various names contain the given L_NAME parameter value.
 #QueryParams=L_NAME,LG_NAME
-#QueryUrl=/lib/personGraph-sameAs"\"sgam po pa\""@bo-x-ewts="'od zer"&LG_NAME=bo-x-ewts
+#QueryUrl=/lib/personGraph-sameAs?L_NAME="'od zer"&LG_NAME=bo-x-ewts
 
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME
@@ -35,14 +35,14 @@ WHERE
 {
   {
     {
-        (?name ?sc ?nameMatch) text:query ( rdfs:label "\"sgam po pa\""@bo-x-ewts "highlight:" ) .
+        (?name ?sc ?nameMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
         ?res bdo:personName ?name .
         ?name ?namep ?nameo .
     } union {
-        (?res ?sc ?labelMatch) text:query ( bdo:skosLabels "\"sgam po pa\""@bo-x-ewts "highlight:" ) .
+        (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
         ?res a :Person .
     } union {
-        (?note ?sc ?noteMatch) text:query ( bdo:noteText "\"sgam po pa\""@bo-x-ewts "highlight:" ) .
+        (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
         ?res bdo:note ?note .
         ?res a :Person .
     }
@@ -58,14 +58,14 @@ WHERE
 
     # get events
     {
-        (?name) text:query ( rdfs:label "\"sgam po pa\""@bo-x-ewts ) .
+        (?name) text:query ( rdfs:label ?L_NAME ) .
         ?res bdo:personName ?name .
         ?name ?namep ?nameo .
     } union {
-        (?res) text:query ( bdo:skosLabels "\"sgam po pa\""@bo-x-ewts ) .
+        (?res) text:query ( bdo:skosLabels ?L_NAME ) .
         ?res a :Person .
     } union {
-        (?note) text:query ( bdo:noteText "\"sgam po pa\""@bo-x-ewts ) .
+        (?note) text:query ( bdo:noteText ?L_NAME ) .
         ?res bdo:note ?note .
         ?res a :Person .
     }
