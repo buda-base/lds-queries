@@ -1,25 +1,20 @@
 #QueryScope=General
 #QueryReturnType=Graph
-#QueryResults=All labels related to a given resource
-#QueryParams=R_RES
-#QueryUrl=/getAssociatedLabels?R_RES=bdr:P1583
+#QueryResults=All prefLabels related to the resources in a given graph (ex: students)
+#QueryParams=R_GR
+#QueryUrl=/getAssociatedLabels?R_GR=bdg:P1583
 
-#param.R_RES.type=URI
-#param.R_RES.subtype=bdo:Entity
-#param.R_RES.desc=the resource on which info is needed
+#param.R_GR.type=URI
+#param.R_GR.subtype=Graph
+#param.R_GR.desc=the graph
 
 construct {  
-  ?s skos:preflabel ?o. 
-  ?s rdfs:label ?o. 
+  ?o skos:prefLabel ?l .
 } 
-  where { 
-    { 
-       ?R_RES  ?resp ?s .   
-    {  
-       ?s skos:prefLabel ?o.
+where { 
+    graph ?R_GR { 
+       ?s ?p ?o .
+      FILTER NOT EXISTS {?o ?op ?oo }
     }
-    union{
-      ?s rdfs:label ?o. 
-    }
-  }
+    ?o skos:prefLabel ?l .
 }
