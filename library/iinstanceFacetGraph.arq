@@ -74,6 +74,9 @@ CONSTRUCT {
     ?resAdm adm:access ?access .
 
     ?resi ?resp ?reso .
+
+    # TODO: the thumbnail should be taken from ?res, not ?resi
+
     FILTER (?resp != bdo:note && ?resp != rdf:type && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle && ?resp != bdo:hasPart
       && ?resp != bdo:colophon && ?resp != bdo:incipit && (!BOUND(?extMatchP) || ?resp != ?extMatchP))
 
