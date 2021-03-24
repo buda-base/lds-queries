@@ -1,0 +1,165 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Graph
+#QueryResults=All image instances matching a certain term
+#QueryParams=L_NAME,LG_NAME
+#QueryUrl=/lib/iinstanceFacetGraph?L_NAME="'od zer"&LG_NAME=bo-x-ewts
+
+#param.L_NAME.type=string
+#param.L_NAME.langTag=LG_NAME
+#param.L_NAME.isLucene=true
+#param.L_NAME.example="ye shes"
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT {
+
+  ?res tmp:isMain true .
+  ?res a bdo:ImageInstance .
+  ?res tmp:status ?status .
+  ?res adm:access ?access .
+  ?res tmp:matchScore ?sc .
+  ?res tmp:labelMatch ?labelMatch.
+  ?res tmp:noteMatch ?noteMatch .
+  ?res ?extMatchP ?extMatch .
+  ?res tmp:provider ?provider .
+  ?res tmp:originalRecord ?originalRecord .
+  ?res ?resp ?reso .
+  ?resR skos:prefLabel ?resRl .
+  ?res ?resRp ?resRo .
+  ?res ?resp ?reso .
+
+    ?res bdo:instanceOf ?resW .
+    ?resW ?resWp ?resWo .
+
+    # We cheat a bit and attach the topic to the instance instead
+    # of the corresponding work
+    ?res ?resWpp ?resWoo .
+    ?resWoo skos:prefLabel ?resWol .
+ 
+  # Same for the author, entity score and language
+    ?res tmp:author ?author .
+    ?agent skos:prefLabel ?agentL .
+    ?res tmp:associatedCentury ?authorC .
+
+    ?res ?resWiip ?resWiio .
+  
+    ?resoo skos:prefLabel ?ol .
+
+} where {
+
+  {
+
+    {
+      (?resi ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+      ?resi a bdo:Instance .
+    } union {
+      (?title ?sc ?labelMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+      ?resi bdo:hasTitle ?title .
+    } union {
+      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      ?resi bdo:note ?note .
+      ?resi a bdo:Instance .
+    } union {
+      (?resi ?sc ?extMatch ?graph ?extMatchP) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      ?resi a bdo:Instance .
+    }
+    # we could imagine adding also the scanInfo of the reproduction...
+
+    ?res :instanceReproductionOf ?resi ;
+         a bdo:ImageInstance .
+
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?status .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
+    ?resAdm adm:access ?access .
+
+    ?resi ?resp ?reso .
+    FILTER (?resp != bdo:note && ?resp != rdf:type && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle && ?resp != bdo:hasPart
+      && ?resp != bdo:colophon && ?resp != bdo:incipit && (!BOUND(?extMatchP) || ?resp != ?extMatchP))
+
+  } union {
+
+    {
+      (?resi ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+      ?resi a bdo:Instance .
+    } union {
+      (?title ?sc ?labelMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+      ?resi bdo:hasTitle ?title .
+    } union {
+      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      ?resi bdo:note ?note .
+      ?resi a bdo:Instance .
+    } union {
+      (?resi ?sc ?extMatch ?graph ?extMatchP) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      ?resi a bdo:Instance .
+    }
+    # we could imagine adding also the scanInfo of the reproduction...
+
+    ?res :instanceReproductionOf ?resi ;
+         a bdo:ImageInstance .
+    ?res bdo:instanceOf ?resW .
+    
+    ?resW bdo:creator ?creator .
+    ?creator bdo:role ?role .
+    ?creator bdo:agent ?agent .
+    VALUES ?agentp { skos:prefLabel tmp:associatedCentury }
+    ?agent ?agentp ?agento .
+    
+    bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+    bind( if(?agentp = skos:prefLabel, ?agento, 1/0) as ?agentL)
+    bind( if(?agentp = tmp:associatedCentury && ?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agento, 1/0) as ?authorC)
+
+  } union {
+    
+    {
+      (?resi ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+      ?resi a bdo:Instance .
+    } union {
+      (?title ?sc ?labelMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+      ?resi bdo:hasTitle ?title .
+    } union {
+      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      ?resi bdo:note ?note .
+      ?resi a bdo:Instance .
+    } union {
+      (?resi ?sc ?extMatch ?graph ?extMatchP) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      ?resi a bdo:Instance .
+    }
+    # we could imagine adding also the scanInfo of the reproduction...
+
+    ?res :instanceReproductionOf ?resi ;
+         a bdo:ImageInstance .
+    ?res bdo:instanceOf ?resW .
+    
+    ?resW ?resWiip ?resWiio .
+
+    FILTER (?resWiip = tmp:entityScore || ?resWiip = bdo:language || ?resWiip = bdo:catalogInfo)
+
+  } union {
+    
+    {
+      (?resi ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+      ?resi a bdo:Instance .
+    } union {
+      (?title ?sc ?labelMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+      ?resi bdo:hasTitle ?title .
+    } union {
+      (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+      ?resi bdo:note ?note .
+      ?resi a bdo:Instance .
+    } union {
+      (?resi ?sc ?extMatch ?graph ?extMatchP) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+      ?resi a bdo:Instance .
+    }
+    # we could imagine adding also the scanInfo of the reproduction...
+
+    ?res :instanceReproductionOf ?resi ;
+         a bdo:ImageInstance .
+    ?res bdo:instanceOf ?resW .
+    
+    ?resW ?resWpp ?resWoo .
+    FILTER(?resWpp IN(bdo:workIsAbout , bdo:workGenre))
+    ?resWoo skos:prefLabel ?resWol .
+
+  }
+}
