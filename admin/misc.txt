@@ -1,0 +1,63 @@
+# authorship statement but no creator
+
+select distinct ?w ?as {
+  ?w :authorshipStatement ?as .
+  ?wadm adm:adminAbout ?w ;
+        adm:metadataLegal bda:LD_BDRC_CC0 ;
+        adm:status bda:StatusReleased .
+  ?w bdo:instanceOf ?wa .
+  FILTER NOT EXISTS {?wa :creator ?c}
+}
+
+# biographies with no attached person
+
+T1CZ60 / T3 / T208 / T413
+
+select distinct ?wa ?title {
+  #VALUES ?t {bdr:T208 bdr:T413}
+  ?wa :workGenre bdr:T208 .
+  #FILTER NOT EXISTS {?wa :workIsAbout/rdf:type bdo:Person}
+  FILTER NOT EXISTS {?wa :workIsAbout ?p}
+  ?wadm adm:adminAbout ?wa ;
+        adm:metadataLegal bda:LD_BDRC_CC0 ;
+        adm:status bda:StatusReleased .
+  ?wa skos:prefLabel ?title .
+  FILTER (lang(?title) = "bo-x-ewts")
+}
+
+# persons with the same birth and death dates
+
+select ?p1 ?p2 ?p1label ?p2label
+where {
+  ?p1b a bdo:PersonBirth ;
+     :onYear ?p1by .
+  ?p1 :personEvent ?p1b .
+  ?p2b  :onYear ?p1by  ;
+     a bdo:PersonBirth .
+  ?p2 :personEvent ?p2b .
+  filter (?p1 != ?p2)
+  ?p1 :personEvent ?p1d .
+  ?p1d a bdo:PersonDeath ;
+       :onYear ?p1dy .
+  ?p2 :personEvent ?p2d .
+  ?p2d a bdo:PersonDeath ;
+       :onYear ?p1dy .
+  ?p1 skos:prefLabel ?p1label .
+  filter(lang(?p1label) = "bo-x-ewts")
+  ?p2 skos:prefLabel ?p2label .
+  filter(lang(?p2label) = "bo-x-ewts")
+}
+
+# number of volumes
+
+select (count(?i) as ?nbvol) where {
+  ?i a :ImageGroup ;
+     :volumePagesTotal ?vpt ;
+     :volumeOf ?w .
+  FILTER (?vpt > 3)
+  ?iadm adm:adminAbout ?i ;
+      adm:status    bda:StatusReleased .
+  ?wadm adm:adminAbout ?w ;
+        adm:status    bda:StatusReleased ;
+        adm:metadataLegal  bda:LD_BDRC_CC0 .
+}
