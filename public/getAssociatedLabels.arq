@@ -11,10 +11,10 @@
 construct {  
   ?o skos:prefLabel ?l .
 } 
-where { 
+where {
     graph ?R_GR { 
-       ?s ?p ?o .
-      FILTER NOT EXISTS {?o ?op ?oo }
+      ?s ?p ?o .
+      FILTER NOT EXISTS { ?o skos:prefLabel ?l }
     }
     ?o skos:prefLabel ?l .
 }
