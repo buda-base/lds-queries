@@ -214,10 +214,8 @@ CONSTRUCT {
 
   } union {
 
-    # the min should probably be a max once the OpenPecha are in sync
-
     select ?res 
-             (min(?resAccessOpen) as ?hasopen)
+             (max(?resAccessOpen) as ?hasopen)
              (max(?resImage) as ?hasimage) 
              (max(?resEtext) as ?hasetext) 
       where {
@@ -243,7 +241,7 @@ CONSTRUCT {
         ?resRepAdm adm:status bda:StatusReleased .
         bind( exists {?resRep a bdo:ImageInstance ; tmp:thumbnailIIIFService ?th } as ?resImage)
         bind( exists {?resRep a bdo:EtextInstance} as ?resEtext)
-        bind( (exists {?resRepAdm adm:access bda:AccessOpen}) && (?resEtext || ?resImage) as ?resAccessOpen)
+        bind( (exists {?resRepAdm adm:access bda:AccessOpen}) && not exists {?resRepAdm adm:syncAgent  bdr:SAOPT} &&(?resEtext || ?resImage) as ?resAccessOpen)
       } group by ?res 
 
     }
