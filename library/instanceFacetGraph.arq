@@ -176,8 +176,10 @@ CONSTRUCT {
     ?res :inRootInstance?/:instanceHasReproduction? ?resRep .
     ?resRepAdm adm:adminAbout ?resRep ;
                adm:access ?resRepAccess .
+
     # ignoring OpenPecha access, as they are sometimes not in sync, see
     # https://github.com/buda-base/public-digital-library/issues/473
+    
     FILTER NOT EXISTS {?resRepAdm adm:syncAgent  bdr:SAOPT }
 
     } union {
@@ -212,8 +214,10 @@ CONSTRUCT {
 
   } union {
 
+    # the min should probably be a max once the OpenPecha are in sync
+
     select ?res 
-             (min(?resAccessOpen) as ?hasopen) # the min should probably be a max once the OpenPecha are in sync
+             (min(?resAccessOpen) as ?hasopen)
              (max(?resImage) as ?hasimage) 
              (max(?resEtext) as ?hasetext) 
       where {
