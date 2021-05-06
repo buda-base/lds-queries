@@ -33,7 +33,7 @@ CONSTRUCT
     ?res tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
     ?res tmp:associatedCentury ?authorC .
-    ?res tmp:associatedCentury ?authorT .
+    ?res tmp:associatedTradition ?authorT .
   
     ?resoo skos:prefLabel ?ol .
 
