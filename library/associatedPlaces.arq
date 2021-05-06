@@ -47,7 +47,7 @@ where {
       ?evt bdo:eventWhere ?res .
     }
     
-    VALUES ?resp {bdo:altLabel skos:prefLabel skos:placeEvent bdo:placeLat bdo:placeLong bdo:placeType bdo:placeLocatedIn owl:sameAs tmp:entityScore}
+    VALUES ?resp {bdo:altLabel skos:prefLabel skos:placeEvent bdo:placeLat bdo:placeLong bdo:placeType bdo:placeLocatedIn owl:sameAs tmp:entityScore bdo:associatedTradition }
     ?res ?resp ?reso .
     #FILTER (?resp IN(bdo:altLabel , skos:prefLabel , skos:placeEvent , bdo:placeLat , bdo:placeLong , bdo:placeType , bdo:placeLocatedIn , owl:sameAs , tmp:entityScore))
     ?resAdm adm:adminAbout ?res .

@@ -60,7 +60,7 @@ where {
           bdo:corporationMember ?res .
     }
     
-    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personEvent owl:sameAs tmp:entityScore tmp:associatedCentury tmp:hasRole }
+    VALUES ?resp {skos:altLabel skos:prefLabel skos:placeEvent bdo:personGender bdo:personEvent owl:sameAs tmp:entityScore tmp:associatedCentury tmp:hasRole bdo:associatedTradition }
     ?res ?resp ?reso .
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .

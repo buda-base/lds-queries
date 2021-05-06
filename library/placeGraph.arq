@@ -41,7 +41,7 @@ WHERE
 
     ?res owl:sameAs* ?resS .
     ?resS ?resp ?reso .
-    FILTER (?resp = skos:altLabel || ?resp = skos:prefLabel || ?resp = skos:placeEvent || ?resp = bdo:placeLat || ?resp = bdo:placeLong || ?resp = bdo:placeType || ?resp = bdo:placeLocatedIn || ?resp = owl:sameAs || ?resp = rdfs:seeAlso || ?resp = tmp:entityScore)
+    FILTER (?resp = skos:altLabel || ?resp = skos:prefLabel || ?resp = bdo:associatedTradition || ?resp = skos:placeEvent || ?resp = bdo:placeLat || ?resp = bdo:placeLong || ?resp = bdo:placeType || ?resp = bdo:placeLocatedIn || ?resp = owl:sameAs || ?resp = rdfs:seeAlso || ?resp = tmp:entityScore)
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
     ?resAdm adm:metadataLegal/adm:provider ?provider .

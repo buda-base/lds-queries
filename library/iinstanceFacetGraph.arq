@@ -40,6 +40,7 @@ CONSTRUCT {
     ?res tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
     ?res tmp:associatedCentury ?authorC .
+    ?res bdo:associatedTradition ?authorT .
 
     ?res ?resWiip ?resWiio .
   
@@ -63,7 +64,6 @@ CONSTRUCT {
       (?resi ?sc ?extMatch ?graph ?extMatchP) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
       ?resi a bdo:Instance .
     }
-    # we could imagine adding also the scanInfo of the reproduction...
 
     ?res :instanceReproductionOf ?resi ;
          a bdo:ImageInstance .
@@ -75,7 +75,7 @@ CONSTRUCT {
 
     ?resi ?resp ?reso .
 
-    # TODO: the thumbnail should be taken from ?res, not ?resi
+    # TODO: the thumbnail should be taken from ?res, not ?resi. add the scanInfo?
 
     FILTER (?resp != bdo:note && ?resp != rdf:type && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle && ?resp != bdo:hasPart
       && ?resp != bdo:colophon && ?resp != bdo:incipit && (!BOUND(?extMatchP) || ?resp != ?extMatchP))
@@ -105,11 +105,12 @@ CONSTRUCT {
     ?resW bdo:creator ?creator .
     ?creator bdo:role ?role .
     ?creator bdo:agent ?agent .
-    VALUES ?agentp { skos:prefLabel tmp:associatedCentury }
+    VALUES ?agentp { skos:prefLabel tmp:associatedCentury bdo:associatedTradition }
     ?agent ?agentp ?agento .
     
     bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
     bind( if(?agentp = skos:prefLabel, ?agento, 1/0) as ?agentL)
+    bind( if(?agentp = bdo:associatedTradition, ?agento, 1/0) as ?authorT)
     bind( if(?agentp = tmp:associatedCentury && ?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agento, 1/0) as ?authorC)
 
   } union {
