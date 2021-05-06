@@ -61,3 +61,37 @@ select (count(?i) as ?nbvol) where {
         adm:status    bda:StatusReleased ;
         adm:metadataLegal  bda:LD_BDRC_CC0 .
 }
+
+# list volumes with less than 3 images (TODO)
+
+# number of volumes synced between ?date1 and ?date2 for the first time (TODO)
+
+# list possible duplicates: P0RK + disciples of the same master who are not P0RK
+
+select ?p ?pl ?od ?odl 
+WHERE 
+{
+  ?lg adm:logWho bdu:U00023 .
+  ?padm adm:logEntry ?lg ;
+        adm:adminAbout ?p ;
+        adm:status bda:StatusReleased .
+  ?p a bdo:Person ;
+     bdo:personStudentOf ?t .
+  ?t bdo:personTeacherOf ?od .
+  ?odadm adm:adminAbout ?od .
+  FILTER (NOT EXISTS {?odadm adm:logEntry/adm:logWho bdu:U00023})
+  ?od skos:prefLabel ?odl .
+  ?p skos:prefLabel ?pl .
+  FILTER (lang(?pl) = "bo-x-ewts")
+  FILTER (lang(?odl) = "bo-x-ewts")
+} limit 2000
+
+select ?p ?label ?nt
+where {
+   (?n ?sc ?nt) text:query ( bdo:noteText "duplicate"@en ) .
+   ?p bdo:note ?n ;
+      a bdo:Person .
+   ?adm adm:adminAbout ?p ;
+        adm:status bda:StatusWithdrawn .
+   FILTER NOT EXISTS {?adm adm:replaceWith ?po .}
+}
