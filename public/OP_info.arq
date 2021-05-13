@@ -1,0 +1,37 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=info needed for OpenPecha
+#QueryParams=R_RES
+#QueryUrl=/OP_info?R_RES=bdr:W12827
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=bdo:Entity
+#param.R_RES.desc=the image instance on which info is needed
+
+
+# for OpenPecha, gathers info about a W record:
+#   - work, author, name of the author, etc.
+
+construct {
+    ?R_RES ?resp ?reso .
+    ?i ?ip ?io .
+    ?w ?wp ?wo .
+    ?aac ?aacp ?aaco .
+    ?a skos:prefLabel ?al .
+} where {
+   {
+      ?R_RES ?resp ?reso .
+   } union {
+      ?R_RES bdo:instanceReproductionOf ?i .
+      ?i ?ip ?io .
+   } union{
+      ?R_RES bdo:instanceOf ?w .
+      ?w ?wp ?wo .
+   } union {
+      ?R_RES bdo:instanceOf ?w .
+      ?w bdo:creator ?aac .
+      ?aac ?aacp ?aaco .
+      ?aac bdo:agent ?a .
+      ?a skos:prefLabel ?al .
+   }
+}
