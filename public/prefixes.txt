@@ -10,7 +10,7 @@ prefix aut:   <http://purl.bdrc.io/ontology/ext/auth/>
 prefix adr:   <http://purl.bdrc.io/resource-nc/auth/>
 prefix bf:    <http://id.loc.gov/ontologies/bibframe/>
 prefix dcterms: <http://purl.org/dc/terms/>
-prefix f:     <java:io.bdrc.ldspdi.sparql.functions.>
+prefix f:     <java:io.bdrc.libraries.sparql.functions.>
 prefix foaf:  <http://xmlns.com/foaf/0.1/>
 prefix iiif2: <http://iiif.io/api/presentation/2#>
 prefix iiif3: <http://iiif.io/api/presentation/3#>
