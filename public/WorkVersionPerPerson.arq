@@ -1,0 +1,30 @@
+#QueryScope=Work
+#QueryReturnType=Table
+#QueryResults=Works and Instances by a certain person, for clustering purposes
+#QueryParams=R_RES
+#QueryUrl=/WorkVersionPerPerson?R_RES=bdr:P64
+
+#output.?wa.type=URI
+#output.?wa.desc=the work
+#output.?mw.type=URI
+#output.?mw.desc=the instance this volume belongs to
+#output.?mwl.type=string
+#output.?mwl.desc=the prefLabel of the instance
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=:Volume
+#param.R_RES.desc=the URI of the volume being investigated
+
+select ?wa ?mw ?mwlu where {
+	?aac bdo:agent ?R_RES ;
+	     bdo:role bdr:R0ER0019 .
+	?wa bdo:creator ?aac ;
+	    bdo:workHasInstance ?mw .
+	FILTER NOT EXISTS { ?mw bdo:instanceReproductionOf ?repof }
+	?mw bdo:inRootInstance? ?root .
+	?rootA adm:adminAbout ?root ;
+           adm:status bda:StatusReleased .
+    ?mw skos:prefLabel ?mwl .
+    FILTER(lang(?mwl) = "bo-x-ewts")
+    BIND(f:ewtsToUnicode(?mwl) as ?mwlu)
+} 
