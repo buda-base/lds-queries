@@ -3,6 +3,7 @@
 #QueryResults=Works and Instances by a certain person, for clustering purposes
 #QueryParams=R_RES
 #QueryUrl=/WorkVersionPerPerson?R_RES=bdr:P64
+#QueryLimit=4000
 
 #output.?wa.type=URI
 #output.?wa.desc=the work
