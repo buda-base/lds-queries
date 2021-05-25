@@ -26,7 +26,7 @@ CONSTRUCT {
   ?res ?resp ?reso .
   ?resR skos:prefLabel ?resRl .
   ?res ?resRp ?resRo .
-  ?res ?resp ?reso .
+  ?res ?resip ?resio .
 
     ?res bdo:instanceOf ?resW .
     ?resW ?resWp ?resWo .
@@ -73,12 +73,12 @@ CONSTRUCT {
     ?resAdm adm:metadataLegal/adm:provider ?provider .
     ?resAdm adm:access ?access .
 
-    ?resi ?resp ?reso .
+    ?resi ?resip ?resio .
 
-    # TODO: the thumbnail should be taken from ?res, not ?resi. add the scanInfo?
+    FILTER (?resip != bdo:note && ?resip != rdf:type && ?resip != bdo:instanceEvent && ?resip != bdo:hasTitle && ?resip != bdo:hasPart && ?resip != tmp:thumbnailIIIFService
+      && ?resip != bdo:colophon && ?resip != bdo:incipit && (!BOUND(?extMatchP) || ?resip != ?extMatchP))
 
-    FILTER (?resp != bdo:note && ?resp != rdf:type && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle && ?resp != bdo:hasPart
-      && ?resp != bdo:colophon && ?resp != bdo:incipit && (!BOUND(?extMatchP) || ?resp != ?extMatchP))
+    ?res ?resp ?reso .
 
   } union {
 
