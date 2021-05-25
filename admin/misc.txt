@@ -95,3 +95,81 @@ where {
         adm:status bda:StatusWithdrawn .
    FILTER NOT EXISTS {?adm adm:replaceWith ?po .}
 }
+
+# NLM works spreadsheet
+
+select ?i ?ilabel ?po ?arid ?alabel ?topic ?genre ?printeryrid ?printerylabel where {
+  {  
+    ?ii bdo:inCollection  bdr:PR1NLM00 .
+    ?iiadm adm:adminAbout ?ii ;
+           adm:status bda:StatusReleased .
+    ?ii bdo:instanceReproductionOf ?i .
+    ?i skos:prefLabel ?ilabel .
+    FILTER (lang(?ilabel) = "bo-x-ewts")
+  } union {
+    ?ii bdo:inCollection  bdr:PR1NLM00 .
+    ?iiadm adm:adminAbout ?ii ;
+           adm:status bda:StatusReleased .
+    ?ii bdo:instanceOf ?w .
+    ?w bdo:creator ?aac .
+    ?aac bdo:role bdr:R0ER0019 ;
+         bdo:agent ?arid .
+    ?arid skos:prefLabel ?alabel .
+    FILTER (lang(?alabel) = "bo-x-ewts")
+  } union {
+    ?ii bdo:inCollection  bdr:PR1NLM00 .
+    ?iiadm adm:adminAbout ?ii ;
+           adm:status bda:StatusReleased .
+    ?ii bdo:instanceOf ?w .
+    ?w bdo:genre ?genre .
+  } union {
+    ?ii bdo:inCollection  bdr:PR1NLM00 .
+    ?iiadm adm:adminAbout ?ii ;
+           adm:status bda:StatusReleased .
+    ?ii bdo:instanceOf ?w .
+    ?w bdo:topic ?topic .
+  }
+   union {
+    ?ii bdo:inCollection  bdr:PR1NLM00 .
+    ?iiadm adm:adminAbout ?ii ;
+           adm:status bda:StatusReleased .
+    ?ii bdo:instanceReproductionOf ?i .
+    ?i bdo:hasSourcePrintery ?printeryrid .
+    ?printeryrid skos:prefLabel ?printerylabel .
+    FILTER (lang(?printerylabel) = "bo-x-ewts")
+  }
+}
+
+# copyrighted works scanned at LTWA
+
+#Bibliographic Note
+
+select ?w ?title ?pubname ?ntext where {
+  {
+    (?w ?sc ?si) text:query ( bdo:scanInfo "satluj"@en ) .
+    ?wadm adm:adminAbout ?w ;
+          adm:access bda:AccessFairUse .
+    ?w bdo:scanInfo ?ntext .
+    FILTER(?ntext != ?si)
+    ?w bdo:instanceReproductionOf ?i .
+    ?i skos:prefLabel ?title ;
+       bdo:publisherName ?pubname .
+  } union {
+    (?w ?sc ?si) text:query ( bdo:scanInfo "satluj"@en ) .
+    ?wadm adm:adminAbout ?w ;
+          adm:access bda:AccessFairUse .
+    FILTER NOT EXISTS { ?w bdo:scanInfo ?osi . FILTER(?osi != ?si) }
+    ?w bdo:instanceReproductionOf ?i .
+    ?i skos:prefLabel ?title ;
+       bdo:publisherName ?pubname .
+    ?i bdo:note ?n .
+    ?n bdo:noteText ?ntext .
+  } union {
+    (?w ?sc ?si) text:query ( bdo:scanInfo "satluj"@en ) .
+    ?wadm adm:adminAbout ?w ;
+          adm:access bda:AccessFairUse .
+    FILTER NOT EXISTS { ?w bdo:scanInfo ?osi . FILTER(?osi != ?si) }
+    ?w bdo:instanceReproductionOf ?i .
+    FILTER NOT EXISTS { ?i bdo:note ?n }
+  }
+}
