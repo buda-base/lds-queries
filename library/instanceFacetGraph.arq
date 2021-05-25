@@ -50,6 +50,7 @@ CONSTRUCT {
     ?resoo skos:prefLabel ?ol .
 
     ?res tmp:hasReproAccess ?resRepAccess .
+    ?res tmp:hasReproQuality ?resRepQuality .
 
 } where {
 
@@ -183,6 +184,8 @@ CONSTRUCT {
     # https://github.com/buda-base/public-digital-library/issues/473
     
     FILTER NOT EXISTS {?resRepAdm adm:syncAgent  bdr:SAOPT }
+
+    BIND(IF(EXISTS {?resRep :qualityGrade 0},0,1/0) as ?resRepQuality)
 
     } union {
       

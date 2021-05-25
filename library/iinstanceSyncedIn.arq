@@ -51,7 +51,7 @@ construct {
       ?iiAdm adm:metadataLegal/adm:provider ?provider .
       ?iiAdm adm:adminAbout ?ii .
       ?ii ?iip ?iio .
-      FILTER (?iip = tmp:thumbnailIIIFService || ?iip = bdo:scanInfo)
+      FILTER (?iip = tmp:thumbnailIIIFService || ?iip = bdo:scanInfo || ?iip = :qualityGrade)
       ?ii :instanceReproductionOf ?i .
       ?i ?ip ?io .
       FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart

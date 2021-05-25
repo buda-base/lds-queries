@@ -17,6 +17,7 @@ CONSTRUCT
     ?i tmp:status ?status .
     ?i tmp:provider ?provider .
     ?i tmp:hasReproAccess ?access .
+    ?i tmp:hasReproQuality ?quality .
     ?i ?ip ?io .
 
     ?i :inRootInstance ?iR .
@@ -121,6 +122,7 @@ WHERE
       FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
       ?iiAdm adm:adminAbout ?ii ;
                adm:access ?access .
+      BIND(IF(EXISTS {?ii :qualityGrade 0},0,1/0) as ?quality)
     } union {
       {
         ?evt bdo:onYear ?GY_RES .
