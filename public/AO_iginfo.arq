@@ -1,0 +1,22 @@
+#QueryScope=Instance
+#QueryReturnType=Table
+#QueryResults=(used by AO) info on an image group
+#QueryParams=R_RES
+#QueryUrl=/AO_iginfo?R_RES=bdr:I0886
+
+#output.?nbimagesscanrequest.type=int
+#output.?nbimagesscanrequest.desc=The number of scan request images
+
+#output.?nbimagestotal.type=int
+#output.?nbimagestotal.desc=The total number of images
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=:ImageGroup
+#param.R_RES.desc=the URI of the image group being investigated
+
+select ?nbimagesscanrequest ?nbimagestotal where {
+  ?R_RES a :ImageGroup ;
+         :volumePagesTbrcIntro ?nbimagesscanrequest ;
+         :volumePagesTotal ?nbimagestotal ;
+         .
+}
