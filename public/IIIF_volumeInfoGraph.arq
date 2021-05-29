@@ -1,0 +1,36 @@
+#QueryScope=Volume
+#QueryReturnType=Table
+#QueryResults=Basic info about a volume for the IIIF Presentation API
+#QueryParams=R_RES
+#QueryUrl=/IIIF_volumeInfoGraph?R_RES=bdr:I0886
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=:Volume
+#param.R_RES.desc=the URI of the volume being investigated
+
+construct {
+  ?R_RES ?resp ?reso .
+  ?iinstanceId :instanceHasVolume ?R_RES ;
+         :instanceReproductionOf ?instanceId ;
+         :inCollection  ?col .
+  ?admItem adm:adminAbout ?iinstanceId .
+  ?admItem adm:access ?access .
+  ?admItem adm:status ?status .
+  ?admItem adm:restrictedInChina ?ric .
+} where {
+  {
+    ?R_RES a :ImageGroup .
+    ?R_RES ?resp ?reso .
+    ?iinstanceId :instanceHasVolume ?R_RES ;
+         :instanceReproductionOf ?instanceId .
+
+    ?admItem adm:adminAbout ?iinstanceId .
+    ?admItem adm:access ?access .
+    ?admItem adm:status ?status .
+    ?admItem adm:restrictedInChina ?ric .
+  } union {
+    # collections
+    ?iinstanceId :instanceHasVolume ?R_RES ;
+                 :inCollection  ?col .
+  }
+}
