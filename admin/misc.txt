@@ -173,3 +173,14 @@ select ?w ?title ?pubname ?ntext where {
     FILTER NOT EXISTS { ?i bdo:note ?n }
   }
 }
+
+# duplicates on Wikidata
+
+select ?wdold ?old ?wdnew ?new {
+  ?oldAdm adm:replaceWith ?new ;
+          adm:adminAbout ?old .
+  ?old owl:sameAs ?wdold .
+  FILTER(regex(str(?wdold), "^http://www.wikidata"))
+  #?new owl:sameAs ?wdnew .
+  #FILTER(regex(str(?wdnew), "^http://www.wikidata"))
+}
