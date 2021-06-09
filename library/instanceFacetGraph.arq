@@ -100,7 +100,10 @@ CONSTRUCT {
     }
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
 
-    ?res :instanceEvent ?evt .
+    ?res :inRootInstance? ?resR2 .
+    ?resR2 :instanceEvent ?evt .
+
+    ?resR2 :instanceEvent ?evt .
     ?evt a :PublishedEvent ;
          :onYear ?pubyear .
 
