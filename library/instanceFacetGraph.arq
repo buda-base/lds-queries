@@ -26,6 +26,7 @@ CONSTRUCT {
   ?resR skos:prefLabel ?resRl .
   ?res ?resRp ?resRo .
   ?res ?resp ?reso .
+  ?res tmp:yearStart ?pubyear .
 
     ?res tmp:hasOpen ?hasopen .
     ?res tmp:hasImage ?hasimage .
@@ -80,6 +81,28 @@ CONSTRUCT {
     ?res ?resp ?reso .
     FILTER (?resp != bdo:note && ?resp != bdo:instanceEvent && ?resp != bdo:hasTitle && ?resp != bdo:hasPart
       && ?resp != bdo:colophon && ?resp != bdo:incipit && (!BOUND(?extMatchP) || ?resp != ?extMatchP))
+
+  } union   {
+
+    {
+      (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+      ?res a bdo:Instance .
+    } union {
+      (?title) text:query ( rdfs:label ?L_NAME ) .
+      ?res bdo:hasTitle ?title .
+    } union {
+      (?note) text:query ( bdo:noteText ?L_NAME ) .
+      ?res bdo:note ?note .
+      ?res a bdo:Instance .
+    } union {
+      (?res) text:query ( bdo:extendedStmts ?L_NAME ) .
+      ?res a bdo:Instance .
+    }
+    FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
+
+    ?res :instanceEvent ?evt .
+    ?evt a :PublishedEvent ;
+         :onYear ?pubyear .
 
   } union {
 
