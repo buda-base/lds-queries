@@ -26,7 +26,8 @@ CONSTRUCT {
   ?resR skos:prefLabel ?resRl .
   ?res ?resRp ?resRo .
   ?res ?resp ?reso .
-  ?res tmp:yearStart ?pubyear .
+  ?res tmp:yearStart ?yearStart .
+  ?res tmp:yearEnd ?yearEnd .
 
     ?res tmp:hasOpen ?hasopen .
     ?res tmp:hasImage ?hasimage .
@@ -104,8 +105,10 @@ CONSTRUCT {
     ?resR2 :instanceEvent ?evt .
 
     ?resR2 :instanceEvent ?evt .
-    ?evt a :PublishedEvent ;
-         :onYear ?pubyear .
+    ?evt a :PublishedEvent .
+    ?evt ?evtp ?evto .
+    BIND (IF(?evtp = bdo:onYear || ?evtp = bdo:notBefore, ?evto, 1/0) as ?yearStart)
+    BIND (IF(?evtp = bdo:notAfter, ?evto, 1/0) as ?yearEnd)
 
   } union {
 
