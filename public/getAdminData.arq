@@ -1,0 +1,24 @@
+#QueryScope=AdminData
+#QueryReturnType=Graph
+#QueryResults=Basic info about a volume for the IIIF Presentation API
+#QueryParams=R_RES
+#QueryUrl=/getAdminData?R_RES=bdr:W22084
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=:Entity
+#param.R_RES.desc=the URI of the entity being investigated
+
+construct {
+  ?adm ?admp ?admo .
+  ?le ?lep ?leo .
+  ?user skos:prefLabel ?userL .
+} where {
+  {
+    ?adm adm:adminAbout ?R_RES .
+    ?adm ?admp ?admo ;
+         adm:logEntry ?le .
+    ?le ?lep ?leo ;
+         adm:logWho ?user .
+    ?user skos:prefLabel ?userL .
+  }
+}
