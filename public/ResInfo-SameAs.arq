@@ -104,6 +104,10 @@ construct {
 ?mb skos:prefLabel ?mbL ;
     tmp:entityScore ?mbSc .
 
+?adm ?admp ?admo .
+?le ?lep ?leo .
+?user skos:prefLabel ?userL .
+
 } where {
   {
     ?r owl:sameAs* ?R_RES .
@@ -398,5 +402,15 @@ construct {
          ?wRes   :workHasInstance ?resAt ;
                    tmp:entityScore ?resAtScore .
     }  order by desc(?resAtScore) limit 20
+  } union {
+    ?adm adm:adminAbout ?R_RES .
+    ?adm ?admp ?admo ;
+         adm:logEntry ?le .
+    ?le ?lep ?leo .
+  } union {
+    ?adm adm:adminAbout ?R_RES .
+    ?adm adm:logEntry ?le .
+    ?le adm:logWho ?user .
+    ?user skos:prefLabel ?userL .
   }
 }
