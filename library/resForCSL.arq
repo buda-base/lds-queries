@@ -1,0 +1,80 @@
+#QueryScope=Work
+#QueryReturnType=Graph
+#QueryResults=A graph for the given work
+#QueryParams=R_RES
+#QueryUrl=/lib/resForMarc?R_RES=bdr:MW22084_0044-31
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the chosen resource
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+construct {
+  ?R_RES ?p ?o .
+  ?o ?op ?oo .
+  ?t skos:prefLabel ?to .
+  ?series skos:prefLabel ?seriesl .
+  ?part ?partp ?parto .
+  ?R_RES tmp:pubEvent ?we .
+  ?we ?wep ?weo .
+  ?aac ?aacp ?aaco .
+  ?id ?idp ?ido .
+  ?agentSa ?agentp ?oo .
+  ?R_RES bf:identifiedBy ?id .
+  ?root ?rootp ?rooto .
+  ?cl ?clp ?clo .
+  ?iinstance ?iinstancep ?iinstanceo .
+  ?wa ?wap ?wao .
+  ?mw ?mwp ?mwo .
+} where {
+  {
+    ?R_RES ?p ?o .
+  }
+  union {
+    ?R_RES :instanceReproductionOf ?mw .
+    ?mw ?mwp ?mwo .
+  }
+  union {
+    ?R_RES :instanceOf ?wa .
+    ?wa ?wap ?wao .
+  }
+  union {
+    ?R_RES bdo:inRootInstance?/:instanceHasReproduction? ?iinstance .
+    ?iinstance a :ImageInstance ;
+          ?iinstancep ?iinstanceo .
+  }
+  union {
+    ?R_RES :instanceReproductionOf?/bdo:partOf+ ?part .
+    ?part ?partp ?parto .
+    FILTER (?partp = skos:prefLabel || ?partp = bdo:partType || ?partp = bdo:partOf)
+  }
+  union {
+    ?R_RES :instanceReproductionOf?/bdo:serialInstanceOf ?series .
+    ?series skos:prefLabel ?seriesl .
+  }
+  union {
+    ?R_RES bdo:inRootInstance ?root .
+    ?root ?rootp ?rooto .
+  }
+  union {
+    ?R_RES bdo:contentLocation ?cl .
+    ?cl ?clp ?clo .
+  }
+  union {
+    ?R_RES bdo:inRootInstance?/bdo:instanceOf?/bdo:creator ?aac .
+    ?aac ?aacp ?aaco .
+    ?aac bdo:agent/owl:sameAs? ?agentSa .
+    VALUES ?agentp { skos:prefLabel skos:altLabel owl:sameAs }
+    ?agentSa ?agentp ?oo .
+  }
+  union {
+    ?R_RES :instanceReproductionOf?/bdo:inRootInstance?/bf:identifiedBy ?id .
+    ?id ?idp ?ido .
+  }
+  union {
+    ?R_RES :instanceReproductionOf?/bdo:inRootInstance?/:instanceEvent ?we .
+    ?we a :PublishedEvent ;
+      ?wep ?weo .
+  }
+}
