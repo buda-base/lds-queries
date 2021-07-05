@@ -273,7 +273,7 @@ CONSTRUCT {
 
         ?resRepAdm adm:adminAbout ?resRep .
         ?resRepAdm adm:status bda:StatusReleased .
-        bind( exists {?resRep a bdo:ImageInstance ; tmp:thumbnailIIIFService ?th } as ?resImage)
+        bind( exists {?resRep a bdo:ImageInstance . values ?thp { tmp:thumbnailIIIFService tmp:thumbnailIIIFSelected } ?resRep ?thp  ?th } as ?resImage)
         bind( exists {?resRep a bdo:EtextInstance} as ?resEtext)
         bind( (exists {?resRepAdm adm:access bda:AccessOpen}) && not exists {?resRepAdm adm:syncAgent  bdr:SAOPT} &&(?resEtext || ?resImage) as ?resAccessOpen)
       } group by ?res 
