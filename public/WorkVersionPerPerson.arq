@@ -16,7 +16,7 @@
 #param.R_RES.subtype=:Volume
 #param.R_RES.desc=the URI of the volume being investigated
 
-select ?wa ?mw ?mwlu where {
+select distinct ?wa ?mw ?mwlu where {
 	?aac bdo:agent ?R_RES ;
 	     bdo:role bdr:R0ER0019 .
 	?wa bdo:creator ?aac ;
