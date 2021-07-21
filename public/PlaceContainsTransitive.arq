@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=All places contained in a place, transitively
 #QueryParams=R_RES
-#QueryUrl=/countAssociatedTypes?R_RES=bdr:P2800
+#QueryUrl=/PlaceContainsTransitive?R_RES=bdr:G2800
 
 #param.R_RES.type=URI
 #param.R_RES.subtype=bdo:Place

@@ -112,7 +112,7 @@ construct {
   {
     ?r owl:sameAs* ?R_RES .
     ?r ?rpkeep ?rokeep .
-    FILTER(?rpkeep != bdo:collectionMember)
+    FILTER(?rpkeep != bdo:collectionMember && ?rpkeep != bdo:serialHasInstance)
   } union  {
     ?r owl:sameAs* ?R_RES .
     ?r ?rp ?ro .
