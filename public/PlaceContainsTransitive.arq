@@ -1,0 +1,28 @@
+#QueryScope=Place
+#QueryReturnType=Table
+#QueryResults=All places contained in a place, transitively
+#QueryParams=R_RES
+#QueryUrl=/countAssociatedTypes?R_RES=bdr:P2800
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=bdo:Place
+#param.R_RES.desc=the place to be
+
+select ?p ?typel ?label where {
+  {
+    ?R_RES bdo:placeContains+ ?p .
+    ?p :placeType ?pt .
+    ?pt skos:prefLabel ?typel .
+    FILTER(lang(?typel) = "en")
+    ?p skos:prefLabel ?label .
+    FILTER(lang(?label) = "bo-x-ewts")
+  } union {
+    bdr:G2800 bdo:placeContains+ ?p .
+    ?p :placeType ?pt .
+    ?pt skos:prefLabel ?typel .
+    FILTER(lang(?typel) = "en")
+    ?p skos:prefLabel ?label .
+    FILTER(lang(?label) = "zh-hans")
+    FILTER NOT EXISTS {?p skos:prefLabel ?pl . FILTER(lang(?pl) = "bo-x-ewts")}
+  }
+}
