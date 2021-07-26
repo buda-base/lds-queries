@@ -30,6 +30,8 @@ CONSTRUCT {
   ?res tmp:yearEnd ?yearEnd .
 
     ?res tmp:hasOpen ?hasopen .
+    ?res tmp:possibleAccess ?haspossible .
+    ?res tmp:catalogOnly ?catalogOnly .
     ?res tmp:hasImage ?hasimage .
     ?res tmp:hasEtext ?hasetext .
 
@@ -250,8 +252,10 @@ CONSTRUCT {
 
     select ?res 
              (max(?resAccessOpen) as ?hasopen)
+             (max(?resAccessPossible) as ?haspossible)
              (max(?resImage) as ?hasimage) 
              (max(?resEtext) as ?hasetext) 
+             (min(?resCatalogOnly) as ?catalogOnly)
       where {
         
         {
@@ -273,9 +277,11 @@ CONSTRUCT {
 
         ?resRepAdm adm:adminAbout ?resRep .
         ?resRepAdm adm:status bda:StatusReleased .
-        bind( exists {?resRep a bdo:ImageInstance . values ?thp { tmp:thumbnailIIIFService tmp:thumbnailIIIFSelected } ?resRep ?thp  ?th } as ?resImage)
-        bind( exists {?resRep a bdo:EtextInstance} as ?resEtext)
-        bind( (exists {?resRepAdm adm:access bda:AccessOpen}) && not exists {?resRepAdm adm:syncAgent  bdr:SAOPT} &&(?resEtext || ?resImage) as ?resAccessOpen)
+        bind( exists {?resRep a bdo:ImageInstance . values ?thp { tmp:thumbnailIIIFService tmp:thumbnailIIIFSelected } ?resRep ?thp  ?th } as ?resImage )
+        bind( exists {?resRep a bdo:EtextInstance} as ?resEtext )
+        bind( (exists {?resRepAdm adm:access bda:AccessOpen}) && not exists {?resRepAdm adm:syncAgent  bdr:SAOPT} &&(?resEtext || ?resImage) as ?resAccessOpen )
+        bind( (exists {?resRepAdm adm:access ?acc . FILTER(?acc IN(bda:AccessOpen , bda:AccessFairUse , bda:AccessRestrictedSealed))}) && (?resEtext || ?resImage) as ?resAccessPossible )
+        bind( not exists {?resRep a ?rept . FILTER(?rept IN(bdo:ImageInstance, bdo:EtextInstance))} as ?resCatalogOnly )
       } group by ?res 
 
     }
