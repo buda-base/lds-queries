@@ -28,6 +28,8 @@ CONSTRUCT
     ?i tmp:yearEnd ?yearEnd .
 
     ?i tmp:hasOpen ?hasopen .
+    ?i tmp:possibleAccess ?haspossible .
+    ?i tmp:catalogOnly ?catalogOnly .
     ?i tmp:hasImage ?hasimage .
     ?i tmp:hasEtext ?hasetext .
 
@@ -217,6 +219,8 @@ WHERE
              (max(?iAccessOpen) as ?hasopen) 
              (max(?iImage) as ?hasimage) 
              (max(?iEtext) as ?hasetext) 
+             (max(?iAccessPossible) as ?haspossible)
+             (min(?iCatalogOnly) as ?catalogOnly)
       where {
         {
           ?evt bdo:onYear ?GY_RES .
@@ -239,9 +243,11 @@ WHERE
 
         ?iiAdm adm:adminAbout ?ii .
         ?iiAdm adm:status bda:StatusReleased .
-        bind( exists {?iiAdm adm:access bda:AccessOpen} as ?iAccessOpen)
-        bind( exists {?ii a bdo:ImageInstance} as ?iImage)
+        bind( exists {?ii a bdo:ImageInstance . values ?thp { tmp:thumbnailIIIFService tmp:thumbnailIIIFSelected } ?ii ?thp  ?th } as ?iImage )
         bind( exists {?ii a bdo:EtextInstance} as ?iEtext)
+        bind( (exists {?iiAdm adm:access bda:AccessOpen}) && not exists {?iiAdm adm:syncAgent  bdr:SAOPT} &&(?iEtext || ?iImage) as ?iAccessOpen )
+        bind( (exists {?iiAdm adm:access ?acc . FILTER(?acc IN(bda:AccessOpen , bda:AccessFairUse , bda:AccessRestrictedSealed))}) && (?iEtext || ?iImage) as ?iAccessPossible )
+        bind( not exists {?ii a ?rept . FILTER(?rept IN(bdo:ImageInstance, bdo:EtextInstance))} as ?iCatalogOnly )
       } group by ?i 
     }
 }

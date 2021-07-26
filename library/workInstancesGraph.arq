@@ -23,6 +23,8 @@ CONSTRUCT {
 	?instanceR skos:prefLabel ?instanceRl .
 	?instance ?instanceRp ?instanceRo .
 	?instance ?instancep ?instanceo .
+    ?instance tmp:possibleAccess ?haspossible .
+    ?instance tmp:catalogOnly ?catalogOnly .
 
     ?instance tmp:hasOpen ?hasopen .
     ?instance tmp:hasImage ?hasimage .
@@ -80,22 +82,26 @@ CONSTRUCT {
     
     } union {
 
-		select ?instance 
-	           (max(?instanceAccessOpen) as ?hasopen) 
-	           (max(?instanceImage) as ?hasimage) 
-	           (max(?instanceEtext) as ?hasetext) 
-	    where {
-	      
-	      ?R_RES :workHasInstance ?instance .
-	      FILTER ( NOT EXISTS {?instance :instanceReproductionOf ?reprof })
-		  ?instance :inRootInstance?/:instanceHasReproduction ?instanceRep .
+      select ?instance 
+             (max(?resAccessOpen) as ?hasopen)
+             (max(?resAccessPossible) as ?haspossible)
+             (max(?resImage) as ?hasimage) 
+             (max(?resEtext) as ?hasetext) 
+             (min(?resCatalogOnly) as ?catalogOnly)
+      where {
+        
+        ?R_RES :workHasInstance ?instance .
+        FILTER ( NOT EXISTS {?instance :instanceReproductionOf ?reprof })
+        ?instance :inRootInstance?/:instanceHasReproduction? ?instanceRep .
 
-	      ?instanceRepAdm adm:adminAbout ?instanceRep .
-	      ?instanceRepAdm adm:status bda:StatusReleased .
-	      bind( exists {?instanceRepAdm adm:access bda:AccessOpen} as ?instanceAccessOpen)
-	      bind( exists {?instanceRep a bdo:ImageInstance} as ?instanceImage)
-	      bind( exists {?instanceRep a bdo:EtextInstance} as ?instanceEtext)
-	    } group by ?instance 
+        ?instanceRepAdm adm:adminAbout ?instanceRep .
+        ?instanceRepAdm adm:status bda:StatusReleased .
+        bind( exists {?instanceRep a bdo:ImageInstance . values ?thp { tmp:thumbnailIIIFService tmp:thumbnailIIIFSelected } ?resRep ?thp  ?th } as ?resImage )
+        bind( exists {?instanceRep a bdo:EtextInstance} as ?resEtext )
+        bind( (exists {?instanceRepAdm adm:access bda:AccessOpen}) && not exists {?resRepAdm adm:syncAgent  bdr:SAOPT} &&(?resEtext || ?resImage) as ?resAccessOpen )
+        bind( (exists {?instanceRepAdm adm:access ?acc . FILTER(?acc IN(bda:AccessOpen , bda:AccessFairUse , bda:AccessRestrictedSealed))}) && (?resEtext || ?resImage) as ?resAccessPossible )
+        bind( not exists {?instanceRep a ?rept . FILTER(?rept IN(bdo:ImageInstance, bdo:EtextInstance))} as ?resCatalogOnly )
+      } group by ?instance 
 
     }
 
