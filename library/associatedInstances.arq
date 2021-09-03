@@ -199,7 +199,7 @@ WHERE
 
         bind( exists {?iiAdm adm:access bda:AccessOpen} && not exists {?iiAdm adm:syncAgent  bdr:SAOPT} && (?iEtext || ?iImage) as ?iAccessOpen)
 
-        bind( (exists {?iiAdm adm:access ?acc . FILTER(?acc IN(bda:AccessOpen , bda:AccessFairUse , bda:AccessRestrictedSealed))}) && (?iiEtext || ?iiImage) as ?iAccessPossible )
+        bind( (exists {?iiAdm adm:access ?acc . FILTER(?acc IN(bda:AccessOpen , bda:AccessFairUse , bda:AccessRestrictedSealed))}) && (?iEtext || ?iImage) as ?iAccessPossible )
 
         bind( not exists {?ii a ?rept . FILTER(?rept IN(bdo:ImageInstance, bdo:EtextInstance))} as ?iCatalogOnly )
       } group by ?i 
