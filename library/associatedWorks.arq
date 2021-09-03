@@ -116,7 +116,7 @@ WHERE
   } union {
     
     select ?res
-           (count (distinct ?instanceAccessPossible) as ?nbinstances)
+           (count (distinct ?instance) as ?nbinstances)
            (max(?instanceAccessPossible) as ?haspossible)
            (max(?instanceAccessOpen) as ?hasopen) 
            (max(?instanceImage) as ?hasimage) 
@@ -136,16 +136,14 @@ WHERE
       }
 
       ?res bdo:workHasInstance ?instance .
-      FILTER ( NOT EXISTS {?instance :instanceReproductionOf ?reprof })
-      ?instance bdo:inRootInstance?/bdo:instanceHasReproduction? ?resRep .
-      ?instanceAdm adm:adminAbout ?resRep .
+      ?instance bdo:inRootInstance? ?rootInstance .
+      FILTER ( NOT EXISTS {?rootInstance :instanceReproductionOf ?reprof })
+      ?rootInstance bdo:instanceHasReproduction? ?instanceRep .
+      ?instanceAdm adm:adminAbout ?instanceRep .
       ?instanceAdm adm:status bda:StatusReleased .
-
-      bind( exists {?resRep a bdo:ImageInstance . values ?thp { tmp:thumbnailIIIFService tmp:thumbnailIIIFSelected } ?resRep ?thp  ?th } as ?instanceImage)
-      bind( exists {?resRep a bdo:EtextInstance} as ?instanceEtext)
-
       bind( (exists {?instanceAdm adm:access bda:AccessOpen}) && not exists {?instanceAdm adm:syncAgent  bdr:SAOPT} && (?instanceEtext || ?instanceImage) as ?instanceAccessOpen )
-
+      bind( exists {?instanceRep a bdo:ImageInstance . values ?thp { tmp:thumbnailIIIFService tmp:thumbnailIIIFSelected } ?instanceRep ?thp  ?th } as ?instanceImage)
+      bind( exists {?instanceRep a bdo:EtextInstance} as ?instanceEtext)
       bind( (exists {?instanceAdm adm:access ?acc . FILTER(?acc IN(bda:AccessOpen , bda:AccessFairUse , bda:AccessRestrictedSealed))}) && (?instanceEtext || ?instanceImage) as ?instanceAccessPossible )
 
     } group by ?res
