@@ -31,6 +31,8 @@ CONSTRUCT
     ?i tmp:hasOpen ?hasopen .
     ?i tmp:hasImage ?hasimage .
     ?i tmp:hasEtext ?hasetext .
+    ?i tmp:possibleAccess ?haspossible .
+    ?i tmp:catalogOnly ?catalogOnly .
 
     # We cheat a bit and attach the topic to the instance instead
     # of the corresponding work
@@ -152,8 +154,9 @@ WHERE
         ?i :instanceHasItem ?it .
       }
       ?i bdo:instanceOf ?w .
+      FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
       ?w ?wiip ?wiio .
-      FILTER(?wiip IN(bdo:language , bdo:catalogInfo))
+      FILTER(?wiip IN(bdo:language , bdo:catalogInfo, bdo:workIsAbout , bdo:workGenre))
     } union {
       {
         ?R_RES ?rel1 ?i .
@@ -172,7 +175,9 @@ WHERE
       select ?i 
              (max(?iAccessOpen) as ?hasopen) 
              (max(?iImage) as ?hasimage) 
-             (max(?iEtext) as ?hasetext) 
+             (max(?iEtext) as ?hasetext)
+             (max(?iAccessPossible) as ?haspossible)
+             (min(?iCatalogOnly) as ?catalogOnly)
       where {
         {
           ?R_RES ?rel1 ?i .
@@ -188,9 +193,15 @@ WHERE
 
         ?iiAdm adm:adminAbout ?ii .
         ?iiAdm adm:status bda:StatusReleased .
-        bind( exists {?iiAdm adm:access bda:AccessOpen} as ?iAccessOpen)
-        bind( exists {?ii a bdo:ImageInstance} as ?iImage)
+        
+        bind( exists {?ii a bdo:ImageInstance . values ?thp { tmp:thumbnailIIIFService tmp:thumbnailIIIFSelected } ?ii ?thp  ?th } as ?iImage)
         bind( exists {?ii a bdo:EtextInstance} as ?iEtext)
+
+        bind( exists {?iiAdm adm:access bda:AccessOpen} && not exists {?iiAdm adm:syncAgent  bdr:SAOPT} && (?iEtext || ?iImage) as ?iAccessOpen)
+
+        bind( (exists {?iiAdm adm:access ?acc . FILTER(?acc IN(bda:AccessOpen , bda:AccessFairUse , bda:AccessRestrictedSealed))}) && (?iiEtext || ?iiImage) as ?iAccessPossible )
+
+        bind( not exists {?ii a ?rept . FILTER(?rept IN(bdo:ImageInstance, bdo:EtextInstance))} as ?iCatalogOnly )
       } group by ?i 
     }
 }
