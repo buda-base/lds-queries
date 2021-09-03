@@ -184,3 +184,17 @@ select ?wdold ?old ?wdnew ?new {
   #?new owl:sameAs ?wdnew .
   #FILTER(regex(str(?wdnew), "^http://www.wikidata"))
 }
+
+# list scan-volumes of openpecha
+
+select distinct ?w ?i where {
+  ?resRepAdm adm:syncAgent  bdr:SAOPT .
+  ?resRepAdm adm:adminAbout/bdo:instanceReproductionOf ?w .
+  ?w a bdo:ImageInstance .
+  ?wadm adm:adminAbout ?w ;
+        adm:status bda:StatusReleased ;
+        adm:access bda:AccessOpen .
+  FILTER NOT EXISTS {?wadm adm:restrictedInChina true}
+  ?w bdo:instanceReproductionOf/bdo:printMethod bdr:PrintMethod_Modern .
+  ?w bdo:instanceHasVolume ?i .
+}
