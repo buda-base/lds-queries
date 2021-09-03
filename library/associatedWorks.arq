@@ -22,6 +22,7 @@ CONSTRUCT
     ?res tmp:provider ?provider .
     ?res tmp:originalRecord ?originalRecord .
     ?res tmp:hasOpen ?hasopen .
+    ?res tmp:possibleAccess ?haspossible .
     ?res tmp:hasImage ?hasimage .
     ?res tmp:hasEtext ?hasetext .
     ?res tmp:relationType ?rel1 .
@@ -115,7 +116,8 @@ WHERE
   } union {
     
     select ?res
-           (count (distinct ?nrepInstance) as ?nbinstances)
+           (count (distinct ?instanceAccessPossible) as ?nbinstances)
+           (max(?instanceAccessPossible) as ?haspossible)
            (max(?instanceAccessOpen) as ?hasopen) 
            (max(?instanceImage) as ?hasimage) 
            (max(?instanceEtext) as ?hasetext) 
@@ -134,13 +136,18 @@ WHERE
       }
 
       ?res bdo:workHasInstance ?instance .
-      bind( if (exists {?instance bdo:instanceReproductionOf ?reprodof}, ?reprodof, ?instance) as ?nrepInstance)
-      ?instance bdo:inRootInstance?/bdo:instanceHasReproduction ?rootInstance .
-      ?instanceAdm adm:adminAbout ?rootInstance .
+      FILTER ( NOT EXISTS {?instance :instanceReproductionOf ?reprof })
+      ?instance bdo:inRootInstance?/bdo:instanceHasReproduction? ?resRep .
+      ?instanceAdm adm:adminAbout ?resRep .
       ?instanceAdm adm:status bda:StatusReleased .
-      bind( exists {?instanceAdm adm:access bda:AccessOpen} as ?instanceAccessOpen)
-      bind( exists {?rootInstance a bdo:ImageInstance} as ?instanceImage)
-      bind( exists {?rootInstance a bdo:EtextInstance} as ?instanceEtext)
+
+      bind( exists {?resRep a bdo:ImageInstance . values ?thp { tmp:thumbnailIIIFService tmp:thumbnailIIIFSelected } ?resRep ?thp  ?th } as ?instanceImage)
+      bind( exists {?resRep a bdo:EtextInstance} as ?instanceEtext)
+
+      bind( (exists {?instanceAdm adm:access bda:AccessOpen}) && not exists {?instanceAdm adm:syncAgent  bdr:SAOPT} && (?instanceEtext || ?instanceImage) as ?instanceAccessOpen )
+
+      bind( (exists {?instanceAdm adm:access ?acc . FILTER(?acc IN(bda:AccessOpen , bda:AccessFairUse , bda:AccessRestrictedSealed))}) && (?instanceEtext || ?instanceImage) as ?instanceAccessPossible )
+
     } group by ?res
   }
 }
