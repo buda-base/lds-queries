@@ -59,6 +59,10 @@ construct {
  ?R_RES bdo:collectionMember ?resInColl .
  ?resInColl skos:prefLabel ?resInCollLabel ;
             tmp:thumbnailIIIFService ?resInCollThumbnail .
+ 
+ ?R_RES bdo:serialHasInstance ?serialI .
+ ?serialI skos:prefLabel ?serialILabel ;
+          tmp:thumbnailIIIFService ?serialIThumbnail .
 
  ?resAbout bdo:workIsAbout ?R_RES ;
            skos:prefLabel ?resAboutLabel ;
@@ -121,6 +125,7 @@ construct {
     # add prefLabel for any related resource
     ?r owl:sameAs* ?R_RES .
     ?r ?rp ?ro .
+    FILTER(?rpkeep != bdo:collectionMember && ?rpkeep != bdo:serialHasInstance)
     ?ro skos:prefLabel ?roLabel .
   } union {
     # display inRootInstance (used to sort instances)
@@ -334,6 +339,17 @@ construct {
         FILTER(not exists{?resInColl tmp:thumbnailIIIFService ?resInCollThumbnail . })
         ?resInColl bdo:instanceReproductionOf? ?resWithLabel .
         ?resWithLabel skos:prefLabel ?resInCollLabel .
+      }
+    } limit 20
+  } union {
+    # 10 instances of serial
+    select
+       ?serialI ?serialILabel ?serialIThumbnail
+    where {
+      {
+         ?R_RES bdo:serialHasInstance ?serialI .
+         ?serialI tmp:thumbnailIIIFService ?serialIThumbnail .
+         ?serialI skos:prefLabel ?serialILabel .
       }
     } limit 20
   } union {
