@@ -125,7 +125,7 @@ construct {
     # add prefLabel for any related resource
     ?r owl:sameAs* ?R_RES .
     ?r ?rp ?ro .
-    FILTER(?rpkeep != bdo:collectionMember && ?rpkeep != bdo:serialHasInstance)
+    FILTER(?rp != bdo:collectionMember && ?rp != bdo:serialHasInstance)
     ?ro skos:prefLabel ?roLabel .
   } union {
     # display inRootInstance (used to sort instances)
