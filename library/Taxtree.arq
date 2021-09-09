@@ -10,7 +10,7 @@ construct {
 }
 where{
   {
-    ?R_RES bdo:taxHasSubClass+ ?sub .
+    ?R_RES bdo:taxHasSubClass* ?super .
     ?super bdo:taxHasSubClass ?sub .
     ?sub skos:prefLabel ?subl .
   }
