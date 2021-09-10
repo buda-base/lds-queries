@@ -115,6 +115,7 @@ construct {
 ?r bdo:personEvent ?foundationEvt .
 ?foundationEvt ?foundationEvtp ?foundationEvto ;
                :eventWhere ?foundationPlace .
+?foundationPlace skos:prefLabel ?foundationPlaceL .
 
 } where {
   {
@@ -132,6 +133,7 @@ construct {
     ?foundationPlace :placeEvent ?foundationEvt .
     ?foundationEvt ?foundationEvtp ?foundationEvto .
     FILTER (?foundationEvtp != bdo:eventWho)
+    ?foundationPlace skos:prefLabel ?foundationPlaceL .
   } union {
     # add prefLabel for any related resource
     ?r owl:sameAs* ?R_RES .
