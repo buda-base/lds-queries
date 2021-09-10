@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=Works and Instances by a certain person, for clustering purposes
 #QueryParams=R_RES
-#QueryUrl=/WorkVersionPerPerson?R_RES=bdr:P64
+#QueryUrl=/WorkVersionPerPersonNotMainAuthor?R_RES=bdr:P64
 #QueryLimit=8000
 
 #output.?wa.type=URI
@@ -19,7 +19,7 @@
 select distinct ?wa ?mw ?mwlu where {
 	?aac bdo:agent ?R_RES ;
 	     bdo:role ?r .
-  FILTER (?r IN (bdr:R0ER0011 , bdr:R0ER0019 , bdr:R0ER0014 , bdr:R0ER0025))
+  FILTER (?r IN (bdr:R0ER0011 , bdr:R0ER0014 , bdr:R0ER0025))
 	?wa bdo:creator ?aac ;
 	    bdo:workHasInstance ?mw .
 	FILTER NOT EXISTS { ?mw bdo:instanceReproductionOf ?repof }
