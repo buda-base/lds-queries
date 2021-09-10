@@ -112,6 +112,10 @@ construct {
 ?le ?lep ?leo .
 ?user skos:prefLabel ?userL .
 
+?r bdo:personEvent ?foundationEvt .
+?foundationEvt ?foundationEvtp ?foundationEvto ;
+               :eventWhere ?foundationPlace .
+
 } where {
   {
     ?r owl:sameAs* ?R_RES .
@@ -121,6 +125,13 @@ construct {
     ?r owl:sameAs* ?R_RES .
     ?r ?rp ?ro .
     ?ro owl:sameAs+ ?roSame .
+  } union  {
+    # monastery foundation events, see https://github.com/buda-base/public-digital-library/issues/556
+    ?r owl:sameAs* ?R_RES .
+    ?foundationEvt :eventWho ?r .
+    ?foundationPlace :placeEvent ?foundationEvt .
+    ?foundationEvt ?foundationEvtp ?foundationEvto .
+    FILTER (?foundationEvtp != bdo:eventWho)
   } union {
     # add prefLabel for any related resource
     ?r owl:sameAs* ?R_RES .
