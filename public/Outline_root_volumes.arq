@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=All image groups contained in this outline node, presented as parts (a bit hacky)
 #QueryParams=R_RES
-#QueryUrl=/Outline_root?R_RES=bdr:MW23703_S0002
+#QueryUrl=/Outline_root_volumes?R_RES=bdr:MW23703_S0002
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=Instance Resource ID
@@ -16,6 +16,8 @@ CONSTRUCT
   ?R_RES :hasPart ?ig .
   ?ig :partType bdr:PartTypeVolume ;
       :partIndex ?bvol ;
+      bdo:volumeNumber ?bvol ;
+      tmp:hasNonVolumeParts true ;
       :contentLocation _:cl .
   _:cl :contentLocationVolume ?bvol .
   ?ig :hasPart ?part .
