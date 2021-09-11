@@ -1,8 +1,8 @@
 #QueryScope=General
 #QueryReturnType=Graph
-#QueryResults=All subnodes of this outline node
-#QueryParams=R_RES
-#QueryUrl=/Outline_root?R_RES=bdr:MW12827
+#QueryResults=All subnodes of this outline node in a certain volume
+#QueryParams=R_RES,I_VNUM
+#QueryUrl=/Outline_root?R_RES=bdr:MW23703_S0002&I_VNUM=3
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=Instance Resource ID
@@ -10,8 +10,6 @@
 #param.R_RES.example=bdr:MW12827
 
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
-
-
 
 CONSTRUCT
 {
@@ -39,51 +37,69 @@ WHERE
     ?R_RES :partOf+ ?ancestor .
     ?ancestor ?ancestorp ?ancestoro .
     FILTER (?ancestorp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
-  #} union {
-  	# get volumes
-  #	?R_RES :instanceHasReproduction ?repr .
-  #	?repr :instanceHasVolume ?vol .
-  # ?vol ?volp ?volo .
-  # FILTER (?volp IN(bdo:volumeNumber , skos:prefLabel ))
   } union {
   	# get parts: essential triples
   	?R_RES :hasPart? ?part .
+    ?part bdo:contentLocation ?loc .
+    ?loc :contentLocationVolume ?bvol .
+    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
     ?part ?partp ?parto .
     FILTER (?partp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart, rdfs:seeAlso, :colophon, :incipit, :explicit,:authorshipStatement ) )
   } union {
     # get parts: essential triples
     ?R_RES :hasPart? ?part .
+    ?part bdo:contentLocation ?loc .
+    ?loc :contentLocationVolume ?bvol .
+    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
     ?part :instanceHasReproduction ?repr .
     ?repr a :ImageInstance .
   } union {
   	# get parts: title
   	?R_RES :hasPart? ?part .
+    ?part bdo:contentLocation ?loc .
+    ?loc :contentLocationVolume ?bvol .
+    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
   	?part  :hasTitle ?partT .
   	?partT ?partTp ?partTo .
   } union {
     # get parts: identifiers
     ?R_RES :hasPart? ?part .
+    ?part bdo:contentLocation ?loc .
+    ?loc :contentLocationVolume ?bvol .
+    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
     ?part  bf:identifiedBy ?id .
     ?id ?idp ?ido .
   } union {
   	# get parts: work triples
   	?R_RES :hasPart? ?part .
+    ?part bdo:contentLocation ?loc .
+    ?loc :contentLocationVolume ?bvol .
+    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
   	?part  :instanceOf ?partW .
   	?partW skos:prefLabel ?partWL .
   } union {
   	# get parts: work creator triples
   	?R_RES :hasPart? ?part .
+    ?part bdo:contentLocation ?loc .
+    ?loc :contentLocationVolume ?bvol .
+    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
   	?part :instanceOf ?partW .
   	?partW :creator/:agent ?partWc .
   	?partWc skos:prefLabel ?partWcL .
   } union {
   	# get parts: location triples
   	?R_RES :hasPart? ?part .
+    ?part bdo:contentLocation ?loc .
+    ?loc :contentLocationVolume ?bvol .
+    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
   	?part :contentLocation ?cl .
   	?cl ?clp ?clo .
   } union {
   	# get parts: locationstatement triples
   	?R_RES :hasPart? ?part .
+    ?part bdo:contentLocation ?loc .
+    ?loc :contentLocationVolume ?bvol .
+    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
   	?part :contentLocationStatement ?cls .
   }
 }
