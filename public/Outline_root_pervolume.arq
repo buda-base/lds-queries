@@ -39,12 +39,10 @@ WHERE
     ?ancestor ?ancestorp ?ancestoro .
     FILTER (?ancestorp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
   } union {
-    ?R_RES bdo:contentLocation ?loc .
-    ?loc :contentLocationVolume ?bvol .
     ?R_RES bdo:inRootInstance?/bdo:instanceHasReproduction ?ii .
     ?ii a bdo:ImageInstance .
     ?ii bdo:instanceHasVolume ?firstig .
-    ?firstig bdo:volumeNumber ?bvol .
+    ?firstig bdo:volumeNumber ?I_VNUM .
   } union {
   	# get parts: essential triples
   	?R_RES :hasPart? ?part .
