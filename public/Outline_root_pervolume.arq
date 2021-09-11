@@ -29,6 +29,7 @@ CONSTRUCT
   ?partW skos:prefLabel ?partWL .
   ?partWc skos:prefLabel ?partWcL .
   ?ancestor ?ancestorp ?ancestoro .
+  ?R_RES tmp:firstImageGroup ?firstig .
 }
 WHERE 
 {
@@ -37,6 +38,13 @@ WHERE
     ?R_RES :partOf+ ?ancestor .
     ?ancestor ?ancestorp ?ancestoro .
     FILTER (?ancestorp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
+  } union {
+    ?R_RES bdo:contentLocation ?loc .
+    ?loc :contentLocationVolume ?bvol .
+    ?R_RES bdo:inRootInstance?/bdo:instanceHasReproduction ?ii .
+    ?ii a bdo:ImageInstance .
+    ?ii bdo:instanceHasVolume ?firstig .
+    ?firstig bdo:volumeNumber ?bvol .
   } union {
   	# get parts: essential triples
   	?R_RES :hasPart? ?part .
