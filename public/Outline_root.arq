@@ -23,7 +23,7 @@ CONSTRUCT
           :contentLocation ?cl ;
           :contentLocationStatement ?cls ;
           bf:identifiedBy ?id ;
-          tmp:hasVolumeParts ?hasVolumeParts ;
+          tmp:hasNonVolumeParts ?hasNonVolumeParts ;
           :instanceHasReproduction ?repr .
   ?partT ?partTp ?partTo .
   ?cl ?clp ?clo .
@@ -51,7 +51,7 @@ WHERE
   	?R_RES :hasPart? ?part .
     ?part ?partp ?parto .
     FILTER (?partp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart, rdfs:seeAlso, :colophon, :incipit, :explicit,:authorshipStatement ) )
-    BIND(EXISTS{?part bdo:hasPart/bdo:partType bdr:PartTypeVolume} as ?hasVolumeParts)
+     BIND(EXISTS{?part bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume)} as ?hasNonVolumeParts)
   } union {
     # get parts: essential triples
     ?R_RES :hasPart? ?part .
