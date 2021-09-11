@@ -22,6 +22,7 @@ select distinct ?wa ?mw ?mwlu where {
   FILTER (?r IN (bdr:R0ER0011 , bdr:R0ER0019 , bdr:R0ER0014 , bdr:R0ER0025))
 	?wa bdo:creator ?aac ;
 	    bdo:workHasInstance ?mw .
+  ?wa (^adm:adminAbout)/adm:status bda:StatusReleased .
 	FILTER NOT EXISTS { ?mw bdo:instanceReproductionOf ?repof }
 	?mw bdo:inRootInstance? ?root .
 	?rootA adm:adminAbout ?root ;
