@@ -1,0 +1,46 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All image groups contained in this outline node, presented as parts (a bit hacky)
+#QueryParams=R_RES
+#QueryUrl=/Outline_root?R_RES=bdr:MW23703_S0002
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=Instance Resource ID
+#param.R_RES.desc=Instance resource ID (can be a part of an instance)
+#param.R_RES.example=bdr:MW23703_S0002
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT
+{
+  ?R_RES :hasPart ?ig .
+  ?ig :partType bdr:PartTypeVolume ;
+      :partIndex ?bvol ;
+      :contentLocation _:cl .
+  _:cl :contentLocationVolume ?bvol .
+  ?ig :hasPart ?part .
+
+  ?ancestor ?ancestorp ?ancestoro .
+}
+WHERE 
+{
+  {
+    # get ancestors label, test with bdr:MW12827_891768 to see some results
+    ?R_RES :partOf+ ?ancestor .
+    ?ancestor ?ancestorp ?ancestoro .
+    FILTER (?ancestorp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
+  } union {
+  	# get parts: essential triples
+    {
+      select distinct ?bvol where { 
+    	   ?R_RES :hasPart? ?part .
+         ?part bdo:contentLocation ?loc .
+         ?loc :contentLocationVolume ?bvol .
+      }
+    }
+    ?R_RES bdo:inRootInstance?/bdo:instanceHasReproduction ?ii .
+    ?ii a bdo:ImageInstance .
+    ?ii bdo:instanceHasVolume ?ig .
+    ?ig bdo:volumeNumber ?bvol .
+  }
+}
