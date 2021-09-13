@@ -39,7 +39,7 @@ WHERE
   {
     # get ancestors label, test with bdr:MW12827_891768 to see some results
     ?R_RES :partOf+ ?ancestor .
-    BIND(EXISTS{?ancestor bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume)} as ?ancestorHasNonVolumeParts)
+    BIND(EXISTS{?ancestor bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume && ?pt != bdr:PartTypeSection)} as ?ancestorHasNonVolumeParts)
     ?ancestor ?ancestorp ?ancestoro .
     FILTER (?ancestorp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
   #} union {
@@ -53,7 +53,7 @@ WHERE
   	?R_RES :hasPart? ?part .
     ?part ?partp ?parto .
     FILTER (?partp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart, rdfs:seeAlso, :colophon, :incipit, :explicit,:authorshipStatement ) )
-     BIND(EXISTS{?part bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume)} as ?hasNonVolumeParts)
+     BIND(EXISTS{?part bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume && ?pt != bdr:PartTypeSection)} as ?hasNonVolumeParts)
   } union {
     # get parts: essential triples
     ?R_RES :hasPart? ?part .
