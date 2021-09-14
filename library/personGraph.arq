@@ -70,7 +70,8 @@ WHERE
         ?res a :Person .
     }
 
-    ?res bdo:personEvent ?evt .
+    ?res owl:sameAs* ?resS .
+    ?resS bdo:personEvent ?evt .
     ?evt a ?evtType .
     FILTER (?evtType IN(bdo:PersonBirth , bdo:PersonDeath))
     ?evt ?evtp ?evto .
