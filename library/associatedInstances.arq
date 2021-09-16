@@ -48,6 +48,7 @@ CONSTRUCT
     ?i ?wiip ?wiio .
 
     ?i tmp:relationType ?rel2 .
+    ?i tmp:relationType ?rel3 .
     ?i tmp:relationTypeInv ?rel1 .
 
 }
@@ -63,6 +64,11 @@ WHERE
       } union {
         ?it :inCollection ?R_RES .
         ?i :instanceHasItem ?it .
+      } union {
+        ?aac bdo:agent ?R_RES .
+        ?i bdo:creator ?aac .
+        ?i a/rdfs:subClassOf* bdo:Instance .
+        ?aac bdo:role ?rel3 .
       }
       ?i a bdo:Instance .
       FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
@@ -81,6 +87,11 @@ WHERE
       } union {
         ?it :inCollection ?R_RES .
         ?i :instanceHasItem ?it .
+      } union {
+        ?aac bdo:agent ?R_RES .
+        ?i bdo:creator ?aac .
+        ?i a/rdfs:subClassOf* bdo:Instance .
+        ?aac bdo:role ?rel3 .
       }
       ?i a bdo:Instance .
       FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
@@ -103,6 +114,11 @@ WHERE
       } union {
         ?it :inCollection ?R_RES .
         ?i :instanceHasItem ?it .
+      } union {
+        ?aac bdo:agent ?R_RES .
+        ?i bdo:creator ?aac .
+        ?i a/rdfs:subClassOf* bdo:Instance .
+        ?aac bdo:role ?rel3 .
       }
       ?i :inRootInstance?/:instanceHasReproduction ?ii .
       FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
@@ -116,6 +132,10 @@ WHERE
       } union {
         ?it :inCollection ?R_RES .
         ?i :instanceHasItem ?it .
+      } union {
+        ?aac bdo:agent ?R_RES .
+        ?i bdo:creator ?aac .
+        ?i a/rdfs:subClassOf* bdo:Instance .
       }
       ?i bdo:instanceOf ?w .
       FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
@@ -131,6 +151,10 @@ WHERE
       } union {
         ?it :inCollection ?R_RES .
         ?i :instanceHasItem ?it .
+      } union {
+        ?aac bdo:agent ?R_RES .
+        ?i bdo:creator ?aac .
+        ?i a/rdfs:subClassOf* bdo:Instance .
       }
       ?i bdo:instanceOf ?w .
       FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
@@ -152,6 +176,10 @@ WHERE
       } union {
         ?it :inCollection ?R_RES .
         ?i :instanceHasItem ?it .
+      } union {
+        ?aac bdo:agent ?R_RES .
+        ?i bdo:creator ?aac .
+        ?i a/rdfs:subClassOf* bdo:Instance .
       }
       ?i bdo:instanceOf ?w .
       FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
@@ -165,6 +193,10 @@ WHERE
       } union {
         ?it :inCollection ?R_RES .
         ?i :instanceHasItem ?it .
+      } union {
+        ?aac bdo:agent ?R_RES .
+        ?i bdo:creator ?aac .
+        ?i a/rdfs:subClassOf* bdo:Instance .
       }
       ?i bdo:instanceOf ?w .
       FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
@@ -186,6 +218,10 @@ WHERE
         } union {
           ?it :inCollection ?R_RES .
           ?i :instanceHasItem ?it .
+        } union {
+          ?aac bdo:agent ?R_RES .
+          ?i bdo:creator ?aac .
+          ?i a/rdfs:subClassOf* bdo:Instance .
         }
         ?i a bdo:Instance .
         FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
