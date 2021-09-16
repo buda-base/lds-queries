@@ -57,8 +57,9 @@ WHERE
       ?res a/rdfs:subClassOf* bdo:Work .
     } union {
       ?aac bdo:agent ?R_RES .
-      ?res bdo:creator ?aac . 
-      BIND(bdo:creator as ?rel3)
+      ?res bdo:creator ?aac .
+      ?res a/rdfs:subClassOf* bdo:Work .
+      ?aac bdo:role ?rel3 .
     }
     
     #VALUES ?resp {bdo:language skos:altLabel skos:prefLabel rdf:type owl:sameAs tmp:entityScore}
@@ -80,7 +81,6 @@ WHERE
     } union {
       ?aac bdo:agent ?R_RES .
       ?res bdo:creator ?aac . 
-      BIND(bdo:creator as ?rel3)
     }
     
     ?res bdo:creator ?creator .
@@ -106,7 +106,6 @@ WHERE
     } union {
       ?aac bdo:agent ?R_RES .
       ?res bdo:creator ?aac . 
-      BIND(bdo:creator as ?rel3)
     }
     
     ?res ?respp ?resoo .
