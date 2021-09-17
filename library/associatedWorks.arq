@@ -64,7 +64,7 @@ WHERE
     
     #VALUES ?resp {bdo:language skos:altLabel skos:prefLabel rdf:type owl:sameAs tmp:entityScore}
     ?res ?resp ?reso .
-    FILTER (?resp IN(bdo:language , skos:altLabel , skos:prefLabel , rdf:type , bdo:workSeriesNumber , owl:sameAs , tmp:entityScore))
+    FILTER (?resp IN(bdo:language , skos:altLabel , skos:prefLabel , rdf:type , bdo:workSeriesNumber , bdo:catalogInfo , owl:sameAs , tmp:entityScore))
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
     ?resAdm adm:metadataLegal/adm:provider ?provider .
