@@ -15,6 +15,7 @@ construct {
   ?o a ?ot .
   ?o skos:prefLabel ?ol .
   ?lt a ?ltt .
+  ?cl ?clp ?clo .
   ?R_RES tmp:rootAccess ?access .
   ?R_RES tmp:rootRestrictedInChina ?ric .
   ?R_RES tmp:rootLicense ?license .
@@ -63,6 +64,11 @@ where {
   } union {
     ?R_RES :virtualLinkTo?/:hasPart ?s .
     ?s ?p ?o .
+  } union {
+    ?R_RES :virtualLinkTo?/:hasPart ?s .
+    ?s :contentLocation ?cl .
+    ?cl ?clp ?clo .
+    FILTER (?clp IN(:contentLocationVolume , :contentLocationEndVolume))
   } union {
     ?R_RES :hasPart ?s .
     ?s :virtualLinkTo ?o .
