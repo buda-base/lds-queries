@@ -198,3 +198,29 @@ select distinct ?w ?i where {
   ?w bdo:instanceReproductionOf/bdo:printMethod bdr:PrintMethod_Modern .
   ?w bdo:instanceHasVolume ?i .
 }
+
+# persons' birth and death dates, with affiliation
+
+select distinct ?p ?pname ?bdate ?ddate ?seat where {
+  {
+    ?p :personEvent ?birth .
+    FILTER NOT EXISTS {?p :personEvent/rdf:type bdo:PersonOccupiesSeat}
+    ?birth a :PersonBirth ;
+           bdo:onYear ?bdate .
+    ?p :personEvent ?death .
+    ?death a :PersonDeath ;
+           bdo:onYear ?ddate .
+    ?p skos:prefLabel ?pname .
+  } union {
+    ?p :personEvent ?os .
+    ?os a :PersonOccupiesSeat ;
+        :eventWhere ?seat .
+    ?p :personEvent ?birth .
+    ?birth a :PersonBirth ;
+           bdo:onYear ?bdate .
+    ?p :personEvent ?death .
+    ?death a :PersonDeath ;
+           bdo:onYear ?ddate .
+    ?p skos:prefLabel ?pname .
+  }
+}
