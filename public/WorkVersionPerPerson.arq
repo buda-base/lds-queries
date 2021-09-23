@@ -17,17 +17,30 @@
 #param.R_RES.desc=the URI of the volume being investigated
 
 select distinct ?wa ?mw ?mwlu where {
-	?aac bdo:agent ?R_RES ;
-	     bdo:role ?r .
-  FILTER (?r IN (bdr:R0ER0011 , bdr:R0ER0019 , bdr:R0ER0014 , bdr:R0ER0025))
-	?wa bdo:creator ?aac ;
-	    bdo:workHasInstance ?mw .
-  ?wa (^adm:adminAbout)/adm:status bda:StatusReleased .
-	FILTER NOT EXISTS { ?mw bdo:instanceReproductionOf ?repof }
-	?mw bdo:inRootInstance? ?root .
-	?rootA adm:adminAbout ?root ;
-           adm:status bda:StatusReleased .
-    ?mw skos:prefLabel ?mwl .
+  {
+  	?aac bdo:agent ?R_RES ;
+  	     bdo:role ?r .
+    FILTER (?r IN (bdr:R0ER0011 , bdr:R0ER0019 , bdr:R0ER0014 , bdr:R0ER0025))
+  	?wa bdo:creator ?aac ;
+  	    bdo:workHasInstance ?mw .
+    ?wa (^adm:adminAbout)/adm:status bda:StatusReleased .
+  	FILTER NOT EXISTS { ?mw bdo:instanceReproductionOf ?repof }
+  	?mw bdo:inRootInstance? ?root .
+  	?rootA adm:adminAbout ?root ;
+             adm:status bda:StatusReleased .
+      ?mw skos:prefLabel ?mwl .
+      FILTER(lang(?mwl) = "bo-x-ewts")
+      BIND(f:ewtsToUnicode(?mwl) as ?mwlu)
+  } union {
+    ?aac bdo:agent ?R_RES ;
+         bdo:role ?r .
+    FILTER (?r IN (bdr:R0ER0011 , bdr:R0ER0019 , bdr:R0ER0014 , bdr:R0ER0025))
+    ?wa bdo:creator ?aac .
+    FILTER NOT EXISTS { ?wa bdo:workHasInstance ?mw }
+    FILTER EXISTS { ?owa bdo:workIsAbout ?wa }
+    ?wa skos:prefLabel ?mwl .
     FILTER(lang(?mwl) = "bo-x-ewts")
     BIND(f:ewtsToUnicode(?mwl) as ?mwlu)
-} 
+    BIND("conceptual" as ?mw)
+  }
+}
