@@ -39,7 +39,8 @@ CONSTRUCT
 
     ?ii tmp:relationType ?rel2 .
     ?ii tmp:relationTypeInv ?rel1 .
-
+    ?ii tmp:thumbnailIIIFService ?th .
+    ?ii bdo:scanInfo ?iio .
 }
 WHERE 
 {
@@ -51,13 +52,14 @@ WHERE
       } union {
         ?ii ?rel2 ?R_RES .
       }
+      # only select synced scans (https://github.com/buda-base/library-issues/issues/389)
+      ?ii tmp:thumbnailIIIFService ?th .
       ?iiAdm adm:adminAbout ?ii .
       bind( exists {?iiAdm adm:access bda:AccessOpen} as ?iAccessOpen)
       ?iiAdm adm:status ?status .
       ?iiAdm adm:access ?access .
       ?iiAdm adm:contentLegal/adm:provider ?provider .
-      ?ii ?iip ?iio .
-      FILTER (?iip = tmp:thumbnailIIIFService || ?iip = bdo:scanInfo)
+      ?ii bdo:scanInfo ?iio .
       ?ii :instanceReproductionOf ?i .
       ?i ?ip ?io .
       FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
@@ -69,6 +71,7 @@ WHERE
         ?ii ?rel2 ?R_RES .
       }
       ?ii a bdo:ImageInstance .
+      ?ii tmp:thumbnailIIIFService ?th .
       ?ii bdo:instanceOf ?w .
       ?w bdo:creator ?creator .
       ?creator bdo:role ?role .
@@ -82,6 +85,7 @@ WHERE
         ?ii ?rel2 ?R_RES .
       }
       ?ii a bdo:ImageInstance .
+      ?ii tmp:thumbnailIIIFService ?th .
       ?ii bdo:instanceOf ?w .
       ?w ?wiip ?wiio .
       FILTER(?wiip IN(bdo:language , bdo:catalogInfo))
@@ -92,6 +96,7 @@ WHERE
         ?ii ?rel2 ?R_RES .
       }
       ?ii a bdo:ImageInstance .
+      ?ii tmp:thumbnailIIIFService ?th .
       ?ii bdo:instanceOf ?w .
       ?w ?wp ?wo .
       FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
