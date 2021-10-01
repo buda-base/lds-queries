@@ -11,6 +11,8 @@
 
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
+# also try with R_RES=bdr:MW22084_S0010 & I_VNUM = 46
+
 CONSTRUCT
 {
   ?repr :instanceHasVolume ?vol .
@@ -48,7 +50,7 @@ WHERE
   	?R_RES :hasPart? ?part .
     ?part bdo:contentLocation ?loc .
     ?loc :contentLocationVolume ?bvol .
-    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
+    FILTER (?part = ?R_RES || (?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
     ?part ?partp ?parto .
     FILTER (?partp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart, rdfs:seeAlso, :colophon, :incipit, :explicit,:authorshipStatement ) )
   } union {
@@ -56,7 +58,7 @@ WHERE
     ?R_RES :hasPart? ?part .
     ?part bdo:contentLocation ?loc .
     ?loc :contentLocationVolume ?bvol .
-    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
+    FILTER (?part = ?R_RES || (?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
     ?part :instanceHasReproduction ?repr .
     ?repr a :ImageInstance .
   } union {
@@ -64,7 +66,7 @@ WHERE
   	?R_RES :hasPart? ?part .
     ?part bdo:contentLocation ?loc .
     ?loc :contentLocationVolume ?bvol .
-    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
+    FILTER (?part = ?R_RES || (?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
   	?part  :hasTitle ?partT .
   	?partT ?partTp ?partTo .
   } union {
@@ -72,7 +74,7 @@ WHERE
     ?R_RES :hasPart? ?part .
     ?part bdo:contentLocation ?loc .
     ?loc :contentLocationVolume ?bvol .
-    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
+    FILTER (?part = ?R_RES || (?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
     ?part  bf:identifiedBy ?id .
     ?id ?idp ?ido .
   } union {
@@ -80,7 +82,7 @@ WHERE
   	?R_RES :hasPart? ?part .
     ?part bdo:contentLocation ?loc .
     ?loc :contentLocationVolume ?bvol .
-    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
+    FILTER (?part = ?R_RES || (?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
   	?part  :instanceOf ?partW .
   	?partW skos:prefLabel ?partWL .
   } union {
@@ -88,7 +90,7 @@ WHERE
   	?R_RES :hasPart? ?part .
     ?part bdo:contentLocation ?loc .
     ?loc :contentLocationVolume ?bvol .
-    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
+    FILTER (?part = ?R_RES || (?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
   	?part :instanceOf ?partW .
   	?partW :creator/:agent ?partWc .
   	?partWc skos:prefLabel ?partWcL .
@@ -97,7 +99,7 @@ WHERE
   	?R_RES :hasPart? ?part .
     ?part bdo:contentLocation ?loc .
     ?loc :contentLocationVolume ?bvol .
-    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
+    FILTER (?part = ?R_RES || (?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
   	?part :contentLocation ?cl .
   	?cl ?clp ?clo .
   } union {
@@ -105,7 +107,7 @@ WHERE
   	?R_RES :hasPart? ?part .
     ?part bdo:contentLocation ?loc .
     ?loc :contentLocationVolume ?bvol .
-    FILTER ((?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
+    FILTER (?part = ?R_RES || (?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
   	?part :contentLocationStatement ?cls .
   }
 }
