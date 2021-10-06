@@ -20,16 +20,19 @@ CONSTRUCT
 {
 
     ?inst ?instp ?insto .
+
     ?t ?tp ?to .
     ?id ?idp ?ido .
     ?inst tmp:matchScore ?titleSc .
     ?inst tmp:titleMatch ?titleMatch.
+    ?inst tmp:hasNonVolumeParts ?hasNonVolumeParts .
     ?work ?workp ?worko .
     ?work tmp:matchScore ?workSc .
     ?work tmp:labelMatch ?labelMatch .
     ?workaac ?workaacp ?workaaco .
     ?author ?authorp ?authoro .
     ?ancestor ?ancestorp ?ancestoro .
+    ?ancestor tmp:hasNonVolumeParts ?ancestorHasNonVolumeParts .
     ?cl ?clp ?clo .
 
 }
@@ -50,11 +53,13 @@ WHERE
         ?inst :partOf+ ?R_RES .
     }
     
+    BIND(EXISTS{?inst bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume && ?pt != bdr:PartTypeSection)} as ?instHasNonVolumeParts)
     ?inst ?instp ?insto .
     ?inst :hasTitle ?t .
     ?t ?tp ?to .
 
     ?inst :partOf+ ?ancestor .
+    BIND(EXISTS{?ancestor bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume && ?pt != bdr:PartTypeSection)} as ?ancestorHasNonVolumeParts)
     ?ancestor ?ancestorp ?ancestoro .
     FILTER (?ancestorp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
     
@@ -138,17 +143,20 @@ WHERE
     # more general search in works with instance in parts
 
     ?R_RES :inRootInstance? ?root .
-    (?work ?workSc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    (?work ?workSc ?labelMatch) text:query ( bdo:skosLabels 200 ?L_NAME "highlight:" ) .
     ?work :workHasInstance ?inst .
     ?inst :inRootInstance ?root .
     # here again we could check
     # ?inst :partOf+ ?R_RES .
+
+    BIND(EXISTS{?inst bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume && ?pt != bdr:PartTypeSection)} as ?instHasNonVolumeParts)
 
     ?inst ?instp ?insto .
     ?inst :hasTitle ?t .
     ?t ?tp ?to .
 
     ?inst :partOf+ ?ancestor .
+    BIND(EXISTS{?ancestor bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume && ?pt != bdr:PartTypeSection)} as ?ancestorHasNonVolumeParts)
     ?ancestor ?ancestorp ?ancestoro .
     FILTER (?ancestorp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
 
@@ -159,7 +167,7 @@ WHERE
     # same with identifiers
 
     ?R_RES :inRootInstance? ?root .
-    (?work) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    (?work) text:query ( bdo:skosLabels ?L_NAME 200 "highlight:" ) .
     ?work :workHasInstance ?inst .
     ?inst :inRootInstance ?root .
     # here again we could check
@@ -173,7 +181,7 @@ WHERE
     # same with content location
 
     ?R_RES :inRootInstance? ?root .
-    (?work) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    (?work) text:query ( bdo:skosLabels ?L_NAME 200 "highlight:" ) .
     ?work :workHasInstance ?inst .
     ?inst :inRootInstance ?root .
     # here again we could check
@@ -187,7 +195,7 @@ WHERE
     # same with authors
     
     ?R_RES :inRootInstance? ?root .
-    (?work) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+    (?work) text:query ( bdo:skosLabels ?L_NAME 200 "highlight:" ) .
     ?work :workHasInstance ?inst .
     ?inst :inRootInstance ?root .
     # here again we could check
