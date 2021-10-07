@@ -208,7 +208,7 @@ WHERE
     # more general search in works with instance in parts
 
     ?R_RES :inRootInstance? ?root .
-    (?work ?workSc ?labelMatch) text:query ( bdo:skosLabels 200 ?L_NAME "highlight:" ) .
+    (?work ?workSc ?labelMatch) text:query ( bdo:skosLabels 200 ?L_NAME ) .
     ?work :workHasInstance ?inst .
     ?inst :inRootInstance ?root .
     # here again we could check
@@ -218,8 +218,6 @@ WHERE
     BIND(EXISTS{?ancestor bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume && ?pt != bdr:PartTypeSection)} as ?ancestorHasNonVolumeParts)
     ?ancestor ?ancestorp ?ancestoro .
     FILTER (?ancestorp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
-
-    ?work ?workp ?worko .
 
   } union {
 
