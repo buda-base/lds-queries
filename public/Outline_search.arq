@@ -25,6 +25,7 @@ CONSTRUCT
     ?id ?idp ?ido .
     ?inst tmp:matchScore ?titleSc .
     ?inst tmp:titleMatch ?titleMatch.
+    ?inst tmp:colophonMatch ?colophonMatch.
     ?inst tmp:hasNonVolumeParts ?hasNonVolumeParts .
     ?work ?workp ?worko .
     ?work tmp:matchScore ?workSc .
@@ -47,16 +48,41 @@ WHERE
     # I checked on http://sparql.org and there is no join when using the quad optimizations
     # so theoretically no performance problem
     graph ?rootGraph {
-        (?title ?titleSc ?titleMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        {
+          (?title ?titleSc ?titleMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          ?inst :hasTitle ?title .
+        } union {
+          (?inst ?titleSc ?colophonMatch) text:query ( bdo:colophon ?L_NAME "highlight:" ) .
+        }
         # only return results that are sub parts of the requested part
-        ?inst :hasTitle ?title .
+        
         ?inst :partOf+ ?R_RES .
     }
     
     BIND(EXISTS{?inst bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume && ?pt != bdr:PartTypeSection)} as ?instHasNonVolumeParts)
-    ?inst ?instp ?insto .
     ?inst :hasTitle ?t .
     ?t ?tp ?to .
+    ?inst ?instp ?insto .
+    
+  } union {
+    # search in titles in graph
+
+    ?R_RES :inRootInstance? ?root .
+    ?rootAdm adm:adminAbout ?root ;
+             adm:graphId ?rootGraph .
+    # I checked on http://sparql.org and there is no join when using the quad optimizations
+    # so theoretically no performance problem
+    graph ?rootGraph {
+        {
+          (?title) text:query ( rdfs:label ?L_NAME ) .
+          ?inst :hasTitle ?title .
+        } union {
+          (?inst) text:query ( bdo:colophon ?L_NAME ) .
+        }
+        # only return results that are sub parts of the requested part
+        ?inst :hasTitle ?title .
+        ?inst :partOf+ ?R_RES .
+    }
 
     ?inst :partOf+ ?ancestor .
     BIND(EXISTS{?ancestor bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume && ?pt != bdr:PartTypeSection)} as ?ancestorHasNonVolumeParts)
@@ -73,7 +99,12 @@ WHERE
     # I checked on http://sparql.org and there is no join when using the quad optimizations
     # so theoretically no performance problem
     graph ?rootGraph {
-        (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        {
+          (?title) text:query ( rdfs:label ?L_NAME ) .
+          ?inst :hasTitle ?title .
+        } union {
+          (?inst) text:query ( bdo:colophon ?L_NAME ) .
+        }
         ?inst :hasTitle ?title .
         ?inst :partOf+ ?R_RES .
     }
@@ -91,7 +122,12 @@ WHERE
     # I checked on http://sparql.org and there is no join when using the quad optimizations
     # so theoretically no performance problem
     graph ?rootGraph {
-        (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        {
+          (?title) text:query ( rdfs:label ?L_NAME ) .
+          ?inst :hasTitle ?title .
+        } union {
+          (?inst) text:query ( bdo:colophon ?L_NAME ) .
+        }
         ?inst :hasTitle ?title .
         ?inst :partOf+ ?R_RES .
     }
@@ -109,7 +145,12 @@ WHERE
     # I checked on http://sparql.org and there is no join when using the quad optimizations
     # so theoretically no performance problem
     graph ?rootGraph {
-        (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        {
+          (?title) text:query ( rdfs:label ?L_NAME ) .
+          ?inst :hasTitle ?title .
+        } union {
+          (?inst) text:query ( bdo:colophon ?L_NAME ) .
+        }
         ?inst :hasTitle ?title .
         ?inst :partOf+ ?R_RES .
     }
@@ -130,7 +171,12 @@ WHERE
     # I checked on http://sparql.org and there is no join when using the quad optimizations
     # so theoretically no performance problem
     graph ?rootGraph {
-        (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+        {
+          (?title) text:query ( rdfs:label ?L_NAME ) .
+          ?inst :hasTitle ?title .
+        } union {
+          (?inst) text:query ( bdo:colophon ?L_NAME ) .
+        }
         ?inst :hasTitle ?title .
         ?inst :partOf+ ?R_RES .
     }
@@ -154,6 +200,19 @@ WHERE
     ?inst ?instp ?insto .
     ?inst :hasTitle ?t .
     ?t ?tp ?to .
+
+    ?work ?workp ?worko .
+
+  } union {
+
+    # more general search in works with instance in parts
+
+    ?R_RES :inRootInstance? ?root .
+    (?work ?workSc ?labelMatch) text:query ( bdo:skosLabels 200 ?L_NAME "highlight:" ) .
+    ?work :workHasInstance ?inst .
+    ?inst :inRootInstance ?root .
+    # here again we could check
+    # ?inst :partOf+ ?R_RES .
 
     ?inst :partOf+ ?ancestor .
     BIND(EXISTS{?ancestor bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume && ?pt != bdr:PartTypeSection)} as ?ancestorHasNonVolumeParts)
