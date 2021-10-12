@@ -53,6 +53,8 @@ WHERE
           ?inst :hasTitle ?title .
         } union {
           (?inst ?titleSc ?colophonMatch) text:query ( bdo:colophon ?L_NAME "highlight:" ) .
+        } union {
+          (?inst ?titleSc ?titleMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
         }
         # only return results that are sub parts of the requested part
         
@@ -78,9 +80,10 @@ WHERE
           ?inst :hasTitle ?title .
         } union {
           (?inst) text:query ( bdo:colophon ?L_NAME ) .
+        } union {
+          (?inst) text:query ( bdo:skosLabels ?L_NAME ) .
         }
         # only return results that are sub parts of the requested part
-        ?inst :hasTitle ?title .
         ?inst :partOf+ ?R_RES .
     }
 
@@ -104,8 +107,9 @@ WHERE
           ?inst :hasTitle ?title .
         } union {
           (?inst) text:query ( bdo:colophon ?L_NAME ) .
+        } union {
+          (?inst) text:query ( bdo:skosLabels ?L_NAME ) .
         }
-        ?inst :hasTitle ?title .
         ?inst :partOf+ ?R_RES .
     }
     
@@ -127,8 +131,9 @@ WHERE
           ?inst :hasTitle ?title .
         } union {
           (?inst) text:query ( bdo:colophon ?L_NAME ) .
+        } union {
+          (?inst) text:query ( bdo:skosLabels ?L_NAME ) .
         }
-        ?inst :hasTitle ?title .
         ?inst :partOf+ ?R_RES .
     }
     
@@ -150,8 +155,9 @@ WHERE
           ?inst :hasTitle ?title .
         } union {
           (?inst) text:query ( bdo:colophon ?L_NAME ) .
+        } union {
+          (?inst) text:query ( bdo:skosLabels ?L_NAME ) .
         }
-        ?inst :hasTitle ?title .
         ?inst :partOf+ ?R_RES .
     }
     
@@ -176,8 +182,9 @@ WHERE
           ?inst :hasTitle ?title .
         } union {
           (?inst) text:query ( bdo:colophon ?L_NAME ) .
+        } union {
+          (?inst) text:query ( bdo:skosLabels ?L_NAME ) .
         }
-        ?inst :hasTitle ?title .
         ?inst :partOf+ ?R_RES .
     }
     
