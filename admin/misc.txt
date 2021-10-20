@@ -224,3 +224,26 @@ select distinct ?p ?pname ?bdate ?ddate ?seat where {
     ?p skos:prefLabel ?pname .
   }
 }
+
+# NGMPP authors, works and instances:
+
+  select distinct (count(distinct ?wa) as ?cwa) (count (distinct ?mw) as ?cmw)  (count (distinct ?p) as ?cp) where {
+    bda:ADMNMGCP adm:adminAbout ?mw .
+    ?mw a bdo:Instance .
+    ?mw :instanceOf ?wa .
+    ?wa :creator/:agent ?p .
+    ?p tmp:associatedCentury 20 .
+  }
+
+# number of authors with sungbum
+
+  select (count(distinct ?p) as ?cp) where {
+    {
+      ?wa bdo:workGenre bdr:T208 .
+    } union {
+      ?wa bdo:workIsAbout bdr:T208 .
+    }
+    ?wa bdo:creator ?aac .
+    ?aac bdo:role bdr:R0ER0019 ;
+         bdo:agent ?p .
+  }
