@@ -3,6 +3,7 @@
 #QueryResults=Chunks in the asked character range
 #QueryParams=R_RES,I_START,I_END
 #QueryUrl=/query/table/ChunksByRange?R_RES=bdr:UT4CZ5369_I1KG9127_0000&I_START=1000&I_END=2000
+#QueryLimit=50000
 
 #param.R_RES.type=URI
 #param.R_RES.subtype=bdo:Etext
