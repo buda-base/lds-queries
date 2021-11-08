@@ -37,7 +37,7 @@ WHERE
 {
   {
     # get ancestors label, test with bdr:MW12827_891768 to see some results
-    ?R_RES :partOf+ ?ancestor .
+    ?R_RES :partOf* ?ancestor .
     ?ancestor ?ancestorp ?ancestoro .
     FILTER (?ancestorp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
   } union {
