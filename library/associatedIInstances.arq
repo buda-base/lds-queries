@@ -24,7 +24,6 @@ CONSTRUCT
     ?ii a bdo:ImageInstance .
     ?ii :instanceReproductionOf ?i .
     ?ii ?ip ?io .
-    ?ii ?iip ?iio .
 
     # We cheat a bit and attach the topic to the instance instead
     # of the corresponding work
@@ -40,7 +39,7 @@ CONSTRUCT
     ?ii tmp:relationType ?rel2 .
     ?ii tmp:relationTypeInv ?rel1 .
     ?ii tmp:thumbnailIIIFService ?th .
-    ?ii bdo:scanInfo ?iio .
+    ?ii bdo:scanInfo ?si .
 }
 WHERE 
 {
@@ -59,11 +58,18 @@ WHERE
       ?iiAdm adm:status ?status .
       ?iiAdm adm:access ?access .
       ?iiAdm adm:contentLegal/adm:provider ?provider .
-      ?ii bdo:scanInfo ?iio .
       ?ii :instanceReproductionOf ?i .
       ?i ?ip ?io .
       FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
         && ?ip != bdo:colophon && ?ip != bdo:incipit)
+    } union {
+      {
+        ?R_RES ?rel1 ?ii .
+      } union {
+        ?ii ?rel2 ?R_RES .
+      }
+      # optional scanInfo
+      ?ii bdo:scanInfo ?si .
     } union {
       {
         ?R_RES ?rel1 ?ii .
