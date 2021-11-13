@@ -247,3 +247,46 @@ select distinct ?p ?pname ?bdate ?ddate ?seat where {
     ?aac bdo:role bdr:R0ER0019 ;
          bdo:agent ?p .
   }
+
+# number of volumes per scanInfo keyword
+
+select (sum(?nbv) as ?nbvt) where {
+   #?w bdo:inCollection bdr:PR1PL480 .
+   ?w text:query ( bdo:scanInfo "\"Fragile Palm Leaves Foundation\""@en ) .
+   #?w bdo:scanInfo "This manuscript was digitized at the Fragile Palm Leaves Foundation in Thailand with the generous support of Khyentse Foundation"@en ;
+   ?w  bdo:numberOfVolumes ?nbv ;
+       tmp:thumbnailIIIFService ?th .
+   ?wadm adm:adminAbout ?w ;
+       adm:contentLegal bda:LD_BDRC_PD ;
+       adm:restrictedInChina false ;
+       adm:access bda:AccessOpen ;
+       adm:status bda:StatusReleased .
+}
+
+# total number of volumes
+
+select (count (distinct ?ig) as ?igt) where {
+   ?w a bdo:ImageInstance .
+   ?w tmp:thumbnailIIIFService ?th .
+   ?wadm adm:adminAbout ?w ;
+        adm:contentLegal bda:LD_BDRC_PD ;
+        adm:restrictedInChina false ;
+        adm:access bda:AccessOpen ;
+        adm:status bda:StatusReleased .
+   ?w bdo:instanceHasVolume ?ig .
+}
+
+# outline in csv
+
+select ?title ?titlebo ?bvol ?bpage ?epage WHERE 
+{
+  ?mw :partOf+ bdr:MW21727 ;
+      :partType bdr:PartTypeText ;
+      :partTreeIndex ?pti ;
+      :contentLocation ?cl ;
+      skos:prefLabel ?title .
+  BIND(f:ewtsToUnicode(?title) as ?titlebo)
+  ?cl :contentLocationPage ?bpage ;
+      :contentLocationEndPage ?epage ;
+      :contentLocationVolume ?bvol .
+} order by ?pti
