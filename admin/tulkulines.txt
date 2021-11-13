@@ -1,0 +1,23 @@
+This document explains how to make a request with the same results as https://www.tbrc.org/#!persons/tulkus . This document is pre-generated on tbrc.org (and may actually be a bit outdated), by a module called `web-content-generator-persons-tulkus.xq`.
+
+Its functionning is the following:
+
+```
+for each role $r with a label containing "skye brgyud":
+	for all persons $p with an event associated with $r:
+	    follow incarnationOf from $p and associate them with $r
+```
+
+or in SPARQL:
+
+```sparql
+select distinct ?p ?r ?rlabel {
+	{
+      (?r ?sc ?rlabel) text:query ( bdo:skosLabels "\"skye brgyud\""@bo-x-ewts ) .
+      ?r a bdo:Role .
+    }
+    ?e :personEventRole ?r .
+    ?first :personEvent ?e .
+    ?first :hasIncarnation* ?p .
+} order by ?r
+```
