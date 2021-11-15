@@ -1,0 +1,98 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All works that have scans in a collection
+#QueryParams=R_RES
+#QueryUrl=/lib/worksInCollection?R_RES=bdr:PR1KDPP00
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced entity
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT
+{
+    ?R_RES skos:prefLabel ?resL .
+    ?res tmp:status ?st .
+    ?res tmp:matchScore ?sc .
+    ?res tmp:labelMatch ?labelMatch.
+    ?res tmp:isMain true .
+
+    ?res tmp:nbInstance ?nbinstances .
+    ?res tmp:provider ?provider .
+    ?res tmp:originalRecord ?originalRecord .
+    ?res tmp:hasOpen ?hasopen .
+    ?res tmp:possibleAccess ?haspossible .
+    ?res tmp:hasImage ?hasimage .
+    ?res tmp:hasEtext ?hasetext .
+  
+    ?res ?resp ?reso .
+    ?res ?respp ?resoo .
+ 
+    ?res tmp:author ?author .
+    ?agent skos:prefLabel ?agentL .
+    ?res tmp:associatedCentury ?authorC .
+    ?res bdo:associatedTradition ?authorT .
+  
+    ?resoo skos:prefLabel ?ol .
+
+}
+WHERE 
+{
+  # We have the following ways a work can be related to another thing:
+  #  - direct relation to/from
+  #  - work has creator R_RES
+  {
+  
+    ?R_RES skos:prefLabel ?resL .
+  
+  } union {
+
+    ?w :inCollection ?R_RES .
+    ?w :instanceOf ?res .
+    #VALUES ?resp {bdo:language skos:altLabel skos:prefLabel rdf:type owl:sameAs tmp:entityScore}
+    ?res ?resp ?reso .
+    FILTER (?resp IN(bdo:language , bdo:workIsAbout , bdo:workGenre , skos:altLabel , skos:prefLabel , rdf:type , bdo:workSeriesNumber , bdo:catalogInfo , owl:sameAs , tmp:entityScore))
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
+    
+  } union {
+    
+    ?w :inCollection ?R_RES .
+    ?w :instanceOf ?res .
+    
+    ?res bdo:creator ?creator .
+    ?creator bdo:role ?role .
+    ?creator bdo:agent ?agent .
+    VALUES ?agentp { skos:prefLabel tmp:associatedCentury bdo:associatedTradition }
+    ?agent ?agentp ?agento .
+    
+    bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+    bind( if(?agentp = skos:prefLabel, ?agento, 1/0) as ?agentL)
+    bind( if(?agentp = bdo:associatedTradition, ?agento, 1/0) as ?authorT)
+    bind( if(?agentp = tmp:associatedCentury && ?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agento, 1/0) as ?authorC)
+
+  } union {
+    
+    select ?res
+           (count (distinct ?instance) as ?nbinstances)
+           (max(?instanceAccessPossible) as ?haspossible)
+           (max(?instanceAccessOpen) as ?hasopen) 
+           (max(?instanceImage) as ?hasimage) 
+           (max(?instanceEtext) as ?hasetext) 
+    where {
+      
+      ?instanceRep :inCollection ?R_RES .
+      ?instanceRep :instanceOf ?res .
+
+      ?instanceAdm adm:adminAbout ?instanceRep .
+      ?instanceAdm adm:status bda:StatusReleased .
+      bind( (exists {?instanceAdm adm:access bda:AccessOpen}) && not exists {?instanceAdm adm:syncAgent  bdr:SAOPT} && (?instanceEtext || ?instanceImage) as ?instanceAccessOpen )
+      bind( exists {?instanceRep a bdo:ImageInstance . values ?thp { tmp:thumbnailIIIFService tmp:thumbnailIIIFSelected } ?instanceRep ?thp  ?th } as ?instanceImage)
+      bind( exists {?instanceRep a bdo:EtextInstance} as ?instanceEtext)
+      bind( (exists {?instanceAdm adm:access ?acc . FILTER(?acc IN(bda:AccessOpen , bda:AccessFairUse , bda:AccessRestrictedSealed))}) && (?instanceEtext || ?instanceImage) as ?instanceAccessPossible )
+
+    } group by ?res
+  }
+}
