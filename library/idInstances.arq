@@ -171,7 +171,6 @@ WHERE
 
         ?iiAdm adm:adminAbout ?ii .
         ?iiAdm adm:status bda:StatusReleased .
-        bind( exists {?ii a bdo:ImageInstance} as ?iImage)
         bind( exists {?ii a bdo:ImageInstance . values ?thp { tmp:thumbnailIIIFService tmp:thumbnailIIIFSelected } ?ii ?thp  ?th } as ?iImage )
         bind( exists {?ii a bdo:EtextInstance} as ?iEtext)
         bind( (exists {?iiAdm adm:access bda:AccessOpen}) && not exists {?iiAdm adm:syncAgent  bdr:SAOPT} &&(?iEtext || ?iImage) as ?iAccessOpen )
