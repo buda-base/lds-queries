@@ -16,6 +16,18 @@ where{
   }
   union
   {
+    ?R_RES ^skos:topConceptOf/skos:narrower* ?super .
+    ?super skos:narrower ?sub .
+    ?sub skos:prefLabel ?subl .
+  }
+  union
+  {
+    ?R_RES ^skos:topConceptOf ?sub .
+    BIND(?R_RES as ?super) .
+    ?sub skos:prefLabel ?subl .
+  }
+  union
+  {
     ?R_RES skos:prefLabel ?subl .
     BIND(?R_RES as ?sub)
   }
