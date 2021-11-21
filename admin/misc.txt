@@ -292,9 +292,7 @@ select ?title ?titlebo ?bvol ?bpage ?epage WHERE
 } order by ?pti
 
 
-# non-ric instances with keywords in title (itself or outline)
-
-# non-ric instances in ric topics
+# non-ric instances about ric entities
 
 select distinct ?rootmw ?rootmwlabel ?mw ?mwlabel ?t ?tlabel where {
   {
@@ -335,4 +333,110 @@ select distinct ?rootmw ?rootmwlabel ?mw ?mwlabel ?t ?tlabel where {
   }
 }
 
+# non-ric instances by ric entities
+
+select distinct ?rootmw ?rootmwlabel ?mw ?mwlabel ?t ?tlabel where {
+  {
+    ?tadm adm:restrictedInChina true ;
+          adm:adminAbout ?t .
+    ?aac :agent ?t .
+    ?w :creator ?aac .
+    ?t skos:prefLabel ?tlabel .
+    FILTER(lang(?tlabel) = "bo-x-ewts")
+
+    ?rootmw :instanceOf ?w .
+    FILTER (NOT EXISTS { ?rootmw :instanceReproductionOf ?mw2 })
+    FILTER (NOT EXISTS { ?rootmw :inRootInstance ?rootmw2 })
+    FILTER (NOT EXISTS { ?rootmw (^adm:adminAbout)/adm:restrictedInChina true })
+    ?rootmw skos:prefLabel ?rootmwlabel .
+    FILTER(lang(?rootmwlabel) = "bo-x-ewts")
+
+  } union {
+
+    ?tadm adm:restrictedInChina true ;
+          adm:adminAbout ?t .
+    ?aac :agent ?t .
+    ?w :creator ?aac .
+    ?t skos:prefLabel ?tlabel .
+    FILTER(lang(?tlabel) = "bo-x-ewts")
+
+    ?mw :instanceOf ?w .
+    ?mw :inRootInstance ?rootmw .
+    FILTER (NOT EXISTS { ?rootmw (^adm:adminAbout)/adm:restrictedInChina true })
+    ?rootmw skos:prefLabel ?rootmwlabel .
+    FILTER(lang(?rootmwlabel) = "bo-x-ewts")
+    ?mw skos:prefLabel ?mwlabel .
+    FILTER(lang(?mwlabel) = "bo-x-ewts")
+
+  }
+}
+
+# non-ric instances with keywords in title (itself or outline)
+
+select distinct ?rootmw ?rootmwlabel ?mw ?mwlabel ?kw ?labelMatch where {
+  {
+    VALUES ?kw { "\"test\""@bo "\"test2\""@bo }
+    (?title ?sc ?labelMatch) text:query ( rdfs:label ?kw "highlight:" ) .
+    ?rootmw bdo:hasTitle ?title .
+
+    FILTER (NOT EXISTS { ?rootmw :inRootInstance ?rootmw2 })
+    FILTER (NOT EXISTS { ?rootmw (^adm:adminAbout)/adm:restrictedInChina true })
+    ?rootmw skos:prefLabel ?rootmwlabel .
+    FILTER(lang(?rootmwlabel) = "bo-x-ewts")
+
+  } union {
+
+    VALUES ?kw { "\"test\""@bo "\"test2\""@bo }
+    (?ut ?sc ?labelMatch) text:query ( skos:prefLabel ?kw "highlight:" ) .
+    ?ut :eTextInInstance ?rootmw .
+
+    FILTER (NOT EXISTS { ?rootmw (^adm:adminAbout)/adm:restrictedInChina true })
+    ?rootmw skos:prefLabel ?rootmwlabel .
+    FILTER(lang(?rootmwlabel) = "bo-x-ewts")
+
+  } union {
+
+    VALUES ?kw { "\"test\""@bo "\"test2\""@bo }
+    (?title ?sc ?labelMatch) text:query ( rdfs:label ?kw "highlight:" ) .
+    ?rootmw bdo:hasTitle ?title .
+
+    ?mw :inRootInstance ?rootmw .
+    FILTER (NOT EXISTS { ?rootmw (^adm:adminAbout)/adm:restrictedInChina true })
+    ?rootmw skos:prefLabel ?rootmwlabel .
+    FILTER(lang(?rootmwlabel) = "bo-x-ewts")
+    ?mw skos:prefLabel ?mwlabel .
+    FILTER(lang(?mwlabel) = "bo-x-ewts")
+
+  }
+
+}
+
 # non-ric instances with keywords in OCR
+
+select distinct ?rootmw ?rootmwlabel ?kw where {
+  {
+    VALUES ?kw { "\"test\""@bo "\"test2\""@bo }
+    (?chunk ?score ?lit) text:query ( :chunkContents ?kw "highlight:") .
+    ?etext bdo:eTextHasChunk ?chunk .
+    ?etext bdo:eTextInInstance ?ie .
+    ?ie bdo:instanceReproductionOf ?rootmw .
+
+    FILTER (NOT EXISTS { ?rootmw (^adm:adminAbout)/adm:restrictedInChina true })
+    ?rootmw skos:prefLabel ?rootmwlabel .
+    FILTER(lang(?rootmwlabel) = "bo-x-ewts")
+
+  } union {
+
+    VALUES ?kw { "\"test\""@bo "\"test2\""@bo }
+    (?chunk ?score ?lit) text:query ( :chunkContents ?kw "highlight:") .
+    ?etext bdo:eTextHasChunk ?chunk .
+    ?etext bdo:eTextInInstance ?rootmw .
+    FILTER (NOT EXISTS { ?rootmw bdo:instanceReproductionOf ?rootmw })
+
+    FILTER (NOT EXISTS { ?rootmw (^adm:adminAbout)/adm:restrictedInChina true })
+    ?rootmw skos:prefLabel ?rootmwlabel .
+    FILTER(lang(?rootmwlabel) = "bo-x-ewts")
+
+  }
+
+}
