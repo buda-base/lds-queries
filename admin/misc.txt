@@ -290,3 +290,49 @@ select ?title ?titlebo ?bvol ?bpage ?epage WHERE
       :contentLocationEndPage ?epage ;
       :contentLocationVolume ?bvol .
 } order by ?pti
+
+
+# non-ric instances with keywords in title (itself or outline)
+
+# non-ric instances in ric topics
+
+select distinct ?rootmw ?rootmwlabel ?mw ?mwlabel ?t ?tlabel where {
+  {
+  
+    #VALUES ?t { bdr:T1KG24262 bdr:T2KG207970 bdr:T1201 bdr:T1KG16182 bdr:T1151 bdr:T2MS13833 bdr:T2331 bdr:T2223 bdr:T8LS1426 bdr:T1KG16182 bdr:T1969 bdr:T8LS16960 }
+    ?tadm adm:restrictedInChina true ;
+          adm:adminAbout ?t .
+    #?t a bdo:Topic . # also works for things other than topics
+    ?w :workIsAbout ?t .
+    ?t skos:prefLabel ?tlabel .
+    FILTER(lang(?tlabel) = "bo-x-ewts")
+
+    ?rootmw :instanceOf ?w .
+    FILTER (NOT EXISTS { ?rootmw :instanceReproductionOf ?mw2 })
+    FILTER (NOT EXISTS { ?rootmw :inRootInstance ?rootmw2 })
+    FILTER (NOT EXISTS { ?rootmw (^adm:adminAbout)/adm:restrictedInChina true })
+    ?rootmw skos:prefLabel ?rootmwlabel .
+    FILTER(lang(?rootmwlabel) = "bo-x-ewts")
+
+  } union {
+
+    #VALUES ?t { bdr:T1KG24262 bdr:T2KG207970 bdr:T1201 bdr:T1KG16182 bdr:T1151 bdr:T2MS13833 bdr:T2331 bdr:T2223 bdr:T8LS1426 bdr:T1KG16182 bdr:T1969 bdr:T8LS16960 }
+    ?tadm adm:restrictedInChina true ;
+          adm:adminAbout ?t .
+    #?t a bdo:Topic . # also works for things other than topics
+    ?w :workIsAbout ?t .
+    ?t skos:prefLabel ?tlabel .
+    FILTER(lang(?tlabel) = "bo-x-ewts")
+
+    ?mw :instanceOf ?w .
+    ?mw :inRootInstance ?rootmw .
+    FILTER (NOT EXISTS { ?rootmw (^adm:adminAbout)/adm:restrictedInChina true })
+    ?rootmw skos:prefLabel ?rootmwlabel .
+    FILTER(lang(?rootmwlabel) = "bo-x-ewts")
+    ?mw skos:prefLabel ?mwlabel .
+    FILTER(lang(?mwlabel) = "bo-x-ewts")
+
+  }
+}
+
+# non-ric instances with keywords in OCR
