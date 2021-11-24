@@ -26,7 +26,7 @@ CONSTRUCT {
     ?id ?idp ?ido .
     ?instance tmp:possibleAccess ?haspossible .
     ?instance tmp:catalogOnly ?catalogOnly .
-    ?res tmp:nbImageReproductions ?nbinstancesRep .
+    ?instance tmp:nbImageReproductions ?nbinstancesRep .
 
     ?instance tmp:hasOpen ?hasopen .
     ?instance tmp:hasImage ?hasimage .
