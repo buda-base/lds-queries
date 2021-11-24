@@ -14,17 +14,19 @@ CONSTRUCT {
 
     ?instance tmp:yearStart ?yearStart .
     ?instance tmp:yearEnd ?yearEnd .
-	?instance tmp:isMain true .
-	?instance tmp:status ?status .
-	?instance tmp:provider ?provider .
-	?instance tmp:originalRecord ?originalRecord .
-	?instance ?instancep ?instanceo .
-	?instance :inRootInstance ?instanceR .
-	?instanceR skos:prefLabel ?instanceRl .
-	?instance ?instanceRp ?instanceRo .
-	?instance ?instancep ?instanceo .
+	  ?instance tmp:isMain true .
+	  ?instance tmp:status ?status .
+	  ?instance tmp:provider ?provider .
+	  ?instance tmp:originalRecord ?originalRecord .
+	  ?instance ?instancep ?instanceo .
+	  ?instance :inRootInstance ?instanceR .
+	  ?instanceR skos:prefLabel ?instanceRl .
+	  ?instance ?instanceRp ?instanceRo .
+	  ?instance ?instancep ?instanceo .
+    ?id ?idp ?ido .
     ?instance tmp:possibleAccess ?haspossible .
     ?instance tmp:catalogOnly ?catalogOnly .
+    ?res tmp:nbImageReproductions ?nbinstancesRep .
 
     ?instance tmp:hasOpen ?hasopen .
     ?instance tmp:hasImage ?hasimage .
@@ -44,6 +46,13 @@ CONSTRUCT {
 
 		?instance ?instancep ?instanceo .
 		FILTER (?instancep != bdo:note && ?instancep != bdo:workEvent && ?instancep != bdo:workTitle)
+
+    } union {
+
+    ?R_RES :workHasInstance ?instance .
+    FILTER ( NOT EXISTS {?instance :instanceReproductionOf ?reprof })
+    ?instance bf:identifiedBy ?id .
+    ?id ?idp ?ido .
 
     } union {
 	    
@@ -70,7 +79,7 @@ CONSTRUCT {
     ?instanceRepAdm adm:adminAbout ?instanceRep ;
                adm:access ?instanceRepAccess .
 
-	} union {
+	  } union {
 
 		?R_RES :workHasInstance ?instance .
 		FILTER ( NOT EXISTS {?instance :instanceReproductionOf ?reprof })
@@ -84,6 +93,7 @@ CONSTRUCT {
 
       select ?instance 
              (max(?resAccessOpen) as ?hasopen)
+             (count (distinct ?instanceRep) as ?nbinstancesRep)
              (max(?resAccessPossible) as ?haspossible)
              (max(?resImage) as ?hasimage) 
              (max(?resEtext) as ?hasetext) 
