@@ -1,0 +1,31 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All reproductions linked to the instance
+#QueryParams=R_RES
+#QueryUrl=/lib/workInstance?R_RES=bdr:MW1FEMC040198
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=bdo:Instance
+#param.R_RES.desc=the instance on which we want to list the reproductions
+
+
+CONSTRUCT {
+    ?R_RES :instanceHasReproduction ?iinstance .
+    ?iinstance tmp:isMain true .
+    ?iinstance tmp:status ?status .
+    ?iinstance tmp:access ?access .
+    ?iinstance tmp:provider ?provider .
+    ?iinstance ?iinstancep ?iinstanceo .
+
+} where {
+
+    {
+      ?R_RES :instanceHasReproduction ?iinstance .
+      ?iinstance ?iinstancep ?iinstanceo .
+      ?adm adm:adminAbout ?iinstance .
+      ?adm adm:status ?status .
+      ?adm adm:access ?access .
+      ?adm adm:metadataLegal/adm:provider ?provider .
+    }
+
+}
