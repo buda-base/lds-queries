@@ -102,7 +102,7 @@ CONSTRUCT {
         
         ?R_RES :workHasInstance ?instance .
         FILTER ( NOT EXISTS {?instance :instanceReproductionOf ?reprof })
-        ?instance :inRootInstance?/:instanceHasReproduction? ?instanceRep .
+        ?instance :inRootInstance?/:instanceHasReproduction ?instanceRep .
 
         ?instanceRepAdm adm:adminAbout ?instanceRep .
         ?instanceRepAdm adm:status bda:StatusReleased .
