@@ -1,0 +1,22 @@
+#QueryScope=Entity
+#QueryReturnType=Table
+#QueryResults=A table with all the IDs of a given type and their associated entity
+#QueryUrl=/table/idsByType?R_TYPE=bdr:FEMCManuscriptCode
+#QueryParams=R_TYPE
+
+#output.?value.type=String
+#output.?value.desc=the value of the ID
+
+#output.?e.type=Resource
+#output.?e.desc=the associated entity
+
+#param.R_TYPE.type=URI
+#param.R_TYPE.subtype=bdo:Entity
+#param.R_TYPE.desc=the type of ID
+
+select distinct ?e ?value 
+where {
+   ?id a ?R_TYPE ;
+       rdf:value ?value .
+   ?e bf:identifiedBy ?id .
+} 
