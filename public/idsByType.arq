@@ -3,6 +3,7 @@
 #QueryResults=A table with all the IDs of a given type and their associated entity
 #QueryUrl=/table/idsByType?R_TYPE=bdr:FEMCManuscriptCode
 #QueryParams=R_TYPE
+#QueryLimit=20000
 
 #output.?value.type=String
 #output.?value.desc=the value of the ID
