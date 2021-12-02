@@ -83,6 +83,9 @@ WHERE
         (?res) text:query ( bdo:skosLabels ?L_NAME ) .
         ?res a/rdfs:subClassOf* bdo:Work .
     } union {
+        (?res) text:query ( bdo:extendedStmts ?L_NAME ) .
+        ?res a bdo:Work .
+    } union {
         (?note) text:query ( bdo:noteText ?L_NAME ) .
         ?res bdo:note ?note .
         ?res a/rdfs:subClassOf* bdo:Work .
@@ -104,6 +107,9 @@ WHERE
     {
         (?res) text:query ( bdo:skosLabels ?L_NAME ) .
         ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+        (?res) text:query ( bdo:extendedStmts ?L_NAME ) .
+        ?res a bdo:Work .
     } union {
         (?note) text:query ( bdo:noteText ?L_NAME ) .
         ?res bdo:note ?note .
@@ -127,6 +133,9 @@ WHERE
       {
         (?res) text:query ( bdo:skosLabels ?L_NAME ) .
         ?res a/rdfs:subClassOf* bdo:Work .
+      } union {
+        (?res) text:query ( bdo:extendedStmts ?L_NAME ) .
+        ?res a bdo:Work .
       } union {
           (?note) text:query ( bdo:noteText ?L_NAME ) .
           ?res bdo:note ?note .
