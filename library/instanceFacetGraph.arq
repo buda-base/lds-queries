@@ -56,6 +56,7 @@ CONSTRUCT {
     ?res tmp:hasReproAccess ?resRepAccess .
     ?res tmp:hasReproQuality ?resRepQuality .
     ?res :inCollection ?collection . 
+    ?collection skos:prefLabel ?collectionL .
 
 } where {
 
@@ -240,6 +241,7 @@ CONSTRUCT {
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
     ?res :inRootInstance?/:instanceHasReproduction? ?resRep .
     ?resRep :inCollection ?collection . 
+    ?collection skos:prefLabel ?collectionL .
 
   } union {
       
