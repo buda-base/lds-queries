@@ -1,0 +1,29 @@
+#QueryScope=Etexts
+#QueryReturnType=Table
+#QueryResults=etext chunks containing the given expression (only in open access instances with no geoblocking)
+#QueryUrl=/countInstancesInCollectionWithProperties&R_COLLECTION=bdr:PR1KDPP00&R_LANG=bdr:LangKm
+#QueryParams=R_COLLECTION
+#QueryOptParams=R_ABOUT,R_LANG,B_COMPLETE,R_BINDING,R_FORMAT
+
+#output.?c.type=int
+#output.?txt.desc=count of instances
+
+#param.R_COLLECTION.type=uri
+#param.R_ABOUT.type=uri
+#param.R_LANG.type=uri
+#param.R_BINDING.type=uri
+#param.R_FORMAT.type=uri
+#param.B_COMPLETE.type=boolean
+
+select (count (distinct ?res) as ?c)
+WHERE 
+{
+    ?w :inCollection ?R_COLLECTION .
+    ?w :instanceReproductionOf ?res .
+
+    FILTER(! ?R_ABOUT_bound || EXISTS{?res :instanceOf ?wa . ?wa ?wap ?R_ABOUT})
+    FILTER(! ?R_LANG_bound || EXISTS{?res :instanceOf ?wa . ?wa bdo:language ?R_LANG})
+    FILTER(! ?B_COMPLETE_bound || EXISTS{?res :isComplete ?B_COMPLETE})
+    FILTER(! ?R_BINDING_bound || EXISTS{?res :binding ?R_BINDING})
+    FILTER(! ?R_FORMAT || EXISTS{?res :format ?R_FORMAT})
+}
