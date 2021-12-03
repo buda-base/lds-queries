@@ -64,10 +64,16 @@ Then information must be given on the input variables (variables that are suppos
 
 The format is made so that lds-pdi can perform a parameter evaluation in order to prevent SPARQL injection. It understands 3 formats of variables in the SPARQL query itself:
 
-- *Literal*: each literal parameter name must be prefixed by `L_` (ex : `L_NAME`)
+- *Literal*: each string literal parameter name must be prefixed by `L_` (ex : `L_NAME`)
 - *Literal lang tag*: each literal parameter can be associated with a lang tag using a parameter prefixed by `LG_` (Ex : if you want `L_FOO` to be associated with the `bar` lang tag, you can add `LG_FOO=bar` to your request and declare it in the `QueryParams` section of your template).
-- *Integer*: each literal parameter name must be prefixed by `I_` (ex : `I_LIM`)
+- *Integer*: each integer parameter name must be prefixed by `I_` (ex : `I_LIM`)
 - *Resource*: each resource URI parameter must be prefixed `R_` (ex : `R_RES`)
+- *Boolean*: each boolean parameter must be prefixed `B_`
+- *GYear*: each resource URI parameter must be prefixed `GY_`
+
+The special argument `B_RIC` indicates that the query should be geo-restricted.
+
+For optional params only, the variable suffixed `_bound` will be replaced with a boolean indicating the presence of the param. 
 
 #### Variables metadata
 
