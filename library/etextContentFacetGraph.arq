@@ -1,7 +1,7 @@
 #QueryScope=General
 #QueryReturnType=Graph
 #QueryResults=All works having etext whose chunks contain the given L_NAME parameter value, along with Topic and WorkMainAuthor facets
-#QueryParams=L_NAME,LG_NAME
+#QueryParams=L_NAME,LG_NAME,B_RIC
 #QueryOptParams=R_EINST
 #QueryUrl=/lib/etextContentFacetGraph?L_NAME="de bzhin gshegs"&LG_NAME=bo-x-ewts
 
@@ -9,6 +9,9 @@
 #param.L_NAME.langTag=LG_NAME
 #param.L_NAME.isLucene=true
 #param.L_NAME.example="ye shes"
+
+#param.B_RIC.type=boolean
+#param.B_RIC.desc=whether or not the query should return georestricted results
 
 #param.R_EINST.type=URI
 #param.R_EINST.subtype=bdo:EtextInstance
@@ -53,7 +56,7 @@ where
     ?eAdm adm:adminAbout ?R_EINST ;
           adm:status bda:StatusReleased ;
           adm:access bda:AccessOpen .
-    FILTER (NOT EXISTS {?eAdm adm:restrictedInChina true.})
+    FILTER ((! ?B_RIC) || NOT EXISTS {?eAdm adm:restrictedInChina true.})
     # kind of cheating, the issue here is that openpecha don't always have the
     # work -> etextinstance link
     ?einstwithlabel :instanceOf ?w .
@@ -73,7 +76,7 @@ where
     ?eAdm adm:adminAbout ?R_EINST ;
           adm:status bda:StatusReleased ;
           adm:access bda:AccessOpen .
-    FILTER (NOT EXISTS {?eAdm adm:restrictedInChina true.})
+    FILTER ((! ?B_RIC) || NOT EXISTS {?eAdm adm:restrictedInChina true.})
     VALUES ?etextp { skos:prefLabel bdo:eTextIsVolume }
     ?etext ?etextp ?etexto .
 
@@ -84,7 +87,7 @@ where
     ?eAdm adm:adminAbout ?R_EINST ;
           adm:status bda:StatusReleased ;
           adm:access bda:AccessOpen .
-    FILTER (NOT EXISTS {?eAdm adm:restrictedInChina true.})
+    FILTER ((! ?B_RIC) || NOT EXISTS {?eAdm adm:restrictedInChina true.})
     ?R_EINST bdo:instanceReproductionOf? ?einstwithlabel .
     ?einstwithlabel :instanceOf ?w .
 
@@ -107,7 +110,7 @@ where
       ?eAdm adm:adminAbout ?R_EINST ;
           adm:status bda:StatusReleased ;
           adm:access bda:AccessOpen .
-    FILTER (NOT EXISTS {?eAdm adm:restrictedInChina true.})
+      FILTER ((! ?B_RIC) || NOT EXISTS {?eAdm adm:restrictedInChina true.})
     } group by ?etext 
   }
 

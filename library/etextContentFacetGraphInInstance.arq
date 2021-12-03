@@ -1,13 +1,16 @@
 #QueryScope=General
 #QueryReturnType=Graph
 #QueryResults=All works having etext whose chunks contain the given L_NAME parameter value, along with Topic and WorkMainAuthor facets
-#QueryParams=L_NAME,LG_NAME,R_EINST
+#QueryParams=L_NAME,LG_NAME,R_EINST,B_RIC
 #QueryUrl=/lib/etextContentFacetGraphInInstance?L_NAME="གལ་ཏེ་བྱང་ཆུབ་སེམས་དཔའསེམས་དཔའ་ཆེན་པོས་འཁྲུགཙང་ནེམ་ནུར་མཁྱེར།"&LG_NAME=bo&R_EINST=bdr:IE0OPP008105
 
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME
 #param.L_NAME.isLucene=true
 #param.L_NAME.example="ye shes"
+
+#param.B_RIC.type=boolean
+#param.B_RIC.desc=whether or not the query should return georestricted results
 
 #param.R_EINST.type=URI
 #param.R_EINST.subtype=bdo:EtextInstance
@@ -42,7 +45,7 @@ where
           adm:access bda:AccessOpen ;
           adm:syncAgent  bdr:SAOPT ;
           adm:graphId ?g .
-    FILTER (NOT EXISTS {?adm adm:restrictedInChina true.})
+    FILTER ((! ?B_RIC) || NOT EXISTS { ?adm adm:restrictedInChina true. })
     graph ?g {
         (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:" ) .
     }
@@ -58,8 +61,8 @@ where
     ?adm adm:adminAbout ?R_EINST ;
           adm:status bda:StatusReleased ;
           adm:access bda:AccessOpen .
-    FILTER (NOT EXISTS {?adm adm:restrictedInChina true.})
-    FILTER (NOT EXISTS {?adm adm:syncAgent  bdr:SAOPT.})
+    FILTER ((! ?B_RIC) || NOT EXISTS { ?adm adm:restrictedInChina true. })
+    FILTER (NOT EXISTS { ?adm adm:syncAgent  bdr:SAOPT. })
     (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:" ) .
     ?etext bdo:eTextHasChunk ?chunk .
     ?etext bdo:eTextInInstance ?R_EINST .
@@ -77,7 +80,7 @@ where
             adm:access bda:AccessOpen ;
             adm:syncAgent  bdr:SAOPT ;
             adm:graphId ?g .
-        FILTER (NOT EXISTS {?adm adm:restrictedInChina true.})
+        FILTER ((! ?B_RIC) || NOT EXISTS { ?adm adm:restrictedInChina true . })
         graph ?g {
           (?chunk ?score) text:query ( :chunkContents ?L_NAME ) .
         }
@@ -86,8 +89,8 @@ where
         ?adm adm:adminAbout ?R_EINST ;
           adm:status bda:StatusReleased ;
           adm:access bda:AccessOpen .
-        FILTER (NOT EXISTS {?adm adm:restrictedInChina true.})
-        FILTER (NOT EXISTS {?adm adm:syncAgent  bdr:SAOPT.})
+        FILTER ((! ?B_RIC) || NOT EXISTS { ?adm adm:restrictedInChina true. })
+        FILTER (NOT EXISTS { ?adm adm:syncAgent  bdr:SAOPT. })
         (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME ) .
         ?etext bdo:eTextHasChunk ?chunk .
         ?etext bdo:eTextInInstance ?R_EINST .
