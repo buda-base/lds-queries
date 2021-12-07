@@ -1,7 +1,7 @@
 #QueryScope=Instance
 #QueryReturnType=Table
 #QueryResults=number of instances in a collection with a certain amount of properties
-#QueryUrl=/countInstancesInCollectionWithProperties?R_COLLECTION=bdr:PR1KDPP00&R_ABOUT_LIST=bdr:FEMC_Scheme_III_2,bdr:FEMC_Scheme_V_2
+#QueryUrl=/instancesInCollectionWithProperties?R_COLLECTION=bdr:PR1KDPP00&R_ABOUT_LIST=bdr:FEMC_Scheme_III_2,bdr:FEMC_Scheme_V_2
 #QueryParams=R_COLLECTION
 #QueryOptParams=R_ABOUT_LIST,R_LANG_LIST,B_COMPLETE,R_BINDING_LIST,R_FORMAT_LIST
 
@@ -17,7 +17,7 @@
 
 CONSTRUCT
 {
-    ?R_RES skos:prefLabel ?resL .
+    ?R_COLLECTION skos:prefLabel ?resL .
   ?res tmp:isMain true .
   ?res tmp:status ?status .
   ?res tmp:matchScore ?sc .
@@ -64,16 +64,13 @@ CONSTRUCT
 }
 WHERE 
 {
-  # We have the following ways a work can be related to another thing:
-  #  - direct relation to/from
-  #  - work has creator R_RES
   {
   
-    ?R_RES skos:prefLabel ?resL .
+    ?R_COLLECTION skos:prefLabel ?resL .
   
   } union {
 
-    ?w :inCollection ?R_RES .
+    ?w :inCollection ?R_COLLECTION .
     ?w :instanceReproductionOf ?res .
 
     FILTER(! ?B_COMPLETE_bound || EXISTS{?res :isComplete ?B_COMPLETE})
@@ -93,7 +90,7 @@ WHERE
     
   } union {
     
-    ?w :inCollection ?R_RES .
+    ?w :inCollection ?R_COLLECTION .
     ?w :instanceReproductionOf ?res .
 
     FILTER(! ?B_COMPLETE_bound || EXISTS{?res :isComplete ?B_COMPLETE})
@@ -113,7 +110,7 @@ WHERE
 
   } union {
     
-    ?w :inCollection ?R_RES .
+    ?w :inCollection ?R_COLLECTION .
     ?w :instanceReproductionOf ?res .
 
     ?res bdo:instanceOf ?resW .
@@ -137,7 +134,7 @@ WHERE
 
   } union {
     
-    ?w :inCollection ?R_RES .
+    ?w :inCollection ?R_COLLECTION .
     ?w :instanceReproductionOf ?res .
 
     ?res bdo:instanceOf ?resW .
@@ -154,7 +151,7 @@ WHERE
 
   } union {
     
-    ?w :inCollection ?R_RES .
+    ?w :inCollection ?R_COLLECTION .
     ?w :instanceReproductionOf ?res .
 
     ?res bdo:instanceOf ?resW .
@@ -171,7 +168,7 @@ WHERE
 
   } union {
     
-    ?w :inCollection ?R_RES .
+    ?w :inCollection ?R_COLLECTION .
     ?w :instanceReproductionOf ?res .
 
     ?res :inRootInstance ?resR .
@@ -192,7 +189,7 @@ WHERE
 
   } union {
 
-    ?w :inCollection ?R_RES .
+    ?w :inCollection ?R_COLLECTION .
     ?w :instanceReproductionOf ?res .
 
     ?res :inRootInstance ?resR .
@@ -221,7 +218,7 @@ WHERE
              (min(?resCatalogOnly) as ?catalogOnly)
       where {
         
-        ?resRep :inCollection ?R_RES .
+        ?resRep :inCollection ?R_COLLECTION .
         ?resRep :instanceReproductionOf ?res .
 
         FILTER(! ?B_COMPLETE_bound || EXISTS{?res :isComplete ?B_COMPLETE})
