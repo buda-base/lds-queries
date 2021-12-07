@@ -1,7 +1,7 @@
-#QueryScope=Etexts
+#QueryScope=Instance
 #QueryReturnType=Table
-#QueryResults=etext chunks containing the given expression (only in open access instances with no geoblocking)
-#QueryUrl=/countInstancesInCollectionWithProperties&R_COLLECTION=bdr:PR1KDPP00&R_LANG=bdr:LangKm
+#QueryResults=number of instances in a collection with a certain amount of properties
+#QueryUrl=/countInstancesInCollectionWithProperties?R_COLLECTION=bdr:PR1KDPP00&R_ABOUT_LIST=bdr:FEMC_Scheme_III_2,bdr:FEMC_Scheme_V_2
 #QueryParams=R_COLLECTION
 #QueryOptParams=R_ABOUT_LIST,R_LANG_LIST,B_COMPLETE,R_BINDING_LIST,R_FORMAT_LIST
 
@@ -21,9 +21,10 @@ WHERE
     ?w :inCollection ?R_COLLECTION .
     ?w :instanceReproductionOf ?res .
 
-    FILTER(! ?R_ABOUT_LIST_bound || EXISTS{?res :instanceOf ?wa . VALUES (?about) { ?R_ABOUT_LIST } ?wa ?wap ?about})
-    FILTER(! ?R_LANG_LIST_bound || EXISTS{?res :instanceOf ?wa . VALUES (?lang) { ?R_LANG_LIST } ?wa bdo:language ?lang})
     FILTER(! ?B_COMPLETE_bound || EXISTS{?res :isComplete ?B_COMPLETE})
     FILTER(! ?R_BINDING_LIST_bound || EXISTS{ VALUES (?binding) { ?R_BINDING_LIST } ?res :binding ?binding})
     FILTER(! ?R_FORMAT_LIST_bound || EXISTS{ VALUES (?format) { ?R_FORMAT_LIST } ?res :format ?format})
+    FILTER(! ?R_ABOUT_LIST_bound || EXISTS{?res :instanceOf ?wa . VALUES (?about) { ?R_ABOUT_LIST } ?wa ?wap ?about})
+    FILTER(! ?R_LANG_LIST_bound || EXISTS{?res :instanceOf ?wa . VALUES (?lang) { ?R_LANG_LIST } ?wa bdo:language ?lang})
+
 }
