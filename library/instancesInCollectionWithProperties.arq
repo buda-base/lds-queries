@@ -4,6 +4,7 @@
 #QueryUrl=/instancesInCollectionWithProperties?R_COLLECTION=bdr:PR1KDPP00&R_ABOUT_LIST=bdr:FEMC_Scheme_III_2,bdr:FEMC_Scheme_V_2
 #QueryParams=R_COLLECTION
 #QueryOptParams=R_ABOUT_LIST,R_LANG_LIST,B_COMPLETE,R_BINDING_LIST,R_FORMAT_LIST
+#QueryLimit=50000
 
 #output.?c.type=int
 #output.?txt.desc=count of instances
