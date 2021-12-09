@@ -20,7 +20,7 @@ CONSTRUCT {
 } where {
 
     {
-      ?R_RES :instanceHasReproduction ?iinstance .
+      ?R_RES :inRootInstance?/:instanceHasReproduction ?iinstance .
       ?iinstance ?iinstancep ?iinstanceo .
       ?adm adm:adminAbout ?iinstance .
       ?adm adm:status ?status .
