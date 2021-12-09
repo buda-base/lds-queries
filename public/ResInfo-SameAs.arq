@@ -15,6 +15,9 @@ construct {
  ?ro3o ?ro4p ?ro4o .
  ?ro5o ?ro6p ?ro6o .
 
+ ?R_RES tmp:hasPartB ?hasPartB ;
+        tmp:hasNonVolumeParts ?hasNonVolumeParts .
+
  ?q ?qp ?qo .
  ?r tmp:hasAdminData ?q .
 
@@ -121,7 +124,7 @@ construct {
   {
     ?r owl:sameAs* ?R_RES .
     ?r ?rpkeep ?rokeep .
-    FILTER(?rpkeep != bdo:collectionMember && ?rpkeep != bdo:serialHasInstance)
+    FILTER(?rpkeep != bdo:collectionMember && ?rpkeep != bdo:serialHasInstance && ?rpkeep != bdo:hasPart)
   } union  {
     ?r owl:sameAs* ?R_RES .
     ?r ?rp ?ro .
@@ -138,12 +141,13 @@ construct {
     # add prefLabel for any related resource
     ?r owl:sameAs* ?R_RES .
     ?r ?rp ?ro .
-    FILTER(?rp != bdo:collectionMember && ?rp != bdo:serialHasInstance)
+    FILTER(?rp != bdo:collectionMember && ?rp != bdo:serialHasInstance && ?rp != bdo:hasPart)
     ?ro skos:prefLabel ?roLabel .
   } union {
     # display inRootInstance (used to sort instances)
     ?r owl:sameAs* ?R_RES .
     ?r ?rp ?ro .
+    FILTER(?rp != bdo:hasPart)
     ?ro bdo:inRootInstance ?roRoot .
     ?roRoot skos:prefLabel ?roRootLabel .
   } union {
@@ -247,10 +251,8 @@ construct {
     ?roTCL ?roTCLp ?roTCLo .
     ?roTCLo skos:prefLabel ?roTCLoLabel .
   } union {
-    # add parts indexes
-    ?r owl:sameAs* ?R_RES .
-    ?r :hasPart ?roP .
-    ?roP :partIndex ?roPi .
+    BIND(EXISTS{?R_RES :hasPart ?p} as ?hasPartB)
+    BIND(EXISTS{?R_RES :hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume && ?pt != bdr:PartTypeSection)} as ?hasNonVolumeParts)
   } union {
     # add volume numbers
     ?r owl:sameAs* ?R_RES .
