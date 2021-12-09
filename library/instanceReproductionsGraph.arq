@@ -21,11 +21,12 @@ CONSTRUCT {
 
     {
       ?R_RES :inRootInstance?/:instanceHasReproduction ?iinstance .
-      ?iinstance ?iinstancep ?iinstanceo .
       ?adm adm:adminAbout ?iinstance .
       ?adm adm:status ?status .
       ?adm adm:access ?access .
       ?adm adm:metadataLegal/adm:provider ?provider .
+      ?iinstance ?iinstancep ?iinstanceo .
+      FILTER(?iinstancep != bdo:instanceHasVolume)
     }
 
 }
