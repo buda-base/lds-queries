@@ -68,6 +68,7 @@ WHERE
       } union {
         ?ii ?rel2 ?R_RES .
       }
+      ?ii tmp:thumbnailIIIFService ?th .
       # optional scanInfo
       ?ii bdo:scanInfo ?si .
     } union {
