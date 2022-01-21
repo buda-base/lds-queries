@@ -1,0 +1,16 @@
+#QueryScope=Instance
+#QueryReturnType=Table
+#QueryResults=A table containing (hopefully one) instance corresponding with a tbrc.org outline node. Used for the redirection
+#QueryParams=L_ON
+#QueryUrl=/instanceFromOutlineNode?L_ON="O01CT00424CZ206380"
+
+#param.L_ON.type=string
+#param.L_ON.example="O01CT00424CZ206380"
+
+
+select ?part ?pix ?title
+where {
+  ?R_id :hasPart+ ?part .
+  ?part :partTreeIndex ?pix ;
+        skos:prefLabel ?title .
+} order by ?pix
