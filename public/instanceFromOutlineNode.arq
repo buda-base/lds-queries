@@ -8,9 +8,7 @@
 #param.L_ON.example="O01CT00424CZ206380"
 
 
-select ?part ?pix ?title
+select ?i
 where {
-  ?R_id :hasPart+ ?part .
-  ?part :partTreeIndex ?pix ;
-        skos:prefLabel ?title .
-} order by ?pix
+  ?i bdo:legacyOutlineNodeRID ?L_ON .
+}
