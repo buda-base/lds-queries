@@ -111,7 +111,7 @@ construct {
 ?mb skos:prefLabel ?mbL ;
     tmp:entityScore ?mbSc .
 
-?adm ?admp ?admo .
+?adm adm:logEntry ?le .
 ?le ?lep ?leo .
 ?user skos:prefLabel ?userL .
 
@@ -437,8 +437,7 @@ construct {
     }  order by desc(?resAtScore) limit 20
   } union {
     ?adm adm:adminAbout ?R_RES .
-    ?adm ?admp ?admo ;
-         adm:logEntry ?le .
+    ?adm adm:logEntry ?le .
     ?le ?lep ?leo .
   } union {
     ?adm adm:adminAbout ?R_RES .
