@@ -44,5 +44,14 @@ WHERE
     ?ii a bdo:ImageInstance .
     ?ii bdo:instanceHasVolume ?ig .
     ?ig bdo:volumeNumber ?bvol .
+  } union {
+    # case where an instance has only one volume
+    # and doesn't have volume indication in contentLocation
+    ?R_RES bdo:inRootInstance?/bdo:instanceHasReproduction ?ii .
+    ?ii a bdo:ImageInstance .
+    ?ii :numberOfVolumes  1 .
+    ?ii bdo:instanceHasVolume ?ig .
+    ?ig bdo:volumeNumber 1 .
+    BIND(1 as ?bvol)
   }
 }
