@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=All synced image groups in an instance
 #QueryParams=R_RES
-#QueryUrl=/AO_imageGroupInfo.arq?R_RES=bdr:W22084
+#QueryUrl=/AO_listSyncedIGInW.arq?R_RES=bdr:W22084
 
 #param.R_RES.type=resource
 #param.R_RES.desc=the image instance we want the synced image groups for
