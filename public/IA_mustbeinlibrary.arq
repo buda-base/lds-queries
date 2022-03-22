@@ -1,7 +1,6 @@
 #QueryScope=ImageInstance
 #QueryReturnType=Table
 #QueryResults=All scans that must be in the inlibrary IA collection
-#QueryParams=
 #QueryUrl=/IA_mustbeinlibrary
 #QueryLimit=8000
 

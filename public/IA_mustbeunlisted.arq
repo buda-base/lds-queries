@@ -1,7 +1,6 @@
 #QueryScope=ImageInstance
 #QueryReturnType=Table
 #QueryResults=All scans that must be unlisted on IA
-#QueryParams=
 #QueryUrl=/IA_mustbeunlisted
 #QueryLimit=8000
 

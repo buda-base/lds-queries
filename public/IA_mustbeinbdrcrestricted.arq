@@ -1,7 +1,6 @@
 #QueryScope=ImageInstance
 #QueryReturnType=Table
 #QueryResults=All scans that must be in the buddhist-digital-resource-center-restricted IA collection
-#QueryParams=
 #QueryUrl=/IA_mustbeinbdrcrestricted
 #QueryLimit=8000
 

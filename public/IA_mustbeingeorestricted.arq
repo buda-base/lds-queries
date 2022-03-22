@@ -1,7 +1,6 @@
 #QueryScope=ImageInstance
 #QueryReturnType=Table
 #QueryResults=All scans that must be in the geo_restricted IA collection
-#QueryParams=
 #QueryUrl=/IA_mustbeingeorestricted
 #QueryLimit=8000
 
