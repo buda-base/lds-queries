@@ -1,0 +1,12 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=All scans that must be in the inlibrary IA collection
+#QueryParams=
+#QueryUrl=/IA_mustbeinlibrary
+#QueryLimit=8000
+
+select ?w where {
+  ?wadm adm:access bda:AccessFairUse ;
+       adm:adminAbout ?w .
+  FILTER (NOT EXISTS {?w :digitalLendingPossible false})
+}

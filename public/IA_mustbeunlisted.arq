@@ -1,0 +1,13 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=All scans that must be unlisted on IA
+#QueryParams=
+#QueryUrl=/IA_mustbeunlisted
+#QueryLimit=8000
+
+select ?w where {
+  ?wadm adm:access ?acc ;
+        adm:status ?st .
+  FILTER((?acc != bda:AccessOpen && ?acc != bda:AccessFairUse) || ?st != bda:StatusReleased)
+  ?wadm adm:adminAbout ?w .
+}
