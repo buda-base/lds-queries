@@ -8,4 +8,5 @@ select ?w where {
   ?wadm adm:access bda:AccessFairUse ;
        adm:adminAbout ?w .
   FILTER (NOT EXISTS {?w :digitalLendingPossible false})
+  ?w a :ImageInstance .
 }

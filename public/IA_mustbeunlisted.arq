@@ -9,4 +9,5 @@ select ?w where {
         adm:status ?st .
   FILTER((?acc != bda:AccessOpen && ?acc != bda:AccessFairUse) || ?st != bda:StatusReleased)
   ?wadm adm:adminAbout ?w .
+  ?w a :ImageInstance .
 }
