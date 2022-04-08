@@ -292,7 +292,7 @@ select ?title ?titlebo ?bvol ?bpage ?epage WHERE
 } order by ?pti
 
 
-# non-ric instances about ric entities
+# non-ric instances about ric entities (TODO: don't spot things about restricted Works, just person, place and topic)
 
 select distinct ?rootmw ?rootmwlabel ?mw ?mwlabel ?t ?tlabel where {
   {
@@ -300,7 +300,7 @@ select distinct ?rootmw ?rootmwlabel ?mw ?mwlabel ?t ?tlabel where {
     #VALUES ?t { bdr:T1KG24262 bdr:T2KG207970 bdr:T1201 bdr:T1KG16182 bdr:T1151 bdr:T2MS13833 bdr:T2331 bdr:T2223 bdr:T8LS1426 bdr:T1KG16182 bdr:T1969 bdr:T8LS16960 }
     ?tadm adm:restrictedInChina true ;
           adm:adminAbout ?t .
-    #?t a bdo:Topic . # also works for things other than topics
+    FILTER (NOT EXISTS {?t a bdo:Work})
     ?w :workIsAbout ?t .
     ?t skos:prefLabel ?tlabel .
     FILTER(lang(?tlabel) = "bo-x-ewts")
@@ -317,7 +317,7 @@ select distinct ?rootmw ?rootmwlabel ?mw ?mwlabel ?t ?tlabel where {
     #VALUES ?t { bdr:T1KG24262 bdr:T2KG207970 bdr:T1201 bdr:T1KG16182 bdr:T1151 bdr:T2MS13833 bdr:T2331 bdr:T2223 bdr:T8LS1426 bdr:T1KG16182 bdr:T1969 bdr:T8LS16960 }
     ?tadm adm:restrictedInChina true ;
           adm:adminAbout ?t .
-    #?t a bdo:Topic . # also works for things other than topics
+    FILTER (NOT EXISTS {?t a bdo:Work})
     ?w :workIsAbout ?t .
     ?t skos:prefLabel ?tlabel .
     FILTER(lang(?tlabel) = "bo-x-ewts")
@@ -373,7 +373,7 @@ select distinct ?rootmw ?rootmwlabel ?mw ?mwlabel ?t ?tlabel where {
 
 # non-ric instances with keywords in title (itself or outline)
 
-select distinct ?rootmw ?rootmwlabel ?mw ?mwlabel ?kw ?labelMatch where {
+select distinct ?rootmwlabel ?mwlabel ?kw ?labelMatch ?rootmw ?mw where {
   {
     VALUES ?kw { "\"test\""@bo "\"test2\""@bo }
     (?title ?sc ?labelMatch) text:query ( rdfs:label ?kw "highlight:" ) .
@@ -413,10 +413,10 @@ select distinct ?rootmw ?rootmwlabel ?mw ?mwlabel ?kw ?labelMatch where {
 
 # non-ric instances with keywords in OCR
 
-select distinct ?rootmw ?rootmwlabel ?kw where {
+select distinct ?rootmw ?ie ?rootmwlabelu ?kw where {
   {
     VALUES ?kw { "\"test\""@bo "\"test2\""@bo }
-    (?chunk ?score ?lit) text:query ( :chunkContents ?kw "highlight:") .
+    (?chunk ?score ?lit) text:query ( :chunkContents ?kw) .
     ?etext bdo:eTextHasChunk ?chunk .
     ?etext bdo:eTextInInstance ?ie .
     ?ie bdo:instanceReproductionOf ?rootmw .
@@ -424,19 +424,316 @@ select distinct ?rootmw ?rootmwlabel ?kw where {
     FILTER (NOT EXISTS { ?rootmw (^adm:adminAbout)/adm:restrictedInChina true })
     ?rootmw skos:prefLabel ?rootmwlabel .
     FILTER(lang(?rootmwlabel) = "bo-x-ewts")
+    BIND(f:ewtsToUnicode(?rootmwlabel) as ?rootmwlabelu)
 
   } union {
 
     VALUES ?kw { "\"test\""@bo "\"test2\""@bo }
-    (?chunk ?score ?lit) text:query ( :chunkContents ?kw "highlight:") .
+    (?chunk ?score ?lit) text:query ( :chunkContents ?kw) .
     ?etext bdo:eTextHasChunk ?chunk .
     ?etext bdo:eTextInInstance ?rootmw .
+    BIND(?rootmw as ?ie)
     FILTER (NOT EXISTS { ?rootmw bdo:instanceReproductionOf ?rootmw })
 
     FILTER (NOT EXISTS { ?rootmw (^adm:adminAbout)/adm:restrictedInChina true })
     ?rootmw skos:prefLabel ?rootmwlabel .
     FILTER(lang(?rootmwlabel) = "bo-x-ewts")
+    BIND(f:ewtsToUnicode(?rootmwlabel) as ?rootmwlabelu)
 
   }
+}
 
+
+# scans restricted in China with outlines
+
+select distinct ?w where {
+    ?wadm adm:restrictedInChina true .
+    ?wadm adm:adminAbout ?w .
+    FILTER ( EXISTS { ?w :instanceReproductionOf/:hasPart ?p } ) 
+}
+
+
+# outline with genres / topics
+
+select ?mw ?title ?pti ?topic ?topiclabel WHERE 
+{
+  ?mw :partOf+ bdr:MW21807 ;
+      :partTreeIndex ?pti ;
+      skos:prefLabel ?title .
+  FILTER (lang(?title) = "bo-x-ewts")
+  ?mw :instanceOf ?w .
+  ?w ?wp ?topic .
+  FILTER(?wp = :workIsAbout || ?wp = :workGenre)
+  ?topic skos:prefLabel ?topiclabel .
+  FILTER(lang(?topiclabel) = "bo-x-ewts")
+} order by ?pti
+
+# non-ric, non-PL480 versions with publisherLocation in certain keywords
+
+select ?mw ?title ?pl where {
+  VALUES ?kw { "test"@en }
+  ?mw :publisherLocation ?kw .
+  FILTER(NOT EXISTS {?mw :instanceHasReproduction/:inCollection bdr:PR1PL480})
+  FILTER(NOT EXISTS {?mw :instanceHasReproduction/^adm:adminAbout/adm:restrictedInChina true })
+  ?mw skos:prefLabel ?title .
+  FILTER (lang(?title) = "bo-x-ewts")
+}
+
+
+# list of place types
+
+select ?t (max(?labelbo) as ?mlabelbo) (max(?labelen) as ?mlabelen) {
+  ?t a bdo:PlaceType .
+  ?t skos:prefLabel ?l .
+  BIND(IF(lang(?l) = "bo-x-ewts", ?l, "") as ?labelbo)
+  BIND(IF(lang(?l) = "en", ?l, "") as ?labelen)
+} group by ?t
+
+
+# estimate of total number of volumes / pages with no OCR
+
+select (sum(?nbimg) as ?totimag) (count(?v) as ?totv) {
+  ?ii a :ImageInstance .
+  ?ii :instanceOf ?wa .
+  ?wa :language bdr:LangBo .
+  FILTER ( NOT EXISTS {
+    ?ii :instanceReproductionOf ?i .
+    ?i :instanceHasReproduction ?ei .
+    ?ei a :EtextInstance .
+  })
+  ?ii :instanceHasVolume ?v .
+  ?v :volumePagesTotal ?nbimg .
+}
+
+
+# "par ma" in title, no printery
+
+select ?mw ?l
+where {
+   ?mw text:query ( skos:prefLabel "\"par ma\""@bo-x-ewts ) .
+   ?mw a bdo:Instance .
+   FILTER (NOT EXISTS {?mw :printery ?p})
+  FILTER (NOT EXISTS {?mw :partOf ?po})
+   ?mw skos:prefLabel ?l
+}
+
+# Printeries (bdr:PT0059) and monasteries (bdr:PT0037) in Mongolia (bdr:G584), Inner Mongolia (bdr:G603) and Buryatia (no RID yet)
+
+# mn-x-trans
+
+select ?p ?pt (group_concat(?pl;SEPARATOR="; ") as ?l) ?lat ?long {
+  {
+    bdr:G584 :placeContains+ ?p .
+    ?p :placeType ?ptr .
+    FILTER NOT EXISTS { ?p :placeLat ?plj }
+    FILTER (?ptr = bdr:PT0059 || ?ptr = bdr:PT0037 || ?ptr=bdr:PT0040)
+    ?ptr skos:prefLabel ?pt . FILTER(lang(?pt) = "en")
+    ?p skos:prefLabel ?pl .
+  } union {
+    bdr:G584 :placeContains+ ?p .
+    ?p :placeType ?ptr .
+    FILTER (?ptr = bdr:PT0059 || ?ptr = bdr:PT0037 || ?ptr=bdr:PT0040)
+    ?ptr skos:prefLabel ?pt . FILTER(lang(?pt) = "en")
+    ?p :placeLat ?lat ;
+       :placeLong ?long ;
+       skos:prefLabel ?pl .
+  } union   {
+    bdr:G584 :placeContains+ ?p .
+    FILTER NOT EXISTS { ?p :placeLat ?plj }
+    FILTER NOT EXISTS {  ?p :placeType ?ptr . }
+    ?p skos:prefLabel ?pl .
+  } union {
+    bdr:G584 :placeContains+ ?p .
+    FILTER NOT EXISTS {  ?p :placeType ?ptr . }
+    ?p :placeLat ?lat ;
+       :placeLong ?long ;
+       skos:prefLabel ?pl .
+  }
+} group by ?p ?pt ?lat ?long
+
+# associated tradition coming from the sungbum vs. associated tradition coming from the seat
+
+select distinct ?p ?sbt (group_concat(distinct ?petln;separator=", ") as ?petc) WHERE 
+{
+    {
+      ?sbt a :Tradition ;
+          rdfs:seeAlso ?sbtt .
+      ?wa :workIsAbout ?sbtt ;
+          :workGenre bdr:T208 ;
+          :creator ?aac .
+      ?aac :agent ?p .
+      FILTER(NOT EXISTS{?p :associatedTradition ?sbt})
+      ?p :associatedTradition ?pet .
+      BIND(strafter(str(?pet), "dition") AS ?petln)
+    } union {
+      ?sbt a :Tradition ;
+          rdfs:seeAlso ?sbtt .
+      ?wa :workIsAbout ?sbtt ;
+          :workGenre bdr:T208 ;
+          :creator ?aac .
+      ?aac :agent ?p .
+        FILTER(NOT EXISTS {?p :associatedTradition ?pet .})
+    }
+} group by ?p ?sbt
+
+# all Tibetan scans
+
+select distinct ?w WHERE 
+{
+  VALUES ?a { bda:AccessOpen bda:AccessFairUse }
+  ?admw adm:access ?a ;
+        adm:status bda:StatusReleased ;
+        adm:adminAbout ?w .
+  ?w :instanceOf ?wa .
+  ?wa :language bdr:LangBo .
+  FILTER(EXISTS { ?w :instanceHasVolume ?v . ?v :volumePagesTotal ?tp . FILTER(?tp > 2) })
+}
+
+
+# outline nodes with no page indication
+
+select ?mw ?on ?title ?titleu {
+  ?cl a :ContentLocation .
+  FILTER(NOT EXISTS {?cl :contentLocationPage ?clp })
+  ?mwo :contentLocation ?cl ;
+       :partType bdr:PartTypeText ;
+       :inRootInstance ?mw ;
+       skos:prefLabel ?title .
+  FILTER(lang(?title) = "bo-x-ewts")
+  BIND(f:ewtsToUnicode(?title) as ?titleu)
+  ?mw (^adm:adminAbout)/:legacyOutlineNodeRID ?on .
+} limit 10
+
+# series number with no serial work
+
+select ?mw ?title ?sn {
+  ?mw :seriesNumber ?sn .
+  FILTER(NOT EXISTS {?mw :serialInstanceOf ?si })
+  ?mw skos:prefLabel ?title .
+  FILTER(lang(?title) = "bo-x-ewts")
+  ?mwa adm:adminAbout ?mw .
+  ?mwa adm:status bda:StatusReleased .
+}
+
+# persons with no associated dates authors of recent open publications
+
+select ?p {
+    ?mw :instanceHasReproduction ?w .
+    ?w a :ImageInstance .
+    ?wadm adm:adminAbout ?w ;
+        adm:status bda:StatusReleased ;
+        adm:access bda:AccessOpen ;
+        .
+    ?mw :instanceEvent ?ie .
+    ?ie :onYear ?y .
+    filter(?y > "1900"^^xsd:gYear)
+
+    ?mw :instanceOf ?wa .
+    ?wa :creator ?c .
+    ?c :agent ?p .
+    filter(not exists {
+      ?p tmp:associatedCentury ?ac .
+    })
+}
+
+# authors with no dates, of recent books
+
+select distinct ?p {
+    ?mw :instanceHasReproduction ?w .
+    ?w a :ImageInstance .
+    ?wadm adm:adminAbout ?w ;
+        adm:status bda:StatusReleased ;
+        .
+    ?mw :instanceEvent ?ie .
+    ?ie :onYear ?y .
+    filter(?y > "1900"^^xsd:gYear)
+
+    ?mw :instanceOf ?wa .
+    ?wa :creator ?c .
+    ?c :agent ?p .
+    filter(not exists {
+      ?p tmp:associatedCentury ?ac .
+    })
+}
+
+
+# copyrighted instances: 4777 instances
+
+select distinct ?mw {
+  {
+    # any event of the author after 1972
+    ?mw :instanceHasReproduction ?w .
+    ?w a :ImageInstance .
+    ?mw :instanceOf ?wa .
+    ?wa :creator ?c .
+    ?c :agent ?p .
+    ?p :personEvent ?e .
+    ?e :onYear ?y .
+    FILTER(?y >= "1972"^^xsd:gYear)
+  } union {
+    # author in the 20th c. with no death date
+    ?mw :instanceHasReproduction ?w .
+    ?w a :ImageInstance .
+    ?mw :instanceOf ?wa .
+    ?wa :creator ?c .
+    ?c :agent ?p .
+    ?p tmp:associatedCentury 20 .
+    FILTER(NOT EXISTS {
+      ?p :personEvent ?e .
+      ?e a :PersonDeath .
+    })
+  }
+}
+
+
+# copyright claimed: 259 instances
+select distinct ?mw {
+  {
+    # author before the 20th c. but fairUse
+    ?mw :instanceHasReproduction ?w .
+    ?w a :ImageInstance .
+    ?wadm adm:adminAbout ?w ;
+          adm:access bda:AccessFairUse .
+    ?mw :instanceOf ?wa .
+    ?wa :creator ?c .
+    ?c :agent ?p .
+    ?p tmp:associatedCentury ?ce .
+    FILTER(?ce < 20)
+  } union {
+    # author died before the 1972 but fairUse
+    ?mw :instanceHasReproduction ?w .
+    ?w a :ImageInstance .
+    ?wadm adm:adminAbout ?w ;
+          adm:access bda:AccessFairUse .
+    ?mw :instanceOf ?wa .
+    ?wa :creator ?c .
+    ?c :agent ?p .
+    ?p :personEvent ?e .
+    ?e a :PersonDeath ;
+       :onYear ?y .
+    FILTER(?y < "1972"^^xsd:gYear)
+  }
+}
+
+# copyright unknown: no author, author with no dates, modern edition not before 1922: 2812 instances
+
+select distinct ?mw {
+  {
+    ?mw :printMethod bdr:PrintMethod_Modern ;
+        :instanceHasReproduction ?w .
+    ?w a :ImageInstance .
+    ?wadm adm:adminAbout ?w ;
+          adm:access ?acc .
+    ?mw :instanceOf ?wa .
+    FILTER ( NOT EXISTS {
+      ?wa :creator ?c .
+      ?c :agent ?p .
+      ?p tmp:associatedCentury ?ce .
+    })
+    FILTER ( NOT EXISTS {
+      ?mw :publishedEvent ?mwe .
+      ?mwe :onYear ?y .
+      FILTER(?y < "1922"^^xsd:gYear)
+    })
+  }
 }
