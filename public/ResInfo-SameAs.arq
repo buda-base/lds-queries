@@ -238,16 +238,14 @@ construct {
     # + display prefLabel for AgentAsCreator 
     # + add Note subnodes
     ?r owl:sameAs* ?R_RES .
+    VALUES ?rpTCL { :contentLocation :creator :note }
     ?r ?rpTCL ?roTCL .
-    VALUES ?roTCLtype { :ContentLocation :AgentAsCreator :Note }
-    ?roTCL a ?roTCLtype .
     ?roTCL ?roTCLp ?roTCLo .
   } union {
     # label for previous:
     ?r owl:sameAs* ?R_RES .
+    VALUES ?rpTCL { :contentLocation :creator :note }
     ?r ?rpTCL ?roTCL .
-    VALUES ?roTCLtype { :ContentLocation :AgentAsCreator :Note }
-    ?roTCL a ?roTCLtype .
     ?roTCL ?roTCLp ?roTCLo .
     ?roTCLo skos:prefLabel ?roTCLoLabel .
   } union {
