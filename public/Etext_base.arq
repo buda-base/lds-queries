@@ -14,6 +14,8 @@ construct {
    ?s ?p ?o .
    ?R_RES tmp:imageVolumeId ?imagevol .
    ?R_RES tmp:hasEtextRes ?etextRes .
+   # greatest bdo:sliceStartChar 
+   ?R_RES tmp:lastChunk ?lastchunk .
   }
 where {
   { 
@@ -48,6 +50,13 @@ where {
       filter not exists { 
         ?etextRes rdf:type bdo:EtextNonPaginated .       
       } 
-    } .
+    } . 
+  } union {
+    # get greatest bdo:sliceStartChar 
+    select (max(?start) as ?lastchunk)
+    where {
+      ?R_RES bdo:eTextHasChunk ?chunk .
+      ?chunk bdo:sliceStartChar ?start .
+    }
   }
-}
+} 
