@@ -34,11 +34,5 @@ WHERE
   {
     ?pl :placeEvent ?ple .
     ?ple :associatedTradition ?plt .
-  } union {
-    ?p :personEvent ?pe .
-    ?pe a :PersonOccupiesSeat ;
-        :eventWhere ?ppl .
-    ?ppl :placeEvent ?pple .
-    ?pple :associatedTradition ?pt . 
   }
 }
