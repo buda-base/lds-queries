@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=All scans that must be in the geo_restricted IA collection
 #QueryUrl=/IA_mustbeingeorestricted
-#QueryLimit=8000
+#QueryLimit=30000
 
 select ?w where {
   ?wadm adm:restrictedInChina true ;

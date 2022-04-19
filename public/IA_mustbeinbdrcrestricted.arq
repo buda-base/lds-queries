@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=All scans that must be in the buddhist-digital-resource-center-restricted IA collection
 #QueryUrl=/IA_mustbeinbdrcrestricted
-#QueryLimit=8000
+#QueryLimit=30000
 
 select distinct ?w where {
   {

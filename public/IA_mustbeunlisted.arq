@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=All scans that must be unlisted on IA
 #QueryUrl=/IA_mustbeunlisted
-#QueryLimit=8000
+#QueryLimit=30000
 
 select ?w where {
   ?wadm adm:access ?acc ;

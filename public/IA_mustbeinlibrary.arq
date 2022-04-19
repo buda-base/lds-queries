@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=All scans that must be in the inlibrary IA collection
 #QueryUrl=/IA_mustbeinlibrary
-#QueryLimit=8000
+#QueryLimit=30000
 
 select distinct ?w where {
   {
