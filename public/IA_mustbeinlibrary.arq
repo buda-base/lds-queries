@@ -4,9 +4,19 @@
 #QueryUrl=/IA_mustbeinlibrary
 #QueryLimit=8000
 
-select ?w where {
-  ?wadm adm:access bda:AccessFairUse ;
-       adm:adminAbout ?w .
-  FILTER (NOT EXISTS {?w :digitalLendingPossible false})
-  ?w a :ImageInstance .
+select distinct ?w where {
+  {
+    ?wadm adm:access bda:AccessFairUse ;
+          adm:adminAbout ?w .
+    FILTER (NOT EXISTS {?w :digitalLendingPossible false})
+    ?w a :ImageInstance .
+  } union {
+    VALUES ?cs { bdr:CopyrightClaimed bdr:CopyrightInCopyright }
+    ?mw :copyrightStatus ?cs .
+    ?mw :instanceHasReproduction ?w .
+    ?w a :ImageInstance .
+    ?wadm adm:adminAbout ?w ;
+          adm:access bda:AccessOpen .
+    FILTER (NOT EXISTS {?w :digitalLendingPossible false})
+  }
 }

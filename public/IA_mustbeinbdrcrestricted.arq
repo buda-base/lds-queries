@@ -4,10 +4,19 @@
 #QueryUrl=/IA_mustbeinbdrcrestricted
 #QueryLimit=8000
 
-select ?w where {
-  ?wadm adm:access ?acc ;
-        adm:status ?st .
-  FILTER(?acc != bda:AccessOpen || ?st != bda:StatusReleased)
-  ?wadm adm:adminAbout ?w .
-  ?w a :ImageInstance .
+select distinct ?w where {
+  {
+    ?wadm adm:access ?acc ;
+          adm:status ?st .
+    FILTER(?acc != bda:AccessOpen || ?st != bda:StatusReleased)
+    ?wadm adm:adminAbout ?w .
+    ?w a :ImageInstance .
+  } union {
+    VALUES ?cs { bdr:CopyrightClaimed bdr:CopyrightInCopyright }
+    ?mw :copyrightStatus ?cs .
+    ?mw :instanceHasReproduction ?w .
+    ?w a :ImageInstance .
+    ?wadm adm:adminAbout ?w ;
+          adm:access bda:AccessOpen .
+  }
 }
