@@ -20,5 +20,5 @@ WHERE
   values (?c) { ?R_SUBSCRIBED_LIST }
   ?c a bdo:Collection .
   BIND(?c as ?res)
-  ?c resp ?reso .
+  ?c ?resp ?reso .
 }
