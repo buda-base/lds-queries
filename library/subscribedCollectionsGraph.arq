@@ -1,0 +1,24 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=All collections subscribed to
+#QueryParams=R_SUBSCRIBED_LIST
+#QueryUrl=/lib/subscribedCollectionsGraph
+
+#param.R_SUBSCRIBED_LIST.type=URI
+#param.R_SUBSCRIBED_LIST.subtype=bdo:Collection
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT
+{
+    ?res tmp:status bda:StatusReleased .
+    ?res tmp:isMain true .
+    ?res ?resp ?reso .
+}
+WHERE 
+{
+  values ?c { ?R_SUBSCRIBED_LIST }
+  ?c a bdo:Collection .
+  BIND(?c as ?res)
+  ?c resp ?reso .
+}
