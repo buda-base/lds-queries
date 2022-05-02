@@ -12,7 +12,9 @@ construct {
   ?R_RES ?resp ?reso .
   ?iinstanceId :instanceHasVolume ?R_RES ;
          :instanceReproductionOf ?instanceId ;
-         :inCollection  ?col .
+         :inCollection  ?col ;
+         tmp:thumbnailIIIFService  ?th ;
+         :copyrightStatus ?cs .
   ?admItem adm:adminAbout ?iinstanceId .
   ?admItem adm:access ?access .
   ?admItem adm:status ?status .
@@ -23,7 +25,6 @@ construct {
     ?R_RES ?resp ?reso .
     ?iinstanceId :instanceHasVolume ?R_RES ;
          :instanceReproductionOf ?instanceId .
-
     ?admItem adm:adminAbout ?iinstanceId .
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
@@ -32,5 +33,14 @@ construct {
     # collections
     ?iinstanceId :instanceHasVolume ?R_RES ;
                  :inCollection  ?col .
+  } union {
+    # thumbnail
+    ?iinstanceId :instanceHasVolume ?R_RES ;
+                 tmp:thumbnailIIIFService  ?th .
+  } union {
+    # copyright status
+    ?iinstanceId :instanceHasVolume ?R_RES ;
+         :instanceReproductionOf ?instanceId .
+    ?instanceId :copyrightStatus ?cs .
   }
 }
