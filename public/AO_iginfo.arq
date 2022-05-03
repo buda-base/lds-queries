@@ -1,4 +1,4 @@
-#QueryScope=Instance
+#QueryScope=ImageGroup
 #QueryReturnType=Table
 #QueryResults=(used by AO) info on an image group
 #QueryParams=R_RES

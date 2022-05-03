@@ -1,0 +1,18 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=All image instances that must be on the mirror
+#QueryLimit=50000
+
+select distinct ?w where {
+  ?wadm adm:access bda:AccessOpen ;
+        adm:status bda:StatusReleased ;
+        adm:contentLegal ?cl ;
+        adm:adminAbout ?w .
+  ?cl adm:provider bda:CP021 .
+  FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
+  FILTER (not exists {?wadm adm:restrictedInChina true })
+  FILTER (not exists {?w :digitalLendingPossible false })
+  FILTER (not exists {?w :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
+  ?w :instanceReproductionOf ?mw .
+  FILTER (not exists {?w :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
+}
