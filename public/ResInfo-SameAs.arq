@@ -122,6 +122,7 @@ construct {
 
 # ContentLocation in a Note
 ?noteCL ?anyProp ?anyVal . 
+?noteCLW skos:prefLabel ?noteCLWL .
 
 } where {
   {
@@ -451,6 +452,8 @@ construct {
     # add ContentLocation from a Note
     ?r owl:sameAs* ?R_RES .
     ?r :note/:contentLocation ?noteCL .
-    ?noteCL ?anyProp ?anyVal . 
+    ?noteCL ?anyProp ?anyVal ;
+        :contentLocationInstance ?noteCLW .
+    ?noteCLW :instanceReproductionOf/skos:prefLabel ?noteCLWL .
   }
 }
