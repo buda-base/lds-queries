@@ -1,0 +1,16 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=All synced image groups in an instance
+#QueryParams=R_RES
+#QueryUrl=/AO_IGinfoInW?R_RES=bdr:W1PD96684
+
+#param.R_RES.type=resource
+#param.R_RES.desc=the image instance we want the synced image groups for
+
+select ?i ?vnum ?vpi ?vpt WHERE 
+{
+    ?R_RES bdo:instanceHasVolume ?i .
+    ?i :volumePagesTotal ?vpt ;
+       :volumeNumber ?vnum ;
+       :volumePagesTbrcIntro ?vpi .
+} order by asc(?vnum)
