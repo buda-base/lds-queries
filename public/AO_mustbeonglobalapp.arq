@@ -1,0 +1,16 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=All image instances that must be in the global version of the app
+#QueryLimit=50000
+#QueryUrl=/AO_mustbeonglobalapp
+
+select distinct ?w where {
+  ?w a :ImageInstance .
+  ?wadm adm:adminAbout ?w ;
+        adm:status bda:StatusReleased ;
+        adm:access ?acc ;
+        .
+  FILTER (?acc = bda:AccessOpen || (?acc = bda:AccessFairUse && not exists {?w :digitalLendingPossible false }))
+  FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
+  FILTER (not exists {?w :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
+}
