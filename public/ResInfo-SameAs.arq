@@ -120,6 +120,10 @@ construct {
                :eventWhere ?foundationPlace .
 ?foundationPlace skos:prefLabel ?foundationPlaceL .
 
+# ContentLocation in a Note
+?noteCL ?anyProp ?anyVal . 
+?noteCLW skos:prefLabel ?noteCLWL .
+
 } where {
   {
     ?r owl:sameAs* ?R_RES .
@@ -444,5 +448,12 @@ construct {
     ?adm adm:logEntry ?le .
     ?le adm:logWho ?user .
     ?user skos:prefLabel ?userL .
+  } union {
+    # add ContentLocation from a Note
+    ?r owl:sameAs* ?R_RES .
+    ?r :note/:contentLocation ?noteCL .
+    ?noteCL ?anyProp ?anyVal ;
+        :contentLocationInstance ?noteCLW .
+    ?noteCLW :instanceReproductionOf/skos:prefLabel ?noteCLWL .
   }
 }
