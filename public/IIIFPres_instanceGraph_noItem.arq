@@ -18,7 +18,6 @@ construct {
   ?cl ?clp ?clo .
   ?R_RES tmp:rootAccess ?access .
   ?R_RES tmp:rootRestrictedInChina ?ric .
-  ?R_RES tmp:rootLicense ?license .
   ?R_RES tmp:rootStatus ?status .
   ?R_RES tmp:inImageInstance ?iinstance .
   ?R_RES tmp:firstImageGroup ?vol .
@@ -52,7 +51,6 @@ where {
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
     ?admItem adm:restrictedInChina ?ric .
-    ?admItem adm:contentLegal/adm:license ?license .
   } union {
     ?R_RES :virtualLinkTo?/:inRootInstance? ?rw .
     ?rw :instanceHasReproduction ?iinstance .

@@ -31,7 +31,7 @@
 #param.R_RES.subtype=:Volume
 #param.R_RES.desc=the URI of the volume being investigated
 
-select distinct ?instanceId ?iinstanceId ?access ?ric ?license ?pagesIntroTbrc ?volumeNumber ?volumeLabel ?iiifManifest ?status where {
+select distinct ?instanceId ?iinstanceId ?access ?ric ?pagesIntroTbrc ?volumeNumber ?volumeLabel ?iiifManifest ?status where {
   {
     ?R_RES a :ImageGroup .
     optional { ?R_RES :volumeNumber ?volumeNumber . }
@@ -44,6 +44,5 @@ select distinct ?instanceId ?iinstanceId ?access ?ric ?license ?pagesIntroTbrc ?
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
     ?admItem adm:restrictedInChina ?ric .
-    ?admItem adm:contentLegal/adm:license ?license .
   }
 }
