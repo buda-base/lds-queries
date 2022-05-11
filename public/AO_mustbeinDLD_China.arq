@@ -15,7 +15,7 @@ select distinct ?w where {
   FILTER (not exists {?w :digitalLendingPossible false })
   FILTER (not exists {?w :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
   ?w :instanceReproductionOf ?mw .
-  FILTER (not exists {?w :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
+  FILTER (not exists {?mw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
   ?mw :instanceOf ?wa .
   ?wa :language bdr:LangBo .
 }
