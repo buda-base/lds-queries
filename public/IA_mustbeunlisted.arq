@@ -12,6 +12,7 @@ select ?w where {
     ?wadm adm:adminAbout ?w .
     ?w a :ImageInstance .
   } union {
-    ?w :inCollection bdr:PR1NLM00 .
+    ?w :inCollection bdr:PR1NLM00 ;
+       a :ImageInstance .
   }
 }

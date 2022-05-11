@@ -19,6 +19,7 @@ select distinct ?w where {
     ?wadm adm:adminAbout ?w ;
           adm:access bda:AccessOpen .
   } union {
-    ?w :inCollection bdr:PR1NLM00 .
+    ?w :inCollection bdr:PR1NLM00  ;
+       a :ImageInstance .
   }
 }
