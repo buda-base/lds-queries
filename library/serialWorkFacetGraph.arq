@@ -1,0 +1,75 @@
+#QueryScope=SerialWork
+#QueryReturnType=Graph
+#QueryResults=All serial works whose various literals contain the given L_NAME parameter value
+#QueryParams=L_NAME,LG_NAME
+#QueryUrl=/lib/serialWorkFacetGraph?L_NAME="Sata-Pitaka"&LG_NAME=en
+
+#param.L_NAME.type=string
+#param.L_NAME.langTag=LG_NAME
+#param.L_NAME.isLucene=true
+#param.L_NAME.example="ye shes"
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT
+{
+    ?res tmp:status ?st .
+    ?res tmp:isMain true .
+    ?res tmp:matchScore ?sc .
+    ?res tmp:labelMatch ?labelMatch .
+    ?res tmp:noteMatch ?noteMatch .
+    ?res ?extMatchP ?extMatch .
+
+    ?res tmp:nbInstance ?nbinstances .
+    ?res tmp:provider ?provider .
+  
+    ?res ?resp ?reso .
+    ?res ?respp ?resoo .
+    ?res tmp:associatedCentury ?authorC .
+    ?res bdo:associatedTradition ?authorT .
+  
+    ?resoo skos:prefLabel ?ol .
+
+}
+WHERE 
+{
+  {
+    {
+        (?res ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+        ?res a bdo:SerialWork .
+    } union {
+        (?res ?sc ?extMatch ?graph ?extMatchP) text:query ( bdo:extendedStmts ?L_NAME "highlight:" ) .
+        ?res a bdo:SerialWork .
+    } union {
+        (?note ?sc ?noteMatch) text:query ( bdo:noteText ?L_NAME "highlight:" ) .
+        ?res bdo:note ?note .
+        ?res a bdo:SerialWork .
+    }
+    ?res ?resp ?reso .
+    FILTER (?resp IN(skos:altLabel , skos:prefLabel , rdf:type , owl:sameAs , bdo:catalogInfo , tmp:entityScore , rdfs:seeAlso ) && (!BOUND(?extMatchP) || ?resp != ?extMatchP))
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
+    
+  } union {
+    
+    select ?res 
+           (count (distinct ?instance) as ?nbinstances)
+    where {
+      
+      {
+        (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+        ?res a bdo:SerialWork .
+      } union {
+        (?res) text:query ( bdo:extendedStmts ?L_NAME ) .
+        ?res a bdo:SerialWork .
+      } union {
+          (?note) text:query ( bdo:noteText ?L_NAME ) .
+          ?res bdo:note ?note .
+          ?res a bdo:SerialWork .
+      }
+
+      ?res :serialHasInstance ?instance .
+    } group by ?res 
+  }
+}
