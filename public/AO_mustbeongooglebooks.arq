@@ -1,0 +1,19 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=All image instances that must be on the mirror
+#QueryLimit=50000
+#QueryUrl=/AO_mustbeongooglebooks
+
+select distinct ?w where {
+  ?wadm adm:access ?acc ;
+        adm:status bda:StatusReleased ;
+        adm:contentLegal ?cl ;
+        adm:adminAbout ?w .
+  ?cl adm:provider bda:CP021 .
+  FILTER (?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+  FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
+  FILTER (not exists {?w :inCollection bdr:PR1NLM00 })
+  ?w :instanceReproductionOf ?mw .
+  ?mw :instanceOf ?wa .
+  ?wa :language bdr:LangBo .
+}
