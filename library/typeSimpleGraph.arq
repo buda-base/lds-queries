@@ -22,6 +22,7 @@ CONSTRUCT
     ?res tmp:labelMatch ?labelMatch .
     ?res tmp:noteMatch ?noteMatch .
     ?res tmp:isMain true .
+    ?res tmp:provider ?provider .
     ?res ?resp ?reso .
 }
 WHERE 
@@ -40,4 +41,5 @@ WHERE
     ?res ?resp ?reso .
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
 }
