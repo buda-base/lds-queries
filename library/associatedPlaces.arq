@@ -39,8 +39,7 @@ where {
       ?res ?rel1 ?R_RES .
       ?res a bdo:Place .
     } union {
-      ?R_RES bdo:placeContains{2,} ?res .
-      ?res a bdo:Place .
+      ?R_RES bdo:placeContains/bdo:placeContains+ ?res .
       BIND(tmp:placeContainsDesc as ?rel1)
     } union {
       ?R_RES ?evtp ?evt .
@@ -74,7 +73,7 @@ where {
       ?evt bdo:eventWho ?R_RES .
       ?evt bdo:eventWhere ?res .
     } union {
-      ?R_RES bdo:placeContains{2,} ?res .
+      ?R_RES bdo:placeContains/bdo:placeContains+ ?res .
       BIND(tmp:placeContainsDesc as ?rel1)
     }
     
@@ -96,7 +95,7 @@ where {
       ?evt bdo:eventWho ?R_RES .
       ?evt bdo:eventWhere ?res .
     } union {
-      ?R_RES bdo:placeContains{2,} ?res .
+      ?R_RES bdo:placeContains/bdo:placeContains+ ?res .
       BIND(tmp:placeContainsDesc as ?rel1)
     }
     
