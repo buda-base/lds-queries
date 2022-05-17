@@ -39,6 +39,10 @@ where {
       ?res ?rel1 ?R_RES .
       ?res a bdo:Place .
     } union {
+      ?R_RES bdo:placeContains{2,} ?res .
+      ?res a bdo:Place .
+      BIND(tmp:placeContainsDesc as ?rel1)
+    } union {
       ?R_RES ?evtp ?evt .
       ?evt bdo:eventWhere ?res .
       BIND(tmp:commonEvents as ?rel2)
@@ -69,6 +73,9 @@ where {
     } union {
       ?evt bdo:eventWho ?R_RES .
       ?evt bdo:eventWhere ?res .
+    } union {
+      ?R_RES bdo:placeContains{2,} ?res .
+      BIND(tmp:placeContainsDesc as ?rel1)
     }
     
     ?res bdo:placeEvent/bdo:placeEventAffiliation ?trad .
@@ -88,6 +95,9 @@ where {
     } union {
       ?evt bdo:eventWho ?R_RES .
       ?evt bdo:eventWhere ?res .
+    } union {
+      ?R_RES bdo:placeContains{2,} ?res .
+      BIND(tmp:placeContainsDesc as ?rel1)
     }
     
     ?res bdo:placeLocatedIn ?locatedin .
