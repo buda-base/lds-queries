@@ -124,6 +124,8 @@ construct {
 ?noteCL ?anyProp ?anyVal . 
 ?noteCLW skos:prefLabel ?noteCLWL .
 
+?R_RES tmp:addIALink ?addIALink .
+
 } where {
   {
     ?r owl:sameAs* ?R_RES .
@@ -330,6 +332,15 @@ construct {
     ?r owl:sameAs* ?R_RES ;
        :corporationHasMember ?mb .
     ?mb :corporationMember/skos:prefLabel ?mbL .
+  } union {
+    BIND(EXISTS {
+      ?r owl:sameAs* ?R_RES .
+      ?r :inRootInstance?/:instanceHasReproduction ?w .
+      ?wadm adm:adminAbout ?w ;
+            adm:access bda:AccessFairUse ;
+            adm:status bda:StatusReleased .
+      FILTER(not exists {?w :digitalLendingPossible false})
+    } as ?addIALink)
   } union {
     # 10 works about the entity
     select
