@@ -16,6 +16,7 @@
 
 ## tests: R_UT=bdr:UTIE0OPP008105_v026&I_START=455688&I_END=460617
 ##        R_UT=bdr:UT4CZ5369_I1KG9128_0000&I_START=1000&I_END=2000
+#         R_UT=bdr:UT4CZ5369_I1KG9127_0000&I_START=-2176&I_END=1000
 construct {
     ?R_UT :eTextHasChunk ?c .
     ?c :chunkContents ?chunkcontent ;
@@ -74,7 +75,7 @@ construct {
      ?p :sliceStartChar  ?pstart ;
           :sliceEndChar    ?pend .
      # taking only one page for this exercise:
-     FILTER (?pstart <= ?I_START && ?pend >= ?I_START)
+     FILTER (?pstart <= ?I_END && ?pend >= ?I_START)
      ?p :seqNum ?pagenum .
      ?R_UT :eTextInInstance ?ie_inst .
      ?ie_inst :instanceReproductionOf+ ?inst .
