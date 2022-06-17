@@ -58,6 +58,10 @@ CONSTRUCT {
     ?res :inCollection ?collection . 
     ?collection skos:prefLabel ?collectionL .
 
+    ?res :serialInstanceOf ?was .
+    ?was skos:prefLabel ?wasiil .
+    ?res bdo:seriesNumber ?sn .
+
 } where {
 
   {
@@ -108,11 +112,33 @@ CONSTRUCT {
     ?res :inRootInstance? ?resR2 .
     ?resR2 :instanceEvent ?evt .
 
-    ?resR2 :instanceEvent ?evt .
     ?evt a :PublishedEvent .
     ?evt ?evtp ?evto .
     BIND (IF(?evtp = bdo:onYear || ?evtp = bdo:notBefore, ?evto, 1/0) as ?yearStart)
     BIND (IF(?evtp = bdo:notAfter, ?evto, 1/0) as ?yearEnd)
+
+  } union {
+
+    {
+      (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+      ?res a bdo:Instance .
+    } union {
+      (?title) text:query ( rdfs:label ?L_NAME ) .
+      ?res bdo:hasTitle ?title .
+    } union {
+      (?note) text:query ( bdo:noteText ?L_NAME ) .
+      ?res bdo:note ?note .
+      ?res a bdo:Instance .
+    } union {
+      (?res) text:query ( bdo:extendedStmts ?L_NAME ) .
+      ?res a bdo:Instance .
+    }
+    FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
+
+    ?res :inRootInstance? ?resR2 .
+    ?resR2 bdo:serialInstanceOf ?was .
+    ?was skos:prefLabel ?wasiil .
+    ?resR2 bdo:seriesNumber ?sn .
 
   } union {
 

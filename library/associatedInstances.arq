@@ -51,6 +51,9 @@ CONSTRUCT
     ?i tmp:relationType ?rel3 .
     ?i tmp:relationTypeInv ?rel1 .
 
+    ?i :serialInstanceOf ?was .
+    ?was skos:prefLabel ?wasiil .
+
 }
 WHERE 
 {
@@ -185,6 +188,23 @@ WHERE
       FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
       ?w ?wiip ?wiio .
       FILTER(?wiip IN(bdo:language , bdo:catalogInfo, bdo:workIsAbout , bdo:workGenre))
+    } union {
+      {
+        ?R_RES ?rel1 ?i .
+      } union {
+        ?i ?rel2 ?R_RES .
+      } union {
+        ?it :inCollection ?R_RES .
+        ?i :instanceHasItem ?it .
+      } union {
+        ?aac bdo:agent ?R_RES .
+        ?i bdo:creator ?aac .
+        ?i a/rdfs:subClassOf* bdo:Instance .
+      }
+      ?i :inRootInstance? ?iroot .
+      ?iroot :serialInstanceOf ?was .
+      ?was skos:prefLabel ?wasiil .
+      ?iroot bdo:seriesNumber ?sn .
     } union {
       {
         ?R_RES ?rel1 ?i .
