@@ -16,7 +16,6 @@ construct {
   ?R_RES tmp:rootAccess ?access .
   ?R_RES tmp:rootStatus ?status .
   ?R_RES tmp:rootRestrictedInChina ?ric .
-  ?R_RES tmp:rootLicense ?license .
   ?instance adm:access ?wa .
   ?instance :hasPart ?wp .
   #?part ?pp ?op .
@@ -50,6 +49,5 @@ where {
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
     ?admItem adm:restrictedInChina ?ric .
-    ?admItem adm:contentLegal/adm:license ?license .
   }
 }

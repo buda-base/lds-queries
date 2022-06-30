@@ -20,8 +20,6 @@ construct {
   } union {
     ?R_RES :inRootInstance?/^adm:adminAbout ?s .
     ?s ?p ?o .
-    ?s adm:contentLegal ?cl .
-    ?cl ?clp ?clo .
   } union {
     ?R_RES :inRootInstance? ?ri .
     ?ri :instanceHasVolume ?s .
