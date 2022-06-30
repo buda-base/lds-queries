@@ -256,10 +256,11 @@ construct {
     ?roTCLo skos:prefLabel ?roTCLoLabel .
   } union {
     # https://github.com/buda-base/public-digital-library/issues/649 (?R_RES = bdr:T111111111)
-    # https://github.com/buda-base/public-digital-library/issues/641 (?R_RES = bdr:MW3CN27014)
-    # https://github.com/buda-base/public-digital-library/issues/652 (?R_RES = bdr:MW27302)
+    # https://github.com/buda-base/public-digital-library/issues/641 (?R_RES = bdr:MW3CN27014) hasNonVolumeParts must be true
+    # https://github.com/buda-base/public-digital-library/issues/652 (?R_RES = bdr:MW27302) hasNonVolumeParts must be false
+    # https://github.com/buda-base/public-digital-library/issues/730 (?R_RES = bdr:MW22271) hasNonVolumeParts must be false
     BIND(IF(EXISTS{?R_RES a ?any}, EXISTS{?R_RES :hasPart ?p}, 1/0) as ?hasPartB)
-    BIND(IF(EXISTS{?R_RES a ?any}, EXISTS{?R_RES :hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume && ?pt != bdr:PartTypeSection)} && NOT EXISTS{?R_RES :bdo:inRootInstance?/bdo:instanceHasReproduction ?ii .
+    BIND(IF(EXISTS{?R_RES a ?any}, !EXISTS{?R_RES :hasPart ?p . ?p bdo:partType ?pt FILTER(?pt = bdr:PartTypeVolume || ?pt = bdr:PartTypeSection)} && NOT EXISTS{?R_RES :bdo:inRootInstance?/bdo:instanceHasReproduction ?ii .
     ?ii a bdo:ImageInstance ; :numberOfVolumes  1 .}, 1/0) as ?hasNonVolumeParts)
   } union {
     # add volume numbers
