@@ -41,9 +41,9 @@ WHERE
 {
   {
     # search in titles in graph
-
-    ?R_RES :inRootInstance? ?root .
-    ?rootAdm adm:adminAbout ?root ;
+    ?o :outlineOf ?R_RES .
+    ?rootAdm adm:adminAbout ?o ;
+             adm:status bda:StatusReleased ;
              adm:graphId ?rootGraph .
     # I checked on http://sparql.org and there is no join when using the quad optimizations
     # so theoretically no performance problem
@@ -68,9 +68,9 @@ WHERE
     
   } union {
     # search in titles in graph
-
-    ?R_RES :inRootInstance? ?root .
-    ?rootAdm adm:adminAbout ?root ;
+    ?o :outlineOf ?R_RES .
+    ?rootAdm adm:adminAbout ?o ;
+             adm:status bda:StatusReleased ;
              adm:graphId ?rootGraph .
     # I checked on http://sparql.org and there is no join when using the quad optimizations
     # so theoretically no performance problem
@@ -95,9 +95,9 @@ WHERE
   } union {
     
     # same with content location
-    
-    ?R_RES :inRootInstance? ?root .
-    ?rootAdm adm:adminAbout ?root ;
+    ?o :outlineOf ?R_RES .
+    ?rootAdm adm:adminAbout ?o ;
+             adm:status bda:StatusReleased ;
              adm:graphId ?rootGraph .
     # I checked on http://sparql.org and there is no join when using the quad optimizations
     # so theoretically no performance problem
@@ -119,9 +119,9 @@ WHERE
   } union {
     
     # same with work info
-    
-    ?R_RES :inRootInstance? ?root .
-    ?rootAdm adm:adminAbout ?root ;
+    ?o :outlineOf ?R_RES .
+    ?rootAdm adm:adminAbout ?o ;
+             adm:status bda:StatusReleased ;
              adm:graphId ?rootGraph .
     # I checked on http://sparql.org and there is no join when using the quad optimizations
     # so theoretically no performance problem
@@ -143,9 +143,9 @@ WHERE
   } union {
     
     # same with creator info
-    
-    ?R_RES :inRootInstance? ?root .
-    ?rootAdm adm:adminAbout ?root ;
+    ?o :outlineOf ?R_RES .
+    ?rootAdm adm:adminAbout ?o ;
+             adm:status bda:StatusReleased ;
              adm:graphId ?rootGraph .
     # I checked on http://sparql.org and there is no join when using the quad optimizations
     # so theoretically no performance problem
@@ -170,9 +170,9 @@ WHERE
   } union {
     
     # same with identifiers
-    
-    ?R_RES :inRootInstance? ?root .
-    ?rootAdm adm:adminAbout ?root ;
+    ?o :outlineOf ?R_RES .
+    ?rootAdm adm:adminAbout ?o ;
+             adm:status bda:StatusReleased ;
              adm:graphId ?rootGraph .
     # I checked on http://sparql.org and there is no join when using the quad optimizations
     # so theoretically no performance problem
