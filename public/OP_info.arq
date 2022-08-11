@@ -18,6 +18,8 @@ construct {
     ?w ?wp ?wo .
     ?aac ?aacp ?aaco .
     ?a skos:prefLabel ?al .
+    ?adm ?admp ?admo .
+    ?ig ?igp ?igo .
 } where {
    {
       ?R_RES ?resp ?reso .
@@ -25,13 +27,19 @@ construct {
       ?R_RES bdo:instanceReproductionOf ?i .
       ?i ?ip ?io .
    } union{
-      ?R_RES bdo:instanceOf ?w .
+      ?R_RES bdo:instanceReproductionOf/bdo:instanceOf ?w .
       ?w ?wp ?wo .
    } union {
-      ?R_RES bdo:instanceOf ?w .
+      ?R_RES bdo:instanceReproductionOf/bdo:instanceOf ?w .
       ?w bdo:creator ?aac .
       ?aac ?aacp ?aaco .
       ?aac bdo:agent ?a .
       ?a skos:prefLabel ?al .
+   } union {
+      ?adm adm:adminAbout ?R_RES .
+      ?adm ?admp ?admo .
+   } union {
+      ?R_RES :instanceHasVolume ?ig .
+      ?ig ?igp ?igo .
    }
 }
