@@ -27,6 +27,7 @@ CONSTRUCT
           :instanceHasReproduction ?repr .
   ?partT ?partTp ?partTo .
   ?cl ?clp ?clo .
+  ?n ?np ?no .
   ?id ?idp ?ido .
   ?part tmp:author ?partWc .
   ?partW skos:prefLabel ?partWL .
@@ -51,43 +52,102 @@ WHERE
   } union {
   	# get parts: essential triples
   	?R_RES :hasPart? ?part .
+    FILTER(NOT EXISTS {
+      ?outline :outlineOf ?part .
+      ?outlineadm adm:adminAbout ?outline ;
+                  adm:status ?status .
+      FILTER(?status != bda:StatusReleased)
+    })
     ?part ?partp ?parto .
     FILTER (?partp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart, rdfs:seeAlso, :colophon, :incipit, :explicit,:authorshipStatement ) )
      BIND(EXISTS{?part bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume && ?pt != bdr:PartTypeSection)} as ?hasNonVolumeParts)
   } union {
     # get parts: essential triples
     ?R_RES :hasPart? ?part .
+    FILTER(NOT EXISTS {
+      ?outline :outlineOf ?part .
+      ?outlineadm adm:adminAbout ?outline ;
+                  adm:status ?status .
+      FILTER(?status != bda:StatusReleased)
+    })
     ?part :instanceHasReproduction ?repr .
     ?repr a :ImageInstance .
   } union {
   	# get parts: title
   	?R_RES :hasPart? ?part .
+    FILTER(NOT EXISTS {
+      ?outline :outlineOf ?part .
+      ?outlineadm adm:adminAbout ?outline ;
+                  adm:status ?status .
+      FILTER(?status != bda:StatusReleased)
+    })
   	?part  :hasTitle ?partT .
   	?partT ?partTp ?partTo .
   } union {
     # get parts: identifiers
     ?R_RES :hasPart? ?part .
+    FILTER(NOT EXISTS {
+      ?outline :outlineOf ?part .
+      ?outlineadm adm:adminAbout ?outline ;
+                  adm:status ?status .
+      FILTER(?status != bda:StatusReleased)
+    })
     ?part  bf:identifiedBy ?id .
     ?id ?idp ?ido .
   } union {
   	# get parts: work triples
   	?R_RES :hasPart? ?part .
+    FILTER(NOT EXISTS {
+      ?outline :outlineOf ?part .
+      ?outlineadm adm:adminAbout ?outline ;
+                  adm:status ?status .
+      FILTER(?status != bda:StatusReleased)
+    })
   	?part  :instanceOf ?partW .
   	?partW skos:prefLabel ?partWL .
   } union {
   	# get parts: work creator triples
   	?R_RES :hasPart? ?part .
+    FILTER(NOT EXISTS {
+      ?outline :outlineOf ?part .
+      ?outlineadm adm:adminAbout ?outline ;
+                  adm:status ?status .
+      FILTER(?status != bda:StatusReleased)
+    })
   	?part :instanceOf ?partW .
   	?partW :creator/:agent ?partWc .
   	?partWc skos:prefLabel ?partWcL .
   } union {
   	# get parts: location triples
   	?R_RES :hasPart? ?part .
+    FILTER(NOT EXISTS {
+      ?outline :outlineOf ?part .
+      ?outlineadm adm:adminAbout ?outline ;
+                  adm:status ?status .
+      FILTER(?status != bda:StatusReleased)
+    })
   	?part :contentLocation ?cl .
   	?cl ?clp ?clo .
   } union {
+    # get parts: location triples
+    ?R_RES :hasPart? ?part .
+    FILTER(NOT EXISTS {
+      ?outline :outlineOf ?part .
+      ?outlineadm adm:adminAbout ?outline ;
+                  adm:status ?status .
+      FILTER(?status != bda:StatusReleased)
+    })
+    ?part :note ?n .
+    ?n ?np ?no .
+  } union {
   	# get parts: locationstatement triples
   	?R_RES :hasPart? ?part .
+    FILTER(NOT EXISTS {
+      ?outline :outlineOf ?part .
+      ?outlineadm adm:adminAbout ?outline ;
+                  adm:status ?status .
+      FILTER(?status != bda:StatusReleased)
+    })
   	?part :contentLocationStatement ?cls .
   }
 }

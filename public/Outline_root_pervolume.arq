@@ -26,6 +26,7 @@ CONSTRUCT
           :instanceHasReproduction ?repr .
   ?partT ?partTp ?partTo .
   ?cl ?clp ?clo .
+  ?n ?np ?no .
   ?id ?idp ?ido .
   ?part tmp:author ?partWc .
   ?partW skos:prefLabel ?partWL .
@@ -102,6 +103,14 @@ WHERE
     FILTER (?part = ?R_RES || (?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
   	?part :contentLocation ?cl .
   	?cl ?clp ?clo .
+  } union {
+    # get parts: note triples
+    ?R_RES :hasPart? ?part .
+    ?part bdo:contentLocation ?loc .
+    ?loc :contentLocationVolume ?bvol .
+    FILTER (?part = ?R_RES || (?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
+    ?part :note ?n .
+    ?n ?np ?no .
   } union {
   	# get parts: locationstatement triples
   	?R_RES :hasPart? ?part .
