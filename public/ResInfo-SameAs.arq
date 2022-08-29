@@ -336,7 +336,8 @@ construct {
   } union {
     BIND(EXISTS {
       ?r owl:sameAs* ?R_RES .
-      ?r :inRootInstance?/:instanceHasReproduction ?w .
+      ?r :inRootInstance?/:instanceHasReproduction? ?w .
+      ?w a bdo:ImageInstance .
       ?wadm adm:adminAbout ?w ;
             adm:access bda:AccessFairUse ;
             adm:status bda:StatusReleased .
