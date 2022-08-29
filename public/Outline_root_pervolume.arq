@@ -21,6 +21,7 @@ CONSTRUCT
   ?part   :hasTitle ?partT ;
           :instanceOf ?partW ;
           :contentLocation ?cl ;
+          :note ?n ;
           :contentLocationStatement ?cls ;
           bf:identifiedBy ?id ;
           :instanceHasReproduction ?repr .

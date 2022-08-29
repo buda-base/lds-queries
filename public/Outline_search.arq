@@ -35,6 +35,7 @@ CONSTRUCT
     ?ancestor ?ancestorp ?ancestoro .
     ?ancestor tmp:hasNonVolumeParts ?ancestorHasNonVolumeParts .
     ?cl ?clp ?clo .
+    ?n ?np ?no .
 
 }
 WHERE 
@@ -115,6 +116,30 @@ WHERE
     
     ?inst :contentLocation ?cl .
     ?cl ?clp ?clo .
+
+  } union {
+    
+    # same with notes
+    ?o :outlineOf ?R_RES .
+    ?rootAdm adm:adminAbout ?o ;
+             adm:status bda:StatusReleased ;
+             adm:graphId ?rootGraph .
+    # I checked on http://sparql.org and there is no join when using the quad optimizations
+    # so theoretically no performance problem
+    graph ?rootGraph {
+        {
+          (?title) text:query ( rdfs:label ?L_NAME ) .
+          ?inst :hasTitle ?title .
+        } union {
+          (?inst) text:query ( bdo:colophon ?L_NAME ) .
+        } union {
+          (?inst) text:query ( bdo:skosLabels ?L_NAME ) .
+        }
+        ?inst :partOf+ ?R_RES .
+    }
+    
+    ?inst :note ?n .
+    ?n ?np ?no .
 
   } union {
     
