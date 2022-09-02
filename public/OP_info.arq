@@ -20,6 +20,7 @@ construct {
     ?a skos:prefLabel ?al .
     ?adm ?admp ?admo .
     ?ig ?igp ?igo .
+    ?l ?lp ?lo .
 } where {
    {
       ?R_RES ?resp ?reso .
@@ -35,6 +36,10 @@ construct {
       ?aac ?aacp ?aaco .
       ?aac bdo:agent ?a .
       ?a skos:prefLabel ?al .
+   } union {
+      ?R_RES bdo:instanceReproductionOf/bdo:instanceOf ?w .
+      ?w bdo:language ?l .
+      ?l ?lp ?lo .
    } union {
       ?adm adm:adminAbout ?R_RES .
       ?adm ?admp ?admo .
