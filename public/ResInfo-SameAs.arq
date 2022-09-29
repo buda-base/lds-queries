@@ -334,7 +334,7 @@ construct {
        :corporationHasMember ?mb .
     ?mb :corporationMember/skos:prefLabel ?mbL .
   } union {
-    BIND(EXISTS {
+    BIND(IF(EXISTS{?R_RES a ?any}, EXISTS {
       ?r owl:sameAs* ?R_RES .
       ?r :inRootInstance?/:instanceHasReproduction? ?w .
       ?w a bdo:ImageInstance .
@@ -342,7 +342,7 @@ construct {
             adm:access bda:AccessFairUse ;
             adm:status bda:StatusReleased .
       FILTER(not exists {?w :digitalLendingPossible false})
-    } as ?addIALink)
+    }, 1/0) as ?addIALink)
   } union {
     # 10 works about the entity
     select
