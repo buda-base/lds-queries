@@ -16,6 +16,7 @@ construct {
    ?R_RES tmp:hasEtextRes ?etextRes .
    # greatest bdo:sliceStartChar 
    ?R_RES tmp:lastChunk ?lastchunk .
+   ?R_RES adm:replaceWith ?replaceWith .
   }
 where {
   { 
@@ -58,5 +59,22 @@ where {
       ?R_RES bdo:eTextHasChunk ?chunk .
       ?chunk bdo:sliceStartChar ?start .
     }
+  } union {
+    FILTER(NOT EXISTS {?R_RES :eTextHasChunk ?c})
+    BIND(STRAFTER( str(?R_RES), "_v" ) as ?volnumstr)
+    FILTER(strlen(?volnumstr) = 3)
+    BIND(xsd:integer(?volnumstr) as ?volnum)
+    FILTER(?volnum > 0)
+    BIND(STRBEFORE( SUBSTR(str(?R_RES), 32 ), "_v") as ?oldiestr)
+    FILTER(strlen(?oldiestr) > 3)
+    BIND(IRI(CONCAT("http://purl.bdrc.io/resource/", ?oldiestr)) as ?oldie)
+    ?oldieadm adm:adminAbout ?oldie ;
+              adm:replaceWith ?newie .
+    ?newie :instanceReproductionOf ?w .
+    ?w :instanceHasVolume ?v .
+    ?v :volumeNumber ?volnum .
+    BIND(SUBSTR(str(?v), 30) as ?newvolstr)
+    BIND(SUBSTR(str(?newie), 30) as ?newiestr)
+    BIND(IRI(CONCAT("http://purl.bdrc.io/resource/UT", ?newiestr, "_", ?newvolstr)) as ?replaceWith)
   }
 } 
