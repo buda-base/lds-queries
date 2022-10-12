@@ -4,7 +4,7 @@
 #QueryParams=GY_RES
 #QueryUrl=/dateInstances?GY_RES=1747
 
-#param.GY_RES.type=GYear
+#param.GY_RES.type=gYear
 #param.GY_RES.desc=the year for which we want associated instances
 
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>

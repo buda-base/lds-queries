@@ -8,11 +8,11 @@
 #output.?c.type=int
 #output.?txt.desc=count of instances
 
-#param.R_COLLECTION.type=uri
-#param.R_ABOUT_LIST.type=uri
-#param.R_LANG_LIST.type=uri
-#param.R_BINDING_LIST.type=uri
-#param.R_FORMAT_LIST.type=uri
+#param.R_COLLECTION.type=resource
+#param.R_ABOUT_LIST.type=resource
+#param.R_LANG_LIST.type=resource
+#param.R_BINDING_LIST.type=resource
+#param.R_FORMAT_LIST.type=resource
 #param.B_COMPLETE.type=boolean
 
 select (count (distinct ?res) as ?c)

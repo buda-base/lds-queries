@@ -1,0 +1,46 @@
+#QueryScope=Person
+#QueryReturnType=Graph
+#QueryResults=All female authors (and translators, editors, etc.)
+#QueryParams=
+#QueryUrl=/lib/femaleAuthorsGraph
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT
+{
+    ?res tmp:isMain true .
+    ?resS ?resp ?reso .
+    ?res owl:sameAs ?resS .
+    ?res tmp:yearStart ?yearStart .
+    ?res tmp:provider ?provider .
+    ?res tmp:originalRecord ?originalRecord .
+    ?res bdo:personName ?name .
+    ?res bdo:personEvent ?evt .
+    ?res tmp:hasRole ?role .
+    ?evt ?evtp ?evto .
+}
+WHERE 
+{
+  {
+    ?res bdo:personGender bdr:GenderFemale .
+    ?res tmp:hasRole ?role .
+    ?res owl:sameAs* ?resS .
+    VALUES ?resp { skos:altLabel skos:prefLabel owl:sameAs rdfs:seeAlso tmp:entityScore tmp:associatedCentury bdo:associatedTradition }
+    ?resS ?resp ?reso .
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+    ?resAdm adm:metadataLegal/adm:provider ?provider .
+    
+  } union {
+
+    ?res bdo:personGender bdr:GenderFemale .
+    ?res tmp:hasRole ?role .
+    ?res owl:sameAs* ?resS .
+    ?resS bdo:personEvent ?evt .
+    ?evt a ?evtType .
+    FILTER (?evtType IN(bdo:PersonBirth , bdo:PersonDeath))
+    ?evt ?evtp ?evto .
+    BIND (IF(?evtType = bdo:PersonBirth && (?evtp = bdo:onYear || ?evtp = bdo:notBefore), ?evto, 1/0) as ?yearStart)
+
+  }
+}

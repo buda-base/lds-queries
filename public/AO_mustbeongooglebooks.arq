@@ -1,6 +1,6 @@
 #QueryScope=ImageInstance
 #QueryReturnType=Table
-#QueryResults=All image instances that must be on the mirror
+#QueryResults=All image instances that must be on Google Books
 #QueryLimit=50000
 #QueryUrl=/AO_mustbeongooglebooks
 
