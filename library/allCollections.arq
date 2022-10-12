@@ -11,6 +11,7 @@ CONSTRUCT
     ?res tmp:isMain true .
     ?res ?resp ?reso .
     ?res tmp:nbMembers ?nbMembers .
+    ?res tmp:nbParts ?nbParts .
 }
 WHERE 
 {
