@@ -2,11 +2,11 @@
 #QueryReturnType=Table
 #QueryResults=A table containing (hopefully one) instance corresponding with a tbrc.org outline node. Used for the redirection
 #QueryParams=L_ON
-#QueryUrl=/instanceFromOutlineNode?L_ON="O01CT00424CZ206380"
+#QueryUrl=/instanceFromOutlineNode?L_ON=O01CT00424CZ206380
 
 #param.L_ON.type=string
 #param.L_ON.example="O01CT00424CZ206380"
-
+#param.L_ON.desc=the outline node RID on tbrc.org
 
 select ?i
 where {

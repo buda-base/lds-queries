@@ -1,0 +1,40 @@
+#QueryScope=Collection
+#QueryReturnType=Graph
+#QueryResults=All top-level collections
+#QueryUrl=/lib/allCollections
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT
+{
+    ?res tmp:status ?status .
+    ?res tmp:isMain true .
+    ?res ?resp ?reso .
+    ?res tmp:nbMembers ?nbMembers .
+}
+WHERE 
+{
+  {
+    ?res a bdo:Collection .
+    FILTER(not exists {?res :partOf ?top})
+    VALUES ?resp { skos:altLabel skos:prefLabel owl:sameAs rdfs:seeAlso tmp:entityScore}
+    ?res ?resp ?reso .
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+    
+  } union {
+
+    select ?res (count(?m) as ?nbMembers) (count(?p) as ?nbParts) {
+      {
+        ?res a bdo:Collection .
+        FILTER(not exists {?res :partOf ?top})
+        ?m bdo:inCollection ?res .
+      } union {
+      ?res a bdo:Collection .
+        FILTER(not exists {?res :partOf ?top})
+        ?res bdo:hasPart ?p .
+      }
+    } group by ?res
+
+  }
+}

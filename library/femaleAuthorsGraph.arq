@@ -1,7 +1,6 @@
 #QueryScope=Person
 #QueryReturnType=Graph
 #QueryResults=All female authors (and translators, editors, etc.)
-#QueryParams=
 #QueryUrl=/lib/femaleAuthorsGraph
 
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>

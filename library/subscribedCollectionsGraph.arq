@@ -1,4 +1,4 @@
-#QueryScope=General
+#QueryScope=Colllection
 #QueryReturnType=Graph
 #QueryResults=All collections subscribed to
 #QueryParams=R_SUBSCRIBED_LIST
