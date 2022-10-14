@@ -134,6 +134,7 @@ construct {
   } union  {
     ?r owl:sameAs* ?R_RES .
     ?r ?rp ?ro .
+    FILTER(?rpkeep != bdo:collectionMember && ?rpkeep != bdo:serialHasInstance && ?rpkeep != bdo:hasPart)
     ?ro owl:sameAs+ ?roSame .
   } union  {
     # monastery foundation events, see https://github.com/buda-base/public-digital-library/issues/556
@@ -153,7 +154,7 @@ construct {
     # display inRootInstance (used to sort instances)
     ?r owl:sameAs* ?R_RES .
     ?r ?rp ?ro .
-    FILTER(?rp != bdo:hasPart)
+    FILTER(?rp != bdo:collectionMember && ?rp != bdo:serialHasInstance && ?rp != bdo:hasPart)
     ?ro bdo:inRootInstance ?roRoot .
     ?roRoot skos:prefLabel ?roRootLabel .
   } union {
@@ -165,6 +166,7 @@ construct {
     # add prefLabel for Event subclasses objects
     ?r owl:sameAs* ?R_RES .
     ?r ?rp ?ro .
+    FILTER(?rp != bdo:collectionMember && ?rp != bdo:serialHasInstance && ?rp != bdo:hasPart)
     ?ro rdf:type/rdfs:subClassOf+ :Event .
     ?ro ?rpEv ?roEv .
     ?roEv skos:prefLabel ?roEvLab .
@@ -172,6 +174,7 @@ construct {
     # add prefLabel for LineageHolder objects
     ?r owl:sameAs* ?R_RES .
     ?r ?rp ?ro .
+    FILTER(?rp != bdo:collectionMember && ?rp != bdo:serialHasInstance && ?rp != bdo:hasPart)
     ?ro rdf:type/rdfs:subClassOf* :LineageHolder .
     ?ro ?rpEv ?roEv .
     ?roEv skos:prefLabel ?roEvLab .
@@ -179,20 +182,24 @@ construct {
     # get canonicalHtml for related resources
     ?r owl:sameAs* ?R_RES .
     ?r ?rp ?ro .
+    FILTER(?rp != bdo:collectionMember && ?rp != bdo:serialHasInstance && ?rp != bdo:hasPart)
     ?ro adm:canonicalHtml ?roCanonHtml .
   } union {
     ?r owl:sameAs* ?R_RES .
     ?r ?rp2 ?ro2 .
+    FILTER(?rp2 != bdo:collectionMember && ?rp2 != bdo:serialHasInstance && ?rp2 != bdo:hasPart)
     ?ro2 rdf:type/rdfs:subClassOf+ :Facet .
     ?ro2 ?ro2p ?ro2o .
   } union {
     ?r owl:sameAs* ?R_RES .
     ?r ?rp3 ?ro3 .
+    FILTER(?rp3 != bdo:collectionMember && ?rp3 != bdo:serialHasInstance && ?rp3 != bdo:hasPart)
     ?ro3 rdf:type/rdfs:subClassOf+ :Event .
     ?ro3 ?ro3p ?ro3o .
   } union {
     ?r owl:sameAs* ?R_RES .
     ?r ?rp3 ?ro3 .
+    FILTER(?rp3 != bdo:collectionMember && ?rp3 != bdo:serialHasInstance && ?rp3 != bdo:hasPart)
     ?ro3 rdf:type/rdfs:subClassOf+ :Event .
     ?ro3 ?ro3p ?ro3o .
     ?ro3o rdf:type/rdfs:subClassOf+ :Facet .
@@ -200,6 +207,7 @@ construct {
   } union {
     ?r owl:sameAs* ?R_RES .
     ?r ?rp3 ?ro3 .
+    FILTER(?rp3 != bdo:collectionMember && ?rp3 != bdo:serialHasInstance && ?rp3 != bdo:hasPart)
     ?ro3 rdf:type/rdfs:subClassOf+ :Event .
     ?ro3 ?ro3p ?ro3o .
     ?ro3o a bdo:DateIndication .
