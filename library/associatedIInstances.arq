@@ -57,7 +57,6 @@ WHERE
       bind( exists {?iiAdm adm:access bda:AccessOpen} as ?iAccessOpen)
       ?iiAdm adm:status ?status .
       ?iiAdm adm:access ?access .
-      ?iiAdm adm:contentLegal/adm:provider ?provider .
       ?ii :instanceReproductionOf ?i .
       ?i ?ip ?io .
       FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
