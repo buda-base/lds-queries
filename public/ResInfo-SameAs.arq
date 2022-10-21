@@ -24,8 +24,7 @@ construct {
  ?r tmp:siblingInstances ?siblingNonRepro .
  ?r tmp:siblingReproInstances ?siblingRepro .
 
- ?ro tmp:withSameAs ?roSame .
- ?ro tmp:withSameAs ?roSame2 .
+ ?rokeep tmp:withSameAs ?roSame .
  
  # misc props needed to fix display:
 
@@ -133,9 +132,9 @@ construct {
     FILTER(?rpkeep != bdo:collectionMember && ?rpkeep != bdo:serialHasInstance && ?rpkeep != bdo:hasPart)
   } union  {
     ?r owl:sameAs* ?R_RES .
-    ?r ?rp ?ro .
+    ?r ?rpkeep ?rokeep .
     FILTER(?rpkeep != bdo:collectionMember && ?rpkeep != bdo:serialHasInstance && ?rpkeep != bdo:hasPart)
-    ?ro owl:sameAs+ ?roSame .
+    ?rokeep owl:sameAs+ ?roSame .
   } union  {
     # monastery foundation events, see https://github.com/buda-base/public-digital-library/issues/556
     ?r owl:sameAs* ?R_RES .
