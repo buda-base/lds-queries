@@ -23,13 +23,14 @@ select distinct ?wa ?mw ?mwlu where {
     FILTER (?r IN (bdr:R0ER0011 , bdr:R0ER0019 , bdr:R0ER0014 , bdr:R0ER0025))
   	?wa bdo:creator ?aac ;
   	    bdo:workHasInstance ?mw .
-    ?wa (^adm:adminAbout)/adm:status bda:StatusReleased .
+    ?wam adm:adminAbout ?wa ;
+         adm:status  bda:StatusReleased .
   	FILTER NOT EXISTS { ?mw bdo:instanceReproductionOf ?repof }
   	?mw bdo:inRootInstance? ?root .
   	?rootA adm:adminAbout ?root ;
              adm:status bda:StatusReleased .
       ?mw skos:prefLabel ?mwl .
-      FILTER(lang(?mwl) = "bo-x-ewts")
+      #FILTER(lang(?mwl) = "bo-x-ewts")
       BIND(f:ewtsToUnicode(?mwl) as ?mwlu)
   } union {
     ?aac bdo:agent ?R_RES ;
@@ -37,6 +38,8 @@ select distinct ?wa ?mw ?mwlu where {
     FILTER (?r IN (bdr:R0ER0011 , bdr:R0ER0019 , bdr:R0ER0014 , bdr:R0ER0025))
     ?wa bdo:creator ?aac .
     FILTER NOT EXISTS { ?wa bdo:workHasInstance ?mw }
+    ?wam adm:adminAbout ?wa ;
+         adm:status  bda:StatusReleased .
     FILTER EXISTS { ?owa bdo:workIsAbout ?wa }
     ?wa skos:prefLabel ?mwl .
     FILTER(lang(?mwl) = "bo-x-ewts")
