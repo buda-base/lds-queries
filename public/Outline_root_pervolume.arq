@@ -30,7 +30,7 @@ CONSTRUCT
   ?n ?np ?no .
   ?id ?idp ?ido .
   ?part tmp:author ?partWc .
-  ?partW skos:prefLabel ?partWL .
+  ?partW ?partWp ?partWo .
   ?partWc skos:prefLabel ?partWcL .
   ?ancestor ?ancestorp ?ancestoro .
   ?R_RES tmp:firstImageGroup ?firstig .
@@ -86,7 +86,8 @@ WHERE
     ?loc :contentLocationVolume ?bvol .
     FILTER (?part = ?R_RES || (?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
   	?part  :instanceOf ?partW .
-  	?partW skos:prefLabel ?partWL .
+  	?partW ?partWp ?partWo .
+    FILTER(?partWp = skos:prefLabel || ?partWp = bdo:catalogInfo)
   } union {
   	# get parts: work creator triples
   	?R_RES :hasPart? ?part .

@@ -31,7 +31,7 @@ CONSTRUCT
   ?n ?np ?no .
   ?id ?idp ?ido .
   ?part tmp:author ?partWc .
-  ?partW skos:prefLabel ?partWL .
+  ?partW ?partWp ?partWo .
   ?partWc skos:prefLabel ?partWcL .
   ?ancestor ?ancestorp ?ancestoro ;
             tmp:hasNonVolumeParts ?ancestorHasNonVolumeParts .
@@ -130,7 +130,8 @@ WHERE
       BIND(?R_RES as ?part)
     }
   	?part  :instanceOf ?partW .
-  	?partW skos:prefLabel ?partWL .
+  	?partW ?partWp ?partWo .
+    FILTER(?partWp = skos:prefLabel || ?partWp = bdo:catalogInfo)
   } union {
   	# get parts: work creator triples
     {
