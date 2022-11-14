@@ -22,8 +22,9 @@ WHERE
   	{
   	  select ?eadm (max(?sdate) as ?d)
       where {
+        BIND(NOW() - xsd:duration("P6M") as ?sixmonthsago)
         ?le adm:logDate ?sdate .
-        FILTER(?sdate > "2020-08-20T00:00:00"^^xsd:dateTime)
+        FILTER(?sdate > ?sixmonthsago)
         ?le a adm:Synced .
         ?va adm:logEntry ?le ;
             adm:adminAbout ?v .
@@ -37,8 +38,9 @@ INSERT
   { GRAPH bdg:CacheLatest { ?eadm tmp:dateCreated ?sdate } }
 WHERE
   {
+      BIND(NOW() - xsd:duration("P6M") as ?sixmonthsago)
     	?le adm:logDate ?sdate .
-        FILTER(?sdate > "2020-08-20T00:00:00"^^xsd:dateTime)
+        FILTER(?sdate > ?sixmonthsago)
         ?le a adm:InitialDataCreation .
         ?eadm adm:logEntry ?le ;
             adm:adminAbout ?e .
