@@ -1,0 +1,25 @@
+#QueryScope=LogEntries
+#QueryReturnType=Table
+#QueryResults=A table containing the recent activity of a user
+#QueryParams=R_USR
+#QueryUrl=/log_activity_by_user?R_USR=bdu:U1132599279
+
+#param.R_USR.type=resource
+#param.R_USR.subtype=a user ID
+#param.R_USR.desc=the user ID
+
+select ?res ?resL ?msg ?date ?type 
+where {
+  {
+    select ?lg ?date {
+       ?lg adm:logWho ?R_USR ;
+           adm:logDate ?date .
+    } order by desc(?date) limit 200
+  }
+  ?lg a ?type ;
+      adm:logMessage ?msg .
+  ?adm adm:logEntry ?lg ;
+       adm:adminAbout ?res .
+  ?res skos:prefLabel ?resL .
+  FILTER(lang(?resL) = "bo-x-ewts")
+}
