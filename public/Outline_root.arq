@@ -28,6 +28,8 @@ CONSTRUCT
           :instanceHasReproduction ?repr .
   ?partT ?partTp ?partTo .
   ?cl ?clp ?clo .
+  ?root :hasOutline ?o .
+  ?o ?op ?oo .
   ?n ?np ?no .
   ?id ?idp ?ido .
   ?part tmp:author ?partWc .
@@ -40,16 +42,17 @@ WHERE
 {
   {
     # get ancestors label, test with bdr:MW12827_891768 to see some results
+    ?R_RES :inRootInstance? ?root .
+    ?o :outlineOf ?root .
+    ?o ?op ?oo .
+    ?oadm adm:adminAbout ?o ;
+          adm:status bda:StatusReleased .
+  } union {
+    # get ancestors label, test with bdr:MW12827_891768 to see some results
     ?R_RES :partOf+ ?ancestor .
     BIND(EXISTS{?ancestor bdo:hasPart ?p . ?p bdo:partType ?pt FILTER(?pt != bdr:PartTypeVolume && ?pt != bdr:PartTypeSection)} as ?ancestorHasNonVolumeParts)
     ?ancestor ?ancestorp ?ancestoro .
     FILTER (?ancestorp IN (skos:prefLabel , :partTreeIndex , :partType , :partIndex , :hasPart))
-  #} union {
-  	# get volumes
-  #	?R_RES :instanceHasReproduction ?repr .
-  #	?repr :instanceHasVolume ?vol .
-  # ?vol ?volp ?volo .
-  # FILTER (?volp IN(bdo:volumeNumber , skos:prefLabel ))
   } union {
   	# get parts: essential triples
     {
