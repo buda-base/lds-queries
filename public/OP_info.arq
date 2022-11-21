@@ -46,5 +46,7 @@ construct {
    } union {
       ?R_RES :instanceHasVolume ?ig .
       ?ig ?igp ?igo .
+      ?ig :volumePagesTotal ?pt .
+      FILTER(?pt > 0)
    }
 }
