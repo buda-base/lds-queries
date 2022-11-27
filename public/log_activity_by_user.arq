@@ -8,7 +8,7 @@
 #param.R_USR.subtype=a user ID
 #param.R_USR.desc=the user ID
 
-select ?res ?resL ?msg ?date ?type 
+select ?res (CONCAT(?resL) as ?resLC) ?msg ?date ?type 
 where {
   {
     select ?lg ?date {
@@ -21,5 +21,4 @@ where {
   ?adm adm:logEntry ?lg ;
        adm:adminAbout ?res .
   ?res skos:prefLabel ?resL .
-  FILTER(lang(?resL) = "bo-x-ewts")
 }
