@@ -23,12 +23,14 @@ construct {
   {
     ?R_RES a :ImageGroup .
     ?R_RES ?resp ?reso .
-    ?iinstanceId :instanceHasVolume ?R_RES ;
-         :instanceReproductionOf ?instanceId .
+    ?iinstanceId :instanceHasVolume ?R_RES .
     ?admItem adm:adminAbout ?iinstanceId .
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
     ?admItem adm:restrictedInChina ?ric .
+  } union {
+    ?iinstanceId :instanceHasVolume ?R_RES ;
+         :instanceReproductionOf ?instanceId .
   } union {
     # collections
     ?iinstanceId :instanceHasVolume ?R_RES ;
