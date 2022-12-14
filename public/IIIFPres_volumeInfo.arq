@@ -39,12 +39,12 @@ select distinct ?instanceId ?iinstanceId ?access ?copyrightStatus ?ric ?pagesInt
     optional { ?R_RES skos:prefLabel ?volumeLabel . }
     optional { ?R_RES :hasIIIFManifest ?iiifManifest . }
     ?iinstanceId :instanceHasVolume ?R_RES .
-    optional { ?iinstanceId :instanceHasVolume ?R_RES ;
+    optional { ?ii2 :instanceHasVolume ?R_RES ;
          :instanceReproductionOf ?mw .
          ?mw :copyrightStatus ?copyrightStatus . }
-    optional { ?iinstanceId :instanceHasVolume ?R_RES ;
-         :instanceReproductionOf ?instanceId .
-         ?mw :copyrightStatus ?copyrightStatus . }
+    optional { ?ii3 :instanceHasVolume ?R_RES ;
+         :instanceReproductionOf ?i3 .
+         ?i3 :copyrightStatus ?copyrightStatus . }
     ?admItem adm:adminAbout ?iinstanceId .
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
