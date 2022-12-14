@@ -38,11 +38,13 @@ select distinct ?instanceId ?iinstanceId ?access ?copyrightStatus ?ric ?pagesInt
     optional { ?R_RES bdo:volumePagesTbrcIntro ?pagesIntroTbrc . }
     optional { ?R_RES skos:prefLabel ?volumeLabel . }
     optional { ?R_RES :hasIIIFManifest ?iiifManifest . }
-    optional { ?ii :instanceHasVolume ?R_RES ;
+    ?iinstanceId :instanceHasVolume ?R_RES .
+    optional { ?iinstanceId :instanceHasVolume ?R_RES ;
          :instanceReproductionOf ?mw .
-         ?mw :copyrightStatus ?copyrightStatus .}
-    ?iinstanceId :instanceHasVolume ?R_RES ;
+         ?mw :copyrightStatus ?copyrightStatus . }
+    optional { ?iinstanceId :instanceHasVolume ?R_RES ;
          :instanceReproductionOf ?instanceId .
+         ?mw :copyrightStatus ?copyrightStatus . }
     ?admItem adm:adminAbout ?iinstanceId .
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
