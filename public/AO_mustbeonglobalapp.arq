@@ -4,13 +4,12 @@
 #QueryLimit=50000
 #QueryUrl=/AO_mustbeonglobalapp
 
-select distinct ?w where {
+select distinct ?w ?acc ?dlp where {
   ?w a :ImageInstance .
   ?wadm adm:adminAbout ?w ;
         adm:status bda:StatusReleased ;
         adm:access ?acc ;
         .
-  FILTER (?acc = bda:AccessOpen || (?acc = bda:AccessFairUse && not exists {?w :digitalLendingPossible false }))
+  BIND(not exists {?w :digitalLendingPossible false} as ?dpl)
   FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
-  FILTER (not exists {?w :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
 }
