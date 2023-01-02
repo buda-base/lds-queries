@@ -1,0 +1,11 @@
+#QueryScope=Outline
+#QueryReturnType=Table
+#QueryResults=All released outlines
+#QueryLimit=10000
+#QueryUrl=/outline_list
+
+select ?o ?mw {
+    ?o :outlineOf ?mw .
+    ?oadm adm:adminAbout ?o ;
+          adm:status bda:StatusReleased .
+}
