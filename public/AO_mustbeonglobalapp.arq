@@ -10,6 +10,6 @@ select distinct ?w ?acc ?dlp where {
         adm:status bda:StatusReleased ;
         adm:access ?acc ;
         .
-  BIND(not exists {?w :digitalLendingPossible false} as ?dpl)
+  BIND(not exists {?w :digitalLendingPossible false} as ?dlp)
   FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
 }
