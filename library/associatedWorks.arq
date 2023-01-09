@@ -38,6 +38,7 @@ CONSTRUCT
     ?res bdo:associatedTradition ?authorT .
   
     ?resoo skos:prefLabel ?ol .
+    ?resto skos:prefLabel ?restol .
 
 }
 WHERE 
@@ -70,6 +71,26 @@ WHERE
     ?resAdm adm:metadataLegal/adm:provider ?provider .
     
   } union {
+    # topics, genres
+    
+    {
+      ?R_RES ?rel1 ?res .
+      ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+      ?res ?rel2 ?R_RES .
+      FILTER(?rel2 != bdo:serialMemberOf)
+      ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+      ?aac bdo:agent ?R_RES .
+      ?res bdo:creator ?aac . 
+    }
+    
+    ?res ?restp ?resto .
+    FILTER (?resp IN(bdo:workIsAbout , bdo:workGenre))
+    ?resto skos:prefLabel ?restol .
+
+  } union {
+    # creators
     
     {
       ?R_RES ?rel1 ?res .
