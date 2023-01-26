@@ -30,6 +30,6 @@ select ?w {
         ?wadm adm:adminAbout ?w .
     ?wadm adm:status bda:StatusReleased ;
           adm:access ?acc .
-    FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+    FILTER(?acc = bda:AccessFairUse)
   }
 }
