@@ -1,0 +1,33 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=All image instances that can be uploaded to GB
+#QueryLimit=50000
+#QueryUrl=/AO_okforGB
+
+{
+    ?w :inCollection bdr:PR1LOKESH01 .
+    ?w tmp:thumbnailIIIFService ?th .
+    ?wadm adm:adminAbout ?w .
+    ?wadm adm:status bda:StatusReleased ;
+          adm:access ?acc .
+    FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+  } union {
+    {
+      ?mw :binding bdr:Binding_Codex_Perfect .
+    } union {
+      ?mw :printMethod bdr:PrintMethod_Modern .
+    }
+    ?mw :copyrightStatus ?cs .
+    FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed)
+    ?mw :instanceEvent ?e .
+    ?e a :PublishedEvent ;
+       :eventWhen ?when .
+    FILTER(str(?when) > "1975")
+    ?mw :instanceHasReproduction ?w .
+    ?w tmp:thumbnailIIIFService ?th .
+    ?w a :ImageInstance .
+        ?wadm adm:adminAbout ?w .
+    ?wadm adm:status bda:StatusReleased ;
+          adm:access ?acc .
+    FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+  }
