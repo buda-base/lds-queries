@@ -4,7 +4,8 @@
 #QueryLimit=50000
 #QueryUrl=/AO_okforGB
 
-{
+select ?w {
+  {
     ?w :inCollection bdr:PR1LOKESH01 .
     ?w tmp:thumbnailIIIFService ?th .
     ?wadm adm:adminAbout ?w .
@@ -31,3 +32,4 @@
           adm:access ?acc .
     FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
   }
+}
