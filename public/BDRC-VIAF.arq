@@ -2,6 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=BDRC and VIAF matches
 #QueryUrl=/BDRC-VIAF
+#QueryLimit=10000
 
 select distinct ?bdrc ?viaf
 WHERE {
