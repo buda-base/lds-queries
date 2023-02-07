@@ -1,8 +1,7 @@
-#QueryScope=General
+#QueryScope=Persons
 #QueryReturnType=Table
 #QueryResults=BDRC and VIAF matches
 #QueryUrl=/BDRC-VIAF
-#QueryParams=
 
 select distinct ?bdrc ?viaf
 WHERE {
