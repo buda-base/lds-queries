@@ -10,4 +10,5 @@ WHERE {
   FILTER( REGEX( str(?viaf), "^http://viaf" ) ) .
   FILTER( REGEX( str(?bdrc), "^http://purl.bdrc" ) ) .
   ?bdrc a :Person .
+  FILTER (EXISTS {?bdrc skos:prefLabel ?bdrcl FILTER (lang(?bdrcl) = "bo-x-ewts")})
 }
