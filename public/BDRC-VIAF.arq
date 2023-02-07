@@ -1,0 +1,12 @@
+#QueryScope=General
+#QueryReturnType=Table
+#QueryResults=BDRC and VIAF matches
+#QueryUrl=/BDRC-VIAF
+#QueryParams=
+
+select distinct ?bdrc ?viaf
+WHERE {
+  ?bdrc owl:sameAs ?viaf .
+  FILTER( REGEX( str(?viaf), "^http://viaf" ) ) .
+  FILTER( REGEX( str(?bdrc), "^http://purl.bdrc" ) ) .
+}
