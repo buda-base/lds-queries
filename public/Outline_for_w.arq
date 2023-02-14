@@ -1,0 +1,22 @@
+#QueryScope=Outline
+#QueryReturnType=Graph
+#QueryResults=outline for a certain MW
+#QueryLimit=10000
+#QueryUrl=/Outline_for_w?R_RES=bdr:MW23703
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=Instance Resource ID
+#param.R_RES.desc=Instance resource ID (can be a part of an instance)
+#param.R_RES.example=bdr:MW23703
+
+construct {
+  ?s ?p ?o
+} where {
+    ?outline :outlineOf ?R_RES .
+    ?oadm adm:adminAbout ?outline ;
+          adm:status bda:StatusReleased ;
+          adm:graphId ?og .
+    graph ?og {
+      ?s ?p ?o .
+    }
+}
