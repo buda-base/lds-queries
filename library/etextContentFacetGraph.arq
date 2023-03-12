@@ -43,6 +43,9 @@ construct {
 
   ?etext tmp:maxScore ?maxScore .
   ?etext tmp:nbChunks ?nbchunks .
+
+
+  ?etext tmp:OCRscore ?OCRscore.
 }
 where
 {
@@ -112,6 +115,27 @@ where
           adm:access bda:AccessOpen .
       FILTER ((! ?B_RIC) || NOT EXISTS {?eAdm adm:restrictedInChina true.})
     } group by ?etext 
-  }
+  } union {
 
+    # get optional OCR/quality info 
+    (?chunk) text:query ( :chunkContents ?L_NAME) .
+    ?etext bdo:eTextHasChunk ?chunk .
+    ?etext bdo:eTextInInstance ?R_EINST .
+    ?eAdm adm:adminAbout ?R_EINST ;
+          adm:status bda:StatusReleased ;
+          adm:access bda:AccessOpen .
+    FILTER ((! ?B_RIC) || NOT EXISTS {?eAdm adm:restrictedInChina true.})
+    
+    { 
+      ?R_EINST bdo:OPFOCRWordMeanConfidenceIndex ?OCRscore . 
+    } union {
+      ?R_EINST bdo:OPFOCRSoftware  "norbuketaka". 
+      BIND(0.99 as ?OCRscore) .
+    } union {
+      ?R_EINST bdo:contentMethod  bdr:ContentMethod_ComputerInput ;
+      BIND(1.0 as ?OCRscore) .
+    }
+  }
 }
+
+
