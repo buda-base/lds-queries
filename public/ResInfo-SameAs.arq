@@ -456,8 +456,6 @@ construct {
            ?resAdm adm:adminAbout ?resAt ;
                    adm:status bda:StatusReleased ;
                    adm:metadataLegal/adm:provider ?resAtProvider .
-         ?wRes   :workHasInstance ?resAt ;
-                   tmp:entityScore ?resAtScore .
     }  order by desc(?resAtScore) limit 20
   } union {
     ?adm adm:adminAbout ?R_RES .
