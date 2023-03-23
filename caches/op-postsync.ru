@@ -38,6 +38,19 @@ WHERE
         ?wadm adm:status ?st ;
               adm:access ?acc ;
               adm:restrictedInChina ?ric .
+        FILTER(?acc != bda:AccessFairUse || not exists {?mw :copyrightStatus bdr:CopyrightClaimed .})
+    } union {
+        ?eiadm adm:syncAgent bdr:SAOPT ;
+               adm:adminAbout ?ei .
+        ?ei :instanceReproductionOf ?w .
+        ?w a :ImageInstance .
+        ?w :instanceReproductionOf ?mw .
+        ?wadm adm:adminAbout ?w .
+        ?wadm adm:status ?st ;
+              adm:access ?acc2 ;
+              adm:restrictedInChina ?ric .
+        FILTER(?acc2 = bda:AccessFairUse && exists {?mw :copyrightStatus bdr:CopyrightClaimed .})
+        BIND(bda:AccessOpen as ?acc)
     } union {
       ?eiadm adm:syncAgent bdr:SAOPT ;
                adm:adminAbout ?ei .
