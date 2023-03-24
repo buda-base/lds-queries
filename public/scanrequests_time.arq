@@ -1,6 +1,6 @@
 #QueryScope=ImageInstance
 #QueryReturnType=Table
-#QueryResults=10 last synced image instances
+#QueryResults=list scan requests created during a time interval
 #QueryParams=D_FROM,D_TO
 #QueryUrl=/scanrequests_time?D_FROM=2015-04-01T00:00:00Z&D_TO=2015-05-01T00:00:00Z
 #QueryLimit=5000
@@ -13,13 +13,7 @@
 #param.D_TO.subtype=xsd:dateTime
 #param.D_TO.desc=the past upper of the search
 
-# ID
-# title (Unicode)
-# nb volumes
-# who
-# when
-
-select distinct ?w (max(?title) as ?titlem) (count(?ig) as ?igc) ?userl (max(?date) as ?maxd) {
+select distinct ?w (max(?titleu) as ?titlem) (count(?ig) as ?igc) ?userl (max(?date) as ?maxd) {
   {
     # scan request log entries
     ?le a adm:ScanRequested ;
@@ -33,6 +27,7 @@ select distinct ?w (max(?title) as ?titlem) (count(?ig) as ?igc) ?userl (max(?da
     ?w :instanceHasVolume ?ig ;
        :instanceReproductionOf ?mw .
     ?mw skos:prefLabel ?title .
+    BIND(IF(lang(?title) = "bo-x-ewts", f:ewtsToUnicode(?title), ?title) as ?titleu)
   } union {
     # W record creation
     ?w a :ImageInstance .
@@ -46,6 +41,7 @@ select distinct ?w (max(?title) as ?titlem) (count(?ig) as ?igc) ?userl (max(?da
     ?le adm:logWho ?user .
     ?user skos:prefLabel ?userl .
     ?mw skos:prefLabel ?title .
+    BIND(IF(lang(?title) = "bo-x-ewts", f:ewtsToUnicode(?title), ?title) as ?titleu)
   } union {
     # tbrc.org scan requests
     ?le a adm:ScanRequestCreation ;
@@ -59,5 +55,6 @@ select distinct ?w (max(?title) as ?titlem) (count(?ig) as ?igc) ?userl (max(?da
     ?w :instanceReproductionOf ?mw ;
        :instanceHasVolume ?ig .
     ?mw skos:prefLabel ?title .
+    BIND(IF(lang(?title) = "bo-x-ewts", f:ewtsToUnicode(?title), ?title) as ?titleu)
   }
 } group by ?w ?userl
