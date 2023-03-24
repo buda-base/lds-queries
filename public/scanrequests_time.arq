@@ -3,6 +3,7 @@
 #QueryResults=10 last synced image instances
 #QueryParams=D_FROM,D_TO
 #QueryUrl=/scanrequests_time?D_FROM=2015-04-01T00:00:00Z&D_TO=2015-05-01T00:00:00Z
+#QueryLimit=5000
 
 #param.D_FROM.type=datetime
 #param.D_FROM.subtype=xsd:dateTime
