@@ -1,0 +1,20 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=All non-IIIF image groups with their W record and total number of images
+#QueryLimit=150000
+#QueryUrl=/AO_AllIGinfo
+
+select ?w ?ig ?vpt {
+  {
+  	?w a :ImageInstance .
+    ?w :instanceHasVolume ?ig .
+  	FILTER(not exists {?ig :hasIIIFManifest ?im })
+    FILTER(not exists {?ig :volumePagesTotal ?vpt2 })
+    BIND(0 as ?vpt)
+  } union {
+    ?w a :ImageInstance .
+    ?w :instanceHasVolume ?ig .
+    FILTER(not exists {?ig :hasIIIFManifest ?im })
+  	?ig :volumePagesTotal ?vpt2 .
+  }
+}
