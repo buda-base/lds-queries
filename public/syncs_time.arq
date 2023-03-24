@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=list scans synced in a time interval
 #QueryParams=D_FROM,D_TO
-#QueryUrl=/scanrequests_time?D_FROM=2015-04-01T00:00:00Z&D_TO=2015-05-01T00:00:00Z
+#QueryUrl=/syncs_time?D_FROM=2023-03-01T00:00:00Z&D_TO=2023-04-01T00:00:00Z
 #QueryLimit=5000
 
 #param.D_FROM.type=datetime
@@ -13,7 +13,7 @@
 #param.D_TO.subtype=xsd:dateTime
 #param.D_TO.desc=the past upper of the search
 
-select distinct ?w (max(?titleu) as ?titlem) (count(?ig) as ?igc) (max(?date) as ?maxd) ?access ?status {
+select distinct ?w (max(?titleu) as ?titlem) (count(distinct ?ig) as ?igc) (max(?date) as ?maxd) ?access ?status {
   {
     # scan request log entries
     ?le a adm:Synced ;

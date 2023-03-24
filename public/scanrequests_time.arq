@@ -13,7 +13,7 @@
 #param.D_TO.subtype=xsd:dateTime
 #param.D_TO.desc=the past upper of the search
 
-select distinct ?w (max(?titleu) as ?titlem) (count(?ig) as ?igc) ?userl (max(?date) as ?maxd) {
+select distinct ?w (max(?titleu) as ?titlem) (count(distinct ?ig) as ?igc) ?userl (max(?date) as ?maxd) {
   {
     # scan request log entries
     ?le a adm:ScanRequested ;
