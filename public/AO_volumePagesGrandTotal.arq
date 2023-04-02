@@ -1,0 +1,14 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=Count all released images
+#QueryLimit=150000
+#QueryUrl=/AO_volumePagesGrandTotal
+
+select (sum (?vpt) as ?vpgt) {
+  ?w a :ImageInstance .
+  ?w :instanceHasVolume ?ig .
+  FILTER(not exists {?ig :hasIIIFManifest ?im })
+	?ig :volumePagesTotal ?vpt .
+  ?wadm adm:adminAbout ?w ;
+        adm:status bda:StatusReleased .
+}
