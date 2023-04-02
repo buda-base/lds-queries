@@ -15,6 +15,6 @@ select ?w ?ig ?vpt {
     ?w a :ImageInstance .
     ?w :instanceHasVolume ?ig .
     FILTER(not exists {?ig :hasIIIFManifest ?im })
-  	?ig :volumePagesTotal ?vpt2 .
+  	?ig :volumePagesTotal ?vpt .
   }
 }
