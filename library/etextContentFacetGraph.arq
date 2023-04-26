@@ -21,6 +21,7 @@ construct {
   ?etext tmp:isMain true .
   ?etext skos:prefLabel ?etextL .
   ?etext bdo:eTextHasChunk ?chunk .
+  ?etext adm:access ?ac .
   ?etext tmp:inRootInstance ?R_EINST .
   ?R_EINST skos:prefLabel ?einstanceL .
 
