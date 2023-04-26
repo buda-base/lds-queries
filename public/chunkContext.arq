@@ -15,8 +15,9 @@
 #param.I_END.example=1300
 
 ## tests: R_UT=bdr:UTIE0OPP008105_v026&I_START=455688&I_END=460617
-##        R_UT=bdr:UT4CZ5369_I1KG9128_0000&I_START=1000&I_END=2000
+#         R_UT=bdr:UT4CZ5369_I1KG9128_0000&I_START=1000&I_END=2000
 #         R_UT=bdr:UT4CZ5369_I1KG9127_0000&I_START=-2176&I_END=1000
+#         R_UT=bdr:UT1PD96682_I1PD96784_0000&I_START=1000&I_END=2000 (copyrighted)
 construct {
     ?R_UT :eTextHasChunk ?c .
     ?c :chunkContents ?chunkcontent ;
@@ -36,8 +37,12 @@ construct {
           tmp:inInstance ?inst .
 
 } where {
-   ?R_UT :eTextInInstance/^adm:adminAbout/adm:access bda:AccessOpen .
+   ?R_UT :eTextInInstance/^adm:adminAbout ?adm .
+   ?adm adm:status bda:StatusReleased ;
+        adm:access ?ac .
+   FILTER(?ac IN (bda:AccessOpen , bda:AccessFairUse))
    {
+     ?R_UT :eTextInInstance/^adm:adminAbout/adm:access bda:AccessOpen .
      ?R_UT :eTextHasChunk ?c .
      ?c :sliceStartChar ?chunkstart ;
         :sliceEndChar ?chunkend .
