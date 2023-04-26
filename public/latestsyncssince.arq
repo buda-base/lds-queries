@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=10 last synced image instances
 #QueryParams=D_SINCE
-#QueryUrl=/latestsyncssince?D_SINCE=2020-08-20T00:00:00
+#QueryUrl=/latestsyncssince?D_SINCE=2020-08-20T00:00:00Z
 
 #param.D_SINCE.type=datetime
 #param.D_SINCE.subtype=xsd:dateTime
