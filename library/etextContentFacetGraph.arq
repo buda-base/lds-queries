@@ -58,7 +58,8 @@ where
 
     ?eAdm adm:adminAbout ?R_EINST ;
           adm:status bda:StatusReleased ;
-          adm:access bda:AccessOpen .
+          adm:access ?ac .
+    FILTER (?ac IN(bda:AccessOpen , bda:AccessFairUse))
     FILTER ((! ?B_RIC) || NOT EXISTS {?eAdm adm:restrictedInChina true.})
     # kind of cheating, the issue here is that openpecha don't always have the
     # work -> etextinstance link
@@ -78,7 +79,8 @@ where
     ?etext bdo:eTextInInstance ?R_EINST .
     ?eAdm adm:adminAbout ?R_EINST ;
           adm:status bda:StatusReleased ;
-          adm:access bda:AccessOpen .
+          adm:access ?ac .
+    FILTER (?ac IN(bda:AccessOpen , bda:AccessFairUse))
     FILTER ((! ?B_RIC) || NOT EXISTS {?eAdm adm:restrictedInChina true.})
     VALUES ?etextp { skos:prefLabel bdo:eTextIsVolume }
     ?etext ?etextp ?etexto .
@@ -89,7 +91,8 @@ where
     ?etext bdo:eTextInInstance ?R_EINST .
     ?eAdm adm:adminAbout ?R_EINST ;
           adm:status bda:StatusReleased ;
-          adm:access bda:AccessOpen .
+          adm:access ?ac .
+    FILTER (?ac IN(bda:AccessOpen , bda:AccessFairUse))
     FILTER ((! ?B_RIC) || NOT EXISTS {?eAdm adm:restrictedInChina true.})
     ?R_EINST bdo:instanceReproductionOf? ?einstwithlabel .
     ?einstwithlabel :instanceOf ?w .
@@ -112,7 +115,8 @@ where
       ?etext bdo:eTextInInstance ?R_EINST .
       ?eAdm adm:adminAbout ?R_EINST ;
           adm:status bda:StatusReleased ;
-          adm:access bda:AccessOpen .
+          adm:access ?ac .
+      FILTER (?ac IN(bda:AccessOpen , bda:AccessFairUse))
       FILTER ((! ?B_RIC) || NOT EXISTS {?eAdm adm:restrictedInChina true.})
     } group by ?etext 
   } union {
@@ -123,7 +127,8 @@ where
     ?etext bdo:eTextInInstance ?R_EINST .
     ?eAdm adm:adminAbout ?R_EINST ;
           adm:status bda:StatusReleased ;
-          adm:access bda:AccessOpen .
+          adm:access ?ac .
+    FILTER (?ac IN(bda:AccessOpen , bda:AccessFairUse))
     FILTER ((! ?B_RIC) || NOT EXISTS {?eAdm adm:restrictedInChina true.})
     
     { 

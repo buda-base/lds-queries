@@ -42,9 +42,10 @@ where
     # openpecha
     ?adm adm:adminAbout ?R_EINST ;
           adm:status bda:StatusReleased ;
-          adm:access bda:AccessOpen ;
           adm:syncAgent  bdr:SAOPT ;
-          adm:graphId ?g .
+          adm:graphId ?g ;
+          adm:access ?ac .
+    FILTER (?ac IN(bda:AccessOpen , bda:AccessFairUse))
     FILTER ((! ?B_RIC) || NOT EXISTS { ?adm adm:restrictedInChina true. })
     graph ?g {
         (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:" ) .
@@ -60,7 +61,8 @@ where
     # not openpecha
     ?adm adm:adminAbout ?R_EINST ;
           adm:status bda:StatusReleased ;
-          adm:access bda:AccessOpen .
+          adm:access ?ac .
+    FILTER (?ac IN(bda:AccessOpen , bda:AccessFairUse))
     FILTER ((! ?B_RIC) || NOT EXISTS { ?adm adm:restrictedInChina true. })
     FILTER (NOT EXISTS { ?adm adm:syncAgent  bdr:SAOPT. })
     (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME "highlight:" ) .
@@ -77,9 +79,10 @@ where
       {
         ?adm adm:adminAbout ?R_EINST ;
             adm:status bda:StatusReleased ;
-            adm:access bda:AccessOpen ;
             adm:syncAgent  bdr:SAOPT ;
-            adm:graphId ?g .
+            adm:graphId ?g ;
+            adm:access ?ac .
+        FILTER (?ac IN(bda:AccessOpen , bda:AccessFairUse))
         FILTER ((! ?B_RIC) || NOT EXISTS { ?adm adm:restrictedInChina true . })
         graph ?g {
           (?chunk ?score) text:query ( :chunkContents ?L_NAME ) .
@@ -89,6 +92,7 @@ where
         ?adm adm:adminAbout ?R_EINST ;
           adm:status bda:StatusReleased ;
           adm:access bda:AccessOpen .
+        FILTER (?ac IN(bda:AccessOpen , bda:AccessFairUse))
         FILTER ((! ?B_RIC) || NOT EXISTS { ?adm adm:restrictedInChina true. })
         FILTER (NOT EXISTS { ?adm adm:syncAgent  bdr:SAOPT. })
         (?chunk ?score ?lit) text:query ( :chunkContents ?L_NAME ) .
