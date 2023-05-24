@@ -24,8 +24,8 @@ select distinct ?w (max(?titleu) as ?titlem) (count(distinct ?ig) as ?igc) ?user
     FILTER(lang(?userl) = "en")
     ?adm adm:logEntry ?le ;
          adm:adminAbout ?ig .
-    ?w :instanceHasVolume ?ig ;
-       :instanceReproductionOf ?mw .
+    ?w :instanceHasVolume ?ig .
+    ?mw :instanceHasReproduction ?w .
     ?mw skos:prefLabel ?title .
     BIND(IF(lang(?title) = "bo-x-ewts", f:ewtsToUnicode(?title), ?title) as ?titleu)
   } union {
@@ -36,8 +36,8 @@ select distinct ?w (max(?titleu) as ?titlem) (count(distinct ?ig) as ?igc) ?user
     ?le a adm:InitialDataCreation ;
         adm:logDate ?date .
     FILTER(?date > ?D_FROM && ?date < ?D_TO)
-    ?w :instanceHasVolume ?ig ;
-       :instanceReproductionOf ?mw .
+    ?w :instanceHasVolume ?ig .
+    ?mw :instanceHasReproduction ?w .
     ?le adm:logWho ?user .
     ?user skos:prefLabel ?userl .
     ?mw skos:prefLabel ?title .
@@ -52,8 +52,8 @@ select distinct ?w (max(?titleu) as ?titlem) (count(distinct ?ig) as ?igc) ?user
     FILTER(lang(?userl) = "en")
     ?adm adm:logEntry ?le ;
          adm:adminAbout ?w .
-    ?w :instanceReproductionOf ?mw ;
-       :instanceHasVolume ?ig .
+    ?w :instanceHasVolume ?ig .
+    ?mw :instanceHasReproduction ?w .
     ?mw skos:prefLabel ?title .
     BIND(IF(lang(?title) = "bo-x-ewts", f:ewtsToUnicode(?title), ?title) as ?titleu)
   }
