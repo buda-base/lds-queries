@@ -49,7 +49,7 @@ WHERE
         ?mw :instanceOf ?wa .
         ?wa :language bdr:LangBo .
 
-      ?inDLDw skos:prefLabel ?resL .
+      ?wa skos:prefLabel ?resL .
 
     } union {
 
