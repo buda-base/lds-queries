@@ -29,25 +29,24 @@ CONSTRUCT
     ?inDLDw tmp:author ?author .
     ?agent skos:prefLabel ?agentL .
 
-    ?inDLDw ?wiip ?wiio .
-
-    ?inDLDw tmp:relationType ?rel2 .
-    ?inDLDw tmp:relationTypeInv ?rel1 .
     ?inDLDw tmp:thumbnailIIIFService ?th .
-    ?inDLDw bdo:scanInfo ?si .
 }
 WHERE 
 {
    {
-        ?wadm adm:access bda:AccessOpen ;
-              adm:status bda:StatusReleased ;
-              adm:adminAbout ?inDLDw .
-        FILTER (exists {?inDLDw tmp:thumbnailIIIFService ?ths } || exists {?inDLDw tmp:thumbnailIIIFSelected ?ths })
-        FILTER (not exists {?inDLDw :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
-        ?inDLDw :instanceReproductionOf ?mw .
-        FILTER (not exists {?inDLDw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
-        ?mw :instanceOf ?wa .
-        ?wa :language bdr:LangBo .
+      ?wadm adm:access bda:AccessOpen ;
+            adm:status bda:StatusReleased ;
+            adm:adminAbout ?inDLDw .
+      FILTER (exists {?inDLDw tmp:thumbnailIIIFService ?ths } || exists {?inDLDw tmp:thumbnailIIIFSelected ?ths })
+      FILTER (not exists {?inDLDw :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
+      ?inDLDw :instanceReproductionOf ?mw .
+      FILTER (not exists {?inDLDw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
+      ?mw :instanceOf ?wa .
+      ?wa :language bdr:LangBo .
+    
+      { ?inDLDw tmp:thumbnailIIIFService ?th . }
+      union
+      { ?inDLDw tmp:thumbnailIIIFSelected ?th . }
 
       ?wa skos:prefLabel ?resL .
 
@@ -69,6 +68,11 @@ WHERE
       FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
         && ?ip != bdo:colophon && ?ip != bdo:incipit)
 
+
+      { ?inDLDw tmp:thumbnailIIIFService ?th . }
+      union
+      { ?inDLDw tmp:thumbnailIIIFSelected ?th . }
+
     } union {
         ?wadm adm:access bda:AccessOpen ;
               adm:status bda:StatusReleased ;
@@ -85,18 +89,26 @@ WHERE
       ?agent skos:prefLabel ?agentL .
       bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
 
+      { ?inDLDw tmp:thumbnailIIIFService ?th . }
+      union
+      { ?inDLDw tmp:thumbnailIIIFSelected ?th . }
+
     } union {
-        ?wadm adm:access bda:AccessOpen ;
-              adm:status bda:StatusReleased ;
-              adm:adminAbout ?inDLDw .
-        FILTER (exists {?inDLDw tmp:thumbnailIIIFService ?ths } || exists {?inDLDw tmp:thumbnailIIIFSelected ?ths })
-        FILTER (not exists {?inDLDw :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
-        ?inDLDw :instanceReproductionOf ?mw .
-        FILTER (not exists {?inDLDw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
-        ?mw :instanceOf ?wa .
-        ?wa :language bdr:LangBo .
+      ?wadm adm:access bda:AccessOpen ;
+            adm:status bda:StatusReleased ;
+            adm:adminAbout ?inDLDw .
+      FILTER (exists {?inDLDw tmp:thumbnailIIIFService ?ths } || exists {?inDLDw tmp:thumbnailIIIFSelected ?ths })
+      FILTER (not exists {?inDLDw :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
+      ?inDLDw :instanceReproductionOf ?mw .
+      FILTER (not exists {?inDLDw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
+      ?mw :instanceOf ?wa .
+      ?wa :language bdr:LangBo .
       ?wa ?wp ?wo .
       FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
       ?wo skos:prefLabel ?wol .
+
+      { ?inDLDw tmp:thumbnailIIIFService ?th . }
+      union
+      { ?inDLDw tmp:thumbnailIIIFSelected ?th . }
     }
 }
