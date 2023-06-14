@@ -40,7 +40,7 @@ WHERE
       FILTER (exists {?inDLDw tmp:thumbnailIIIFService ?th})
       FILTER (not exists {?inDLDw :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
       ?inDLDw :instanceReproductionOf ?mw .
-      FILTER (not exists {?mw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
+      #FILTER (not exists {?mw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
       FILTER (not exists {?inDLDw :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
       FILTER (exists {?mw :instanceOf ?wa . ?wa :language bdr:LangBo .} || (not exists {?mw :instanceOf ?wa} && exists {?mw :script ?sc FILTER(?sc = bdr:ScriptTibt || ?sc = bdr:ScriptDbuCan || ?sc = bdr:ScriptDbuMed)}))
       
@@ -59,7 +59,7 @@ WHERE
         FILTER (exists {?inDLDw tmp:thumbnailIIIFService ?th})
         FILTER (not exists {?inDLDw :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
         ?inDLDw :instanceReproductionOf ?mw .
-        FILTER (not exists {?mw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
+        #FILTER (not exists {?mw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
         FILTER (not exists {?inDLDw :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
         ?mw :instanceOf ?wa .
         ?wa :language bdr:LangBo .
@@ -76,7 +76,7 @@ WHERE
       FILTER (exists {?inDLDw tmp:thumbnailIIIFService ?th})
       FILTER (not exists {?inDLDw :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
       ?inDLDw :instanceReproductionOf ?mw .
-      FILTER (not exists {?mw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
+      #FILTER (not exists {?mw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
       FILTER (not exists {?inDLDw :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
       ?mw :instanceOf ?wa .
       ?wa :language bdr:LangBo .
