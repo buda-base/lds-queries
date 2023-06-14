@@ -26,7 +26,8 @@ select distinct ?w where {
     FILTER (not exists {?w :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
     FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
     ?mw :script ?sc .
-    FILTER(?sc = bdr:ScriptTibt || ?sc = bdr:ScriptDbuCan || ?sc bdr:ScriptDbuMed) .
+    FILTER(?sc = bdr:ScriptTibt || ?sc = bdr:ScriptDbuCan || ?sc = bdr:ScriptDbuMed) .
+    # so as to not include Dzonkha works
     FILTER(not exists {?mw :instanceOf ?wa .})
   }
 }
