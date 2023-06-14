@@ -12,7 +12,7 @@ select distinct ?w where {
     FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
     FILTER (not exists {?w :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
     ?w :instanceReproductionOf ?mw .
-    #FILTER (not exists {?mw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
+    FILTER (not exists {?mw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) } || exists {?mw :printMethod ?pm FILTER(?pm = bdr:PrintMethod_Manuscript || ?pm = bdr:PrintMethod_Relief_WoodBlock)})
     FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
     ?mw :instanceOf ?wa .
     ?wa :language bdr:LangBo .
@@ -23,7 +23,7 @@ select distinct ?w where {
     FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
     FILTER (not exists {?w :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
     ?w :instanceReproductionOf ?mw .
-    #FILTER (not exists {?mw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
+    FILTER (not exists {?mw :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) } || exists {?mw :printMethod ?pm FILTER(?pm = bdr:PrintMethod_Manuscript || ?pm = bdr:PrintMethod_Relief_WoodBlock)})
     FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
     ?mw :script ?sc .
     FILTER(?sc = bdr:ScriptTibt || ?sc = bdr:ScriptDbuCan || ?sc = bdr:ScriptDbuMed) .
