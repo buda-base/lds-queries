@@ -5,13 +5,28 @@
 #QueryUrl=/AO_mustbeinDLD
 
 select distinct ?w where {
-  ?wadm adm:access bda:AccessOpen ;
-        adm:status bda:StatusReleased ;
-        adm:adminAbout ?w .
-  FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
-  FILTER (not exists {?w :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
-  ?w :instanceReproductionOf ?mw .
-  FILTER (not exists {?w :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
-  ?mw :instanceOf ?wa .
-  ?wa :language bdr:LangBo .
+  {
+    ?wadm adm:access bda:AccessOpen ;
+          adm:status bda:StatusReleased ;
+          adm:adminAbout ?w .
+    FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
+    FILTER (not exists {?w :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
+    ?w :instanceReproductionOf ?mw .
+    FILTER (not exists {?w :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
+    FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
+    ?mw :instanceOf ?wa .
+    ?wa :language bdr:LangBo .
+  } union {
+    ?wadm adm:access bda:AccessOpen ;
+          adm:status bda:StatusReleased ;
+          adm:adminAbout ?w .
+    FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
+    FILTER (not exists {?w :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
+    ?w :instanceReproductionOf ?mw .
+    FILTER (not exists {?w :copyrightStatus ?cs FILTER(?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed) })
+    FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
+    ?mw :script ?sc .
+    FILTER(?sc = bdr:ScriptTibt || ?sc = bdr:ScriptDbuCan || ?sc bdr:ScriptDbuMed) .
+    FILTER(not exists {?mw :instanceOf ?wa .})
+  }
 }
