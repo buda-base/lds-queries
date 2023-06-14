@@ -1,7 +1,7 @@
 #QueryScope=ImageInstance
 #QueryReturnType=Graph
 #QueryResults=All image instances that must be on DLD for distribution outside of China
-#QueryUrl=/AO_mustbeinDLD_withdata
+#QueryUrl=/AO_mustbeinDLD_withdata_China
 
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
@@ -37,6 +37,7 @@ WHERE
       ?wadm adm:access bda:AccessOpen ;
             adm:status bda:StatusReleased ;
             adm:adminAbout ?inDLDw .
+      FILTER (not exists {?wadm adm:restrictedInChina true })
       FILTER (exists {?inDLDw tmp:thumbnailIIIFService ?th})
       FILTER (not exists {?inDLDw :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
       ?inDLDw :instanceReproductionOf ?mw .
@@ -56,6 +57,7 @@ WHERE
         ?wadm adm:access bda:AccessOpen ;
               adm:status bda:StatusReleased ;
               adm:adminAbout ?inDLDw .
+        FILTER (not exists {?wadm adm:restrictedInChina true })
         FILTER (exists {?inDLDw tmp:thumbnailIIIFService ?th})
         FILTER (not exists {?inDLDw :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
         ?inDLDw :instanceReproductionOf ?mw .
@@ -73,6 +75,7 @@ WHERE
       ?wadm adm:access bda:AccessOpen ;
             adm:status bda:StatusReleased ;
             adm:adminAbout ?inDLDw .
+      FILTER (not exists {?wadm adm:restrictedInChina true })
       FILTER (exists {?inDLDw tmp:thumbnailIIIFService ?th})
       FILTER (not exists {?inDLDw :inCollection ?c FILTER(?c = bdr:PR1KDPP00 || ?c = bdr:PR1FPL01 )})
       ?inDLDw :instanceReproductionOf ?mw .
