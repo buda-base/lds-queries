@@ -11,12 +11,11 @@ PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 CONSTRUCT
 {
-    ?res tmp:status bda:StatusReleased .
+    ?res tmp:status ?status .
     ?res tmp:isMain true .
-    ?res skos:prefLabel ?label .
-    
-    # not needed
-    #?res ?resp ?reso .
+    ?res ?resp ?reso .
+    ?res tmp:nbMembers ?nbMembers .
+    ?res tmp:nbParts ?nbParts .
 }
 WHERE 
 {
