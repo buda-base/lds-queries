@@ -20,12 +20,41 @@ CONSTRUCT
 }
 WHERE 
 {
-  values (?c) { ?R_SUBSCRIBED_LIST }
-  ?c a bdo:Collection .
-  BIND(?c as ?res)
-  ?c skos:prefLabel ?label .
-  
-  # not needed
-  #?c ?resp ?reso .
+  {
 
+    values (?c) { ?R_SUBSCRIBED_LIST }
+    ?c a bdo:Collection .
+    BIND(?c as ?res)
+    
+    FILTER(not exists {?res :partOf ?top})
+    VALUES ?resp { skos:altLabel skos:prefLabel owl:sameAs rdfs:seeAlso tmp:entityScore}
+    ?res ?resp ?reso .
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status ?st .
+    
+  } union {
+
+    select ?res (count(?m) as ?nbMembers) (count(?p) as ?nbParts) {
+      {
+  
+        values (?c) { ?R_SUBSCRIBED_LIST }
+        ?c a bdo:Collection .
+        BIND(?c as ?res)
+  
+        FILTER(not exists {?res :partOf ?top})
+        ?m bdo:inCollection ?res .
+      } union {
+
+        values (?c) { ?R_SUBSCRIBED_LIST }
+        ?c a bdo:Collection .
+        BIND(?c as ?res)
+        
+        FILTER(not exists {?res :partOf ?top})
+        ?res bdo:hasPart ?p .
+      }
+    } group by ?res
+
+  }
+
+  
 }
