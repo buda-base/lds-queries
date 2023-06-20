@@ -13,12 +13,19 @@ CONSTRUCT
 {
     ?res tmp:status bda:StatusReleased .
     ?res tmp:isMain true .
-    ?res ?resp ?reso .
+    ?res skos:prefLabel ?label .
+    
+    # not needed
+    #?res ?resp ?reso .
 }
 WHERE 
 {
   values (?c) { ?R_SUBSCRIBED_LIST }
   ?c a bdo:Collection .
   BIND(?c as ?res)
-  ?c ?resp ?reso .
+  ?c skos:prefLabel ?label .
+  
+  # not needed
+  #?c ?resp ?reso .
+
 }
