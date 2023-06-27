@@ -125,7 +125,9 @@ WHERE
         ?i a/rdfs:subClassOf* bdo:Instance .
         ?aac bdo:role ?rel3 .
       }
-      ?i :inRootInstance?/:instanceHasReproduction ?ii .
+      ?i :inRootInstance? ?iRoot .
+      FILTER (not exists {?iRAdm adm:adminAbout ?iRoot ; adm:status bda:StatusHidden})
+      ?iRoot :instanceHasReproduction ?ii .
       FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
       ?iiAdm adm:adminAbout ?ii ;
                adm:access ?access .
@@ -144,6 +146,10 @@ WHERE
       }
       ?i bdo:instanceOf ?w .
       FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+
+      FILTER (not exists {?iadm adm:adminAbout ?i ; adm:status bda:StatusHidden})
+      FILTER (not exists {?i :inRootInstance ?iroot . ?iRAdm adm:adminAbout ?iroot ; adm:status bda:StatusHidden})
+
       ?i :instanceEvent ?evt .
       ?evt ?evtp ?evto .
       BIND (IF(?evtp = bdo:onYear || ?evtp = bdo:notBefore, ?evto, 1/0) as ?yearStart)
@@ -163,6 +169,10 @@ WHERE
       }
       ?i bdo:instanceOf ?w .
       FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+
+      FILTER (not exists {?iadm adm:adminAbout ?i ; adm:status bda:StatusHidden})
+      FILTER (not exists {?i :inRootInstance ?iroot . ?iRAdm adm:adminAbout ?iroot ; adm:status bda:StatusHidden})
+
       ?w bdo:creator ?creator .
       ?creator bdo:role ?role .
       ?creator bdo:agent ?agent .
@@ -188,6 +198,10 @@ WHERE
       }
       ?i bdo:instanceOf ?w .
       FILTER ( NOT EXISTS {?i :instanceReproductionOf ?reprof })
+
+      FILTER (not exists {?iadm adm:adminAbout ?i ; adm:status bda:StatusHidden})
+      FILTER (not exists {?i :inRootInstance ?iroot . ?iRAdm adm:adminAbout ?iroot ; adm:status bda:StatusHidden})
+
       ?w ?wiip ?wiio .
       FILTER(?wiip IN(bdo:language , bdo:catalogInfo, bdo:workIsAbout , bdo:workGenre))
     } union {
@@ -204,6 +218,9 @@ WHERE
         ?i a/rdfs:subClassOf* bdo:Instance .
       }
       ?i :inRootInstance? ?iroot .
+
+      FILTER (not exists {?iRAdm adm:adminAbout ?iroot ; adm:status bda:StatusHidden})
+
       ?iroot :serialInstanceOf ?was .
       ?was skos:prefLabel ?wasiil .
       ?iroot bdo:seriesNumber ?sn .
