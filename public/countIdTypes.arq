@@ -8,9 +8,10 @@
 #param.L_ID.desc=the id
 
 select ?type (count (distinct ?e) as ?count) where {
-	{
-		?id rdf:value ?L_ID .
-		?e bf:identifiedBy ?id .
-		?e a ?type .
-	}
+  {
+    ?id rdf:value ?L_ID .
+    ?e bf:identifiedBy ?id .
+    ?e a ?type .
+  }
+  FILTER(exists {?eadm adm:adminAbout ?e ; adm:status bda:StatusReleased .} || exists {?e :inRootInstance ?eR . ?eadm adm:adminAbout ?eR ; adm:status bda:StatusReleased .})
 } group by ?type 

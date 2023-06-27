@@ -70,6 +70,8 @@ CONSTRUCT {
 
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?status .
+    FILTER(?status != bda:StatusHidden)
+
     ?resAdm adm:metadataLegal/adm:provider ?provider .
     ?resAdm adm:access ?access .
 
@@ -100,6 +102,9 @@ CONSTRUCT {
 
     ?res :instanceReproductionOf ?resi ;
          a bdo:ImageInstance .
+
+    FILTER(not exists {?resAdm adm:adminAbout ?res ; ?resAdm adm:status bda:StatusHidden })
+
     ?res bdo:instanceOf ?resW .
     
     ?resW bdo:creator ?creator .
@@ -133,6 +138,9 @@ CONSTRUCT {
 
     ?res :instanceReproductionOf ?resi ;
          a bdo:ImageInstance .
+
+    FILTER(not exists {?resAdm adm:adminAbout ?res ; ?resAdm adm:status bda:StatusHidden })
+
     ?res bdo:instanceOf ?resW .
     
     ?resW ?resWiip ?resWiio .
@@ -159,6 +167,9 @@ CONSTRUCT {
 
     ?res :instanceReproductionOf ?resi ;
          a bdo:ImageInstance .
+
+    FILTER(not exists {?resAdm adm:adminAbout ?res ; ?resAdm adm:status bda:StatusHidden })
+
     ?res bdo:instanceOf ?resW .
     
     ?resW ?resWpp ?resWoo .

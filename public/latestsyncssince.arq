@@ -25,7 +25,8 @@ construct {
       {
         select ?ii ?sdate
         where {
-          ?iiAdm tmp:lastSync ?sdate .
+          ?iiAdm tmp:lastSync ?sdate ;
+                 adm:status bda:StatusReleased .
           FILTER(?sdate > ?D_SINCE)
           ?iiAdm adm:adminAbout ?ii .
         } order by desc(?sdate) limit 10
@@ -35,7 +36,8 @@ construct {
       {
         select ?ii ?sdate
         where {
-          ?iiAdm tmp:lastSync ?sdate .
+          ?iiAdm tmp:lastSync ?sdate ;
+                 adm:status bda:StatusReleased .
           FILTER(?sdate > ?D_SINCE)
           ?iiAdm adm:adminAbout ?ii .
         } order by desc(?sdate) limit 10

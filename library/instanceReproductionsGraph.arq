@@ -23,6 +23,7 @@ CONSTRUCT {
       ?R_RES :inRootInstance?/:instanceHasReproduction ?iinstance .
       ?adm adm:adminAbout ?iinstance .
       ?adm adm:status ?status .
+      FILTER(?status != bda:StatusHidden)
       ?adm adm:access ?access .
       ?adm adm:metadataLegal/adm:provider ?provider .
       ?iinstance ?iinstancep ?iinstanceo .

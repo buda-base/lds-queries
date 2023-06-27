@@ -72,6 +72,7 @@ WHERE
 
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?status .
+    FILTER(?status != bda:StatusHidden)
     ?resAdm adm:metadataLegal/adm:provider ?provider .
 
     ?res ?resp ?reso .
@@ -83,6 +84,9 @@ WHERE
     
     ?w :inCollection ?R_RES .
     ?w :instanceReproductionOf ?res .
+
+    FILTER (not exists {?resAdm adm:adminAbout ?res ; adm:status bda:StatusHidden})
+    FILTER (not exists {?res :inRootInstance ?resR . ?resAdm adm:adminAbout ?resR ; adm:status bda:StatusHidden})
 
     ?res :inRootInstance? ?resR2 .
     ?resR2 :instanceEvent ?evt .
@@ -97,6 +101,9 @@ WHERE
     
     ?w :inCollection ?R_RES .
     ?w :instanceReproductionOf ?res .
+
+    FILTER (not exists {?resAdm adm:adminAbout ?res ; adm:status bda:StatusHidden})
+    FILTER (not exists {?res :inRootInstance ?resR . ?resAdm adm:adminAbout ?resR ; adm:status bda:StatusHidden})
 
     ?res bdo:instanceOf ?resW .
     
@@ -116,6 +123,9 @@ WHERE
     ?w :inCollection ?R_RES .
     ?w :instanceReproductionOf ?res .
 
+    FILTER (not exists {?resAdm adm:adminAbout ?res ; adm:status bda:StatusHidden})
+    FILTER (not exists {?res :inRootInstance ?resR . ?resAdm adm:adminAbout ?resR ; adm:status bda:StatusHidden})
+
     ?res bdo:instanceOf ?resW .
     
     ?resW ?resWiip ?resWiio .
@@ -126,6 +136,9 @@ WHERE
     
     ?w :inCollection ?R_RES .
     ?w :instanceReproductionOf ?res .
+
+    FILTER (not exists {?resAdm adm:adminAbout ?res ; adm:status bda:StatusHidden})
+    FILTER (not exists {?res :inRootInstance ?resR . ?resAdm adm:adminAbout ?resR ; adm:status bda:StatusHidden})
 
     ?res bdo:instanceOf ?resW .
     
@@ -141,6 +154,7 @@ WHERE
     ?res :inRootInstance ?resR .
     ?resRAdm adm:adminAbout ?resR .
     ?resRAdm adm:status ?status .
+    FILTER (?status != bda:StatusHidden)
     ?resRAdm adm:metadataLegal/adm:provider ?provider .
 
     ?resR skos:prefLabel ?resRl .
@@ -155,6 +169,7 @@ WHERE
     ?res :inRootInstance ?resR .
     ?resRAdm adm:adminAbout ?resR .
     ?resRAdm adm:status ?status .
+    FILTER (?status != bda:StatusHidden)
     ?resRAdm adm:metadataLegal/adm:provider ?provider .
 
     ?resR skos:prefLabel ?resRl .

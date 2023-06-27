@@ -60,7 +60,7 @@ WHERE
       ?iiAdm adm:status ?status .
       # do not show non-open access in CTC
       # ex: W1KG25482 in PR1CTC14
-      FILTER(?access = bda:AccessOpen || not exists {?R_RES skos:prefLabel ?resL . FILTER(contains(?resL, "Core Text"))})
+      FILTER(?status != bda:StatusHidden && (?access = bda:AccessOpen || not exists {?R_RES skos:prefLabel ?resL . FILTER(contains(?resL, "Core Text"))}))
       ?ii :instanceReproductionOf ?i .
       ?i ?ip ?io .
       FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
@@ -76,7 +76,7 @@ WHERE
       ?iiAdm adm:access ?access .
       bind( ?access = bda:AccessOpen as ?iAccessOpen)
       ?iiAdm adm:status ?status .
-      FILTER(?access = bda:AccessOpen || not exists {?R_RES skos:prefLabel ?resL . FILTER(contains(?resL, "Core Text"))})
+      FILTER(?status != bda:StatusHidden && (?access = bda:AccessOpen || not exists {?R_RES skos:prefLabel ?resL . FILTER(contains(?resL, "Core Text"))}))
       # optional scanInfo
       ?ii bdo:scanInfo ?si .
     } union {
@@ -90,7 +90,7 @@ WHERE
       ?iiAdm adm:access ?access .
       bind( ?access = bda:AccessOpen as ?iAccessOpen)
       ?iiAdm adm:status ?status .
-      FILTER(?access = bda:AccessOpen || not exists {?R_RES skos:prefLabel ?resL . FILTER(contains(?resL, "Core Text"))})
+      FILTER(?status != bda:StatusHidden && (?access = bda:AccessOpen || not exists {?R_RES skos:prefLabel ?resL . FILTER(contains(?resL, "Core Text"))}))
       ?ii bdo:instanceOf ?w .
       ?w bdo:creator ?creator .
       ?creator bdo:role ?role .
@@ -108,7 +108,7 @@ WHERE
       ?iiAdm adm:access ?access .
       bind( ?access = bda:AccessOpen as ?iAccessOpen)
       ?iiAdm adm:status ?status .
-      FILTER(?access = bda:AccessOpen || not exists {?R_RES skos:prefLabel ?resL . FILTER(contains(?resL, "Core Text"))})
+      FILTER(?status != bda:StatusHidden && (?access = bda:AccessOpen || not exists {?R_RES skos:prefLabel ?resL . FILTER(contains(?resL, "Core Text"))}))
       ?ii bdo:instanceOf ?w .
       ?w ?wiip ?wiio .
       FILTER(?wiip IN(bdo:language , bdo:catalogInfo))
@@ -123,7 +123,7 @@ WHERE
       ?iiAdm adm:access ?access .
       bind( ?access = bda:AccessOpen as ?iAccessOpen)
       ?iiAdm adm:status ?status .
-      FILTER(?access = bda:AccessOpen || not exists {?R_RES skos:prefLabel ?resL . FILTER(contains(?resL, "Core Text"))})
+      FILTER(?status != bda:StatusHidden && (?access = bda:AccessOpen || not exists {?R_RES skos:prefLabel ?resL . FILTER(contains(?resL, "Core Text"))}))
       ?ii bdo:instanceOf ?w .
       ?w ?wp ?wo .
       FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))

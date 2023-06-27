@@ -84,11 +84,14 @@ CONSTRUCT {
 
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
 
+    ?res :inRootInstance? ?resR2 .
+
     # no results in non-released outlines
     FILTER ( ?res = ?resR2 || NOT EXISTS { graph ?og { ?res :inRootInstance ?resR2 . ?o :outlineOf ?resR2 . ?res a :Instance . ?oadm adm:adminAbout ?o ; adm:status ?st FILTER(?st != bda:StatusReleased) } } )
 
-    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:adminAbout ?resR2 .
     ?resAdm adm:status ?status .
+    FILTER(?status != bda:StatusHidden)
     ?resAdm adm:metadataLegal/adm:provider ?provider .
 
     ?res ?resp ?reso .
@@ -117,6 +120,9 @@ CONSTRUCT {
 
     # no results in non-released outlines
     FILTER ( ?res = ?resR2 || NOT EXISTS { graph ?og {?o :outlineOf ?resR2 . ?res a :Instance . ?oadm adm:adminAbout ?o ; adm:status ?st FILTER(?st != bda:StatusReleased) } } )
+
+    # no hidden results
+    FILTER(not exists {?resAdm adm:adminAbout ?resR2 ; adm:status bda:StatusHidden})
 
     ?resR2 :instanceEvent ?evt .
 
@@ -147,6 +153,8 @@ CONSTRUCT {
     # no results in non-released outlines
     FILTER ( ?res = ?resR2 || NOT EXISTS { graph ?og {?o :outlineOf ?resR2 . ?res a :Instance . ?oadm adm:adminAbout ?o ; adm:status ?st FILTER(?st != bda:StatusReleased) } } )
 
+    FILTER(not exists {?resAdm adm:adminAbout ?resR2 ; adm:status bda:StatusHidden})
+
     ?resR2 bdo:serialInstanceOf ?was .
     ?was skos:prefLabel ?wasiil .
     ?resR2 bdo:seriesNumber ?sn .
@@ -171,6 +179,10 @@ CONSTRUCT {
 
     # no results in non-released outlines
     FILTER ( NOT EXISTS { graph ?og { ?res :inRootInstance ?resR2 . ?o :outlineOf ?resR2 . ?res a :Instance . ?oadm adm:adminAbout ?o ; adm:status ?st FILTER(?st != bda:StatusReleased) } } )
+    
+    # no hidden results
+    FILTER( not exists {?resAdm adm:adminAbout ?res ; adm:status bda:StatusHidden})
+    FILTER( not exists {?res :inRootInstance ?resR . ?resAdm adm:adminAbout ?resR ; adm:status bda:StatusHidden})
 
     ?res bdo:instanceOf ?resW .
     
@@ -206,6 +218,10 @@ CONSTRUCT {
     # no results in non-released outlines
     FILTER ( NOT EXISTS { graph ?og { ?res :inRootInstance ?resR2 . ?o :outlineOf ?resR2 . ?res a :Instance . ?oadm adm:adminAbout ?o ; adm:status ?st FILTER(?st != bda:StatusReleased) } } )
 
+    # no hidden results
+    FILTER( not exists {?resAdm adm:adminAbout ?res ; adm:status bda:StatusHidden})
+    FILTER( not exists {?res :inRootInstance ?resR . ?resAdm adm:adminAbout ?resR ; adm:status bda:StatusHidden})
+
     ?res bdo:instanceOf ?resW .
     
     ?resW ?resWiip ?resWiio .
@@ -230,8 +246,9 @@ CONSTRUCT {
     }
     FILTER ( NOT EXISTS {?res :instanceReproductionOf ?reprof })
 
-    # no results in non-released outlines
-    FILTER ( NOT EXISTS { graph ?og { ?res :inRootInstance ?resR2 . ?o :outlineOf ?resR2 . ?res a :Instance . ?oadm adm:adminAbout ?o ; adm:status ?st FILTER(?st != bda:StatusReleased) } } )
+    # no hidden results
+    FILTER( not exists {?resAdm adm:adminAbout ?res ; adm:status bda:StatusHidden})
+    FILTER( not exists {?res :inRootInstance ?resR . ?resAdm adm:adminAbout ?resR ; adm:status bda:StatusHidden})
 
     ?res bdo:instanceOf ?resW .
     
@@ -262,6 +279,9 @@ CONSTRUCT {
     ?res :inRootInstance? ?resR2 .
     # no results in non-released outlines
     FILTER ( ?res = ?resR2 || NOT EXISTS { graph ?og {?o :outlineOf ?resR2 . ?res a :Instance . ?oadm adm:adminAbout ?o ; adm:status ?st FILTER(?st != bda:StatusReleased) } } )
+
+    # no hidden results
+    FILTER( not exists {?resAdm adm:adminAbout ?resR2 ; adm:status bda:StatusHidden})
 
     ?resR2 :instanceHasReproduction? ?resRep .
     ?resRepAdm adm:adminAbout ?resRep ;
@@ -297,6 +317,8 @@ CONSTRUCT {
     ?res :inRootInstance? ?resR2 .
     # no results in non-released outlines
     FILTER ( ?res = ?resR2 || NOT EXISTS { graph ?og {?o :outlineOf ?resR2 . ?res a :Instance . ?oadm adm:adminAbout ?o ; adm:status ?st FILTER(?st != bda:StatusReleased) } } )
+    # no hidden results
+    FILTER( not exists {?resAdm adm:adminAbout ?resR2 ; adm:status bda:StatusHidden})
 
     ?resR2 :instanceHasReproduction? ?resRep .
     ?resRep :inCollection ?collection . 
@@ -327,6 +349,7 @@ CONSTRUCT {
 
     ?resRAdm adm:adminAbout ?resR .
     ?resRAdm adm:status ?status .
+    FILTER(?status != bda:StatusHidden)
     ?resRAdm adm:metadataLegal/adm:provider ?provider .
 
     ?resR skos:prefLabel ?resRl .

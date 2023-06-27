@@ -41,5 +41,6 @@ WHERE
     ?res ?resp ?reso .
     ?resAdm adm:adminAbout ?res .
     ?resAdm adm:status ?st .
+    FILTER(?st != bda:StatusHidden)
     ?resAdm adm:metadataLegal/adm:provider ?provider .
 }

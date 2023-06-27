@@ -278,6 +278,7 @@ construct {
     # add repro+thumbnail for versions
     ?r owl:sameAs* ?R_RES .
     ?r :workHasInstance ?version .
+    FILTER(exists{?vadm adm:adminAbout ?version ; adm:status bda:StatusReleased })
     ?version :instanceHasReproduction ?repro .
     ?repro a bdo:ImageInstance .
   } union {
@@ -285,6 +286,7 @@ construct {
     ?r owl:sameAs* ?R_RES .
     ?r :workHasInstance ?version .
     ?version :inRootInstance ?rootV .
+    FILTER(exists{?vadm adm:adminAbout ?rootV ; adm:status bda:StatusReleased })
     ?rootV :instanceHasReproduction ?repro .
     ?repro a bdo:ImageInstance .
   } union {
@@ -297,6 +299,7 @@ construct {
     # add provider for versions
     ?r owl:sameAs* ?R_RES .
     ?r :workHasInstance ?version .
+    FILTER(exists{?vadm adm:adminAbout ?version ; adm:status bda:StatusReleased })
     ?qv adm:adminAbout ?version .
     ?qv adm:metadataLegal/adm:provider ?qvop .
   } union {
@@ -304,6 +307,7 @@ construct {
     ?r owl:sameAs* ?R_RES .
     ?r :instanceHasReproduction ?version .
     ?version :inRootInstance? ?rootV .
+    FILTER(exists{?vadm adm:adminAbout ?rootV ; adm:status bda:StatusReleased })
     ?rootV tmp:thumbnailIIIFService ?vThumb .
   } union {
     # add items with collections
