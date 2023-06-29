@@ -9,17 +9,11 @@
 #param.R_RES.desc=the unique resource ID of the chosen resource
 
 construct { ?s ?p ?o } where {
-  {
-  	# for resources
-	?rAdm adm:graphId ?R_RES ;
-	      adm:adminAbout ?entity .
-	FILTER ((NOT EXISTS {?entity :eTextInInstance ?inst }) || (EXISTS {?entity :eTextInInstance/^adm:adminAbout/adm:access bda:AccessOpen}))
+  ?rAdm adm:graphId ?R_RES ;
+        adm:adminAbout ?entity ;
+        adm:status ?st .
+  FILTER (?st != bda:StatusHidden)
+  FILTER (not exists {?rAdm adm:access ?acc FILTER(?acc != bda:AccessOpen)})
+  FILTER ((NOT EXISTS {?entity :eTextInInstance ?inst }) || (EXISTS {?entity :eTextInInstance/^adm:adminAbout/adm:access bda:AccessOpen}))
     graph ?R_RES { ?s ?p ?o }
-  } union {
-  	# for non-resources:
-  	graph ?R_RES { 
-      FILTER (NOT EXISTS{?a adm:adminAbout ?e})
-      ?s ?p ?o .
-    }
-  }
 }
