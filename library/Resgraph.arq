@@ -13,7 +13,7 @@ construct { ?s ?p ?o } where {
         adm:adminAbout ?entity ;
         adm:status ?st .
   FILTER (?st != bda:StatusHidden)
-  FILTER (not exists {?rAdm adm:access ?acc FILTER(?acc != bda:AccessOpen)})
+  FILTER (not exists {?entity a :EtextInstance . ?rAdm adm:access ?acc FILTER(?acc != bda:AccessOpen)})
   FILTER ((NOT EXISTS {?entity :eTextInInstance ?inst }) || (EXISTS {?entity :eTextInInstance/^adm:adminAbout/adm:access bda:AccessOpen}))
     graph ?R_RES { ?s ?p ?o }
 }
