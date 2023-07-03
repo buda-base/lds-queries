@@ -1,0 +1,69 @@
+#QueryScope=Etexts
+#QueryReturnType=Graph
+#QueryResults=all commits of the Openpecha graphs
+#QueryParams=R_RES
+#QueryUrl=/OP_workInfo?R_RES=bdr:W12827
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=bdo:Entity
+#param.R_RES.desc=the image instance on which info is needed
+
+construct {
+  ?R_RES ?wap ?wao .
+  ?R_RES :creator ?aac .
+  ?aac :role bdr:R0ER0019 ;
+       :agent ?p .
+  ?p ?pp ?po .
+  ?wa_c :workIsAbout ?R_RES ;
+        ?wa_cp ?wa_co .
+  ?R_RES :workHasInstance ?i .
+  ?R_RES tmp:workHasEtextReproduction ?etext .
+  ?R_RES tmp:workHasEtextReproductionIn ?etextR .
+} where {
+  # This query is intended for use by MonlamAI / OpenPecha for work / version grouping
+  # and commentary finding
+  {
+    # work titles
+    ?R_RES ?wap ?wao .
+    FILTER(?wap = skos:prefLabel || ?wap = skos:altlabel)
+  } union {
+    # author names
+    ?R_RES :creator ?aac .
+    ?aac :role bdr:R0ER0019 ;
+        :agent ?p .
+    ?p ?pp ?po .
+    FILTER(?pp = skos:prefLabel || ?pp = skos:altlabel)
+  } union {
+    # commentaries IDs and titles
+    ?wa_c :workIsAbout ?R_RES .
+    ?wa_cadm adm:adminAbout ?wa_c ;
+             adm:status bda:StatusReleased .
+    ?wa_c ?wa_cp ?wa_co .
+    FILTER(?wa_cp = skos:prefLabel || ?wa_cp = skos:altlabel)
+  } union {
+    # instances
+    ?R_RES :workHasInstance ?i .
+    ?iadm adm:adminAbout ?i ;
+          adm:status bda:StatusReleased .
+    FILTER(not exists {?i :instanceReproductionOf ?o})
+  } union {
+    # etext reproductions of instances
+    ?R_RES :workHasInstance ?i .
+    ?iadm adm:adminAbout ?i ;
+          adm:status bda:StatusReleased .
+    ?i :instanceHasReproduction ?etext .
+    ?etext a :EtextInstance .
+    ?etextadm adm:adminAbout ?etext ;
+          adm:status bda:StatusReleased .
+  } union {
+    # etext reproductions of root instances
+    ?R_RES :workHasInstance ?i .
+    ?i :inRootInstance ?iR .
+    ?iRadm adm:adminAbout ?iR ;
+          adm:status bda:StatusReleased .
+    ?iR :instanceHasReproduction ?etextR .
+    ?etextR a :EtextInstance .
+    ?etextRadm adm:adminAbout ?etextR ;
+          adm:status bda:StatusReleased .
+  }
+}
