@@ -1,0 +1,38 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=All image instances about a tradition or by authors of a tradition
+#QueryParams=R_RES
+#QueryUrl=/AO_tradition_drive?R_RES=bdr:TraditionNyingma
+
+#param.R_RES.type=resource
+#param.R_RES.desc=the tradition
+
+select distinct ?w WHERE 
+{
+    {
+      ?R_RES rdfs:seeAlso* ?t .
+      ?wa :workIsAbout ?t .
+      ?mw :instanceOf ?wa ;
+          :instanceHasReproduction ?w .
+      ?w a :ImageInstance .
+      FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
+      FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
+      ?wadm adm:adminAbout ?w ;
+            adm:status bda:StatusReleased ;
+            adm:access ?acc .
+      FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+    } union {
+      ?p :associatedTradition ?R_RES .
+      ?aac :agent ?p .
+      ?wa :creator ?aac .
+      ?mw :instanceOf ?wa ;
+          :instanceHasReproduction ?w .
+      ?w a :ImageInstance .
+      FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
+      FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
+      ?wadm adm:adminAbout ?w ;
+            adm:status bda:StatusReleased ;
+            adm:access ?acc .
+      FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+    }
+}
