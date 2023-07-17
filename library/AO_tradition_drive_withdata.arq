@@ -1,0 +1,82 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Graph
+#QueryResults=All image instances about a tradition or by authors of a tradition
+#QueryParams=R_RES
+#QueryUrl=/AO_tradition_drive?R_RES=bdr:TraditionNyingma
+
+#param.R_RES.type=resource
+#param.R_RES.desc=the tradition
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT
+{
+    ?inDLDw skos:prefLabel ?resL .
+    ?inDLDw a bdo:ImageInstance .
+    ?inDLDw :instanceReproductionOf ?mw .
+
+    ?inDLDw ?ip ?io .
+
+    # We cheat a bit and attach the topic to the instance instead
+    # of the corresponding work
+    ?inDLDw ?wp ?wo .
+    ?wo skos:prefLabel ?wol .
+
+    # Same for the author, entity score and language
+    ?inDLDw tmp:author ?author .
+    ?agent skos:prefLabel ?agentL .
+
+    ?inDLDw tmp:thumbnailIIIFService ?th .
+}
+WHERE 
+{
+    {
+      ?R_RES rdfs:seeAlso* ?t .
+      ?wa :workIsAbout ?t .
+      ?mw :instanceOf ?wa ;
+          :instanceHasReproduction ?w .
+      ?w a :ImageInstance .
+      BIND(?w as ?inDLDw)
+      FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
+      FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
+      ?wadm adm:adminAbout ?w ;
+            adm:status bda:StatusReleased ;
+            adm:access ?acc .
+      FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+      
+      ?mw ?ip ?io .
+      FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
+        && ?ip != bdo:colophon && ?ip != bdo:incipit)
+
+      ?wa bdo:creator ?creator .
+      ?creator bdo:role ?role .
+      ?creator bdo:agent ?agent .
+      ?agent skos:prefLabel ?agentL .
+      bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+
+    } union {
+      ?p :associatedTradition ?R_RES .
+      ?aac :agent ?p .
+      ?wa :creator ?aac .
+      ?mw :instanceOf ?wa ;
+          :instanceHasReproduction ?w .
+      ?w a :ImageInstance .
+      BIND(?w as ?inDLDw)
+      FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
+      FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
+      ?wadm adm:adminAbout ?w ;
+            adm:status bda:StatusReleased ;
+            adm:access ?acc .
+      FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+
+      ?mw ?ip ?io .
+      FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
+        && ?ip != bdo:colophon && ?ip != bdo:incipit)
+
+      ?wa bdo:creator ?creator .
+      ?creator bdo:role ?role .
+      ?creator bdo:agent ?agent .
+      ?agent skos:prefLabel ?agentL .
+      bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
+    }
+}
