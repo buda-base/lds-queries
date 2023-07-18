@@ -98,7 +98,7 @@ WHERE
       FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
         && ?ip != bdo:colophon && ?ip != bdo:incipit)
 
-      ?agent skos:prefLabel ?agentL .
+      ?author skos:prefLabel ?agentL .
 
       ?wa ?wp ?wo .
       FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
