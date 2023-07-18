@@ -11,7 +11,8 @@ select distinct ?w WHERE
 {
     {
       ?R_RES rdfs:seeAlso* ?t .
-      ?wa :workIsAbout ?t .
+      ?wa :workIsAbout ?t ;
+          :language bdr:LangBo .
       ?mw :instanceOf ?wa ;
           :instanceHasReproduction ?w .
       ?w a :ImageInstance .
@@ -21,10 +22,15 @@ select distinct ?w WHERE
             adm:status bda:StatusReleased ;
             adm:access ?acc .
       FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+
     } union {
+
       ?p :associatedTradition ?R_RES .
-      ?aac :agent ?p .
-      ?wa :creator ?aac .
+      ?aac :agent ?p ;
+           :role ?r .
+      filter(?r IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025))
+      ?wa :creator ?aac ;
+          :language bdr:LangBo .
       ?mw :instanceOf ?wa ;
           :instanceHasReproduction ?w .
       ?w a :ImageInstance .

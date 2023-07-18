@@ -24,7 +24,7 @@ CONSTRUCT
 
     # Same for the author, entity score and language
     ?inDLDw tmp:author ?author .
-    ?agent skos:prefLabel ?agentL .
+    ?author skos:prefLabel ?agentL .
 
     ?inDLDw tmp:thumbnailIIIFService ?th .
 }
@@ -32,7 +32,8 @@ WHERE
 {
     {
       ?R_RES rdfs:seeAlso* ?t .
-      ?wa :workIsAbout ?t .
+      ?wa :workIsAbout ?t ;
+          :language bdr:LangBo .
       ?mw :instanceOf ?wa ;
           :instanceHasReproduction ?w .
       ?w a :ImageInstance .
@@ -48,20 +49,40 @@ WHERE
       FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
         && ?ip != bdo:colophon && ?ip != bdo:incipit)
 
-      ?wa bdo:creator ?creator .
-      ?creator bdo:role ?role .
-      ?creator bdo:agent ?agent .
-      ?agent skos:prefLabel ?agentL .
-      bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
-
       ?wa ?wp ?wo .
       FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
       ?wo skos:prefLabel ?wol .
 
     } union {
-      ?p :associatedTradition ?R_RES .
-      ?aac :agent ?p .
-      ?wa :creator ?aac .
+
+      ?R_RES rdfs:seeAlso* ?t .
+      ?wa :workIsAbout ?t ;
+          :language bdr:LangBo .
+      ?mw :instanceOf ?wa ;
+          :instanceHasReproduction ?w .
+      ?w a :ImageInstance .
+      BIND(?w as ?inDLDw)
+      FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
+      FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
+      ?wadm adm:adminAbout ?w ;
+            adm:status bda:StatusReleased ;
+            adm:access ?acc .
+      FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+
+      ?wa bdo:creator ?creator .
+      ?creator bdo:role ?role .
+      filter(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025))
+      ?creator bdo:agent ?author .
+      ?author skos:prefLabel ?agentL .
+
+    } unin {
+
+      ?author :associatedTradition ?R_RES .
+      ?aac :agent ?author ;
+           :role ?r .
+      filter(?r IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025))
+      ?wa :creator ?aac ;
+          :language bdr:LangBo .
       ?mw :instanceOf ?wa ;
           :instanceHasReproduction ?w .
       ?w a :ImageInstance .
@@ -77,11 +98,7 @@ WHERE
       FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
         && ?ip != bdo:colophon && ?ip != bdo:incipit)
 
-      ?wa bdo:creator ?creator .
-      ?creator bdo:role ?role .
-      ?creator bdo:agent ?agent .
       ?agent skos:prefLabel ?agentL .
-      bind( if(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025), ?agent, 1/0) as ?author)
 
       ?wa ?wp ?wo .
       FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
