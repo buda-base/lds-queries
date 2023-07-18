@@ -75,7 +75,7 @@ WHERE
       ?creator bdo:agent ?author .
       ?author skos:prefLabel ?agentL .
 
-    } unin {
+    } union {
 
       ?author :associatedTradition ?R_RES .
       ?aac :agent ?author ;
