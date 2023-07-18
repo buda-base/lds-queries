@@ -2,6 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=All image instances about a tradition or by authors of a tradition
 #QueryParams=R_RES
+#QueryLimit=50000
 #QueryUrl=/AO_tradition_drive?R_RES=bdr:TraditionNyingma
 
 #param.R_RES.type=resource
