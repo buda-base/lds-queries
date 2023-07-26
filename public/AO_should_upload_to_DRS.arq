@@ -2,18 +2,10 @@
 #QueryReturnType=Table
 #QueryResults=Returns a boolean determining if we want to upload an image instance to IA or not
 #QueryParams=R_RES
-#QueryUrl=/AO_should_upload_to_IA?R_RES=bdr:W22084
+#QueryUrl=/AO_should_upload_to_DRS?R_RES=bdr:W22084
 
 #param.R_RES.type=resource
 #param.R_RES.desc=the image instance
-
-# test with:
-# W22084 : true
-# W1KG21821 : false (fair use, digital lending not possible)
-# W22170 : true (fair use, digital lending possible)
-# W22255 : false (restricted sealed)
-# W22303 : false (status not released)
-# W1KG1578 : false (in NLM collection)
 
 ASK
   {
@@ -22,6 +14,6 @@ ASK
     ?wadm adm:adminAbout ?R_RES ;
             adm:status bda:StatusReleased ;
             adm:access ?acc .
-    FILTER(?acc = bda:AccessOpen || (?acc = bda:AccessFairUse && not exists {?R_RES :digitalLendingPossible false}))
+    FILTER(?acc = bda:AccessOpen)
     FILTER(not exists {?R_RES :inCollection bdr:PR1NLM00})
   }
