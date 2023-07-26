@@ -11,9 +11,5 @@ ASK
   {
     ?R_RES a :ImageInstance .
     FILTER (not exists {?R_RES :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
-    ?wadm adm:adminAbout ?R_RES ;
-            adm:status bda:StatusReleased ;
-            adm:access ?acc .
-    FILTER(?acc = bda:AccessOpen)
-    FILTER(not exists {?R_RES :inCollection bdr:PR1NLM00})
+    FILTER(not exists {?R_RES :inCollection bdr:PR1FPL01} && not exists {?R_RES :inCollection bdr:PR1KDPP00})
   }
