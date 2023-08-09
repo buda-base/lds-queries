@@ -9,30 +9,32 @@
 #param.R_RES.desc=the URI of the etext instance
 
 construct {
-	?R_RES :instanceHasVolume ?vol .
-	?vol ?volp ?volo .
-	?eref ?erefp ?erefo .
-	?ut skos:prefLabel ?utl .
+  ?R_RES :instanceHasVolume ?vol .
+  ?vol ?volp ?volo .
   ?utd skos:prefLabel ?utdl .
   ?vol :volumeHasEtext [
      :seqNum ?sn ;
-     :etextResource ?utd .
+     :etextResource ?utd 
   ]
 } where {
   {
-  	?R_RES :instanceHasVolume ?vol .
-  	?vol :volumeHasEtext ?eref .
-    ?eref :eTextResource ?ut .
-    ?ut skos:prefLabel ?utl .
-  	?eref ?erefp ?erefo .
-    ?vol ?volp ?volo .
-  } union {
     # here we construct a virtual EtextRef for the transition
-  	?R_RES :instanceHasVolume ?vol .
-	  ?vol :volumeHasEtext ?utd .
-    ?utd skos:prefLabel ?utdl ;
+    ?R_RES :instanceHasVolume ?vol .
+    ?vol :volumeNumber ?vnum .
+    ?utd :eTextInInstance ?R_RES ;
+         :eTextInVolume ?vnum ;
+         skos:prefLabel ?utdl ;
          :eTextVolumeIndex ?sn . 
-	  ?vol ?volp ?volo .
-    FILTER(?volp != :volumeHasEtext)
+  ?vol ?volp ?volo .
+    FILTER(?volp != :volumeHasEtext && ?volp != rdf:type && ?volp != :volumeOf)
+  } union {
+    ?R_RES :instanceHasVolume ?vol .
+    ?vol :volumeNumber ?vnum .
+    ?utd :eTextInInstance ?R_RES ;
+         :eTextIsolume ?vnum ;
+         skos:prefLabel ?utdl ;
+         :eTextVolumeIndex ?sn . 
+  ?vol ?volp ?volo .
+    FILTER(?volp != :volumeHasEtext && ?volp != rdf:type && ?volp != :volumeOf)
   }
 }
