@@ -12,14 +12,13 @@ construct {
   ?R_RES :instanceHasVolume ?vol .
   ?vol ?volp ?volo .
   ?voll ?volp ?volo .
-  ?utd skos:prefLabel ?utdl .
-  ?vol :volumeHasEtext [
-     a ?etype ;
+  ?vol :volumeHasEtext ?eref .
+  ?eref a bdo:EtextRef ;
      :seqNum ?sn ;
-     :etextResource ?utd 
-  ] .
+     :etextResource ?utd .
   ?eref ?erefp ?erefo .
   ?ut skos:prefLabel ?utl .
+  ?utd skos:prefLabel ?utdl .
 } where {
   {
     # here we construct a virtual EtextRef for the transition
@@ -31,21 +30,22 @@ construct {
          :eTextVolumeIndex ?sn . 
     ?vol ?volp ?volo .
     FILTER(?volp != :volumeHasEtext && ?volp != :volumeOf)
-    BIND(bdo:EtextRef as ?etype)
+    BIND( IRI(CONCAT(str(?vol),"_ER")) as ?eref)
   } union {
     ?R_RES :instanceHasVolume ?vol .
     ?vol :volumeNumber ?vnum .
     ?utd :eTextInInstance ?R_RES ;
          :eTextIsVolume ?vnum ;
          skos:prefLabel ?utdl . 
+    BIND(1 as ?sn)
     ?vol ?volp ?volo .
     FILTER(?volp != :volumeHasEtext && ?volp != :volumeOf)
-    BIND(bdo:EtextRef as ?etype)
+    BIND( IRI(CONCAT(str(?vol),"_ER")) as ?eref)
   } union {
     # legacy format, still used by OP import
-    ?R_RES :instanceHasVolume ?voll .
-    ?voll :volumeHasEtext ?eref .
-    ?voll ?volp ?volo .
+    ?R_RES :instanceHasVolume ?vol .
+    ?vol :volumeHasEtext ?eref .
+    ?vol ?volp ?volo .
     ?eref ?erefp ?erefo .
   }
 }
