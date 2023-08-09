@@ -13,6 +13,7 @@ construct {
   ?vol ?volp ?volo .
   ?utd skos:prefLabel ?utdl .
   ?vol :volumeHasEtext [
+     a bdo:EtextRef ;
      :seqNum ?sn ;
      :etextResource ?utd 
   ]
@@ -25,16 +26,15 @@ construct {
          :eTextInVolume ?vnum ;
          skos:prefLabel ?utdl ;
          :eTextVolumeIndex ?sn . 
-  ?vol ?volp ?volo .
-    FILTER(?volp != :volumeHasEtext && ?volp != rdf:type && ?volp != :volumeOf)
+    ?vol ?volp ?volo .
+    FILTER(?volp != :volumeHasEtext && ?volp != :volumeOf)
   } union {
     ?R_RES :instanceHasVolume ?vol .
     ?vol :volumeNumber ?vnum .
     ?utd :eTextInInstance ?R_RES ;
-         :eTextIsolume ?vnum ;
-         skos:prefLabel ?utdl ;
-         :eTextVolumeIndex ?sn . 
-  ?vol ?volp ?volo .
-    FILTER(?volp != :volumeHasEtext && ?volp != rdf:type && ?volp != :volumeOf)
+         :eTextIsVolume ?vnum ;
+         skos:prefLabel ?utdl . 
+    ?vol ?volp ?volo .
+    FILTER(?volp != :volumeHasEtext && ?volp != :volumeOf)
   }
 }
