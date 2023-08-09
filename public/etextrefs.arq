@@ -13,16 +13,26 @@ construct {
 	?vol ?volp ?volo .
 	?eref ?erefp ?erefo .
 	?ut skos:prefLabel ?utl .
+  ?utd skos:prefLabel ?utdl .
+  ?vol :volumeHasEtext [
+     :seqNum ?sn ;
+     :etextResource ?utd .
+  ]
 } where {
   {
-	?R_RES :instanceHasVolume ?vol .
-	?vol ?volp ?volo .
-	?vol :volumeHasEtext ?eref .
-	?eref ?erefp ?erefo .
-  } union {
   	?R_RES :instanceHasVolume ?vol .
-	?vol :volumeHasEtext ?eref .
-	?eref :eTextResource ?ut .
-	?ut skos:prefLabel ?utl .
+  	?vol :volumeHasEtext ?eref .
+    ?eref :eTextResource ?ut .
+    ?ut skos:prefLabel ?utl .
+  	?eref ?erefp ?erefo .
+    ?vol ?volp ?volo .
+  } union {
+    # here we construct a virtual EtextRef for the transition
+  	?R_RES :instanceHasVolume ?vol .
+	  ?vol :volumeHasEtext ?utd .
+    ?utd skos:prefLabel ?utdl ;
+         :eTextVolumeIndex ?sn . 
+	  ?vol ?volp ?volo .
+    FILTER(?volp != :volumeHasEtext)
   }
 }
