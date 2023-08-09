@@ -30,7 +30,7 @@ construct {
          :eTextVolumeIndex ?sn . 
     ?vol ?volp ?volo .
     FILTER(?volp != :volumeHasEtext && ?volp != :volumeOf)
-    BIND( IRI(CONCAT(str(?vol),"_ER")) as ?eref)
+    BIND( IRI(CONCAT(str(?utd),"_ER")) as ?eref)
   } union {
     ?R_RES :instanceHasVolume ?vol .
     ?vol :volumeNumber ?vnum .
@@ -40,7 +40,7 @@ construct {
     BIND(1 as ?sn)
     ?vol ?volp ?volo .
     FILTER(?volp != :volumeHasEtext && ?volp != :volumeOf)
-    BIND( IRI(CONCAT(str(?vol),"_ER")) as ?eref)
+    BIND( IRI(CONCAT(str(?utd),"_ER")) as ?eref)
   } union {
     # legacy format, still used by OP import
     ?R_RES :instanceHasVolume ?vol .
