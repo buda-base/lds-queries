@@ -2,6 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=outline for a certain MW
 #QueryLimit=10000
+#QueryParams=R_RES
 #QueryUrl=/Outline_for_w?R_RES=bdr:MW23703
 
 #param.R_RES.type=resource
