@@ -42,15 +42,30 @@ where {
     ?R_RES :volumeOf/:instanceHasReproduction ?hasRepro .
     ?R_RES :volumeNumber ?volNB .
     ?hasRepro a bdo:EtextInstance .
-    ?hasRepro :instanceHasVolume ?etextVol .
-    ?etextVol :volumeNumber ?volNB ; :volumeHasEtext/:eTextResource ?etextRes .
+    ?etextRes :eTextInInstance ?hasRepro .
+    ?etextRes :eTextIsVolume ?volNB .
+    filter exists {
+      # in mirador we can only use etexts with page numbers
+      ?etextRes :eTextHasPage/:seqNum ?num
+      # etext must not be unpaginated (see bdr:MW1KG14_BED8FE)
+      filter not exists {
+        ?etextRes rdf:type bdo:EtextNonPaginated .
+      }
+    } .
+  } union {
+    # same with eTextInVolume
+    ?R_RES :volumeOf/:instanceHasReproduction ?hasRepro .
+    ?R_RES :volumeNumber ?volNB .
+    ?hasRepro a bdo:EtextInstance .
+    ?etextRes :eTextInInstance ?hasRepro .
+    ?etextRes :eTextInVolume ?volNB .
     filter exists { 
       # in mirador we can only use etexts with page numbers
-      ?etextRes :eTextHasPage/:seqNum ?num 
+      ?etextRes :eTextHasPage/:seqNum ?num
       # etext must not be unpaginated (see bdr:MW1KG14_BED8FE)
-      filter not exists { 
-        ?etextRes rdf:type bdo:EtextNonPaginated .       
-      } 
+      filter not exists {
+        ?etextRes rdf:type bdo:EtextNonPaginated .
+      }
     } . 
   } union {
     # get greatest bdo:sliceStartChar 
