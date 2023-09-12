@@ -21,5 +21,12 @@ select distinct ?tlewts {
     ?t a :Topic .
     ?t skos:prefLabel ?tlewts .
     FILTER(lang(?tlewts) = "bo-x-ewts")
+  } union {
+    ?wa :instanceOf? ?R_RES ;
+        :creator ?c .
+    ?c :agent ?p .
+    ?p :associatedTradition ?t .
+    ?t skos:prefLabel ?tlewts .
+    FILTER(lang(?tlewts) = "bo-x-ewts")
   }
 }
