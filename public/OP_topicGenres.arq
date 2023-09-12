@@ -1,0 +1,25 @@
+#QueryScope=Work
+#QueryReturnType=Table
+#QueryResults=ewts labels of the topics and genres associated with a work or instance
+#QueryParams=R_RES
+#QueryUrl=/OP_topicGenres?R_RES=bdr:WA0RT3216
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=bdo:Entity
+#param.R_RES.desc=the work or instance on which the topic/genre is needed
+
+select distinct ?tlewts {
+  {
+    ?wa :instanceOf? ?R_RES ;
+        :workIsAbout ?t .
+    ?t a :Topic .
+    ?t skos:prefLabel ?tlewts .
+    FILTER(lang(?tlewts) = "bo-x-ewts")
+  } union {
+    ?wa :instanceOf? ?R_RES ;
+        :workGenre ?t .
+    ?t a :Topic .
+    ?t skos:prefLabel ?tlewts .
+    FILTER(lang(?tlewts) = "bo-x-ewts")
+  }
+}
