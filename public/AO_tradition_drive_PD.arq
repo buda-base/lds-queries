@@ -3,7 +3,7 @@
 #QueryResults=All image instances about a tradition or by authors of a tradition
 #QueryParams=R_RES
 #QueryLimit=50000
-#QueryUrl=/AO_tradition_drive?R_RES=bdr:TraditionNyingma
+#QueryUrl=/AO_tradition_drive_PDbdr:TraditionDakpoKagyu=bdr:TraditionNyingma
 
 #param.R_RES.type=resource
 #param.R_RES.desc=the tradition
@@ -23,7 +23,7 @@ select distinct ?w WHERE
       ?wadm adm:adminAbout ?w ;
             adm:status bda:StatusReleased ;
             adm:access ?acc .
-      FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+      FILTER(?acc = bda:AccessOpen)
 
     } union {
 
@@ -42,6 +42,6 @@ select distinct ?w WHERE
       ?wadm adm:adminAbout ?w ;
             adm:status bda:StatusReleased ;
             adm:access ?acc .
-      FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+      FILTER(?acc = bda:AccessOpen)
     }
 }
