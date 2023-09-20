@@ -44,7 +44,7 @@ WHERE
       ?wadm adm:adminAbout ?w ;
             adm:status bda:StatusReleased ;
             adm:access ?acc .
-      FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+      FILTER(?acc = bda:AccessOpen)
       
       ?mw ?ip ?io .
       FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
@@ -69,7 +69,7 @@ WHERE
       ?wadm adm:adminAbout ?w ;
             adm:status bda:StatusReleased ;
             adm:access ?acc .
-      FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+      FILTER(?acc = bda:AccessOpen)
 
       ?wa bdo:creator ?creator .
       ?creator bdo:role ?role .
@@ -95,7 +95,7 @@ WHERE
       ?wadm adm:adminAbout ?w ;
             adm:status bda:StatusReleased ;
             adm:access ?acc .
-      FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+      FILTER(?acc = bda:AccessOpen)
 
       ?mw ?ip ?io .
       FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
