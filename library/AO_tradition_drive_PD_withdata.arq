@@ -50,6 +50,26 @@ WHERE
       FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
         && ?ip != bdo:colophon && ?ip != bdo:incipit)
 
+    } union {
+      ?tr skos:broader* ?R_RES .
+      ?tr rdfs:seeAlso* ?t .
+      ?wa :workIsAbout ?t ;
+          :language bdr:LangBo .
+      ?mw :instanceOf ?wa ;
+          :instanceHasReproduction ?w .
+      ?w a :ImageInstance .
+      BIND(?w as ?inDLDw)
+      FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
+      FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
+      ?wadm adm:adminAbout ?w ;
+            adm:status bda:StatusReleased ;
+            adm:access ?acc .
+      FILTER(?acc = bda:AccessOpen)
+      
+      ?mw ?ip ?io .
+      FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
+        && ?ip != bdo:colophon && ?ip != bdo:incipit)
+
       ?wa ?wp ?wo .
       FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
       ?wo skos:prefLabel ?wol .
@@ -77,6 +97,31 @@ WHERE
       ?creator bdo:agent ?author .
       ?author skos:prefLabel ?agentL .
 
+    } union {
+
+      ?tr skos:broader* ?R_RES .
+      ?author :associatedTradition ?tr .      
+      ?aac :agent ?author ;
+           :role ?r .
+      filter(?r IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025))
+      ?wa :creator ?aac ;
+          :language bdr:LangBo .
+      ?mw :instanceOf ?wa ;
+          :instanceHasReproduction ?w .
+      ?w a :ImageInstance .
+      BIND(?w as ?inDLDw)
+      FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
+      FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
+      ?wadm adm:adminAbout ?w ;
+            adm:status bda:StatusReleased ;
+            adm:access ?acc .
+      FILTER(?acc = bda:AccessOpen)
+
+      ?mw ?ip ?io .
+      FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
+        && ?ip != bdo:colophon && ?ip != bdo:incipit)
+
+      ?author skos:prefLabel ?agentL .
     } union {
 
       ?tr skos:broader* ?R_RES .
