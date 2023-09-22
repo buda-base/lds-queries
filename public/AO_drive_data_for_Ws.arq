@@ -4,8 +4,8 @@
 #QueryParams=R_RES_LIST
 #QueryUrl=/AO_drive_data_for_Ws?R_RES_LIST=bdr:W294,bdr:W1KG8321
 
-#param.R_ABOUT_LIST.type=resource
-#param.R_ABOUT_LIST.desc=the list of Ws
+#param.R_RES_LIST.type=resource
+#param.R_RES_LIST.desc=the list of Ws
 
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
@@ -31,7 +31,7 @@ WHERE
 
 {
     {
-      VALUES (?inDLDw) { ?R_ABOUT_LIST }
+      VALUES (?inDLDw) { ?R_RES_LIST }
       ?inDLDw a :ImageInstance .
       ?inDLDw :instanceReproductionOf ?mw .
 
@@ -41,7 +41,7 @@ WHERE
 
     } union {
       
-      VALUES (?inDLDw) { ?R_ABOUT_LIST }
+      VALUES (?inDLDw) { ?R_RES_LIST }
       ?inDLDw a :ImageInstance .
       ?inDLDw :instanceReproductionOf ?mw .
 
@@ -50,7 +50,7 @@ WHERE
 
     } union {
       
-      VALUES (?inDLDw) { ?R_ABOUT_LIST }
+      VALUES (?inDLDw) { ?R_RES_LIST }
       ?inDLDw a :ImageInstance .
       ?inDLDw :instanceReproductionOf ?mw .
 
@@ -61,7 +61,7 @@ WHERE
 
     } union {
 
-      VALUES (?inDLDw) { ?R_ABOUT_LIST }
+      VALUES (?inDLDw) { ?R_RES_LIST }
       ?inDLDw a :ImageInstance .
       ?inDLDw :instanceReproductionOf ?mw .
 
