@@ -1,0 +1,77 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Graph
+#QueryResults=Information about a list of Ws to put on AO drives (DLD, CTC, etc.)
+#QueryParams=R_RES_LIST
+#QueryUrl=/AO_drive_data_for_Ws?R_RES_LIST=bdr:W294,bdr:W1KG8321
+
+#param.R_ABOUT_LIST.type=resource
+#param.R_ABOUT_LIST.desc=the list of Ws
+
+PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
+
+CONSTRUCT
+{
+    ?inDLDw skos:prefLabel ?resL .
+    ?inDLDw a bdo:ImageInstance .
+    ?inDLDw :instanceReproductionOf ?mw .
+
+    ?inDLDw ?ip ?io .
+
+    # We cheat a bit and attach the topic to the instance instead
+    # of the corresponding work
+    ?inDLDw ?wp ?wo .
+    ?wo skos:prefLabel ?wol .
+
+    # Same for the author, entity score and language
+    ?inDLDw tmp:author ?author .
+    ?author skos:prefLabel ?agentL .
+}
+
+WHERE 
+
+{
+    {
+      VALUES (?inDLDw) { ?R_ABOUT_LIST }
+      ?inDLDw a :ImageInstance .
+      ?inDLDw :instanceReproductionOf ?mw .
+
+      ?mw ?ip ?io .
+      FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
+        && ?ip != bdo:colophon && ?ip != bdo:incipit && ?ip != bdo:biblioNote)
+
+    } union {
+      
+      VALUES (?inDLDw) { ?R_ABOUT_LIST }
+      ?inDLDw a :ImageInstance .
+      ?inDLDw :instanceReproductionOf ?mw .
+
+      ?mw :instanceOf ?wa .
+      ?wa ?wp ?wo .
+
+    } union {
+      
+      VALUES (?inDLDw) { ?R_ABOUT_LIST }
+      ?inDLDw a :ImageInstance .
+      ?inDLDw :instanceReproductionOf ?mw .
+
+      ?mw :instanceOf ?wa .
+      ?wa ?wp ?wo .
+      FILTER(?wp IN(bdo:workIsAbout , bdo:workGenre))
+      ?wo skos:prefLabel ?wol .
+
+    } union {
+
+      VALUES (?inDLDw) { ?R_ABOUT_LIST }
+      ?inDLDw a :ImageInstance .
+      ?inDLDw :instanceReproductionOf ?mw .
+
+      ?mw :instanceOf ?wa .
+
+      ?wa bdo:creator ?creator .
+      ?creator bdo:role ?role .
+      filter(?role IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025))
+      ?creator bdo:agent ?author .
+      ?author skos:prefLabel ?agentL .
+
+    }
+}
