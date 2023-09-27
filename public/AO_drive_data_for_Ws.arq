@@ -33,7 +33,7 @@ WHERE
     {
       VALUES (?inDLDw) { ?R_RES_LIST }
       ?inDLDw a :ImageInstance .
-      ?inDLDw :instanceReproductionOf ?mw .
+      ?mw :instanceHasReproduction ?inDLDw .
 
       ?mw ?ip ?io .
       FILTER (?ip != bdo:note && ?ip != rdf:type && ?ip != bdo:instanceHasReproduction && ?ip != tmp:thumbnailIIIFService && ?ip != bdo:instanceEvent && ?ip != bdo:hasTitle && ?ip != bdo:hasPart
@@ -43,7 +43,7 @@ WHERE
       
       VALUES (?inDLDw) { ?R_RES_LIST }
       ?inDLDw a :ImageInstance .
-      ?inDLDw :instanceReproductionOf ?mw .
+      ?mw :instanceHasReproduction ?inDLDw .
 
       ?mw :instanceOf ?wa .
       ?wa ?wp ?wo .
@@ -52,7 +52,7 @@ WHERE
       
       VALUES (?inDLDw) { ?R_RES_LIST }
       ?inDLDw a :ImageInstance .
-      ?inDLDw :instanceReproductionOf ?mw .
+      ?mw :instanceHasReproduction ?inDLDw .
 
       ?mw :instanceOf ?wa .
       ?wa ?wp ?wo .
@@ -63,7 +63,7 @@ WHERE
 
       VALUES (?inDLDw) { ?R_RES_LIST }
       ?inDLDw a :ImageInstance .
-      ?inDLDw :instanceReproductionOf ?mw .
+      ?mw :instanceHasReproduction ?inDLDw .
 
       ?mw :instanceOf ?wa .
 
