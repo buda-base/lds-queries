@@ -1,0 +1,14 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=All image instances that must be on DRS
+#QueryLimit=50000
+#QueryUrl=/AO_mustbeinDRS
+
+select distinct ?w where {
+  {
+    ?w a :ImageInstance .
+    FILTER (not exists {?w :inCollection bdr:PR1FPL01} && not exists {?w :inCollection bdr:PR1KDPP00})
+    FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
+    FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
+  }
+}
