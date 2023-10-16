@@ -7,6 +7,7 @@
 select distinct ?w where {
   {
     ?w a :ImageInstance .
+    FILTER (not exists {?wadm adm:adminAbout ?w ; adm:status bda:StatusWithdrawn})
     FILTER (not exists {?w :inCollection bdr:PR1FPL01} && not exists {?w :inCollection bdr:PR1KDPP00})
     FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
     FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
