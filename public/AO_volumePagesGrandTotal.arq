@@ -4,7 +4,7 @@
 #QueryLimit=150000
 #QueryUrl=/AO_volumePagesGrandTotal
 
-select (sum (?vpt) as ?vpgt) {
+select (sum (?vpt) as ?nbpages) (count (distinct ?ig) as ?nbvolumes) {
   ?w a :ImageInstance .
   ?w :instanceHasVolume ?ig .
   FILTER(not exists {?ig :hasIIIFManifest ?im })
