@@ -6,10 +6,10 @@
 
 select (sum (?vpt) as ?nbpages) (count (distinct ?ig) as ?nbvolumes) {
   ?w a :ImageInstance .
+  ?wadm adm:adminAbout ?w ;
+        adm:status bda:StatusReleased .
   ?w :instanceHasVolume ?ig .
   FILTER(not exists {?ig :hasIIIFManifest ?im })
 	?ig :volumePagesTotal ?vpt .
   FILTER(?vpt > 0)
-  ?wadm adm:adminAbout ?w ;
-        adm:status bda:StatusReleased .
 }
