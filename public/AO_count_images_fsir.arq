@@ -1,0 +1,25 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=returns statistics for volumes that have been synced in a date range
+#QueryParams=D_FROM,D_TO
+#QueryUrl=/AO_count_images_fsir?D_FROM=2023-07-01T00:00:00Z&D_TO=2023-10-01T00:00:00Z
+
+#param.D_FROM.type=datetime
+#param.D_FROM.subtype=xsd:dateTime
+#param.D_FROM.desc=the lower bound of the search
+
+#param.D_TO.type=datetime
+#param.D_TO.subtype=xsd:dateTime
+#param.D_TO.desc=the past upper of the search
+
+select (sum(?vpt) as ?nbimg) (count(distinct ?w) as ?nbw) (count(distinct ?ig) as ?nbig) {
+  {
+    ?le a adm:Synced .
+    ?le adm:logDate ?date .
+    FILTER(?date > ?D_FROM && ?date < ?D_TO)
+    ?adm adm:logEntry ?le ;
+         adm:adminAbout ?ig .
+    ?ig :volumePagesTotal ?vpt .
+    ?w :instanceHasVolume ?ig .
+  }
+}
