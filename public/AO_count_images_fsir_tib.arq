@@ -13,16 +13,18 @@
 #param.D_TO.desc=the past upper of the search
 
 select (sum(?vpt) as ?nbimg) (count(distinct ?w) as ?nbw) (count(distinct ?ig) as ?nbig) {
-  {
-    ?le a adm:Synced .
-    ?le adm:logDate ?date .
-    FILTER(?date > ?D_FROM && ?date < ?D_TO)
-    ?adm adm:logEntry ?le ;
-         adm:adminAbout ?ig .
-    ?ig :volumePagesTotal ?vpt .
-    ?w :instanceHasVolume ?ig .
-    ?mw :instanceHasReproduction ?w ;
-        :script ?sc .
-    FILTER(?sc = bdr:ScriptTibt || ?sc = bdr:ScriptDbuMed || ?sc = bdr:ScriptDbuCan)
+  select distinct ?vpt ?w ?ig {
+    {
+      ?le a adm:Synced .
+      ?le adm:logDate ?date .
+      FILTER(?date > ?D_FROM && ?date < ?D_TO)
+      ?adm adm:logEntry ?le ;
+           adm:adminAbout ?ig .
+      ?ig :volumePagesTotal ?vpt .
+      ?w :instanceHasVolume ?ig .
+      ?mw :instanceHasReproduction ?w ;
+          :script ?sc .
+      FILTER(?sc = bdr:ScriptTibt || ?sc = bdr:ScriptDbuMed || ?sc = bdr:ScriptDbuCan)
+    }
   }
 }
