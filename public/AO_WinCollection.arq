@@ -1,0 +1,16 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=All Ws in a collection
+#QueryParams=R_RES
+#QueryUrl=/AO_WinCollection?R_RES=bdr:PR1CTC18
+
+#param.R_RES.type=resource
+#param.R_RES.desc=the collection we want the Ws for for
+
+select distinct ?w WHERE 
+{
+    ?w :inCollection ?R_RES .
+    ?w a :ImageInstance .
+    ?wadm adm:adminAbout ?w ;
+          adm:status bda:StatusReleased .
+}
