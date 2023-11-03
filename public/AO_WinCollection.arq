@@ -2,6 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=All Ws in a collection
 #QueryParams=R_RES
+#QueryLimit=50000
 #QueryUrl=/AO_WinCollection?R_RES=bdr:PR1CTC18
 
 #param.R_RES.type=resource
