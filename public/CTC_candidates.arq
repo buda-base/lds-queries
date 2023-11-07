@@ -13,7 +13,7 @@
 #param.D_TO.subtype=xsd:dateTime
 #param.D_TO.desc=the past upper of the search
 
-select distinct ?w (max(?titleu) as ?titlemu) (max(?tlu) as ?tlum) ?pt (max(?title) as ?titlem) (count(distinct ?ig) as ?igc) (max(?date) as ?maxd) {
+select distinct ?w (max(?titleu) as ?titleuni) (max(?title) as ?titleorig) (max(?tlu) as ?topic) ?printtype (count(distinct ?ig) as ?nbvolumes) (max(?date) as ?syncdate) {
   {
     # scan request log entries
     ?le a adm:Synced ;
