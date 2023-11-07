@@ -1,0 +1,58 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=list CTC candidates synced in a time interval
+#QueryParams=D_FROM,D_TO
+#QueryUrl=/CTC_candidates?D_FROM=2021-10-01T00:00:00Z&D_TO=2022-10-01T00:00:00Z
+#QueryLimit=5000
+
+#param.D_FROM.type=datetime
+#param.D_FROM.subtype=xsd:dateTime
+#param.D_FROM.desc=the lower bound of the search
+
+#param.D_TO.type=datetime
+#param.D_TO.subtype=xsd:dateTime
+#param.D_TO.desc=the past upper of the search
+
+select distinct ?w (max(?titleu) as ?titlemu) (max(?tlu) as ?tlum) ?pt (max(?title) as ?titlem) (count(distinct ?ig) as ?igc) (max(?date) as ?maxd) {
+  {
+    # scan request log entries
+    ?le a adm:Synced ;
+        adm:logDate ?date .
+    FILTER(?date > ?D_FROM && ?date < ?D_TO)
+    ?admv adm:logEntry ?le ;
+          adm:adminAbout ?igs .
+    ?w :instanceHasVolume ?igs ;
+       :instanceReproductionOf ?mw .
+    FILTER(not exists {?w :inCollection bdr:PR1KDPP00} && not exists {?w :inCollection bdr:PR1FPL01})
+    FILTER(not exists {?mw :instanceOf ?wa . ?wa :workIsAbout ?t})
+    ?admw adm:adminAbout ?w ;
+          adm:status bda:StatusReleased ;
+          adm:access bda:AccessOpen .
+    ?mw :printMethod ?pt .
+    ?mw skos:prefLabel ?title .
+    BIND(IF(lang(?title) = "bo-x-ewts", f:ewtsToUnicode(?title), ?title) as ?titleu)
+    ?w :instanceHasVolume ?ig .
+  } union {
+    # scan request log entries
+    ?le a adm:Synced ;
+        adm:logDate ?date .
+    FILTER(?date > ?D_FROM && ?date < ?D_TO)
+    ?admv adm:logEntry ?le ;
+          adm:adminAbout ?igs .
+    ?w :instanceHasVolume ?igs ;
+       :instanceReproductionOf ?mw .
+    FILTER(not exists {?w :inCollection bdr:PR1KDPP00} && not exists {?w :inCollection bdr:PR1FPL01})
+    ?mw :instanceOf ?wa .
+    ?wa :workIsAbout ?t .
+    ?t skos:prefLabel ?tl .
+    FILTER(lang(?tl) = "bo-x-ewts")
+    BIND(f:ewtsToUnicode(?tl) as ?tlu)
+    ?admw adm:adminAbout ?w ;
+          adm:status bda:StatusReleased ;
+          adm:access bda:AccessOpen .
+    ?mw :printMethod ?pt .
+    ?mw skos:prefLabel ?title .
+    BIND(IF(lang(?title) = "bo-x-ewts", f:ewtsToUnicode(?title), ?title) as ?titleu)
+    ?w :instanceHasVolume ?ig .
+  }
+} group by ?w ?pt
