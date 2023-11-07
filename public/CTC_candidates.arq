@@ -13,7 +13,7 @@
 #param.D_TO.subtype=xsd:dateTime
 #param.D_TO.desc=the past upper of the search
 
-select distinct ?w (max(?titleu) as ?titleuni) (max(?title) as ?titleorig) (max(?tlu) as ?topic) ?printtype (count(distinct ?ig) as ?nbvolumes) (max(?date) as ?syncdate) {
+select distinct ?w (max(?titleu) as ?titleuni) (max(?title) as ?titleorig) (group_concat(distinct ?tlu ; SEPARATOR="; ") as ?topics)  ?printtype (count(distinct ?ig) as ?nbvolumes) (max(?date) as ?syncdate) {
   {
     # scan request log entries
     ?le a adm:Synced ;
@@ -23,8 +23,28 @@ select distinct ?w (max(?titleu) as ?titleuni) (max(?title) as ?titleorig) (max(
           adm:adminAbout ?igs .
     ?w :instanceHasVolume ?igs ;
        :instanceReproductionOf ?mw .
-    FILTER(not exists {?w :inCollection bdr:PR1KDPP00} && not exists {?w :inCollection bdr:PR1FPL01})
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1KDPP00 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1FPL01 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC11 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC18 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR3JW7543 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR60CTX96 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR01CTC09 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR01JW11672  }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC16 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC15 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC14 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC13 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PRHD03 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC12  }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1GS49488 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC10 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC17 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PRHD02 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR00JW501092 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PRHD01 }
     FILTER(not exists {?mw :instanceOf ?wa . ?wa :workIsAbout ?t})
+    FILTER(not exists {?mw :instanceOf ?wa . ?wa :workGenre ?t})
     ?admw adm:adminAbout ?w ;
           adm:status bda:StatusReleased ;
           adm:access bda:AccessOpen .
@@ -41,9 +61,29 @@ select distinct ?w (max(?titleu) as ?titleuni) (max(?title) as ?titleorig) (max(
           adm:adminAbout ?igs .
     ?w :instanceHasVolume ?igs ;
        :instanceReproductionOf ?mw .
-    FILTER(not exists {?w :inCollection bdr:PR1KDPP00} && not exists {?w :inCollection bdr:PR1FPL01})
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1KDPP00 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1FPL01 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC11 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC18 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR3JW7543 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR60CTX96 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR01CTC09 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR01JW11672  }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC16 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC15 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC14 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC13 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PRHD03 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC12  }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1GS49488 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC10 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC17 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PRHD02 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR00JW501092 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PRHD01 }
     ?mw :instanceOf ?wa .
-    ?wa :workIsAbout ?t .
+    values ?p {:workIsAbout :workGenre}
+    ?wa ?p ?t .
     ?t skos:prefLabel ?tl .
     FILTER(lang(?tl) = "bo-x-ewts")
     BIND(f:ewtsToUnicode(?tl) as ?tlu)
