@@ -55,4 +55,4 @@ select distinct ?w (max(?titleu) as ?titleuni) (max(?title) as ?titleorig) (max(
     BIND(IF(lang(?title) = "bo-x-ewts", f:ewtsToUnicode(?title), ?title) as ?titleu)
     ?w :instanceHasVolume ?ig .
   }
-} group by ?w ?pt
+} group by ?w ?printtype
