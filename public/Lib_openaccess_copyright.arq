@@ -1,0 +1,17 @@
+#QueryScope=Instance
+#QueryReturnType=Table
+#QueryResults=All instances under copyright with open access scans 
+#QueryLimit=15000
+#QueryUrl=/Lib_openaccess_copyright
+
+select ?mw (max(?lgd) as ?lastmwmodif) {
+  ?mw :copyrightStatus bdr:CopyrightInCopyright ;
+      :instanceHasReproduction ?w .
+  ?wadm adm:adminAbout ?w ;
+        adm:access bda:AccessOpen ;
+        adm:status bda:StatusReleased .
+  ?mwadm adm:adminAbout ?mw ;
+         adm:status bda:StatusReleased ;
+         adm:logEntry ?lg .
+  ?lg adm:logDate ?lgd .
+} group by ?mw order by desc(?lastmwmodif)
