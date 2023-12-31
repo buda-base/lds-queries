@@ -31,7 +31,7 @@
 #param.R_RES.subtype=:Volume
 #param.R_RES.desc=the URI of the volume being investigated
 
-select distinct ?instanceId ?iinstanceId ?access ?copyrightStatus ?ric ?pagesIntroTbrc ?volumeNumber ?volumeLabel ?iiifManifest ?status where {
+select distinct ?instanceId ?iinstanceId ?access ?copyrightStatus ?ric ?pagesIntroTbrc ?volumeNumber ?volumeLabel ?iiifManifest ?status ?virtualImageInstance where {
   {
     ?R_RES a :ImageGroup .
     optional { ?R_RES :volumeNumber ?volumeNumber . }
@@ -45,6 +45,8 @@ select distinct ?instanceId ?iinstanceId ?access ?copyrightStatus ?ric ?pagesInt
     optional { ?ii3 :instanceHasVolume ?R_RES ;
          :instanceReproductionOf ?i3 .
          ?i3 :copyrightStatus ?copyrightStatus . }
+    optional { ?ii4 :instanceHasVolume ?R_RES ;
+         :virtualImageInstance ?virtualImageInstance . }
     ?admItem adm:adminAbout ?iinstanceId .
     ?admItem adm:access ?access .
     ?admItem adm:status ?status .
