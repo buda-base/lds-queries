@@ -40,11 +40,7 @@ where {
     ?R_RES :virtualLinkTo?/:contentLocation ?s .
     ?s ?p ?o .
   } union {
-    {
-      ?R_RES :virtualLinkTo?/:inRootInstance?/:instanceHasReproduction ?iinstance .
-    } union {
-      ?R_RES :contentLocation/:contentLocationInstance/:instanceHasReproduction? ?iinstance .
-    }
+    ?R_RES :contentLocation/:contentLocationInstance ?iinstance .
     ?iinstance a :ImageInstance .
     ?iinstance :inRootInstance? ?iir .
     ?admItem adm:adminAbout ?iir .
@@ -52,10 +48,8 @@ where {
     ?admItem adm:status ?status .
     ?admItem adm:restrictedInChina ?ric .
   } union {
-    ?R_RES :virtualLinkTo?/:inRootInstance? ?rw .
-    ?rw :instanceHasReproduction ?iinstance .
-    ?iinstance a :ImageInstance .
     ?R_RES :virtualLinkTo?/:contentLocation ?loc .
+    ?loc :contentLocationInstance ?iinstance .
     ?loc :contentLocationVolume ?bvol .
     ?iinstance :instanceHasVolume ?vol .
     ?vol :volumeNumber ?bvol .
