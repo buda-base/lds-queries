@@ -40,7 +40,12 @@ where {
     ?R_RES :virtualLinkTo?/:contentLocation ?s .
     ?s ?p ?o .
   } union {
-    ?R_RES :contentLocation/:contentLocationInstance ?iinstance .
+    {
+      ?R_RES :contentLocation/:contentLocationInstance ?iinstance .
+    } union {
+      FILTER(NOT EXISTS {?R_RES :contentLocation/:contentLocationInstance ?iinstance2 .})
+      ?R_RES :virtualLinkTo?/:inRootInstance?/:instanceHasReproduction ?iinstance .
+    }
     ?iinstance a :ImageInstance .
     ?iinstance :inRootInstance? ?iir .
     ?admItem adm:adminAbout ?iir .
