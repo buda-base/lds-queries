@@ -34,14 +34,13 @@ WHERE
   } union {
   	# get parts: essential triples
     {
-      select distinct ?bvol where { 
+      select distinct ?bvol ?ii where { 
     	   ?R_RES :hasPart? ?part .
          ?part bdo:contentLocation ?loc .
-         ?loc :contentLocationVolume ?bvol .
+         ?loc :contentLocationVolume ?bvol ;
+              :contentLocationInstance ?ii .
       }
     }
-    ?R_RES bdo:inRootInstance?/bdo:instanceHasReproduction ?ii .
-    ?ii a bdo:ImageInstance .
     ?ii bdo:instanceHasVolume ?ig .
     ?ig bdo:volumeNumber ?bvol .
   } union {
