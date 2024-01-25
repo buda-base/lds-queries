@@ -1,0 +1,141 @@
+#QueryScope=Instance
+#QueryReturnType=Table
+#QueryResults=data necessary for the ISBN API
+#QueryParams=L_ID
+#QueryUrl=/LDS_ISBN?L_ID=9787800579875
+
+#param.L_ID.type=string
+#param.L_ID.desc=the id
+
+# try with 9789380359700 for single volume, 9787800579875 for partial match on multi volumes, 9787540929800 on match on multivolumes for all volumes
+
+construct {
+    ?mw :inRootInstance ?mwroot ;
+        skos:prefLabel ?mwl ;
+        :volumeNumber ?mwvn .
+    ?mwroot ?mwp ?mwo ;
+        tmp:idvalue ?id2val ;
+        tmp:mainAuthor ?a ;
+        tmp:volume ?v ;
+        tmp:imageGroup ?ig .
+    ?ig :volumeNumber ?ign .
+    ?a skos:prefLabel ?al .
+    ?v skos:prefLabel ?vl ;
+       :partIndex ?pi ;
+       tmp:idvalue ?idvval ;
+       tmp:isMatch ?vismatch .
+} where {
+    {
+        ?id rdf:value ?L_ID .
+        ?mw bf:identifiedBy ?id .
+        ?mw :inRootInstance? ?mwroot .
+        ?mwrootadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?mwroot :instanceHasReproduction ?w .
+        ?w a :ImageInstance .
+        ?wadm adm:adminAbout ?w ;
+              adm:status bda:StatusReleased .
+        ?w :instanceHasVolume ?ig .
+        ?ig :volumeNumber ?ign .
+    } union {
+        ?id rdf:value ?L_ID .
+        ?mw bf:identifiedBy ?id .
+        ?mw :inRootInstance? ?mwroot .
+        ?mwrootadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?mwroot bf:identifiedBy ?id2 .
+        ?id2 rdf:value ?id2val .
+    } union {
+        ?id rdf:value ?L_ID .
+        ?mw bf:identifiedBy ?id .
+        ?mw :inRootInstance? ?mwroot .
+        ?mwrootadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?mw :instanceOf ?wa .
+        ?wa :creator ?c .
+        ?c :agent ?a .
+        ?a skos:prefLabel ?al .
+    } union {
+        # get volumes from outlines for full-multivolumes matches
+        ?id rdf:value ?L_ID .
+        ?mwroot bf:identifiedBy ?id .
+        FILTER(not exists {?mwroot :inRootInstance ?mwroot2 .})
+        ?mwadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?o :outlineOf ?mwroot .
+        ?oadm adm:adminAbout ?o ;
+              adm:status bda:StatusReleased ;
+              adm:graphId ?og .
+        graph ?og {
+            ?v :partType bdr:PartTypeVolume ;
+               :partIndex ?pi .
+            ?v skos:prefLabel ?vl .
+        }
+    } union {
+        # get volumes from outlines for subset matches
+        ?id rdf:value ?L_ID .
+        ?v  bf:identifiedBy ?id ;
+            :inRootInstance ?mwroot ;
+            :partIndex ?pi ;
+            bf:identifiedBy ?idv ;
+            skos:prefLabel ?vl .
+        ?idv rdf:value ?idvval .
+        BIND(true as ?vismatch)
+    } union {
+        # same as before, include content location
+        ?id rdf:value ?L_ID .
+        ?mwroot bf:identifiedBy ?id .
+        FILTER(not exists {?mwroot :inRootInstance ?mwroot2 .})
+        ?mwadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?o :outlineOf ?mwroot .
+        ?oadm adm:adminAbout ?o ;
+              adm:status bda:StatusReleased ;
+              adm:graphId ?og .
+        graph ?og {
+            ?v :partType bdr:PartTypeVolume ;
+               :contentLocation ?cl .
+            ?cl :contentLocationVolume ?clvnum .
+        }
+    } union {
+        # content location for subsets
+        ?id rdf:value ?L_ID .
+        ?v  bf:identifiedBy ?id ;
+            :contentLocation ?cl .
+        ?cl :contentLocationVolume ?clvnum .
+    } union {
+        # same as before, include ids
+        ?id rdf:value ?L_ID .
+        ?mwroot bf:identifiedBy ?id .
+        FILTER(not exists {?mwroot :inRootInstance ?mwroot2 .})
+        ?mwadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?o :outlineOf ?mwroot .
+        ?oadm adm:adminAbout ?o ;
+              adm:status bda:StatusReleased ;
+              adm:graphId ?og .
+        graph ?og {
+            ?v :partType bdr:PartTypeVolume ;
+               bf:identifiedBy ?idv .
+            ?idv rdf:value ?idvval .
+        }
+    } union {
+        ?id rdf:value ?L_ID .
+        ?mw bf:identifiedBy ?id .
+        ?mw :inRootInstance? ?mwroot .
+        ?mwrootadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        values ?mwp { :editionStatement :inRootInstance skos:prefLabel tmp:thumbnailIIIFService :numberOfVolumes }
+        ?mwroot ?mwp ?mwo .
+    } union {
+        # for volumes only
+        ?id rdf:value ?L_ID .
+        ?mw bf:identifiedBy ?id .
+        ?mw :inRootInstance ?mwroot .
+        ?mwrootadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?mw :contentLocation ?cl .
+        ?cl :contentLocationVolume ?mwvn .
+        ?mw skos:prefLabel ?mwl .
+    }
+}
