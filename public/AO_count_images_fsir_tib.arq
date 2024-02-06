@@ -21,6 +21,7 @@ select (sum(?vpt) as ?nbimg) (count(distinct ?w) as ?nbw) (count(distinct ?ig) a
       ?adm adm:logEntry ?le ;
            adm:adminAbout ?ig .
       ?ig :volumePagesTotal ?vpt .
+      FILTER(?vpt > 2)
       ?w :instanceHasVolume ?ig .
       ?mw :instanceHasReproduction ?w ;
           :script ?sc .

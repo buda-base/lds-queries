@@ -1,0 +1,19 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=returns statistics for volumes that have been synced in a collection
+#QueryParams=R_RES
+#QueryUrl=/AO_count_images_coll?R_RES=bdr:PR1NLM00
+
+#param.R_RES.type=resource
+#param.R_RES.desc=the collection
+
+select (sum(?vpt) as ?nbimg) (count(distinct ?w) as ?nbw) (count(distinct ?ig) as ?nbig) {
+  select distinct ?vpt ?w ?ig {
+    {
+      ?w :inCollection ?R_RES ;
+         :instanceHasVolume ?ig .
+      ?ig :volumePagesTotal ?vpt .
+      FILTER(?vpt > 2)
+    }
+  }
+}
