@@ -1,8 +1,11 @@
 #QueryScope=ImageInstance
 #QueryReturnType=Table
-#QueryResults=returns statistics for volumes that have been synced in a date range
-#QueryParams=D_FROM,D_TO
+#QueryResults=returns statistics for volumes that have been synced in a date range in a collection
+#QueryParams=D_FROM,D_TO,R_RES
 #QueryUrl=/AO_count_images_fsir_coll?R_RES=bdr:PR1NLM00&D_FROM=2023-07-01T00:00:00Z&D_TO=2023-10-01T00:00:00Z
+
+#param.R_RES.type=resource
+#param.R_RES.desc=the collection
 
 #param.D_FROM.type=datetime
 #param.D_FROM.subtype=xsd:dateTime
