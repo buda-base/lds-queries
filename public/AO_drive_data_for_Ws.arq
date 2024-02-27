@@ -47,6 +47,9 @@ WHERE
 
       ?mw :instanceOf ?wa .
       ?wa ?wp ?wo .
+      # so that we don't have two prefLabels:
+      # https://github.com/buda-base/buda-dld/issues/66#issuecomment-1966309481
+      FILTER(?wp != skos:prefLabel)
 
     } union {
       
