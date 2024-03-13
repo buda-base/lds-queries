@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=data necessary for the ISBN API
 #QueryParams=L_ID
-#QueryUrl=/LDS_ISBN?L_ID=9787800579875
+#QueryUrl=/lib/isbn?L_ID=9787800579875
 
 #param.L_ID.type=string
 #param.L_ID.desc=the id
@@ -45,6 +45,7 @@ construct {
         ?mwrootadm adm:adminAbout ?mwroot ;
                    adm:status bda:StatusReleased .
         ?mwroot bf:identifiedBy ?id2 .
+        FILTER(not exists {?id2 a ?idType . FILTER(?idType != bf:Isbn && ?idType != bf:Issn && ?idType != bf:Ean)})
         ?id2 rdf:value ?id2val .
     } union {
         ?id rdf:value ?L_ID .
@@ -80,6 +81,7 @@ construct {
             :partIndex ?pi ;
             bf:identifiedBy ?idv ;
             skos:prefLabel ?vl .
+        FILTER(not exists {?idv a ?idType . FILTER(?idType != bf:Isbn && ?idType != bf:Issn && ?idType != bf:Ean)})
         ?idv rdf:value ?idvval .
         BIND(true as ?vismatch)
     } union {
@@ -118,6 +120,7 @@ construct {
         graph ?og {
             ?v :partType bdr:PartTypeVolume ;
                bf:identifiedBy ?idv .
+            FILTER(not exists {?idv a ?idType . FILTER(?idType != bf:Isbn && ?idType != bf:Issn && ?idType != bf:Ean)})
             ?idv rdf:value ?idvval .
         }
     } union {
