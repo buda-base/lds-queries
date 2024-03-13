@@ -17,7 +17,8 @@ construct {
         tmp:idvalue ?id2val ;
         tmp:mainAuthor ?a ;
         tmp:volume ?v ;
-        tmp:imageGroup ?ig .
+        tmp:imageGroup ?ig ;
+        tmp:publicationDate ?publicationWhen .
     ?ig :volumeNumber ?ign .
     ?a skos:prefLabel ?al .
     ?v skos:prefLabel ?vl ;
@@ -125,8 +126,17 @@ construct {
         ?mw :inRootInstance? ?mwroot .
         ?mwrootadm adm:adminAbout ?mwroot ;
                    adm:status bda:StatusReleased .
-        values ?mwp { :editionStatement :inRootInstance skos:prefLabel tmp:thumbnailIIIFService :numberOfVolumes }
+        values ?mwp { :editionStatement :inRootInstance skos:prefLabel tmp:thumbnailIIIFService :numberOfVolumes :publisherName :publisherLocation }
         ?mwroot ?mwp ?mwo .
+    } union {
+        ?id rdf:value ?L_ID .
+        ?mw bf:identifiedBy ?id .
+        ?mw :inRootInstance? ?mwroot .
+        ?mwrootadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?mwroot :instanceEvent ?e .
+        ?e a :PublishedEvent ;
+           :eventWhen ?publicationWhen .
     } union {
         # for volumes only
         ?id rdf:value ?L_ID .
