@@ -1,0 +1,221 @@
+#QueryScope=Instance
+#QueryReturnType=Table
+#QueryResults=data necessary for the ISBN API
+#QueryParams=L_NAME,LG_NAME
+#QueryUrl=/LDS_ISBN?L_ID=9787800579875
+
+#param.L_NAME.type=string
+#param.L_NAME.langTag=LG_NAME
+#param.L_NAME.isLucene=true
+#param.L_NAME.example="\"bzhin bzang ma gtum drag rol pa'i sgrung gtam/\"~1"@bo-x-ewts
+
+construct {
+    ?mw :inRootInstance ?mwroot ;
+        skos:prefLabel ?mwl ;
+        tmp:labelMatch ?labelMatch ;
+        :volumeNumber ?mwvn .
+    ?mwroot ?mwp ?mwo ;
+        tmp:idvalue ?id2val ;
+        tmp:mainAuthor ?a ;
+        tmp:labelMatch ?labelMatchr ;
+        tmp:volume ?v ;
+        tmp:imageGroup ?ig ;
+        tmp:publicationDate ?publicationWhen .
+    ?ig :volumeNumber ?ign .
+    ?a skos:prefLabel ?al .
+    ?v skos:prefLabel ?vl ;
+       :partIndex ?pi ;
+       tmp:idvalue ?idvval ;
+       tmp:labelMatch ?labelMatchv ;
+       tmp:isMatch ?vismatch .
+} where {
+    {
+        {
+          (?mw ?sc ?labelMatch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          ?mw a bdo:Instance .
+        } union {
+          (?title ?sc ?labelMatch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          ?mw bdo:hasTitle ?title .
+        }
+        FILTER(not exists {?mw :partType ?pt . FILTER(?pt != bdr:PartTypeVolume)})
+        ?mw :inRootInstance? ?mwroot .
+        ?mwrootadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?mwroot :instanceHasReproduction ?w .
+        ?w a :ImageInstance .
+        ?wadm adm:adminAbout ?w ;
+              adm:status bda:StatusReleased .
+        ?w :instanceHasVolume ?ig .
+        ?ig :volumeNumber ?ign .
+    } union {
+        {
+          (?mw) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          ?mw a bdo:Instance .
+        } union {
+          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          ?mw bdo:hasTitle ?title .
+        }
+        FILTER(not exists {?mw :partType ?pt . FILTER(?pt != bdr:PartTypeVolume)})
+        ?mw :inRootInstance? ?mwroot .
+        ?mwrootadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?mwroot bf:identifiedBy ?id2 .
+        ?id2 rdf:value ?id2val .
+    } union {
+        {
+          (?mw) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          ?mw a bdo:Instance .
+        } union {
+          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          ?mw bdo:hasTitle ?title .
+        }
+        FILTER(not exists {?mw :partType ?pt . FILTER(?pt != bdr:PartTypeVolume)})
+        ?mw :inRootInstance? ?mwroot .
+        ?mwrootadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?mw :instanceOf ?wa .
+        ?wa :creator ?c .
+        ?c :agent ?a .
+        ?a skos:prefLabel ?al .
+    } union {
+        # get volumes from outlines for full-multivolumes matches
+        {
+          (?mwroot ?sc ?labelMatchr) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          ?mwroot a bdo:Instance .
+        } union {
+          (?title ?sc ?labelMatchr) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          ?mwroot bdo:hasTitle ?title .
+        }
+        FILTER(not exists {?mwroot :inRootInstance ?mwroot2 .})
+        ?mwadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?o :outlineOf ?mwroot .
+        ?oadm adm:adminAbout ?o ;
+              adm:status bda:StatusReleased ;
+              adm:graphId ?og .
+        graph ?og {
+            ?v :partType bdr:PartTypeVolume ;
+               :partIndex ?pi .
+            ?v skos:prefLabel ?vl .
+        }
+    } union {
+        # get volumes from outlines for subset matches
+        {
+          (?v ?sc ?labelMatchv) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          ?v :partType bdr:PartTypeVolume .
+        } union {
+          (?title ?sc ?labelMatchv) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          ?v bdo:hasTitle ?title .
+          ?v :partType bdr:PartTypeVolume .
+        }
+        ?v  :inRootInstance ?mwroot ;
+            bf:identifiedBy ?id ;
+            :partIndex ?pi ;
+            bf:identifiedBy ?idv ;
+            skos:prefLabel ?vl .
+        ?idv rdf:value ?idvval .
+        BIND(true as ?vismatch)
+    } union {
+        # same as before, include content location
+        {
+          (?mwroot) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          ?mwroot a bdo:Instance .
+        } union {
+          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          ?mwroot bdo:hasTitle ?title .
+        }
+        FILTER(not exists {?mwroot :inRootInstance ?mwroot2 .})
+        ?mwadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?o :outlineOf ?mwroot .
+        ?oadm adm:adminAbout ?o ;
+              adm:status bda:StatusReleased ;
+              adm:graphId ?og .
+        graph ?og {
+            ?v :partType bdr:PartTypeVolume ;
+               :contentLocation ?cl .
+            ?cl :contentLocationVolume ?clvnum .
+        }
+    } union {
+        # content location for subsets
+        {
+          (?v) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          ?v :partType bdr:PartTypeVolume .
+        } union {
+          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          ?v bdo:hasTitle ?title .
+          ?v :partType bdr:PartTypeVolume .
+        }
+        ?v  bf:identifiedBy ?id ;
+            :contentLocation ?cl .
+        ?cl :contentLocationVolume ?clvnum .
+    } union {
+        # same as before, include ids
+        {
+          (?mwroot) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          ?mwroot a bdo:Instance .
+        } union {
+          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          ?mwroot bdo:hasTitle ?title .
+        }
+        ?mwroot bf:identifiedBy ?id .
+        FILTER(not exists {?mwroot :inRootInstance ?mwroot2 .})
+        ?mwadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?o :outlineOf ?mwroot .
+        ?oadm adm:adminAbout ?o ;
+              adm:status bda:StatusReleased ;
+              adm:graphId ?og .
+        graph ?og {
+            ?v :partType bdr:PartTypeVolume ;
+               bf:identifiedBy ?idv .
+            ?idv rdf:value ?idvval .
+        }
+    } union {
+        {
+          (?mw) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          ?mw a bdo:Instance .
+        } union {
+          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          ?mw bdo:hasTitle ?title .
+        }
+        FILTER(not exists {?mw :partType ?pt . FILTER(?pt != bdr:PartTypeVolume)})
+        ?mw :inRootInstance? ?mwroot .
+        ?mwrootadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        values ?mwp { :editionStatement :inRootInstance skos:prefLabel tmp:thumbnailIIIFService :numberOfVolumes :publisherName :publisherLocation }
+        ?mwroot ?mwp ?mwo .
+    } union {
+        {
+          (?mw) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          ?mw a bdo:Instance .
+        } union {
+          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          ?mw bdo:hasTitle ?title .
+        }
+        FILTER(not exists {?mw :partType ?pt . FILTER(?pt != bdr:PartTypeVolume)})
+        ?mw :inRootInstance? ?mwroot .
+        ?mwrootadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?mwroot :instanceEvent ?e .
+        ?e a :PublishedEvent ;
+           :eventWhen ?publicationWhen .
+    } union {
+        # for volumes only
+        {
+          (?v) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          ?v :partType bdr:PartTypeVolume .
+        } union {
+          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          ?v bdo:hasTitle ?title .
+          ?v :partType bdr:PartTypeVolume .
+        }
+        ?mw bf:identifiedBy ?id .
+        ?mw :inRootInstance ?mwroot .
+        ?mwrootadm adm:adminAbout ?mwroot ;
+                   adm:status bda:StatusReleased .
+        ?mw :contentLocation ?cl .
+        ?cl :contentLocationVolume ?mwvn .
+        ?mw skos:prefLabel ?mwl .
+    }
+}
