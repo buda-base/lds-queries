@@ -13,8 +13,12 @@ construct {
    ?cl ?clp ?clo .
    ?ri :instanceHasVolume ?s .
    ?l ?lp ?lo .
+   ?R_RES :instanceReproductionOf ?mw .
 } where {
-  { 
+  {
+    # for non-inferred, non-released stuff
+    ?mw :instanceHasReproduction ?R_RES .
+  } union { 
     ?R_RES ?p ?o .
     BIND (?R_RES as ?s)
   } union {
