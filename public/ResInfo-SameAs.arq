@@ -125,8 +125,14 @@ construct {
 
 ?R_RES tmp:addIALink ?addIALink .
 
+?R_RES :instanceReproductionOf ?mw .
+?mw skos:prefLabel ?mws .
 } where {
   {
+    # case of unreleased status
+    ?mw :instanceHasReproduction ?R_RES .
+    ?mw skos:prefLabel ?mws .
+  } union  {
     ?r owl:sameAs* ?R_RES .
     ?r ?rpkeep ?rokeep .
     FILTER(?rpkeep != bdo:collectionMember && ?rpkeep != bdo:serialHasInstance && ?rpkeep != bdo:hasPart)
