@@ -23,6 +23,7 @@ select (sum(?vpt) as ?nbimg) (count(distinct ?w) as ?nbw) (count(distinct ?ig) a
       FILTER(?date > ?D_FROM && ?date < ?D_TO)
       ?adm adm:logEntry ?le ;
            adm:adminAbout ?ig .
+      FILTER(not exists { ?adm adm:logEntry bda:LGIGS001 } && not exists { ?adm adm:logEntry bda:LGIGS002 } && not exists { ?adm adm:logEntry bda:LGIGS003 })
       ?ig :volumePagesTotal ?vpt .
       FILTER(?vpt > 2)
       ?w :instanceHasVolume ?ig .
