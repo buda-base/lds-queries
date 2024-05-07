@@ -49,10 +49,10 @@ construct {
         ?ig :volumeNumber ?ign .
     } union {
         {
-          (?mw) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          (?mw) text:query ( bdo:skosLabels ?L_NAME ) .
           ?mw a bdo:Instance .
         } union {
-          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          (?title) text:query ( rdfs:label ?L_NAME ) .
           ?mw bdo:hasTitle ?title .
         }
         FILTER(not exists {?mw :partType ?pt . FILTER(?pt != bdr:PartTypeVolume)})
@@ -64,10 +64,10 @@ construct {
         ?id2 rdf:value ?id2val .
     } union {
         {
-          (?mw) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          (?mw) text:query ( bdo:skosLabels ?L_NAME ) .
           ?mw a bdo:Instance .
         } union {
-          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          (?title) text:query ( rdfs:label ?L_NAME ) .
           ?mw bdo:hasTitle ?title .
         }
         FILTER(not exists {?mw :partType ?pt . FILTER(?pt != bdr:PartTypeVolume)})
@@ -120,10 +120,10 @@ construct {
     } union {
         # same as before, include content location
         {
-          (?mwroot) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          (?mwroot) text:query ( bdo:skosLabels ?L_NAME ) .
           ?mwroot a bdo:Instance .
         } union {
-          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          (?title) text:query ( rdfs:label ?L_NAME ) .
           ?mwroot bdo:hasTitle ?title .
         }
         FILTER(not exists {?mwroot :inRootInstance ?mwroot2 .})
@@ -141,10 +141,10 @@ construct {
     } union {
         # content location for subsets
         {
-          (?v) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          (?v) text:query ( bdo:skosLabels ?L_NAME ) .
           ?v :partType bdr:PartTypeVolume .
         } union {
-          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          (?title) text:query ( rdfs:label ?L_NAME ) .
           ?v bdo:hasTitle ?title .
           ?v :partType bdr:PartTypeVolume .
         }
@@ -154,10 +154,10 @@ construct {
     } union {
         # same as before, include ids
         {
-          (?mwroot) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          (?mwroot) text:query ( bdo:skosLabels ?L_NAME ) .
           ?mwroot a bdo:Instance .
         } union {
-          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          (?title) text:query ( rdfs:label ?L_NAME ) .
           ?mwroot bdo:hasTitle ?title .
         }
         ?mwroot bf:identifiedBy ?id .
@@ -176,24 +176,24 @@ construct {
         }
     } union {
         {
-          (?mw) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          (?mw) text:query ( bdo:skosLabels ?L_NAME ) .
           ?mw a bdo:Instance .
         } union {
-          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          (?title) text:query ( rdfs:label ?L_NAME ) .
           ?mw bdo:hasTitle ?title .
         }
         FILTER(not exists {?mw :partType ?pt . FILTER(?pt != bdr:PartTypeVolume)})
         ?mw :inRootInstance? ?mwroot .
         ?mwrootadm adm:adminAbout ?mwroot ;
                    adm:status bda:StatusReleased .
-        values ?mwp { :editionStatement :inRootInstance skos:prefLabel tmp:thumbnailIIIFService :numberOfVolumes :publisherName :publisherLocation }
+        values ?mwp { :editionStatement :inRootInstance skos:prefLabel tmp:thumbnailIIIFService :numberOfVolumes :publisherName :publisherLocation skos:prefLabel }
         ?mwroot ?mwp ?mwo .
     } union {
         {
-          (?mw) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          (?mw) text:query ( bdo:skosLabels ?L_NAME ) .
           ?mw a bdo:Instance .
         } union {
-          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          (?title) text:query ( rdfs:label ?L_NAME ) .
           ?mw bdo:hasTitle ?title .
         }
         FILTER(not exists {?mw :partType ?pt . FILTER(?pt != bdr:PartTypeVolume)})
@@ -206,10 +206,10 @@ construct {
     } union {
         # for volumes only
         {
-          (?v) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
+          (?v) text:query ( bdo:skosLabels ?L_NAME ) .
           ?v :partType bdr:PartTypeVolume .
         } union {
-          (?title) text:query ( rdfs:label ?L_NAME "highlight:" ) .
+          (?title) text:query ( rdfs:label ?L_NAME ) .
           ?v bdo:hasTitle ?title .
           ?v :partType bdr:PartTypeVolume .
         }
