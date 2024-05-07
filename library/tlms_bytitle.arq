@@ -3,7 +3,7 @@
 #QueryResults=data necessary for the ISBN API
 #QueryParams=L_NAME,LG_NAME
 #QueryUrl=/tlms_bytitle?L_ID=9787800579875
-#QueryLimit=10000
+#QueryLimit=50000
 
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME
