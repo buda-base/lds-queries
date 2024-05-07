@@ -55,6 +55,10 @@ construct {
                    adm:status bda:StatusReleased .
         ?mw :instanceOf ?wa .
         ?wa :creator ?c .
+        FILTER (exists {
+          ?c :role ?r .
+          FILTER (?r = bdr:R0ER0019 || ?r = bdr:R0ER0025 || ?r = bdr:R0ER0014 || ?r = bdr:R0ER0011)
+        })
         ?c :agent ?a .
         ?a skos:prefLabel ?al .
     } union {
@@ -129,7 +133,7 @@ construct {
         ?mw :inRootInstance? ?mwroot .
         ?mwrootadm adm:adminAbout ?mwroot ;
                    adm:status bda:StatusReleased .
-        values ?mwp { :editionStatement :inRootInstance skos:prefLabel tmp:thumbnailIIIFService :numberOfVolumes :publisherName :publisherLocation }
+        values ?mwp { :editionStatement :inRootInstance skos:prefLabel tmp:thumbnailIIIFService :numberOfVolumes :publisherName :publisherLocation :extentStatement }
         ?mwroot ?mwp ?mwo .
     } union {
         ?id rdf:value ?L_ID .
