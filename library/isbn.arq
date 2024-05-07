@@ -19,7 +19,8 @@ construct {
         tmp:volume ?v ;
         tmp:imageGroup ?ig ;
         tmp:publicationDate ?publicationWhen .
-    ?ig :volumeNumber ?ign .
+    ?ig :volumeNumber ?ign ;
+        :volumePagesTotal ?vpt .
     ?a skos:prefLabel ?al .
     ?v skos:prefLabel ?vl ;
        :partIndex ?pi ;
@@ -37,7 +38,8 @@ construct {
         ?wadm adm:adminAbout ?w ;
               adm:status bda:StatusReleased .
         ?w :instanceHasVolume ?ig .
-        ?ig :volumeNumber ?ign .
+        ?ig :volumeNumber ?ign ;
+            :volumePagesTotal ?vpt .
     } union {
         ?id rdf:value ?L_ID .
         ?mw bf:identifiedBy ?id .
