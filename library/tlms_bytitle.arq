@@ -2,7 +2,8 @@
 #QueryReturnType=Table
 #QueryResults=data necessary for the ISBN API
 #QueryParams=L_NAME,LG_NAME
-#QueryUrl=/LDS_ISBN?L_ID=9787800579875
+#QueryUrl=/tlms_bytitle?L_ID=9787800579875
+#QueryLimit=10000
 
 #param.L_NAME.type=string
 #param.L_NAME.langTag=LG_NAME
