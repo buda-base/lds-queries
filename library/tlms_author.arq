@@ -13,19 +13,19 @@
 construct {
     ?bdrcres tmp:luceneScore ?sc ;
        tmp:isMain true ;
-       tmp:idMatch ?idMatch ;
-       tmp:superMatch ?superMatch .
+       tmp:nameMatch ?namematch .
     ?bdrcres ?resp ?reso .
     ?bdrcres bdo:personEvent ?evt .
     ?evt :eventWhen ?evtw ;
          a ?evtType .
+    ?bdrcres tmp:name ?pn .
 } where {
   {
     {
-        (?name ?sc) text:query ( rdfs:label ?L_NAME ) .
+        (?name ?sc ?namematch) text:query ( rdfs:label ?L_NAME "highlight:" ) .
         ?res bdo:personName ?name .
     } union {
-        (?res ?sc) text:query ( bdo:skosLabels ?L_NAME ) .
+        (?res ?sc ?namematch) text:query ( bdo:skosLabels ?L_NAME "highlight:" ) .
         ?res a :Person .
     }
 
@@ -55,5 +55,22 @@ construct {
     ?evt a ?evtType .
     FILTER (?evtType IN(bdo:PersonBirth , bdo:PersonDeath , bdo:PersonFlourished))
     ?evt :eventWhen ?evtw .
+  } union {
+    # get events
+    {
+        (?name) text:query ( rdfs:label ?L_NAME ) .
+        ?res bdo:personName ?name .
+    } union {
+        (?res) text:query ( bdo:skosLabels ?L_NAME ) .
+        ?res a :Person .
+    }
+
+    ?res owl:sameAs* ?bdrcres .
+    ?resAdm adm:adminAbout ?bdrcres .
+    ?resAdm adm:metadataLegal  bda:LD_BDRC_CC0 ;
+            adm:status    bda:StatusReleased .
+    FILTER(exists{?bdrcres tmp:hasRole ?r})
+    ?bdrcres bdo:personName ?pnR .
+    ?pnR rdfs:label ?pn .
   }
 }
