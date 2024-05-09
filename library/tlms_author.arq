@@ -34,7 +34,7 @@ construct {
     ?resAdm adm:metadataLegal  bda:LD_BDRC_CC0 ;
             adm:status    bda:StatusReleased .
     FILTER(exists{?bdrcres tmp:hasRole ?r})
-    VALUES ?resp { skos:prefLabel tmp:entityScore tmp:associatedCentury tmp:hasRole }
+    VALUES ?resp { skos:prefLabel tmp:entityScore bdo:associatedTradition tmp:associatedCentury tmp:hasRole }
     ?bdrcres ?resp ?reso .
   } union {
     # get events
