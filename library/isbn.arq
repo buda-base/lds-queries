@@ -75,8 +75,9 @@ construct {
               adm:status bda:StatusReleased ;
               adm:graphId ?og .
         graph ?og {
-            ?v :partType bdr:PartTypeVolume ;
-               :partIndex ?pi .
+            ?v :partType ?pt .
+            FILTER(?pt = bdr:PartTypeVolume || ?pt = bdr:PartTypeCodicologicalVolume)
+            ?v :partIndex ?pi .
             ?v skos:prefLabel ?vl .
         }
     } union {
@@ -84,12 +85,17 @@ construct {
         ?id rdf:value ?L_ID .
         ?v  bf:identifiedBy ?id ;
             :inRootInstance ?mwroot ;
-            :partIndex ?pi ;
             bf:identifiedBy ?idv ;
             skos:prefLabel ?vl .
         FILTER(not exists {?idv a ?idType . FILTER(?idType != bf:Isbn && ?idType != bf:Issn && ?idType != bf:Ean)})
         ?idv rdf:value ?idvval .
         BIND(true as ?vismatch)
+    } union {
+        # get partIndex for subset matches, it's not present for all results (think of codicological volumes)
+        ?id rdf:value ?L_ID .
+        ?v  bf:identifiedBy ?id ;
+            :inRootInstance ?mwroot .
+        ?v :partIndex ?pi .
     } union {
         # same as before, include content location
         ?id rdf:value ?L_ID .
@@ -102,8 +108,9 @@ construct {
               adm:status bda:StatusReleased ;
               adm:graphId ?og .
         graph ?og {
-            ?v :partType bdr:PartTypeVolume ;
-               :contentLocation ?cl .
+            ?v :partType ?pt .
+            FILTER(?pt = bdr:PartTypeVolume || ?pt = bdr:PartTypeCodicologicalVolume)
+            ?v   :contentLocation ?cl .
             ?cl :contentLocationVolume ?clvnum .
         }
     } union {
@@ -124,8 +131,9 @@ construct {
               adm:status bda:StatusReleased ;
               adm:graphId ?og .
         graph ?og {
-            ?v :partType bdr:PartTypeVolume ;
-               bf:identifiedBy ?idv .
+            ?v :partType ?pt .
+            FILTER(?pt = bdr:PartTypeVolume || ?pt = bdr:PartTypeCodicologicalVolume)
+            ?v   bf:identifiedBy ?idv .
             FILTER(not exists {?idv a ?idType . FILTER(?idType != bf:Isbn && ?idType != bf:Issn && ?idType != bf:Ean)})
             ?idv rdf:value ?idvval .
         }
