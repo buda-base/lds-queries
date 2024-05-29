@@ -41,6 +41,8 @@ construct {
         }
         FILTER(not exists {?mw :partType ?pt . FILTER(?pt != bdr:PartTypeVolume)})
         ?mw :inRootInstance? ?mwroot .
+        FILTER(not exists {?mwroot :printMethod bdr:PrintMethod_Manuscript})
+        FILTER(exists {?mwroot tmp:thumbnailIIIFService ?th})
         ?mwrootadm adm:adminAbout ?mwroot ;
                    adm:status bda:StatusReleased .
         ?mwroot :instanceHasReproduction ?w .
@@ -60,6 +62,8 @@ construct {
         }
         FILTER(not exists {?mw :partType ?pt . FILTER(?pt != bdr:PartTypeVolume)})
         ?mw :inRootInstance? ?mwroot .
+        FILTER(not exists {?mwroot :printMethod bdr:PrintMethod_Manuscript})
+        FILTER(exists {?mwroot tmp:thumbnailIIIFService ?th})
         ?mwrootadm adm:adminAbout ?mwroot ;
                    adm:status bda:StatusReleased .
         ?mwroot bf:identifiedBy ?id2 .
@@ -75,6 +79,8 @@ construct {
         }
         FILTER(not exists {?mw :partType ?pt . FILTER(?pt != bdr:PartTypeVolume)})
         ?mw :inRootInstance? ?mwroot .
+        FILTER(not exists {?mwroot :printMethod bdr:PrintMethod_Manuscript})
+        FILTER(exists {?mwroot tmp:thumbnailIIIFService ?th})
         ?mwrootadm adm:adminAbout ?mwroot ;
                    adm:status bda:StatusReleased .
         ?mw :instanceOf ?wa .
@@ -95,6 +101,8 @@ construct {
           ?mwroot bdo:hasTitle ?title .
         }
         FILTER(not exists {?mwroot :inRootInstance ?mwroot2 .})
+        FILTER(not exists {?mwroot :printMethod bdr:PrintMethod_Manuscript})
+        FILTER(exists {?mwroot tmp:thumbnailIIIFService ?th})
         ?mwadm adm:adminAbout ?mwroot ;
                    adm:status bda:StatusReleased .
         ?o :outlineOf ?mwroot .
@@ -116,8 +124,10 @@ construct {
           ?v bdo:hasTitle ?title .
           ?v :partType bdr:PartTypeVolume .
         }
-        ?v  :inRootInstance ?mwroot ;
-            bf:identifiedBy ?id ;
+        ?v  :inRootInstance ?mwroot .
+        FILTER(not exists {?mwroot :printMethod bdr:PrintMethod_Manuscript})
+        FILTER(exists {?mwroot tmp:thumbnailIIIFService ?th})
+        ?v  bf:identifiedBy ?id ;
             :partIndex ?pi ;
             bf:identifiedBy ?idv ;
             skos:prefLabel ?vl .
@@ -134,6 +144,8 @@ construct {
           ?mwroot bdo:hasTitle ?title .
         }
         FILTER(not exists {?mwroot :inRootInstance ?mwroot2 .})
+        FILTER(not exists {?mwroot :printMethod bdr:PrintMethod_Manuscript})
+        FILTER(exists {?mwroot tmp:thumbnailIIIFService ?th})
         ?mwadm adm:adminAbout ?mwroot ;
                    adm:status bda:StatusReleased .
         ?o :outlineOf ?mwroot .
@@ -169,6 +181,8 @@ construct {
         }
         ?mwroot bf:identifiedBy ?id .
         FILTER(not exists {?mwroot :inRootInstance ?mwroot2 .})
+        FILTER(not exists {?mwroot :printMethod bdr:PrintMethod_Manuscript})
+        FILTER(exists {?mwroot tmp:thumbnailIIIFService ?th})
         ?mwadm adm:adminAbout ?mwroot ;
                    adm:status bda:StatusReleased .
         ?o :outlineOf ?mwroot .
@@ -191,6 +205,8 @@ construct {
         }
         FILTER(not exists {?mw :partType ?pt . FILTER(?pt != bdr:PartTypeVolume)})
         ?mw :inRootInstance? ?mwroot .
+        FILTER(not exists {?mwroot :printMethod bdr:PrintMethod_Manuscript})
+        FILTER(exists {?mwroot tmp:thumbnailIIIFService ?th})
         ?mwrootadm adm:adminAbout ?mwroot ;
                    adm:status bda:StatusReleased .
         values ?mwp { :editionStatement :inRootInstance skos:prefLabel tmp:thumbnailIIIFService :numberOfVolumes :publisherName :publisherLocation skos:prefLabel :extentStatement }
@@ -205,6 +221,8 @@ construct {
         }
         FILTER(not exists {?mw :partType ?pt . FILTER(?pt != bdr:PartTypeVolume)})
         ?mw :inRootInstance? ?mwroot .
+        FILTER(not exists {?mwroot :printMethod bdr:PrintMethod_Manuscript})
+        FILTER(exists {?mwroot tmp:thumbnailIIIFService ?th})
         ?mwrootadm adm:adminAbout ?mwroot ;
                    adm:status bda:StatusReleased .
         ?mwroot :instanceEvent ?e .
@@ -222,6 +240,8 @@ construct {
         }
         ?mw bf:identifiedBy ?id .
         ?mw :inRootInstance ?mwroot .
+        FILTER(not exists {?mwroot :printMethod bdr:PrintMethod_Manuscript})
+        FILTER(exists {?mwroot tmp:thumbnailIIIFService ?th})
         ?mwrootadm adm:adminAbout ?mwroot ;
                    adm:status bda:StatusReleased .
         ?mw :contentLocation ?cl .
