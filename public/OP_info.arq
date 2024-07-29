@@ -21,6 +21,7 @@ construct {
     ?adm ?admp ?admo .
     ?ig ?igp ?igo .
     ?l ?lp ?lo .
+    ?o :outlineOf ?R_RES .
 } where {
    {
       ?R_RES ?resp ?reso .
@@ -48,5 +49,10 @@ construct {
       ?ig ?igp ?igo .
       ?ig :volumePagesTotal ?pt .
       FILTER(?pt > 0)
+   } union {
+      ?R_RES bdo:instanceReproductionOf ?i .
+      ?o :outlineOf ?i .
+      ?oadm adm:adminAbout ?o ;
+            adm:status bda:StatusReleased .
    }
 }
