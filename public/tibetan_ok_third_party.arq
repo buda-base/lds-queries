@@ -1,0 +1,35 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=All image instances that can be fully shared with third parties
+#QueryLimit=50000
+#QueryUrl=/tibetan_ok_third_party
+
+#select (sum(?vpt) as ?nbimg) (count(?ig) as ?nbvols) {
+select distinct ?w {
+  {
+    # white listed collections
+    # TODO: find MOU with CIHTS
+    values ?collwhitelist { bdr:PR1LOKESH01 bdr:PR1CIHTS00 bdr:PR1KG1 bdr:PR1PEMAKOD00 }
+    ?w :inCollection ?collwhitelist .
+  } union {
+    # PL480 is a collection of MWs
+    ?mw :inCollection bdr:PR1PL480 ;
+        :instanceHasReproduction ?w .
+    ?w a :ImageInstance .
+  } union {
+    # things that were scanned by GEBIS are safe
+    (?w) text:query ( bdo:scanInfo "\"GEBIS\""@en ) .
+  }
+  FILTER (exists {
+    # only released, open access
+    ?wadm adm:adminAbout ?w ;
+          adm:status bda:StatusReleased ;
+          adm:access bda:AccessOpen .
+  })
+  FILTER(exists {
+    # only with images
+    ?w :instanceHasVolume ?ig .
+    ?ig :volumePagesTotal ?vpt .
+    FILTER(?vpt > 2)
+  })
+}
