@@ -13,9 +13,14 @@ construct {
   ?vol ?volp ?volo .
   ?ut ?utp ?uto .
 } where {
-  ?R_RES ?iep ?ieo ;
-         :instanceHasVolume ?vol .
-  ?vol ?volp ?volo .
-  ?ut :etextInVolume ?vol .
-  ?ut ?utp ?uto .
+  {
+    ?R_RES ?iep ?ieo .
+  } union {
+    ?R_RES :instanceHasVolume ?vol .
+    ?vol ?volp ?volo .
+  } union {
+    ?R_RES :instanceHasVolume ?vol .
+    ?ut :etextInVolume ?vol .
+    ?ut ?utp ?uto .  
+  }
 }
