@@ -9,43 +9,13 @@
 #param.R_RES.desc=the URI of the etext instance
 
 construct {
-  ?R_RES :instanceHasVolume ?vol .
+  ?R_RES ?iep ?ieo .
   ?vol ?volp ?volo .
-  ?voll ?volp ?volo .
-  ?vol :volumeHasEtext ?eref .
-  ?eref a bdo:EtextRef ;
-     :seqNum ?sn ;
-     :etextResource ?utd .
-  ?eref ?erefp ?erefo .
-  ?ut skos:prefLabel ?utl .
-  ?utd skos:prefLabel ?utdl .
+  ?ut ?utp ?uto .
 } where {
-  {
-    # here we construct a virtual EtextRef for the transition
-    ?R_RES :instanceHasVolume ?vol .
-    ?vol :volumeNumber ?vnum .
-    ?utd :eTextInInstance ?R_RES ;
-         :eTextInVolume ?vnum ;
-         skos:prefLabel ?utdl ;
-         :eTextVolumeIndex ?sn . 
-    ?vol ?volp ?volo .
-    FILTER(?volp != :volumeHasEtext && ?volp != :volumeOf)
-    BIND( IRI(CONCAT(str(?utd),"_ER")) as ?eref)
-  } union {
-    ?R_RES :instanceHasVolume ?vol .
-    ?vol :volumeNumber ?vnum .
-    ?utd :eTextInInstance ?R_RES ;
-         :eTextIsVolume ?vnum ;
-         skos:prefLabel ?utdl . 
-    BIND(1 as ?sn)
-    ?vol ?volp ?volo .
-    FILTER(?volp != :volumeHasEtext && ?volp != :volumeOf)
-    BIND( IRI(CONCAT(str(?utd),"_ER")) as ?eref)
-  } union {
-    # legacy format, still used by OP import
-    ?R_RES :instanceHasVolume ?vol .
-    ?vol :volumeHasEtext ?eref .
-    ?vol ?volp ?volo .
-    ?eref ?erefp ?erefo .
-  }
+  ?R_RES ?iep ?ieo ;
+         :instanceHasVolume ?vol .
+  ?vol ?volp ?volo .
+  ?ut :etextInVolume ?vol .
+  ?ut ?utp ?uto .
 }
