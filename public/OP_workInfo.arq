@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=all commits of the Openpecha graphs
 #QueryParams=R_RES
-#QueryUrl=/OP_workInfo?R_RES=bdr:W12827
+#QueryUrl=/OP_workInfo?R_RES=bdr:WA0RT3216
 
 #param.R_RES.type=URI
 #param.R_RES.subtype=bdo:Entity

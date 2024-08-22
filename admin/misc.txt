@@ -225,6 +225,41 @@ select distinct ?p ?pname ?bdate ?ddate ?seat where {
   }
 }
 
+select distinct ?p ?pname (group_concat(distinct ?bdate;SEPARATOR=";; ") as ?b) (group_concat(distinct ?ddate;SEPARATOR=";; ") as ?d) (group_concat(?seat;SEPARATOR="; ") as ?s) where {
+  {
+    ?p :personEvent ?birth .
+    FILTER NOT EXISTS {?p :personEvent ?os . ?os a bdo:PersonOccupiesSeat ; :eventWhere ?seat}
+    ?birth a :PersonBirth ;
+           :eventWhen ?bdate .
+    FILTER regex(str(?bdate), "^[0-9]{4}$")
+    ?p :personEvent ?death .
+    ?death a :PersonDeath ;
+           :eventWhen ?ddate .
+    FILTER regex(str(?ddate), "^[0-9]{4}$")
+    ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+    ?p skos:prefLabel ?pname .
+    FILTER(lang(?pname) = "bo-x-ewts")
+  } union {
+    ?p :personEvent ?os .
+    ?os a :PersonOccupiesSeat ;
+        :eventWhere ?seat .
+    ?p :personEvent ?birth .
+    ?birth a :PersonBirth ;
+           :eventWhen ?bdate .
+    FILTER regex(str(?bdate), "^[0-9]{4}$")
+    ?p :personEvent ?death .
+    ?death a :PersonDeath ;
+           :eventWhen ?ddate .
+    FILTER regex(str(?ddate), "^[0-9]{4}$")
+    ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+    ?p skos:prefLabel ?pname .
+    FILTER(lang(?pname) = "bo-x-ewts")
+  }
+} group by ?p ?pname
+
+
 # NGMPP authors, works and instances:
 
   select distinct (count(distinct ?wa) as ?cwa) (count (distinct ?mw) as ?cmw)  (count (distinct ?p) as ?cp) where {
@@ -576,6 +611,21 @@ select distinct ?p ?sbt (group_concat(distinct ?petln;separator=", ") as ?petc) 
     }
 } group by ?p ?sbt
 
+# traditions associated with a person based on sungbum
+
+select distinct ?p (group_concat(distinct ?sbtln;separator=", ") as ?sbtc) WHERE 
+{
+    {
+      ?sbt a :Tradition ;
+          rdfs:seeAlso ?sbtt .
+      BIND(strafter(str(?sbt), "dition") AS ?sbtln)
+      ?wa :workIsAbout ?sbtt ;
+          :workGenre bdr:T208 ;
+          :creator ?aac .
+      ?aac :agent ?p .
+    }
+} group by ?p
+
 # all Tibetan scans
 
 select distinct ?w WHERE 
@@ -736,4 +786,1016 @@ select distinct ?mw {
       FILTER(?y < "1922"^^xsd:gYear)
     })
   }
+}
+
+# copyright unknown with an editor
+
+  select distinct ?mw ?p ?plabel ?rolelabel {
+  {
+    ?mw :printMethod bdr:PrintMethod_Modern ;
+        :instanceHasReproduction ?w .
+    ?mw :instanceOf ?wa .
+    FILTER ( NOT EXISTS {
+      ?wa :creator ?c .
+    })
+    FILTER ( NOT EXISTS {
+      ?mw :publishedEvent ?mwe .
+      ?mwe :onYear ?y .
+      FILTER(?y < "1922"^^xsd:gYear)
+    })
+    ?mw :creator ?mwc .
+    ?mwc :agent ?p .
+    ?p skos:prefLabel ?plabel .
+    FILTER(lang(?plabel) = "bo-x-ewts")
+    ?mwc :role ?r .
+    ?r skos:prefLabel ?rolelabel .
+    FILTER(lang(?rolelabel) = "en")
+  }
+}
+
+# place events associated with traditions
+
+select ?pl ?tr ?y ?nb ?na  {
+  ?pl :placeEvent ?e .
+  ?e :associatedTradition ?tr ;
+     ?ep ?eo .
+  FILTER(?ep = :onYear || ?ep = :notBefore || ?ep = :notAfter)
+  BIND(IF(?ep = :onYear, ?eo, 1/0) as ?y)
+  BIND(IF(?ep = :notBefore, ?eo, 1/0) as ?nb)
+  BIND(IF(?ep = :notAfter, ?eo, 1/0) as ?na)
+}
+
+# person events associated with monasteries
+
+select ?pl ?tr ?y ?nb ?na  {
+  ?pl :placeEvent ?e .
+  ?e :associatedTradition ?tr ;
+     ?ep ?eo .
+  FILTER(?ep = :onYear || ?ep = :notBefore || ?ep = :notAfter)
+  BIND(IF(?ep = :onYear, ?eo, 1/0) as ?y)
+  BIND(IF(?ep = :notBefore, ?eo, 1/0) as ?nb)
+  BIND(IF(?ep = :notAfter, ?eo, 1/0) as ?na)
+}
+
+
+# places with two conflicting foundation dates
+
+select distinct ?pl WHERE 
+{
+   ?e a bdo:PlaceFounded ;
+      :onYear ?y .
+  ?pl :placeEvent ?e .
+  FILTER(exists {?pl :placeEvent ?etwo . ?etwo a bdo:PlaceFounded ; :onYear ?ytwo FILTER(?y != ?ytwo)})
+  ?pladm adm:adminAbout ?pl ;
+         adm:status bda:StatusReleased .
+}
+
+# books published in China in open access:
+
+select distinct ?w ?mwl ?cs {
+  {
+    tmp:TmpChina tmp:inChina ?mw .
+    ?mw :instanceHasReproduction ?w ;
+        :printMethod bdr:PrintMethod_Modern .
+    ?w a :ImageInstance .
+    ?wadm adm:adminAbout ?w ;
+          adm:access bda:AccessOpen ;
+          adm:status bda:StatusReleased .
+    ?mw :copyrightStatus ?cs .
+    ?mw skos:prefLabel ?mwl .
+    FILTER(lang(?mwl) = "bo-x-ewts")
+  } union {
+    tmp:TmpChina tmp:inChina ?mw .
+    ?mw :instanceHasReproduction ?w ;
+        :printMethod bdr:PrintMethod_Modern .
+    ?w a :ImageInstance .
+    ?wadm adm:adminAbout ?w ;
+          adm:access bda:AccessOpen ;
+          adm:status bda:StatusReleased .
+    FILTER(not exists {?mw :copyrightStatus ?csv .})
+    BIND(bdr:CopyrightPublicDomain as ?cs)
+    ?mw skos:prefLabel ?mwl .
+    FILTER(lang(?mwl) = "bo-x-ewts")
+  }
+}
+
+# medical treatises
+
+select distinct ?w (group_concat(distinct ?aac;SEPARATOR="; ") as ?plg) (group_concat(distinct ?pml;SEPARATOR="; ") as ?pmlg) (group_concat(distinct ?mwlabel;SEPARATOR="; ") as ?mwl) (group_concat(distinct ?tlabel;SEPARATOR="; ") as ?tl) {
+  {
+    values ?t { bdr:T00EGS1017630 bdr:T012AG03520 bdr:T10MS14643 bdr:T10MS14651 bdr:T1102 bdr:T1106 bdr:T1114 bdr:T1121 bdr:T1122 bdr:T1139 bdr:T1140 bdr:T1141 bdr:T1142 bdr:T1153 bdr:T1164 bdr:T1188 bdr:T1189 bdr:T1250 bdr:T1468 bdr:T1469 bdr:T1654 bdr:T1656 bdr:T1660 bdr:T1661 bdr:T1690 bdr:T1714 bdr:T1730 bdr:T1795 bdr:T1952 bdr:T1972 bdr:T1978 bdr:T1GS108145 bdr:T1GS139157 bdr:T1KG21162 bdr:T1KG21177 bdr:T1KG21678 bdr:T1KG21679 bdr:T1PD106851 bdr:T1PD106853 bdr:T1PD106854 bdr:T1PD106855 bdr:T1PD106856 bdr:T1PD106857 bdr:T1PD95 bdr:T2124 bdr:T2142 bdr:T237 bdr:T2407 bdr:T241 bdr:T2428 bdr:T2460 bdr:T2558 bdr:T2626 bdr:T279 bdr:T295 bdr:T2DB35092 bdr:T2GS1326 bdr:T2MS13793 bdr:T301 bdr:T3JT12433 bdr:T3JT13430 bdr:T831 bdr:T85 bdr:T86 bdr:T88 bdr:T94 }
+    {
+      ?wa :workIsAbout ?t .
+    } union {
+      ?wa :workGenre ?t .
+    }
+    ?mw :instanceOf ?wa .
+    ?mw :instanceHasReproduction ?w .
+    FILTER(not exists {?mw :copyrightStatus ?cs FILTER (?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed )})
+    ?w a :ImageInstance .
+    ?wadm adm:adminAbout ?w ;
+          adm:status bda:StatusReleased ;
+          adm:access bda:AccessOpen ;
+          adm:contentLegal bda:LD_BDRC_PD .
+    FILTER (not exists {?wadm adm:restrictedInChina true })
+    ?mw skos:prefLabel ?mwlabel .
+    #FILTER(lang(?mwlabel) = "bo-x-ewts")
+    ?t skos:prefLabel ?tlabel .
+    FILTER(lang(?tlabel) = "bo-x-ewts")
+    ?mw :printMethod ?pm .
+    ?pm skos:prefLabel ?pml .
+    FILTER(lang(?pml) = "en")
+  } union {
+  values ?t { bdr:T00EGS1017630 bdr:T012AG03520 bdr:T10MS14643 bdr:T10MS14651 bdr:T1102 bdr:T1106 bdr:T1114 bdr:T1121 bdr:T1122 bdr:T1139 bdr:T1140 bdr:T1141 bdr:T1142 bdr:T1153 bdr:T1164 bdr:T1188 bdr:T1189 bdr:T1250 bdr:T1468 bdr:T1469 bdr:T1654 bdr:T1656 bdr:T1660 bdr:T1661 bdr:T1690 bdr:T1714 bdr:T1730 bdr:T1795 bdr:T1952 bdr:T1972 bdr:T1978 bdr:T1GS108145 bdr:T1GS139157 bdr:T1KG21162 bdr:T1KG21177 bdr:T1KG21678 bdr:T1KG21679 bdr:T1PD106851 bdr:T1PD106853 bdr:T1PD106854 bdr:T1PD106855 bdr:T1PD106856 bdr:T1PD106857 bdr:T1PD95 bdr:T2124 bdr:T2142 bdr:T237 bdr:T2407 bdr:T241 bdr:T2428 bdr:T2460 bdr:T2558 bdr:T2626 bdr:T279 bdr:T295 bdr:T2DB35092 bdr:T2GS1326 bdr:T2MS13793 bdr:T301 bdr:T3JT12433 bdr:T3JT13430 bdr:T831 bdr:T85 bdr:T86 bdr:T88 bdr:T94 }
+    {
+      ?wa :workIsAbout ?t .
+    } union {
+      ?wa :workGenre ?t .
+    }
+    ?mw :instanceOf ?wa .
+    ?mw :instanceHasReproduction ?w .
+    FILTER(not exists {?mw :copyrightStatus ?cs FILTER (?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed )})
+    ?w a :ImageInstance .
+    ?wadm adm:adminAbout ?w ;
+          adm:status bda:StatusReleased ;
+          adm:access bda:AccessOpen ;
+          adm:contentLegal bda:LD_BDRC_PD .
+    FILTER (not exists {?wadm adm:restrictedInChina true })
+    ?mw skos:prefLabel ?mwlabel .
+    #FILTER(lang(?mwlabel) = "bo-x-ewts")
+    ?t skos:prefLabel ?tlabel .
+    FILTER(lang(?tlabel) = "bo-x-ewts")
+    FILTER(not exists {?mw :printMethod ?pm .})
+  } union {
+        values ?t { bdr:T00EGS1017630 bdr:T012AG03520 bdr:T10MS14643 bdr:T10MS14651 bdr:T1102 bdr:T1106 bdr:T1114 bdr:T1121 bdr:T1122 bdr:T1139 bdr:T1140 bdr:T1141 bdr:T1142 bdr:T1153 bdr:T1164 bdr:T1188 bdr:T1189 bdr:T1250 bdr:T1468 bdr:T1469 bdr:T1654 bdr:T1656 bdr:T1660 bdr:T1661 bdr:T1690 bdr:T1714 bdr:T1730 bdr:T1795 bdr:T1952 bdr:T1972 bdr:T1978 bdr:T1GS108145 bdr:T1GS139157 bdr:T1KG21162 bdr:T1KG21177 bdr:T1KG21678 bdr:T1KG21679 bdr:T1PD106851 bdr:T1PD106853 bdr:T1PD106854 bdr:T1PD106855 bdr:T1PD106856 bdr:T1PD106857 bdr:T1PD95 bdr:T2124 bdr:T2142 bdr:T237 bdr:T2407 bdr:T241 bdr:T2428 bdr:T2460 bdr:T2558 bdr:T2626 bdr:T279 bdr:T295 bdr:T2DB35092 bdr:T2GS1326 bdr:T2MS13793 bdr:T301 bdr:T3JT12433 bdr:T3JT13430 bdr:T831 bdr:T85 bdr:T86 bdr:T88 bdr:T94 }
+    {
+      ?wa :workIsAbout ?t .
+    } union {
+      ?wa :workGenre ?t .
+    }
+    ?mw :instanceOf ?wa .
+    ?mw :instanceHasReproduction ?w .
+    FILTER(not exists {?mw :copyrightStatus ?cs FILTER (?cs = bdr:CopyrightInCopyright || ?cs = bdr:CopyrightClaimed )})
+    ?w a :ImageInstance .
+    ?wadm adm:adminAbout ?w ;
+          adm:status bda:StatusReleased ;
+          adm:access bda:AccessOpen ;
+          adm:contentLegal bda:LD_BDRC_PD .
+    FILTER (not exists {?wadm adm:restrictedInChina true })
+    ?wa :creator ?aac .
+    #?aac :role bdr:R0ER0019 ;
+    #     :agent ?p .
+    #?p skos:prefLabel ?pl .
+  }
+} group by ?w
+
+
+# tradition in the old note
+
+select ?res ?noteMatch WHERE 
+{
+        (?note ?sc ?noteMatch) text:query ( :noteText "\"Old TSD Schools table tree\""@en ) .
+        ?res bdo:note ?note .
+        ?res a :Person .
+        FILTER(NOT EXISTS {?res :associatedTradition ?at})
+}
+
+# bonpo texts with record creation date
+
+# from topic: 380
+# from associated tradition: 248
+# 
+
+select ?mw ?mwtitle ?ci (min(?led) as ?creationdate)
+{
+  {
+     VALUES ?t { bdr:T247 bdr:T1710 }
+     VALUES ?p { :workIsAbout :workGenre }
+     ?wa ?p ?t .
+     ?wa :catalogInfo ?ci .
+     ?mw :instanceOf ?wa ;
+      :instanceHasReproduction ?w .
+  } union {
+     VALUES ?tr { bdr:TraditionBon bdr:TraditionBonSar }
+     ?p :associatedTradition ?tr .
+     ?aac :agent ?p .
+     ?wa :creator ?aac .
+     ?wa :catalogInfo ?ci .
+     ?mw :instanceOf ?wa ;
+      :instanceHasReproduction ?w .
+  } union {
+     VALUES ?tr { bdr:TraditionBon bdr:TraditionBonSar }
+     ?p :associatedTradition ?tr .
+     ?wa :workIsAbout ?p .
+     ?wa :catalogInfo ?ci .
+     ?mw :instanceOf ?wa ;
+      :instanceHasReproduction ?w .
+  } union {
+     ?mw text:query ( :publisherName "\"bon\""@en ) .
+     ?mw :instanceOf ?wa .
+     ?wa :catalogInfo ?ci .
+  } union {
+     ?mw text:query ( :publisherName "\"bonpo\""@en ) .
+     ?mw :instanceOf ?wa .
+     ?wa :catalogInfo ?ci .
+  } union {
+     ?wa text:query ( :catalogInfo "\"bonpo\""@en ) .
+     ?mw :instanceOf ?wa ;
+      :instanceHasReproduction ?w .
+     ?wa :catalogInfo ?ci .
+  } union {
+     ?wa text:query ( :catalogInfo "\"bon\""@en ) .
+     ?mw :instanceOf ?wa ;
+      :instanceHasReproduction ?w .
+     ?wa :catalogInfo ?ci .
+  }
+  ?mw skos:prefLabel ?mwtitle .
+  FILTER(lang(?mwtitle) = "bo-x-ewts")
+  ?admmw adm:adminAbout ?mw ;
+         adm:logEntry ?le .
+  ?le adm:logDate ?led .
+} group by ?mw ?mwtitle ?ci order by desc(?creationdate)
+
+
+## printeries in monasteries
+
+select ?pr ?prl ?mn ?mnl {
+  ?pr :placeType bdr:PT0059 ;
+      :placeLocatedIn ?mn .
+  ?pradm adm:adminAbout ?pr ;
+        adm:status bda:StatusReleased .
+  ?mnadm adm:adminAbout ?mn ;
+        adm:status bda:StatusReleased .
+  ?mn :placeType ?pt .
+  FILTER(?pt = bdr:PT0037 || ?pt = bdr:PT0040)
+  ?pr skos:prefLabel ?prl .
+  FILTER(lang(?prl) = "bo-x-ewts")
+  ?mn skos:prefLabel ?mnl .
+  FILTER(lang(?mnl) = "bo-x-ewts")
+}
+
+# invalid gis coordinates
+
+select ?pr ?plat ?plong {
+  ?pr :placeLat ?plat ;
+      :placeLong ?plong .
+  FILTER(!regex(?plat, "^[0-9]+\\.[0-9]+$") || !regex(?plong, "^[0-9]+\\.[0-9]+$"))
+}
+
+
+select ?p where {
+  ?p :placeLong ?plo .
+  filter (not exists {?p :locatedIn bdr:G584})
+  ?padm adm:adminAbout ?p ;
+        adm:status bda:StatusReleased .
+  FILTER(?plo >= "42." && ?plo <= "52.")
+  ?p :placeLat ?pla .
+  FILTER(?pla >= "91." && ?pla <= "115.")
+}
+
+select ?pl ?plnames ?pltypel ?locatedin ?locatedinpl {
+  {
+    ?pl a :Place .
+    FILTER(not exists {?pl :placeLocatedIn ?locatedin})
+    ?pladm adm:adminAbout ?pl ;
+           adm:status bda:StatusReleased .
+    ?pl skos:prefLabel ?plnames .
+    FILTER(lang(?plnames) = "bo-x-ewts")
+    ?pl :placeType ?pltype .
+    ?pltype skos:prefLabel ?pltypel .
+    FILTER(lang(?pltypel) = "en")
+  } union {
+    ?pl a :Place .
+    ?pl :placeLocatedIn ?locatedin .
+    ?pladm adm:adminAbout ?pl ;
+           adm:status bda:StatusReleased .
+    ?pl skos:prefLabel ?plnames .
+    FILTER(lang(?plnames) = "bo-x-ewts")
+    ?pl :placeType ?pltype .
+    ?pltype skos:prefLabel ?pltypel .
+    FILTER(lang(?pltypel) = "en")
+    ?locatedin skos:prefLabel ?locatedinpl .
+    FILTER(lang(?locatedinpl) = "bo-x-ewts")
+  }
+}
+
+# places that are source printeries but not monasteries
+
+select distinct ?plbase ?pt ?ptl where {
+  
+    ?mw :hasSourcePrintery ?plbase ;
+          :printMethod bdr:PrintMethod_Relief_WoodBlock .
+      FILTER (exists {?mwadm adm:adminAbout ?mw . ?mwadm adm:status bda:StatusReleased })
+      FILTER (exists {?pladm adm:adminAbout ?plbase . ?pladm adm:status bda:StatusReleased })
+      ?plbase :placeType ?pt .
+      FILTER(?pt != bdr:PT0059 && ?pt != bdr:PT0037 && ?pt != bdr:PT0040 && ?pt != bdr:PT0021 && ?pt != bdr:PT0080)
+      ?pt skos:prefLabel ?ptl .
+      FILTER(lang(?ptl) = "en")
+}
+
+# all independent printeries and monasteries with printeries
+
+select distinct ?pl (max(?pll) as ?l) (max(?lat) as ?mlat) (max(?lon) as ?mlon) {
+  {
+    # independent printeries
+    ?pl :placeType bdr:PT0059 .
+    FILTER (exists {?pladm adm:adminAbout ?pl . ?pladm adm:status bda:StatusReleased })
+    FILTER (not exists {?pl :placeLocatedIn ?plp . ?plp :placeType ?plpt . FILTER(?plpt = bdr:PT0037 || ?plpt = bdr:PT0040 || ?plpt = bdr:PT0021 || ?plpt = bdr:PT0080)})
+    ?pl :placeLat ?lat ;
+        :placeLong ?lon ;
+        skos:prefLabel ?pll .
+    FILTER(lang(?pll) = "bo-x-ewts" || (lang(?pll) = "en" && not exists {?pl skos:prefLabel ?pll2 FILTER(lang(?pll2) = "bo-x-ewts")}))
+  } union {
+    # printeries in monasteries, and monasteries with place of production
+    {
+      ?mw :hasSourcePrintery ?pl ;
+          :printMethod bdr:PrintMethod_Relief_WoodBlock .
+      FILTER (exists {?mwadm adm:adminAbout ?mw . ?mwadm adm:status bda:StatusReleased })
+      FILTER (exists {?pladm adm:adminAbout ?pl . ?pladm adm:status bda:StatusReleased })
+      ?pl :placeLat ?lat ;
+        :placeLong ?lon ;
+        skos:prefLabel ?pll ;
+        :placeType ?pt .
+      FILTER(lang(?pll) = "bo-x-ewts" || (lang(?pll) = "en" && not exists {?pl skos:prefLabel ?pll2 FILTER(lang(?pll2) = "bo-x-ewts")}))
+      FILTER(?pt = bdr:PT0037 || ?pt = bdr:PT0040 || ?pt = bdr:PT0021 || ?pt = bdr:PT0080)
+    } union {
+      # printeries in monasteries, cities, grwa tshang, etc.
+      ?pl :placeType bdr:PT0059 .
+      FILTER (exists {?pladm adm:adminAbout ?pl . ?pladm adm:status bda:StatusReleased })
+      FILTER(not exists {?pl :placeLat ?lat})
+      ?pl :placeLocatedIn ?plli .
+      ?plli :placeType ?pt .
+      FILTER(?pt = bdr:PT0037 || ?pt = bdr:PT0040 || ?pt = bdr:PT0021 || ?pt = bdr:PT0080 || ?pt = bdr:PT0008)
+      ?plli :placeLat ?lat ;
+          :placeLong ?lon .
+      ?pl skos:prefLabel ?pll .
+      FILTER(lang(?pll) = "bo-x-ewts" || (lang(?pll) = "en" && not exists {?pl skos:prefLabel ?pll2 FILTER(lang(?pll2) = "bo-x-ewts")}))
+    }
+  }
+} group by ?pl
+
+
+select distinct ?w {
+  ?i :volumePagesTotal ?pt .
+  FILTER(?pt > 2)
+  ?w :instanceHasVolume ?i .
+}
+
+select ?w ?si {
+  (?w ?sc ?si) text:query ( bdo:scanInfo "\"Tibetan Buddhist Resource Center\""@en ) .
+  ?w :instanceReproductionOf ?mw .
+  ?mw :printMethod ?pm .
+  FILTER (?pm = bdr:PrintMethod_Manuscript || ?pm = bdr:PrintMethod_Relief_WoodBlock)
+}
+
+select ?idtv ?mwo {
+  ?idt a bdr:CBCSiglaT ;
+    rdf:value ?idtv .
+  ?mwt bf:identifiedBy ?idt .
+  ?mwt :instanceOf ?wa .
+  ?wa :workHasInstance ?mwo .
+}
+
+select distinct ?p ?prefL
+WHERE {
+  ?p a :Person .
+  FILTER(EXISTS { ?p tmp:hasRole ?r . })
+  FILTER (NOT EXISTS { 
+      ?p  owl:sameAs ?viaf .
+      FILTER( REGEX( str(?viaf), "^http://viaf" ) ) .
+    })
+  ?p skos:prefLabel ?prefL .
+  FILTER(lang(?prefL) = "bo-x-ewts")
+  FILTER(NOT EXISTS {?p :personName ?nm . ?nm rdfs:label ?prefL2 FILTER(lang(?prefL2) = "sa-x-iast")})
+  ?p tmp:entityScore ?es .
+} order by desc(?es) limit 2000
+
+# monasteries with foundation dates and coordinates
+
+select ?p ?pLu (min(?fw) as ?fwm) (max(?lat) as ?latm) (max(?long) as ?longm) {
+  ?p :placeType bdr:PT0037 .
+  ?padm adm:adminAbout ?p ;
+        adm:status bda:StatusReleased .
+  ?p :placeEvent ?e .
+  ?e a :PlaceFounded ;
+     :eventWhen ?fw .
+  ?p :placeLat ?lat ;
+     :placeLong ?long .
+  ?p skos:prefLabel ?pL .
+  FILTER(lang(?pL) = "bo-x-ewts")
+  BIND(f:ewtsToUnicode(?pL) as ?pLu)
+} group by ?p ?pLu
+
+
+select distinct ?res ?prefL ?authorprefl
+WHERE 
+{
+  {
+    {
+        (?res ?sc ?labelMatch) text:query ( bdo:skosLabels "\"rdo rje gcod pa\""@bo-x-ewts) .
+        ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+        (?res ?sc ?extMatch ?graph ?extMatchP) text:query ( bdo:extendedStmts "\"rdo rje gcod pa\""@bo-x-ewts ) .
+        ?res a bdo:Work .
+    } union {
+        (?note ?sc ?noteMatch) text:query ( bdo:noteText "\"rdo rje gcod pa\""@bo-x-ewts "highlight:" ) .
+        ?res bdo:note ?note .
+        ?res a/rdfs:subClassOf* bdo:Work .
+    }
+    ?res ?resp ?reso .
+    FILTER(NOT EXISTS{?res :creator ?aac . ?aac :role bdr:R0ER0019 . ?aac :agent ?p .})
+    ?res :language bdr:LangBo .
+    ?res skos:prefLabel ?prefL .
+    FILTER(lang(?prefL) = "bo-x-ewts")
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status bda:StatusReleased .
+  } union {
+
+        {
+        (?res ?sc ?labelMatch) text:query ( bdo:skosLabels "\"rdo rje gcod pa\""@bo-x-ewts) .
+        ?res a/rdfs:subClassOf* bdo:Work .
+    } union {
+        (?res ?sc ?extMatch ?graph ?extMatchP) text:query ( bdo:extendedStmts "\"rdo rje gcod pa\""@bo-x-ewts ) .
+        ?res a bdo:Work .
+    } union {
+        (?note ?sc ?noteMatch) text:query ( bdo:noteText "\"rdo rje gcod pa\""@bo-x-ewts "highlight:" ) .
+        ?res bdo:note ?note .
+        ?res a/rdfs:subClassOf* bdo:Work .
+    }
+    ?res ?resp ?reso .
+    ?res :creator ?aac . ?aac :role bdr:R0ER0019 . ?aac :agent ?p . ?p skos:prefLabel ?authorprefl . FILTER(lang(?authorprefl) = "bo-x-ewts")
+    ?res :language bdr:LangBo .
+    ?res skos:prefLabel ?prefL .
+    FILTER(lang(?prefL) = "bo-x-ewts")
+    ?resAdm adm:adminAbout ?res .
+    ?resAdm adm:status bda:StatusReleased .
+
+  }
+} group by ?res ?prefL ?authorprefl
+
+
+select (sample(?w) as ?sw) {
+  ?mw :hasSourcePrintery ?sp ;
+      :instanceHasReproduction ?w ;
+      :printMethod bdr:PrintMethod_Relief_WoodBlock .
+  ?w tmp:thumbnailIIIFService ?th .
+  ?wadm adm:adminAbout ?w ;
+        adm:status bda:StatusReleased ;
+        adm:access bda:AccessOpen .
+} group by ?sp
+
+
+# csv contemporary female authors
+
+select ?p (group_concat (distinct ?pl) as ?names) (group_concat(distinct ?yearStart) as ?year) (count(distinct ?wa) as ?nbworks) (group_concat (distinct ?nt) as ?notes) (group_concat (distinct ?viaf) as ?viafall)
+WHERE 
+{
+  {
+
+    ?p bdo:personGender bdr:GenderFemale .
+    ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+    ?p skos:prefLabel ?pl .
+    FILTER(lang(?pl) = "bo-x-ewts")
+    ?aac :agent ?p .
+    ?p :personEvent ?evt .
+    ?evt a ?evtType .
+    FILTER(?evtType = :PersonBirth || ?evtType = :PersonEventNotSpecified || ?evtType = :PersonFlourished)
+    ?evt :eventWhen ?yearStart .
+    FILTER(strstarts(str(?yearStart), "19") || strstarts(str(?yearStart), "20"))
+    ?wa :creator ?aac .
+    BIND("" as ?nt)
+    BIND("" as ?viaf)
+
+  } union {
+
+    ?p bdo:personGender bdr:GenderFemale .
+    ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+    ?p skos:prefLabel ?pl .
+    FILTER(lang(?pl) = "bo-x-ewts")
+    ?aac :agent ?p .
+    ?p :personEvent ?evt .
+    ?evt a ?evtType .
+    FILTER(?evtType = :PersonBirth || ?evtType = :PersonEventNotSpecified || ?evtType = :PersonFlourished)
+    ?evt :eventWhen ?yearStart .
+    FILTER(strstarts(str(?yearStart), "19") || strstarts(str(?yearStart), "20"))
+    ?wa :creator ?aac .
+    ?p :note ?n .
+    ?n :noteText ?nt .
+    BIND("" as ?viaf)
+
+  } union {
+
+    ?p bdo:personGender bdr:GenderFemale .
+    ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+    ?p skos:prefLabel ?pl .
+    FILTER(lang(?pl) = "bo-x-ewts")
+    ?aac :agent ?p .
+    ?p :personEvent ?evt .
+    ?evt a ?evtType .
+    FILTER(?evtType = :PersonBirth || ?evtType = :PersonEventNotSpecified || ?evtType = :PersonFlourished)
+    ?evt :eventWhen ?yearStart .
+    FILTER(strstarts(str(?yearStart), "19") || strstarts(str(?yearStart), "20"))
+    ?wa :creator ?aac .
+    ?p owl:sameAs ?viaf .
+    FILTER(strstarts(str(?viaf), "http://viaf.org"))
+
+  }
+} group by ?p
+
+select (sum(?vpt) as ?pt) {
+  {
+    select distinct ?ig {
+      values ?t {bdr:T238 bdr:T1352 bdr:T393 bdr:T1881 bdr:T1512 bdr:T179 bdr:T1KG8469 bdr:T1285 bdr:T1254 bdr:T1694 bdr:T4CZ15473 bdr:T1249 bdr:T1246 bdr:T1402 bdr:T613 bdr:T456 bdr:T58 bdr:T1CZ58 bdr:T545 bdr:T1335 bdr:T1358 bdr:T1504 bdr:T1091 bdr:T1988 bdr:T313 bdr:T1796 bdr:T1543}
+      ?wa :workIsAbout ?t .
+      ?mw :instanceOf ?wa ;
+          :instanceHasReproduction ?w .
+      ?w a :ImageInstance ;
+         :instanceHasVolume ?ig .
+    }
+  }
+  ?ig :volumePagesTotal ?vpt .
+}
+
+# NLM export for Joel
+
+select ?nlmid ?bdrcid ?w ?imgstart ?imgend {
+  ?id a bdr:NLMId ;
+      rdf:value ?nlmid .
+  ?bdrcid bf:identifiedBy ?id ;
+          :contentLocation ?cl .
+  ?cl :contentLocationInstance ?w ;
+      :contentLocationPage ?imgstart ;
+      :contentLocationEndPage ?imgend .
+}
+
+# export of places for TN:
+
+select ?p (group_concat(distinct ?pl;SEPARATOR="; ") as ?l) ?lat ?long (group_concat(distinct ?parl;SEPARATOR="; ") as ?parentl) {
+  {
+    ?p :placeType bdr:PT0037 .
+    FILTER not exists { ?p :placeLocatedIn ?parent }
+    ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+    FILTER NOT EXISTS { ?p :placeLat ?plj }
+    ?p skos:prefLabel ?pl .
+  } union {
+    ?p :placeType bdr:PT0037 .
+    FILTER not exists { ?p :placeLocatedIn ?parent }
+    ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+    ?p :placeLat ?lat ;
+       :placeLong ?long ;
+       skos:prefLabel ?pl .
+  } union {
+    ?p :placeType bdr:PT0037 .
+    FILTER NOT EXISTS { ?p :placeLat ?plj }
+    ?p :placeLocatedIn ?parent .
+    FILTER(?parent != bdr:G3182 && ?parent != bdr:G584 && ?parent != bdr:G603 && ?parent != bdr:G3205 )
+    ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+    ?p skos:prefLabel ?pl .
+    ?parent skos:prefLabel ?parl .
+  } union {
+    ?p :placeType bdr:PT0037 .
+    ?p :placeLocatedIn ?parent .
+    FILTER(?parent != bdr:G3182 && ?parent != bdr:G584 && ?parent != bdr:G603 && ?parent != bdr:G3205 )
+    ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+    ?p :placeLat ?lat ;
+       :placeLong ?long ;
+       skos:prefLabel ?pl .
+    ?parent skos:prefLabel ?parl .
+  }
+} group by ?p ?lat ?long
+
+
+# rewritten with optionals
+
+select ?p (group_concat(distinct ?pl;SEPARATOR="; ") as ?l) ?lat ?long (group_concat(distinct ?parl;SEPARATOR="; ") as ?parentl) (group_concat(distinct ?fd;SEPARATOR="; ") as ?fdm) (group_concat(distinct ?trl;SEPARATOR="; ") as ?trlm) {
+  {
+    ?p :placeType bdr:PT0037 .
+    ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+    filter(not exists {?p :placeLocatedIn ?parent} || exists {?p :placeLocatedIn ?parent FILTER(?parent != bdr:G3182 && ?parent != bdr:G584 && ?parent != bdr:G603 && ?parent != bdr:G3205 )})
+    optional {
+      ?p :placeType bdr:PT0037 .
+      ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+      filter(not exists {?p :placeLocatedIn ?parent} || exists {?p :placeLocatedIn ?parent FILTER(?parent != bdr:G3182 && ?parent != bdr:G584 && ?parent != bdr:G603 && ?parent != bdr:G3205 )})
+      ?p :associatedTradition ?tr .
+      ?tr skos:prefLabel ?trl .
+      FILTER(lang(?trl) = "bo-x-ewts")
+    }
+    optional {
+      ?p :placeType bdr:PT0037 .
+      ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+      filter(not exists {?p :placeLocatedIn ?parent} || exists {?p :placeLocatedIn ?parent FILTER(?parent != bdr:G3182 && ?parent != bdr:G584 && ?parent != bdr:G603 && ?parent != bdr:G3205 )})
+      ?p :placeEvent ?e .
+        ?e a :PlaceFounded ;
+        :eventWhen ?fd .
+    }
+    optional {
+      ?p :placeType bdr:PT0037 .
+      ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+      filter(not exists {?p :placeLocatedIn ?parent} || exists {?p :placeLocatedIn ?parent FILTER(?parent != bdr:G3182 && ?parent != bdr:G584 && ?parent != bdr:G603 && ?parent != bdr:G3205 )})
+      ?p :placeLat ?lat ;
+       :placeLong ?long ;
+    }
+    optional {
+      ?p :placeType bdr:PT0037 .
+      ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+      ?p :placeLocatedIn ?parent .
+      FILTER(?parent != bdr:G3182 && ?parent != bdr:G584 && ?parent != bdr:G603 && ?parent != bdr:G3205 )
+       ?parent skos:prefLabel ?parl .
+    }
+    ?p skos:prefLabel ?pl .
+  }
+} group by ?p ?lat ?long
+
+
+select ?p (group_concat (distinct ?pl) as ?names) (group_concat(distinct ?yearStart) as ?year) (count(distinct ?wa) as ?nbworks) (group_concat (distinct ?nt) as ?notes) (group_concat (distinct ?viaf) as ?viafall)
+WHERE 
+{
+  {
+
+    ?p bdo:personGender bdr:GenderFemale .
+    ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+    ?p skos:prefLabel ?pl .
+    FILTER(lang(?pl) = "bo-x-ewts" || lang(?pl) = "bo")
+    ?aac :agent ?p .
+    ?p :personEvent ?evt .
+    ?evt a ?evtType .
+    FILTER(?evtType = :PersonBirth || ?evtType = :PersonEventNotSpecified || ?evtType = :PersonFlourished)
+    ?evt :eventWhen ?yearStart .
+    FILTER(strstarts(str(?yearStart), "19") || strstarts(str(?yearStart), "20"))
+    ?wa :creator ?aac .
+    BIND("" as ?nt)
+    BIND("" as ?viaf)
+
+  } union {
+
+    ?p bdo:personGender bdr:GenderFemale .
+    ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+    ?p skos:prefLabel ?pl .
+    FILTER(lang(?pl) = "bo-x-ewts" || lang(?pl) = "bo")
+    ?aac :agent ?p .
+    ?p :personEvent ?evt .
+    ?evt a ?evtType .
+    FILTER(?evtType = :PersonBirth || ?evtType = :PersonEventNotSpecified || ?evtType = :PersonFlourished)
+    ?evt :eventWhen ?yearStart .
+    FILTER(strstarts(str(?yearStart), "19") || strstarts(str(?yearStart), "20"))
+    ?wa :creator ?aac .
+    ?p :note ?n .
+    ?n :noteText ?nt .
+    BIND("" as ?viaf)
+
+  } union {
+
+    ?p bdo:personGender bdr:GenderFemale .
+    ?padm adm:adminAbout ?p ;
+          adm:status bda:StatusReleased .
+    ?p skos:prefLabel ?pl .
+    FILTER(lang(?pl) = "bo-x-ewts" || lang(?pl) = "bo")
+    ?aac :agent ?p .
+    ?p :personEvent ?evt .
+    ?evt a ?evtType .
+    FILTER(?evtType = :PersonBirth || ?evtType = :PersonEventNotSpecified || ?evtType = :PersonFlourished)
+    ?evt :eventWhen ?yearStart .
+    FILTER(strstarts(str(?yearStart), "19") || strstarts(str(?yearStart), "20"))
+    ?wa :creator ?aac .
+    ?p owl:sameAs ?viaf .
+    FILTER(strstarts(str(?viaf), "http://viaf.org"))
+
+  }
+} group by ?p
+
+# TLM
+
+# certain: name in common, creator of work with a title in common
+
+select ?p ?pl (group_concat(distinct ?wl;SEPARATOR="; ") as ?l) (group_concat(distinct str(?pr);SEPARATOR="; ") as ?prm) {
+  ?padm adm:status bda:StatusEditing ;
+          adm:adminAbout ?p .
+    ?p a :Person ;
+       skos:prefLabel ?pl .
+  filter(lang(?pl) = "bo-x-ewts")
+  ?aac :agent ?p .
+  ?wa :creator ?aac ;
+      skos:prefLabel ?wl .
+  ?n rdfs:label ?pl .
+  ?pr :personName ?n .
+  ?pradm adm:adminAbout ?pr ;
+         adm:status bda:StatusReleased .
+  ?aac2 :agent ?pr .
+  ?wa2 :creator ?aac2 .
+  FILTER(exists {?wa2 skos:prefLabel ?wl} || exists {?wa2 skos:altLabel ?wl})
+  ?w2adm adm:adminAbout ?wa2 ;
+         adm:status bda:StatusReleased .
+} group by ?p ?pl
+
+# TLM persons less certain: name in common
+
+select ?p ?pl (group_concat(distinct ?wl;SEPARATOR="; ") as ?l) (group_concat(distinct str(?pr);SEPARATOR="; ") as ?prm) {
+  ?padm adm:status bda:StatusEditing ;
+          adm:adminAbout ?p .
+    ?p a :Person ;
+       skos:prefLabel ?pl .
+  filter(lang(?pl) = "bo-x-ewts")
+  ?aac :agent ?p .
+  ?wa :creator ?aac ;
+      skos:prefLabel ?wl .
+  ?n rdfs:label ?pl .
+  ?pr :personName ?n .
+  FILTER (strstarts(str(?pr), 'http://purl.bdrc.io'))
+  ?pradm adm:adminAbout ?pr ;
+         adm:status bda:StatusReleased .
+} group by ?p ?pl
+
+# TLM works:
+
+select ?wa1 ?p (group_concat(distinct str(?pl);SEPARATOR="; ") as ?plm) (group_concat(distinct str(?wa2);SEPARATOR="; ") as ?wa2m) {
+  ?wa1adm adm:status bda:StatusEditing ;
+          adm:adminAbout ?wa1 .
+    ?wa1 a :Work ;
+       skos:prefLabel ?pl .
+  filter(lang(?pl) = "bo-x-ewts")
+  ?wa1 :creator ?aac .
+  ?aac :agent ?p .
+  ?aac2 :agent ?p .
+  ?wa2 :creator ?aac2 .
+  ?wa2 skos:prefLabel ?pl .
+  ?wa2adm adm:adminAbout ?wa2 ;
+         adm:status bda:StatusReleased .
+} group by ?wa1 ?p
+
+# TLM stats:
+
+# nb items total: 3875
+
+select (count(distinct ?it) as ?cit) {
+  ?it a bf:Item .
+  FILTER (strstarts(str(?it), 'http://purl.bdrc.io/resource/IT1TLM'))
+}
+
+# nb versions in TLM total: 2437 (none of which are in the catalog)
+
+select (count(distinct ?mw) as ?cit) {
+  ?it a bf:Item .
+  FILTER (strstarts(str(?it), 'http://purl.bdrc.io/resource/IT1TLM'))
+  ?it bf:itemOf ?mw .
+}
+
+# nb works in TLM not in catalog: 2012
+
+select (count(distinct ?wa) as ?cit) {
+  ?it a bf:Item .
+  FILTER (strstarts(str(?it), 'http://purl.bdrc.io/resource/IT1TLM'))
+  ?it bf:itemOf ?mw .
+  ?mw :instanceOf ?wa .
+  FILTER (strstarts(str(?wa), 'http://purl.bdrc.io/resource/WA1TLM'))
+}
+
+# nb persons in TLM works not in catalog: 339
+
+select (count(distinct ?p) as ?cit) {
+  ?it a bf:Item .
+  FILTER (strstarts(str(?it), 'http://purl.bdrc.io/resource/IT1TLM'))
+  ?it bf:itemOf ?mw .
+  ?mw :instanceOf ?wa .
+  FILTER (strstarts(str(?wa), 'http://purl.bdrc.io/resource/WA1TLM'))
+  ?wa :creator ?aac .
+  ?aac :agent ?p .
+  FILTER (strstarts(str(?p), 'http://purl.bdrc.io/resource/P1TLM'))
+}
+
+# grand TLM spreadsheet
+
+select ?mw (group_concat(distinct str(?wa);SEPARATOR="; ") as ?wag) (group_concat(distinct ?tbo;SEPARATOR="; ") as ?tg) (group_concat(distinct str(?p);SEPARATOR="; ") as ?pg) (group_concat(distinct ?plbo;SEPARATOR="; ") as ?plg) (group_concat(distinct ?pn;SEPARATOR="; ") as ?png) (group_concat(distinct ?publ;SEPARATOR="; ") as ?publg) (group_concat(distinct ?puby;SEPARATOR="; ") as ?pubyg) (group_concat(distinct str(?cm);SEPARATOR="; ") as ?cmg) { 
+  {
+    ?mwadm adm:status bda:StatusEditing ;
+           adm:adminAbout ?mw .
+    ?mw :instanceOf ?wa .
+    optional {
+       ?mwadm adm:status bda:StatusEditing ;
+           adm:adminAbout ?mw .
+        ?mw :instanceOf ?wa .
+        ?wa :creator ?aac .
+        ?aac :agent ?p .
+        ?p skos:prefLabel ?pl .
+        FILTER(lang(?pl) = "bo-x-ewts")
+        BIND(f:ewtsToUnicode(?pl) as ?plbo)
+    }
+    optional {
+      ?mwadm adm:status bda:StatusEditing ;
+             adm:adminAbout ?mw .
+      ?mw :publisherLocation ?publ .
+    }
+    optional {
+      ?mwadm adm:status bda:StatusEditing ;
+             adm:adminAbout ?mw .
+      ?mw :publisherName ?pn .
+    }
+    optional {
+      ?mwadm adm:status bda:StatusEditing ;
+             adm:adminAbout ?mw .
+      ?mw :instanceEvent ?ev .
+      ?ev :eventWhen ?puby .
+    }
+    optional {
+      ?mwadm adm:status bda:StatusEditing ;
+             adm:adminAbout ?mw .
+      ?mw :contentMethod ?cm .
+    }
+    ?mw :hasTitle ?tt .
+    ?tt rdfs:label ?t .
+    BIND(f:ewtsToUnicode(?t) as ?tbo)
+  }
+} group by ?mw
+
+# grand TLM spreadsheet, no released version with these titles
+
+select ?mw (group_concat(distinct str(?wa);SEPARATOR="; ") as ?wag) (group_concat(distinct ?tbo;SEPARATOR="; ") as ?tg) (group_concat(distinct str(?p);SEPARATOR="; ") as ?pg) (group_concat(distinct ?plbo;SEPARATOR="; ") as ?plg) (group_concat(distinct ?pn;SEPARATOR="; ") as ?png) (group_concat(distinct ?publ;SEPARATOR="; ") as ?publg) (group_concat(distinct ?puby;SEPARATOR="; ") as ?pubyg) (group_concat(distinct str(?cm);SEPARATOR="; ") as ?cmg) { 
+    ?mwadm adm:status bda:StatusEditing ;
+           adm:adminAbout ?mw .
+    ?mw :instanceOf ?wa .
+    optional {
+       ?mwadm adm:status bda:StatusEditing ;
+           adm:adminAbout ?mw .
+        ?mw :instanceOf ?wa .
+        ?wa :creator ?aac .
+        ?aac :agent ?p .
+        ?p skos:prefLabel ?pl .
+        FILTER(lang(?pl) = "bo-x-ewts")
+        BIND(f:ewtsToUnicode(?pl) as ?plbo)
+    }
+    optional {
+      ?mwadm adm:status bda:StatusEditing ;
+             adm:adminAbout ?mw .
+      ?mw :publisherLocation ?publ .
+    }
+    optional {
+      ?mwadm adm:status bda:StatusEditing ;
+             adm:adminAbout ?mw .
+      ?mw :publisherName ?pn .
+    }
+    optional {
+      ?mwadm adm:status bda:StatusEditing ;
+             adm:adminAbout ?mw .
+      ?mw :instanceEvent ?ev .
+      ?ev :eventWhen ?puby .
+    }
+    optional {
+      ?mwadm adm:status bda:StatusEditing ;
+             adm:adminAbout ?mw .
+      ?mw :contentMethod ?cm .
+    }
+    ?mw :hasTitle ?tt .
+    ?tt rdfs:label ?t .
+    filter(not exists {
+      ?tt2 rdfs:label ?t .
+      ?mw2 :hasTitle ?tt2 .
+      filter (exists { 
+          ?mw2adm adm:adminAbout ?mw2 ;
+                adm:status bda:StatusReleased .
+        } || exists {
+          ?mw2 :partType bdr:PartTypeVolume ;
+               :partOf ?mw2root .
+          ?mw2adm adm:adminAbout ?mw2root ;
+                adm:status bda:StatusReleased .
+        })
+  })
+  BIND(f:ewtsToUnicode(?t) as ?tbo)
+} group by ?mw
+
+# possible duplicates on BDRC:
+
+# any primary name / primary title in common
+
+select ?p1 ?p2 (group_concat(distinct ?pnl;SEPARATOR="; ") as ?pnlm) {
+  ?p1 :personName ?pn1 .
+  ?pn1 rdfs:label ?pnl .
+  FILTER(lang(?pnl) = "bo-x-ewts")
+  ?pn2 rdfs:label ?pnl .
+  ?pn1 a ?pn1type .
+  FILTER(?pn1type = bdo:PersonPrimaryName || ?pn1type = bdo:PersonPrimaryTitle)
+  ?pn2 a ?pn2type .
+  FILTER(?pn2type = bdo:PersonPrimaryName || ?pn1type = bdo:PersonPrimaryTitle)
+  ?p2 :personName ?pn2 .
+  FILTER(str(?p1) > str(?p2) && strstarts(str(?p1), 'http://purl.bdrc.io/') && strstarts(str(?p2), 'http://purl.bdrc.io/'))
+  ?p1adm adm:adminAbout ?p1 ;
+         adm:status bda:StatusReleased .
+  ?p2adm adm:adminAbout ?p2 ;
+         adm:status bda:StatusReleased .
+} group by ?p1 ?p2
+
+# prefLabel
+
+select (group_concat(distinct ?pnl;SEPARATOR="; ") as ?pnlm) ?p1 (group_concat(distinct ?p1nl;SEPARATOR="; ") as ?p1nlm) ?p2 (group_concat(distinct ?p2nl;SEPARATOR="; ") as ?p2nlm) (group_concat(distinct ?c;SEPARATOR="; ") as ?cm) {
+  ?p1 a :Person .
+  ?p1 skos:prefLabel ?pnl .
+  FILTER(lang(?pnl) = "bo-x-ewts")
+  ?p2 skos:prefLabel ?pnl .
+  FILTER(str(?p1) > str(?p2) && strstarts(str(?p1), 'http://purl.bdrc.io/') && strstarts(str(?p2), 'http://purl.bdrc.io/'))
+  ?p1 tmp:associatedCentury ?c .
+  ?p2 tmp:associatedCentury ?c .
+  ?p1adm adm:adminAbout ?p1 ;
+         adm:status bda:StatusReleased .
+  ?p2adm adm:adminAbout ?p2 ;
+         adm:status bda:StatusReleased .
+  ?p1 :personName ?p1n .
+  ?p1n rdfs:label ?p1nl .
+  FILTER(lang(?p1nl) = "bo-x-ewts")
+  ?p2 :personName ?p2n .
+  ?p2n rdfs:label ?p2nl .
+  FILTER(lang(?p2nl) = "bo-x-ewts")
+
+} group by ?p1 ?p2
+
+# same date
+
+select (group_concat(distinct ?pnl;SEPARATOR="; ") as ?pnlm) ?p1 (group_concat(distinct ?p1nl;SEPARATOR="; ") as ?p1nlm) ?p2 (group_concat(distinct ?p2nl;SEPARATOR="; ") as ?p2nlm) (group_concat(distinct ?ew;SEPARATOR="; ") as ?cm) {
+  ?p1 a :Person .
+  ?p1 skos:prefLabel ?pnl .
+  FILTER(lang(?pnl) = "bo-x-ewts")
+  ?p2 skos:prefLabel ?pnl .
+  FILTER(str(?p1) > str(?p2) && strstarts(str(?p1), 'http://purl.bdrc.io/') && strstarts(str(?p2), 'http://purl.bdrc.io/'))
+  ?p1 :personEvent ?e1 .
+  ?e1 a :PersonBirth ;
+      :eventWhen ?ew .
+  ?p2 :personEvent ?e2 .
+  ?e2 :eventWhen ?ew ;
+      a :PersonBirth .
+  ?p1adm adm:adminAbout ?p1 ;
+         adm:status bda:StatusReleased .
+  ?p2adm adm:adminAbout ?p2 ;
+         adm:status bda:StatusReleased .
+  ?p1 :personName ?p1n .
+  ?p1n rdfs:label ?p1nl .
+  FILTER(lang(?p1nl) = "bo-x-ewts")
+  ?p2 :personName ?p2n .
+  ?p2n rdfs:label ?p2nl .
+  FILTER(lang(?p2nl) = "bo-x-ewts")
+} group by ?p1 ?p2
+
+# Tibetan needs outline (misses more recent NLM works)
+
+# 11670
+select (count(distinct ?mw) as ?c) {
+  {
+     bdr:O3JW530910MS9144 :taxHasSubClass+ ?t .
+     ?wa ?p ?t .
+     ?mw :instanceOf ?wa .
+     FILTER(not exists {?mw :inRootInstance ?mwr})
+  } union {
+     ?mw :numberOfVolumes ?nv .
+     FILTER(?nv > 1)
+  } union {
+     ?o :outlineOf ?mw .
+  } union {
+     ?mw :copyrightStatus bdr:CopyrightClaimed .
+  }
+  FILTER (exists {
+    ?mw :instanceHasReproduction ?w .
+    ?w tmp:thumbnailIIIFService ?th .
+    FILTER (not exists {?w :inCollection bdr:PR1FPL01})
+    ?wadm adm:adminAbout ?w ;
+          adm:status bda:StatusReleased ;
+          adm:access ?acc .
+    FILTER(?acc = bda:AccessOpen || ?acc = bda:AccessFairUse)
+  })
+}
+
+# nb outlines: 7780
+
+select (count(distinct ?o) as ?c) {
+  ?o :outlineOf ?mw .
+  ?oadm adm:adminAbout ?o ;
+        adm:status bda:StatusReleased .
+  ?mw :instanceHasReproduction ?w .
+  ?w tmp:thumbnailIIIFService ?th .
+}
+
+# nb outlines with creators identified: 1051
+
+select (count(distinct ?o) as ?c) {
+  ?o :outlineOf ?mw .
+  ?oadm adm:adminAbout ?o ;
+        adm:status bda:StatusReleased .
+  ?mw :instanceHasReproduction ?w .
+  ?w tmp:thumbnailIIIFService ?th .
+  ?oadm adm:graphId ?g .
+  filter (exists {
+    graph ?g {
+       ?mwp :instanceOf ?wa 
+    }
+    ?wa :creator ?c
+  })
 }

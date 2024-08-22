@@ -48,7 +48,7 @@ select distinct ?w (max(?titleu) as ?titleuni) (max(?title) as ?titleorig) (grou
     ?admw adm:adminAbout ?w ;
           adm:status bda:StatusReleased ;
           adm:access bda:AccessOpen .
-    ?mw :printMethod ?pt .
+    ?mw :printMethod ?printtype .
     ?mw skos:prefLabel ?title .
     BIND(IF(lang(?title) = "bo-x-ewts", f:ewtsToUnicode(?title), ?title) as ?titleu)
     ?w :instanceHasVolume ?ig .
@@ -90,7 +90,7 @@ select distinct ?w (max(?titleu) as ?titleuni) (max(?title) as ?titleorig) (grou
     ?admw adm:adminAbout ?w ;
           adm:status bda:StatusReleased ;
           adm:access bda:AccessOpen .
-    ?mw :printMethod ?pt .
+    ?mw :printMethod ?printtype .
     ?mw skos:prefLabel ?title .
     BIND(IF(lang(?title) = "bo-x-ewts", f:ewtsToUnicode(?title), ?title) as ?titleu)
     ?w :instanceHasVolume ?ig .
