@@ -12,6 +12,7 @@ construct {
   ?R_RES ?iep ?ieo .
   ?vol ?volp ?volo .
   ?ut ?utp ?uto .
+  ?vol :volumeHasEtext ?ut .
 } where {
   {
     ?R_RES ?iep ?ieo .
