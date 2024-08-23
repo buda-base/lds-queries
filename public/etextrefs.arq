@@ -20,7 +20,7 @@ construct {
     ?vol ?volp ?volo .
   } union {
     ?R_RES :instanceHasVolume ?vol .
-    ?ut :etextInVolume ?vol .
+    ?ut :eTextInVolume ?vol .
     ?ut ?utp ?uto .  
   }
 }
