@@ -361,63 +361,6 @@ construct {
       FILTER(not exists {?w :digitalLendingPossible false})
     }, 1/0) as ?addIALink)
   } union {
-    # 10 works about the entity
-    select
-       ?resAbout ?resAboutScore ?resAboutLabel ?resAboutProvider
-    where {
-           ?r owl:sameAs* ?R_RES .
-           ?resAbout bdo:workIsAbout ?r ;
-                     tmp:entityScore ?resAboutScore ;
-                     skos:prefLabel ?resAboutLabel .
-           ?resAdm adm:adminAbout ?resAbout ;
-                   adm:status bda:StatusReleased ;
-                   adm:metadataLegal/adm:provider ?resAboutProvider .
-    } order by desc(?resAboutScore) limit 20
-  } union {
-    # 10 versions in collection, test with bdr:PR1CTC17, bdr:PR0IDP001, bdr:PR0NGMCP0617
-    select
-       ?resInColl ?resInCollLabel ?resInCollThumbnail
-    where {
-      {
-         ?resInCollX bdo:inCollection ?R_RES .
-         ?resInColl bdo:instanceHasItem? ?resInCollX .
-         ?resInColl tmp:thumbnailIIIFService ?resInCollThumbnail .
-         ?resInColl bdo:instanceReproductionOf? ?resWithLabel .
-         ?resWithLabel skos:prefLabel ?resInCollLabel .
-      } union {
-        ?resInCollX bdo:inCollection ?R_RES.
-        ?resInColl bdo:instanceHasItem? ?resInCollX .
-        FILTER(not exists{?resInColl tmp:thumbnailIIIFService ?resInCollThumbnail . })
-        ?resInColl bdo:instanceReproductionOf? ?resWithLabel .
-        ?resWithLabel skos:prefLabel ?resInCollLabel .
-      }
-    } limit 20
-  } union {
-    # 10 instances of serial
-    select
-       ?serialI ?serialILabel ?serialIThumbnail
-    where {
-      {
-         ?R_RES bdo:serialHasInstance ?serialI .
-         ?serialI tmp:thumbnailIIIFService ?serialIThumbnail .
-         ?serialI skos:prefLabel ?serialILabel .
-      }
-    } limit 20
-  } union {
-    # 10 works created by the entity
-    select 
-       ?resBy ?resByType ?resByScore ?resByLabel ?resByProvider
-    where {
-           ?r owl:sameAs* ?R_RES .
-           ?resBy bdo:creator/bdo:agent ?r ;
-                  a ?resByType ;
-                  tmp:entityScore ?resByScore ;
-                  skos:prefLabel ?resByLabel .
-           ?resAdm adm:adminAbout ?resBy ;
-                   adm:status bda:StatusReleased ;
-                   adm:metadataLegal/adm:provider ?resByProvider .
-    } order by desc(?resByScore) limit 20
-  } union {
     # number of translations by parallel
     select 
        ?par (count(distinct ?trans) as ?nbtrans) 
@@ -426,47 +369,6 @@ construct {
            ?r bdo:workHasParallelsIn ?par .
            ?par owl:sameAs*/bdo:workHasTranslation ?trans .
     } group by ?par
-  } union {    
-    # first text of first volume of etext 
-    select ?etext ?volstart ?vnumstart ?vtext ?rnumstart ?rstart
-    where {
-      ?etext owl:sameAs* ?R_RES ;
-             :instanceHasVolume ?volstart .
-      ?volstart :volumeNumber ?vnumstart ; :volumeHasEtext ?vtext.
-      ?vtext :seqNum ?rnumstart ; :eTextResource ?rstart .  
-  
-      # find first volume 
-      { 
-        select ?etext ( min(?vnum) as ?vnumstart )  
-        where { 
-          ?etext owl:sameAs* ?R_RES ;   
-                 :instanceHasVolume/:volumeNumber ?vnum .
-        } group by ?etext
-      }  
-      # find first text of first volume
-      { 
-        select ?volstart ( min(?rnum) as ?rnumstart )
-        where {
-          ?etext owl:sameAs* ?R_RES ;   
-                 :instanceHasVolume ?volstart . 
-          ?volstart :volumeNumber ?vnumstart ;
-                    :volumeHasEtext/:seqNum ?rnum .
-        } group by ?volstart
-      }   
-    }
-  } union {
-    # select 10 instances printed at this place
-    select ?resAt ?resAtType ?resAtLabel ?resAtProvider ?resAtThumb ?resAtScore
-    where {
-           ?r owl:sameAs* ?R_RES .
-           ?resAt bdo:hasSourcePrintery ?r ;
-                  a ?resAtType ;
-                  skos:prefLabel ?resAtLabel ;
-                  :instanceHasReproduction/tmp:thumbnailIIIFService ?resAtThumb .
-           ?resAdm adm:adminAbout ?resAt ;
-                   adm:status bda:StatusReleased ;
-                   adm:metadataLegal/adm:provider ?resAtProvider .
-    }  order by desc(?resAtScore) limit 20
   } union {
     ?adm adm:adminAbout ?R_RES .
     ?adm adm:logEntry ?le .
