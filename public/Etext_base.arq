@@ -16,6 +16,7 @@ construct {
    ?ev ?evp ?evo .
    ?mw skos:prefLabel ?mwpl .
    ?mwroot skos:prefLabel ?mwrootpl .
+   ?R_RES tmp:etextIsPaginated ?eip .
   }
 where {
   { 
@@ -36,5 +37,7 @@ where {
     # get image volume ID
     ?R_RES :eTextInVolume ?ev .
     ?ev ?evp ?evo .
+  } union {
+    BIND(exists {?R_RES :eTextInInstance ?ie . ?ie :instanceReproductionOf ?w . ?w a :ImageInstance } as ?eip)
   }
 } 
