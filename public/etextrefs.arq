@@ -11,7 +11,9 @@
 construct {
   ?R_RES ?iep ?ieo .
   ?vol ?volp ?volo .
+  ?vol skos:prefLabel ?volpl .
   ?ut ?utp ?uto .
+  ?ut skos:prefLabel ?utpl .
   ?vol :volumeHasEtext ?ut .
 } where {
   {
@@ -21,7 +23,16 @@ construct {
     ?vol ?volp ?volo .
   } union {
     ?R_RES :instanceHasVolume ?vol .
+    ?vol :eTextForInstance ?mw .
+    ?mw skos:prefLabel ?volpl .
+  } union {
+    ?R_RES :instanceHasVolume ?vol .
     ?ut :eTextInVolume ?vol .
-    ?ut ?utp ?uto .  
+    ?ut ?utp ?uto .
+  } union {
+    ?R_RES :instanceHasVolume ?vol .
+    ?ut :eTextInVolume ?vol .
+    ?ut :eTextForInstance ?mw .
+    ?mw skos:prefLabel ?utpl .
   }
 }
