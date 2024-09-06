@@ -18,7 +18,7 @@ construct {
  ?R_RES tmp:hasPartB ?hasPartB ;
         tmp:hasNonVolumeParts ?hasNonVolumeParts .
 
- ?R_RES tmp:tmp:hasEtextInOutline ?ut .
+ ?R_RES tmp:hasEtextInOutline ?ut .
  ?ut ?utp ?uto .
  ?ie ?iep ?ieo .
 
