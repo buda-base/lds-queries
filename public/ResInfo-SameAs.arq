@@ -391,6 +391,7 @@ construct {
     ?noteCLW :instanceReproductionOf/skos:prefLabel ?noteCLWL .
   } union {
     # add information about etext for outline nodes
+    FILTER(exists {?R_RES :partOf ?other})
     ?ut :eTextForInstance ?R_RES ;
         :eTextInInstance ?ie .
     ?ut ?utp ?uto .
