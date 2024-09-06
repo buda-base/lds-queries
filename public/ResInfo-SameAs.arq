@@ -18,6 +18,10 @@ construct {
  ?R_RES tmp:hasPartB ?hasPartB ;
         tmp:hasNonVolumeParts ?hasNonVolumeParts .
 
+ ?R_RES tmp:tmp:hasEtextInOutline ?ut .
+ ?ut ?utp ?uto .
+ ?ie ?iep ?ieo .
+
  ?q ?qp ?qo .
  ?r tmp:hasAdminData ?q .
 
@@ -385,5 +389,12 @@ construct {
     ?noteCL ?anyProp ?anyVal ;
         :contentLocationInstance ?noteCLW .
     ?noteCLW :instanceReproductionOf/skos:prefLabel ?noteCLWL .
+  } union {
+    # add information about etext for outline nodes
+    ?ut :eTextForInstance ?R_RES ;
+        :eTextInInstance ?ie .
+    ?ut ?utp ?uto .
+    ?ie ?iep ?ieo .
+    FILTER(?iep != :instanceHasVolume)
   }
 }
