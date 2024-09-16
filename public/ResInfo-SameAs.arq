@@ -21,6 +21,7 @@ construct {
  ?R_RES tmp:hasEtextInOutline ?ut .
  ?ut ?utp ?uto .
  ?ie ?iep ?ieo .
+ ?ut tmp:eTextInVolumeNumber ?venb .
 
  ?q ?qp ?qo .
  ?r tmp:hasAdminData ?q .
@@ -393,7 +394,9 @@ construct {
     # add information about etext for outline nodes
     FILTER(exists {?R_RES :partOf ?other})
     ?ut :eTextForInstance ?R_RES ;
-        :eTextInInstance ?ie .
+        :eTextInInstance ?ie ;
+        :eTextInVolume ?ve .
+    ?ve :volumeNumber ?venb .
     ?ut ?utp ?uto .
     ?ie ?iep ?ieo .
     FILTER(?iep != :instanceHasVolume)
