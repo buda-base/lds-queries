@@ -1,0 +1,429 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=A graph with the information for the UI for the given version ID
+#QueryParams=R_RES
+#QueryUrl=/ResInfo-SameAs?R_RES=bdr:MW22084
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the chosen resource
+
+construct {
+ ?r ?rpkeep ?rokeep .
+ ?ro2 ?ro2p ?ro2o .
+ ?ro3 ?ro3p ?ro3o .
+ ?ro3o ?ro4p ?ro4o .
+ ?ro5o ?ro6p ?ro6o .
+
+ ?R_RES tmp:hasPartB ?hasPartB ;
+        tmp:hasNonVolumeParts ?hasNonVolumeParts .
+
+ ?R_RES tmp:hasEtextInOutline ?ut .
+ ?ut ?utp ?uto .
+ ?ie ?iep ?ieo .
+ ?ut tmp:eTextInVolumeNumber ?venb .
+
+ ?q ?qp ?qo .
+ ?r tmp:hasAdminData ?q .
+
+ ?r tmp:siblingInstances ?siblingNonRepro .
+ ?r tmp:siblingReproInstances ?siblingRepro .
+
+ ?rokeep tmp:withSameAs ?roSame .
+ 
+ # misc props needed to fix display:
+
+ ?ro skos:prefLabel ?roLabel .
+
+ ?ro bdo:inRootInstance ?roRoot .
+ ?roRoot skos:prefLabel ?roRootLabel .
+
+ ?siblingNonRepro skos:prefLabel ?siblingNonReproLabel .
+ ?siblingNonRepro bdo:inRootInstance ?siblingRoot .
+ ?siblingRoot skos:prefLabel ?siblingRootLabel .
+
+ ?ro bdo:language ?roLang .
+
+ ?roTCL ?roTCLp ?roTCLo .
+ ?roTCLo skos:prefLabel ?roTCLoLabel .
+
+ ?roEv skos:prefLabel ?roEvLab . 
+
+ ?ro6o skos:prefLabel ?ro6oLabel . 
+
+ ?qo skos:prefLabel ?qoLab .
+
+ ?ro adm:canonicalHtml ?roCanonHtml .
+
+ ?roP :partIndex ?roPi .
+ ?roV :volumeNumber ?roVi .
+
+ ?id ?idp ?ido .
+ ?title ?titlep ?titleo .
+ ?cm skos:prefLabel ?cmL .
+
+
+ ?R_RES bdo:collectionMember ?resInColl .
+ ?resInColl skos:prefLabel ?resInCollLabel ;
+            tmp:thumbnailIIIFService ?resInCollThumbnail .
+ 
+ ?R_RES bdo:serialHasInstance ?serialI .
+ ?serialI skos:prefLabel ?serialILabel ;
+          tmp:thumbnailIIIFService ?serialIThumbnail .
+
+ ?resAbout bdo:workIsAbout ?R_RES ;
+           skos:prefLabel ?resAboutLabel ;
+           tmp:entityScore ?resAboutScore ;
+           tmp:provider ?resAboutProvider .
+
+ ?resBy    tmp:createdBy ?R_RES ;
+           a ?resByType ;
+           skos:prefLabel ?resByLabel ;
+           tmp:entityScore ?resByScore ;
+           tmp:provider ?resByProvider .
+
+# repro+thumbnail for versions
+# + provider
+?version  :instanceHasReproduction ?repro ;
+          tmp:thumbnailIIIFService ?vThumb ;
+          tmp:provider ?qvop .
+
+?par tmp:nbTranslations ?nbtrans .
+
+?item ?itemp ?itemo .
+?itemid ?itemidp ?itemido .
+?itemcoll skos:prefLabel ?itemcolll .
+
+# first text of first volume of etext
+?etext tmp:firstVol ?volstart ;
+       tmp:firstVolN ?vnumstart ; 
+       tmp:firstText ?rstart ;
+       tmp:firstTextN ?rnumstart . 
+  
+# Instances printed at this place
+?resAt    tmp:printedAt ?R_RES ;
+          a ?resAtType ;
+          skos:prefLabel ?resAtLabel ;
+          tmp:entityScore ?resAtScore ;
+          tmp:provider ?resAtProvider ;
+          tmp:thumbnailIIIFService ?resAtThumb .
+  
+# access for outline nodes
+?r adm:access ?nworkacc .
+  
+# info related to members (series, corporation, collection)
+?mb skos:prefLabel ?mbL ;
+    tmp:entityScore ?mbSc .
+
+?adm adm:logEntry ?le .
+?le ?lep ?leo .
+?user skos:prefLabel ?userL .
+
+?r bdo:personEvent ?foundationEvt .
+?foundationEvt ?foundationEvtp ?foundationEvto ;
+               :eventWhere ?foundationPlace .
+?foundationPlace skos:prefLabel ?foundationPlaceL .
+
+# ContentLocation in a Note
+?noteCL ?anyProp ?anyVal . 
+?noteCLW skos:prefLabel ?noteCLWL .
+
+?R_RES tmp:addIALink ?addIALink .
+
+?R_RES :instanceReproductionOf ?mw .
+?mw skos:prefLabel ?mws .
+} where {
+  {
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    ?r ?rpkeep ?rokeep .
+    FILTER(?rpkeep != bdo:hasPart)
+  } union  {
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    ?r ?rpkeep ?rokeep .
+    FILTER(?rpkeep != bdo:hasPart)
+    ?rokeep owl:sameAs+ ?roSame .
+  } union {
+    # add prefLabel for any related resource
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    ?r ?rp ?ro .
+    FILTER(?rp != bdo:hasPart)
+    ?ro skos:prefLabel ?roLabel .
+  } union {
+    # display inRootInstance (used to sort instances)
+    ?R_RES ?rp ?ro .
+    FILTER(?rp != bdo:hasPart)
+    ?ro bdo:inRootInstance ?roRoot .
+    ?roRoot skos:prefLabel ?roRootLabel .
+  } union {
+    # add language (used to sort translations)
+    ?R_RES :instanceOf ?r .
+    ?r :workHasTranslation ?ro .
+    ?ro bdo:language ?roLang .
+  } union {
+    # add prefLabel for Event subclasses objects
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    ?r ?rp ?ro .
+    FILTER(?rp != bdo:hasPart)
+    ?ro rdf:type/rdfs:subClassOf+ :Event .
+    ?ro ?rpEv ?roEv .
+    ?roEv skos:prefLabel ?roEvLab .
+  } union  {
+    # get canonicalHtml for related resources
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    ?r ?rp ?ro .
+    FILTER(?rp != bdo:hasPart)
+    ?ro adm:canonicalHtml ?roCanonHtml .
+  } union {
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    ?r ?rp2 ?ro2 .
+    FILTER(?rp2 != bdo:hasPart)
+    ?ro2 rdf:type/rdfs:subClassOf+ :Facet .
+    ?ro2 ?ro2p ?ro2o .
+  } union {
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    ?r ?rp3 ?ro3 .
+    FILTER(?rp3 != bdo:hasPart)
+    ?ro3 rdf:type/rdfs:subClassOf+ :Event .
+    ?ro3 ?ro3p ?ro3o .
+  } union {
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    ?r ?rp3 ?ro3 .
+    FILTER(?rp3 != bdo:hasPart)
+    ?ro3 rdf:type/rdfs:subClassOf+ :Event .
+    ?ro3 ?ro3p ?ro3o .
+    ?ro3o rdf:type/rdfs:subClassOf+ :Facet .
+    ?ro3o ?ro4p ?ro4o .
+  } union {
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    ?q adm:adminAbout ?r .
+    ?q ?qp ?qo .
+    # we don't return all the adminAbout, they can be in large quantities
+    FILTER(?qp != adm:adminAbout)
+  } union {
+    # return legalData labels
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    ?q adm:adminAbout ?r .
+    ?q adm:metadataLegal ?qo .
+    ?qo skos:prefLabel ?qoLab .
+  } union {
+    # add access for outline nodes
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    ?r :contentLocation/:contentLocationInstance ?nwork .
+    ?nworkadm adm:adminAbout ?nwork ;
+              adm:access ?nworkacc .
+  } union {
+    # add ContentLocation nodes that were missing
+    # + display prefLabel for AgentAsCreator 
+    # + add Note subnodes
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    VALUES ?rpTCL { :contentLocation :creator :note }
+    ?r ?rpTCL ?roTCL .
+    ?roTCL ?roTCLp ?roTCLo .
+  } union {
+    # label for previous:
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    VALUES ?rpTCL { :contentLocation :creator :note }
+    ?r ?rpTCL ?roTCL .
+    ?roTCL ?roTCLp ?roTCLo .
+    ?roTCLo skos:prefLabel ?roTCLoLabel .
+  } union {
+    # https://github.com/buda-base/public-digital-library/issues/649 (?R_RES = bdr:T111111111)
+    # https://github.com/buda-base/public-digital-library/issues/641 (?R_RES = bdr:MW3CN27014) hasNonVolumeParts must be true
+    # https://github.com/buda-base/public-digital-library/issues/652 (?R_RES = bdr:MW27302) hasNonVolumeParts must be false
+    # https://github.com/buda-base/public-digital-library/issues/730 (?R_RES = bdr:MW22271) hasNonVolumeParts must be false
+    BIND(IF(EXISTS{?R_RES a ?any}, EXISTS{?R_RES :hasPart ?p}, 1/0) as ?hasPartB)
+    BIND(IF(EXISTS{?R_RES a ?any}, !EXISTS{?R_RES :hasPart ?p . ?p bdo:partType ?pt FILTER(?pt = bdr:PartTypeVolume || ?pt = bdr:PartTypeSection)} && NOT EXISTS{?R_RES :bdo:inRootInstance?/bdo:instanceHasReproduction ?ii .
+    ?ii a bdo:ImageInstance ; :numberOfVolumes  1 .}, 1/0) as ?hasNonVolumeParts)
+  } union {
+    # add volume numbers
+    ?R_RES :instanceHasReproduction ?r .
+    ?r :instanceHasVolume ?roV .
+    ?roV :volumeNumber ?roVi .
+  } union {
+    # add repro+thumbnail for versions
+    ?R_RES :instanceOf ?r .
+    ?r :workHasInstance ?version .
+    FILTER(exists{?vadm adm:adminAbout ?version ; adm:status bda:StatusReleased })
+    ?version :instanceHasReproduction ?repro .
+    ?repro a bdo:ImageInstance .
+  } union {
+    # add repro for versions with inRootInstance
+    ?R_RES :instanceOf ?r .
+    ?r :workHasInstance ?version .
+    ?version :inRootInstance ?rootV .
+    FILTER(exists{?vadm adm:adminAbout ?rootV ; adm:status bda:StatusReleased })
+    ?rootV :instanceHasReproduction ?repro .
+    ?repro a bdo:ImageInstance .
+  } union {
+    # add thumbnail for work instances
+    ?R_RES :instanceOf ?r .
+    ?r :workHasInstance ?version .
+    ?version :inRootInstance? ?rootV .
+    ?rootV tmp:thumbnailIIIFService ?vThumb .
+  } union {
+    # add provider for versions
+    ?R_RES :instanceOf ?r .
+    ?r :workHasInstance ?version .
+    FILTER(exists{?vadm adm:adminAbout ?version ; adm:status bda:StatusReleased })
+    ?qv adm:adminAbout ?version .
+    ?qv adm:metadataLegal/adm:provider ?qvop .
+  } union {
+    # add thumbnail for instance reproductions
+    ?R_RES :instanceHasReproduction ?version .
+    ?version :inRootInstance? ?rootV .
+    FILTER(exists{?vadm adm:adminAbout ?rootV ; adm:status bda:StatusReleased })
+    ?rootV tmp:thumbnailIIIFService ?vThumb .
+  } union {
+    # add items with collections
+    ?R_RES :instanceHasReproduction*/:instanceHasItem ?item .
+    ?item ?itemp ?itemo .
+    ?item :inCollection ?itemcoll .
+    ?itemcoll skos:prefLabel ?itemcolll .
+  } union {
+    # add items with collections
+    ?R_RES :instanceHasReproduction*/:instanceHasItem ?item .
+    ?item bf:identifiedBy ?itemid .
+    ?itemid ?itemidp ?itemido .
+  } union {
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    ?r bf:identifiedBy ?id .
+    ?id ?idp ?ido .
+  } union {
+    ?R_RES bdo:hasTitle ?title .
+    ?title ?titlep ?titleo .
+  } union {
+    BIND(IF(EXISTS{?R_RES a ?any}, EXISTS {
+      ?R_RES :inRootInstance?/:instanceHasReproduction? ?w .
+      ?w a bdo:ImageInstance .
+      ?wadm adm:adminAbout ?w ;
+            adm:access bda:AccessFairUse ;
+            adm:status bda:StatusReleased .
+      FILTER(not exists {?w :digitalLendingPossible false})
+    }, 1/0) as ?addIALink)
+  } union {
+    # number of translations by parallel
+    select 
+       ?par (count(distinct ?trans) as ?nbtrans) 
+    where {
+           ?R_RES :instanceOf ?r .
+           ?r bdo:workHasParallelsIn ?par .
+           ?par owl:sameAs*/bdo:workHasTranslation ?trans .
+    } group by ?par
+  } union {
+    ?adm adm:adminAbout ?R_RES .
+    ?adm adm:logEntry ?le .
+    ?le ?lep ?leo .
+  } union {
+    ?adm adm:adminAbout ?R_RES .
+    ?adm adm:logEntry ?le .
+    ?le adm:logWho ?user .
+    ?user skos:prefLabel ?userL .
+  } union {
+    # add ContentLocation from a Note
+    {
+      ?R_RES :instanceOf ?r .
+    } union {
+      ?R_RES :instanceHasReproduction ?r .
+    } union {
+      BIND(?R_RES as ?r)
+    }
+    ?r :note/:contentLocation ?noteCL .
+    ?noteCL ?anyProp ?anyVal ;
+        :contentLocationInstance ?noteCLW .
+    ?noteCLW :instanceReproductionOf/skos:prefLabel ?noteCLWL .
+  } union {
+    # add information about etext for outline nodes
+    FILTER(exists {?R_RES :partOf ?other})
+    ?ut :eTextForInstance ?R_RES ;
+        :eTextInInstance ?ie ;
+        :eTextInVolume ?ve .
+    ?ve :volumeNumber ?venb .
+    ?ut ?utp ?uto .
+    ?ie ?iep ?ieo .
+    FILTER(?iep != :instanceHasVolume)
+  }
+}
