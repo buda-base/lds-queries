@@ -2,7 +2,7 @@
 #QueryReturnType=Graph
 #QueryResults=A graph with the information for the UI for the given version ID
 #QueryParams=R_RES
-#QueryUrl=/ResInfo-SameAs?R_RES=bdr:MW22084
+#QueryUrl=/ResInfo-SameAs_MW?R_RES=bdr:MW22084
 
 #param.R_RES.type=resource
 #param.R_RES.subtype=a Resource ID
