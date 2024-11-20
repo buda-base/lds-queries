@@ -2,7 +2,7 @@
 #QueryReturnType=Table
 #QueryResults=list scans synced in a time interval
 #QueryParams=D_FROM,D_TO
-#QueryUrl=/syncs_time?D_FROM=2023-03-01T00:00:00Z&D_TO=2023-04-01T00:00:00Z
+#QueryUrl=/syncs_time_simple?D_FROM=2023-03-01T00:00:00Z&D_TO=2023-04-01T00:00:00Z
 #QueryLimit=5000
 
 #param.D_FROM.type=datetime
