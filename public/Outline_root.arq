@@ -150,7 +150,9 @@ WHERE
       BIND(?R_RES as ?part)
     }
   	?part :instanceOf ?partW .
-  	?partW :creator/:agent ?partWc .
+  	?partW :creator ?aac .
+    FILTER(exists{?aac :role ?r FILTER(?r = bdr:R0ER0011 || ?r = bdr:R0ER0014 || ?r = bdr:R0ER0016 || bdr:R0ER0019)})
+    ?aac :agent ?partWc .
   	?partWc skos:prefLabel ?partWcL .
   } union {
   	# get parts: location triples
