@@ -291,6 +291,7 @@ WHERE
     # ?inst :partOf+ ?R_RES .
 
     ?work :creator ?workaac .
+    FILTER(exists{?workaac :role ?r FILTER(?r = bdr:R0ER0011 || ?r = bdr:R0ER0014 || ?r = bdr:R0ER0016 || bdr:R0ER0019)})
     ?workaac ?workaacp ?workaaco .
     ?workaac :agent ?author .
     ?author ?authorp ?authoro .

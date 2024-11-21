@@ -95,7 +95,9 @@ WHERE
     ?loc :contentLocationVolume ?bvol .
     FILTER (?part = ?R_RES || (?bvol = ?I_VNUM || (?bvol <= ?I_VNUM  && EXISTS {?loc :contentLocationEndVolume ?evol FILTER (?evol >= ?I_VNUM)})))
   	?part :instanceOf ?partW .
-  	?partW :creator/:agent ?partWc .
+  	?partW :creator ?aac .
+    FILTER(exists{?aac :role ?r FILTER(?r = bdr:R0ER0011 || ?r = bdr:R0ER0014 || ?r = bdr:R0ER0016 || bdr:R0ER0019)})
+    ?aac :agent ?partWc .
   	?partWc skos:prefLabel ?partWcL .
   } union {
   	# get parts: location triples
