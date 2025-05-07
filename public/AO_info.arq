@@ -1,0 +1,35 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=info needed for AO etext sync
+#QueryParams=R_RES
+#QueryUrl=/AO_info?R_RES=bdr:IE1ER24
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=bdo:Entity
+#param.R_RES.desc=the image instance on which info is needed
+
+construct {
+    ?R_RES ?resp ?reso .
+    ?adm ?admp ?admo .
+    ?mw ?mwp ?mwo .
+    ?o :outlineOf ?R_RES .
+} where {
+   FILTER(exists{?R_RES a :EtextInstance} || exists{?R_RES a :ImageInstance})
+   {
+      ?R_RES ?resp ?reso .
+   } union {
+      ?mw :instanceHasReproduction ?R_RES .
+      ?mw ?mwp ?mwo .
+   } union {
+      ?adm adm:adminAbout ?R_RES .
+      ?adm ?admp ?admo .
+   } union {
+      ?R_RES :instanceHasVolume ?ig .
+      ?ig ?igp ?igo .
+   } union {
+      ?mw :instanceHasReproduction ?R_RES .
+      ?o :outlineOf ?mw .
+      ?oadm adm:adminAbout ?o ;
+            adm:status bda:StatusReleased .
+   }
+}
