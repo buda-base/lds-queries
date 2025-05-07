@@ -11,6 +11,7 @@
 construct {
     ?R_RES ?resp ?reso .
     ?adm ?admp ?admo .
+    ?ig ?igp ?igo .
     ?mw ?mwp ?mwo .
     ?o :outlineOf ?R_RES .
 } where {
