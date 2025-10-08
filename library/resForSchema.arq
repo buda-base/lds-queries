@@ -11,7 +11,7 @@
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 construct {
-  bdr:MW12827 ?p ?o .
+  ?R_RES ?p ?o .
   ?t ?tp ?to .
   ?series ?seriesp ?serieso .
   ?pe ?pep ?peo .
@@ -22,62 +22,62 @@ construct {
   ?wa ?wap ?wao .
 } where {
   {
-    bdr:MW12827 ?p ?o .
+    ?R_RES ?p ?o .
     FILTER(?p != bdo:collectionMember && ?p != bdo:serialHasInstance && ?p != bdo:hasPart)
   }
   union {
-    bdr:MW12827 :instanceEvent ?pe .
+    ?R_RES :instanceEvent ?pe .
     ?pe ?pep ?peo .
   }
   union {
-    bdr:MW12827 bf:identifiedBy ?id .
+    ?R_RES bf:identifiedBy ?id .
     ?id ?idp ?ido .
   }
   union {
-    bdr:MW12827 :inRootInstance ?root .
+    ?R_RES :inRootInstance ?root .
     ?root ?rootp ?rooto .
   }
   union {
-    bdr:MW12827 :serialInstanceOf ?series .
+    ?R_RES :serialInstanceOf ?series .
     ?series ?seriesp ?serieso .
   }
   union {
-    bdr:MW12827 :instanceOf ?wa .
+    ?R_RES :instanceOf ?wa .
     ?wa ?wap ?wao .
   }
   union {
-    bdr:MW12827 :instanceOf ?wa .
+    ?R_RES :instanceOf ?wa .
     ?wa :creator ?aac .
     ?aac ?aacp ?aaco .
   }
   union {
-    bdr:MW12827 :instanceOf ?wa .
+    ?R_RES :instanceOf ?wa .
     ?wa :creator ?aac .
     ?aac :agent ?ag .
     ?ag ?agp ?ago .
   }
   union {
-    bdr:MW12827 :instanceOf ?wa .
+    ?R_RES :instanceOf ?wa .
     ?wa :creator ?aac .
     ?aac :agent ?ag .
     ?ag :personEvent ?pe .
     ?pe ?pep ?peo .
   }
   union {
-    bdr:MW12827 :personEvent ?pe .
+    ?R_RES :personEvent ?pe .
     ?pe ?pep ?peo .
   }
   union {
-    bdr:MW12827 :placeEvent ?pe .
+    ?R_RES :placeEvent ?pe .
     ?pe ?pep ?peo .
   }
   union {
-    bdr:MW12827 :instanceOf ?wa .
+    ?R_RES :instanceOf ?wa .
     ?wa :workIsAbout ?t .
     ?t ?tp ?to .
   }
   union {
-    bdr:MW12827 :instanceOf ?wa .
+    ?R_RES :instanceOf ?wa .
     ?wa :workGenre ?t .
     ?t ?tp ?to .
   }
