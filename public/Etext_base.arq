@@ -11,85 +11,37 @@
 PREFIX tmp: <http://purl.bdrc.io/ontology/tmp/>
 
 construct { 
-   ?s ?p ?o .
-   ?R_RES tmp:imageVolumeId ?imagevol .
-   ?R_RES tmp:hasEtextRes ?etextRes .
-   # greatest bdo:sliceStartChar 
-   ?R_RES tmp:lastChunk ?lastchunk .
-   ?R_RES adm:replaceWith ?replaceWith .
+   ?R_RES ?p ?o .
+   ?ie ?iep ?ieo .
+   ?ev ?evp ?evo .
+   ?mw skos:prefLabel ?mwpl .
+   ?mwroot skos:prefLabel ?mwrootpl .
+   ?R_RES tmp:etextIsPaginated ?eip .
+   ?R_RES tmp:hasEtextVolume ?vl .
   }
 where {
   { 
     ?R_RES ?p ?o .
     BIND (?R_RES as ?s)
   } union {
-    ?R_RES bdo:eTextInInstance  ?s .
-    ?s ?p ?o .
+    ?R_RES bdo:eTextInInstance  ?ie .
+    ?ie ?iep ?ieo .
   } union {
-    ?R_RES bdo:eTextInInstance/bdo:instanceOf  ?s .
-    ?s skos:prefLabel ?o .
-    BIND (skos:prefLabel as ?p)
+    ?R_RES :eTextForInstance ?mw .
+    ?mw skos:prefLabel ?mwpl .
   } union {
-    # get image volume ID (for iiif)
-    ?R_RES :eTextIsVolume ?volNum .
-    ?R_RES :eTextInInstance ?inInst .
-    ?inInst :instanceReproductionOf ?isRepro .
-    ?isRepro :instanceHasVolume ?imagevol .
-    ?imagevol a :ImageGroup .
-    ?imagevol :volumeNumber ?volNum .
+    ?R_RES :eTextInInstance ?ie .
+    ?ie :instanceReproductionOf ?mwroot .
+    FILTER(not exists {?mwroot a :ImageInstance})
+    ?mwroot skos:prefLabel ?mwrootpl .
   } union {
-    # useful info to display etext in mirador
-    ?R_RES :volumeOf/:instanceHasReproduction ?hasRepro .
-    ?R_RES :volumeNumber ?volNB .
-    ?hasRepro a bdo:EtextInstance .
-    ?etextRes :eTextInInstance ?hasRepro .
-    ?etextRes :eTextIsVolume ?volNB .
-    filter exists {
-      # in mirador we can only use etexts with page numbers
-      ?etextRes :eTextHasPage/:seqNum ?num
-      # etext must not be unpaginated (see bdr:MW1KG14_BED8FE)
-      filter not exists {
-        ?etextRes rdf:type bdo:EtextNonPaginated .
-      }
-    } .
+    # get image volume ID
+    ?R_RES :eTextInVolume ?ev .
+    ?ev ?evp ?evo .
   } union {
-    # same with eTextInVolume
-    ?R_RES :volumeOf/:instanceHasReproduction ?hasRepro .
-    ?R_RES :volumeNumber ?volNB .
-    ?hasRepro a bdo:EtextInstance .
-    ?etextRes :eTextInInstance ?hasRepro .
-    ?etextRes :eTextInVolume ?volNB .
-    filter exists { 
-      # in mirador we can only use etexts with page numbers
-      ?etextRes :eTextHasPage/:seqNum ?num
-      # etext must not be unpaginated (see bdr:MW1KG14_BED8FE)
-      filter not exists {
-        ?etextRes rdf:type bdo:EtextNonPaginated .
-      }
-    } . 
+    BIND(exists {?R_RES :eTextInInstance ?ie . ?ie :instanceReproductionOf ?w . ?w a :ImageInstance } as ?eip)
   } union {
-    # get greatest bdo:sliceStartChar 
-    select (max(?start) as ?lastchunk)
-    where {
-      ?R_RES bdo:eTextHasChunk ?chunk .
-      ?chunk bdo:sliceStartChar ?start .
-    }
-  } union {
-    FILTER(NOT EXISTS {?R_RES :eTextHasChunk ?c})
-    BIND(STRAFTER( str(?R_RES), "_v" ) as ?volnumstr)
-    FILTER(strlen(?volnumstr) = 3)
-    BIND(xsd:integer(?volnumstr) as ?volnum)
-    FILTER(?volnum > 0)
-    BIND(STRBEFORE( SUBSTR(str(?R_RES), 32 ), "_v") as ?oldiestr)
-    FILTER(strlen(?oldiestr) > 3)
-    BIND(IRI(CONCAT("http://purl.bdrc.io/resource/", ?oldiestr)) as ?oldie)
-    ?oldieadm adm:adminAbout ?oldie ;
-              adm:replaceWith ?newie .
-    ?newie :instanceReproductionOf ?w .
-    ?w :instanceHasVolume ?v .
-    ?v :volumeNumber ?volnum .
-    BIND(SUBSTR(str(?v), 30) as ?newvolstr)
-    BIND(SUBSTR(str(?newie), 30) as ?newiestr)
-    BIND(IRI(CONCAT("http://purl.bdrc.io/resource/UT", ?newiestr, "_", ?newvolstr)) as ?replaceWith)
+    # add
+    ?vl :eTextVolumeForImageGroup ?R_RES . 
   }
 } 

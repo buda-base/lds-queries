@@ -21,10 +21,12 @@ select distinct ?w (max(?titleu) as ?titleuni) (max(?title) as ?titleorig) (grou
     FILTER(?date > ?D_FROM && ?date < ?D_TO)
     ?admv adm:logEntry ?le ;
           adm:adminAbout ?igs .
+    FILTER(not exists { ?admv adm:logEntry bda:LGIGS001 } && not exists { ?admv adm:logEntry bda:LGIGS002 } && not exists { ?admv adm:logEntry bda:LGIGS003 })
     ?w :instanceHasVolume ?igs ;
        :instanceReproductionOf ?mw .
     FILTER NOT EXISTS {?w :inCollection bdr:PR1KDPP00 }
     FILTER NOT EXISTS {?w :inCollection bdr:PR1FPL01 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1ER3 }
     FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC11 }
     FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC18 }
     FILTER NOT EXISTS {?w :inCollection bdr:PR3JW7543 }
@@ -59,9 +61,11 @@ select distinct ?w (max(?titleu) as ?titleuni) (max(?title) as ?titleorig) (grou
     FILTER(?date > ?D_FROM && ?date < ?D_TO)
     ?admv adm:logEntry ?le ;
           adm:adminAbout ?igs .
+    FILTER(not exists { ?admv adm:logEntry bda:LGIGS001 } && not exists { ?admv adm:logEntry bda:LGIGS002 } && not exists { ?admv adm:logEntry bda:LGIGS003 })
     ?w :instanceHasVolume ?igs ;
        :instanceReproductionOf ?mw .
     FILTER NOT EXISTS {?w :inCollection bdr:PR1KDPP00 }
+    FILTER NOT EXISTS {?w :inCollection bdr:PR1ER3 }
     FILTER NOT EXISTS {?w :inCollection bdr:PR1FPL01 }
     FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC11 }
     FILTER NOT EXISTS {?w :inCollection bdr:PR1CTC18 }

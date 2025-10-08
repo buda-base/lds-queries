@@ -1,0 +1,26 @@
+#QueryScope=ImageInstance
+#QueryReturnType=Table
+#QueryResults=list scans synced in a time interval
+#QueryParams=D_FROM,D_TO
+#QueryUrl=/syncs_time_simple?D_FROM=2023-03-01T00:00:00Z&D_TO=2023-04-01T00:00:00Z
+#QueryLimit=5000
+
+#param.D_FROM.type=datetime
+#param.D_FROM.subtype=xsd:dateTime
+#param.D_FROM.desc=the lower bound of the search
+
+#param.D_TO.type=datetime
+#param.D_TO.subtype=xsd:dateTime
+#param.D_TO.desc=the past upper of the search
+
+select distinct ?w (max(?date) as ?maxd) {
+  {
+    # scan request log entries
+    ?le a adm:Synced ;
+        adm:logDate ?date .
+    FILTER(?date > ?D_FROM && ?date < ?D_TO)
+    ?admv adm:logEntry ?le ;
+          adm:adminAbout ?igs .
+    ?w :instanceHasVolume ?igs .
+  }
+} group by ?w
