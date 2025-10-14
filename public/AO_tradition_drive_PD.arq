@@ -3,7 +3,7 @@
 #QueryResults=All image instances about a tradition or by authors of a tradition
 #QueryParams=R_RES
 #QueryLimit=50000
-#QueryUrl=/AO_tradition_drive_PDbdr:TraditionDakpoKagyu=bdr:TraditionNyingma
+#QueryUrl=/AO_tradition_drive_PD?R_RES=bdr:TraditionNyingma
 
 #param.R_RES.type=resource
 #param.R_RES.desc=the tradition
@@ -33,6 +33,21 @@ select distinct ?w WHERE
            :role ?r .
       filter(?r IN(bdr:R0ER0014 , bdr:R0ER0016 , bdr:R0ER0019 , bdr:R0ER0025))
       ?wa :creator ?aac ;
+          :language bdr:LangBo .
+      ?mw :instanceOf ?wa ;
+          :instanceHasReproduction ?w .
+      ?w a :ImageInstance .
+      FILTER (exists {?w tmp:thumbnailIIIFService ?ths } || exists {?w tmp:thumbnailIIIFSelected ?ths })
+      FILTER (not exists {?w :instanceHasVolume ?v . ?v :hasIIIFManifest ?iiif })
+      ?wadm adm:adminAbout ?w ;
+            adm:status bda:StatusReleased ;
+            adm:access ?acc .
+      FILTER(?acc = bda:AccessOpen)
+    } union {
+
+      ?tr skos:broader* ?R_RES .
+      ?t :associatedTradition ?tr .
+      ?wa :workIsAbout ?t ;
           :language bdr:LangBo .
       ?mw :instanceOf ?wa ;
           :instanceHasReproduction ?w .
