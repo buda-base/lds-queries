@@ -1,0 +1,30 @@
+#QueryScope=General
+#QueryReturnType=Graph
+#QueryResults=Info on all volumes from an outline
+#QueryParams=R_RES
+#QueryUrl=/lib/outline_volumes?R_RES=bdr:MW29329
+
+#param.R_RES.type=resource
+#param.R_RES.subtype=a Resource ID
+#param.R_RES.desc=the unique resource ID of the referenced entity
+
+CONSTRUCT
+{
+    ?R_RES :hasPart ?mwv .
+    ?mwv skos:prefLabel ?pl ;
+         :volumeNumber ?vn .
+}
+WHERE 
+{
+  ?outline :outlineOf ?R_RES .
+  ?oadm adm:adminAbout ?outline ;
+        adm:status bda:StatusReleased ;
+        adm:graphId ?og .
+  graph ?og {
+    values ?t { bdr:PartTypeVolume bdr:PartTypeCodicologicalVolume }
+    ?mwv :partType ?t ;
+      skos:prefLabel ?pl ;
+      :contentLocation ?cl .
+    ?cl :contentLocationVolume ?vn .
+  }
+}
