@@ -24,7 +24,8 @@ select distinct ?w WHERE
             adm:status bda:StatusReleased ;
             adm:access ?acc .
       FILTER(?acc = bda:AccessOpen)
-
+      # FILTER(not exists { ?wadm adm:restrictedInChina true })
+      FILTER(not exists {?w :virtualImageInstance true })
     } union {
 
       ?tr skos:broader* ?R_RES .
@@ -43,6 +44,8 @@ select distinct ?w WHERE
             adm:status bda:StatusReleased ;
             adm:access ?acc .
       FILTER(?acc = bda:AccessOpen)
+      # FILTER(not exists { ?wadm adm:restrictedInChina true })
+      FILTER(not exists {?w :virtualImageInstance true })
     } union {
 
       ?tr skos:broader* ?R_RES .
@@ -58,5 +61,7 @@ select distinct ?w WHERE
             adm:status bda:StatusReleased ;
             adm:access ?acc .
       FILTER(?acc = bda:AccessOpen)
+      # FILTER(not exists { ?wadm adm:restrictedInChina true })
+      FILTER(not exists {?w :virtualImageInstance true })
     }
 }
