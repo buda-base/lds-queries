@@ -18,6 +18,9 @@ construct {
    ?mwroot skos:prefLabel ?mwrootpl .
    ?R_RES tmp:etextIsPaginated ?eip .
    ?R_RES tmp:hasEtextVolume ?vl .
+   ?R_RES :eTextInInstance ?ie .
+   ?ie adm:access ?acc .
+   ?ie adm:status ?st .
   }
 where {
   { 
@@ -45,5 +48,18 @@ where {
   } union {
     # add
     ?vl :eTextVolumeForImageGroup ?R_RES . 
+  } union {
+    ?R_RES :eTextInInstance ?ie .
+    ?ieadm adm:adminAbout ?ie ;
+           adm:access ?acc ;
+           adm:status ?st .
+  } union {
+    # in the image viewer, this query is called with the image group as R_RES, ex: bdr:I1KG15042
+    ?R_RES :volumeOf ?w .
+    ?w :instanceHasReproduction ?ie .
+    ?ie a :EtextInstance .
+    ?ieadm adm:adminAbout ?ie ;
+           adm:access ?acc ;
+           adm:status ?st .
   }
 } 
