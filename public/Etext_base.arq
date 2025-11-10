@@ -17,18 +17,18 @@ construct {
    ?mw skos:prefLabel ?mwpl .
    ?mwroot skos:prefLabel ?mwrootpl .
    ?R_RES tmp:etextIsPaginated ?eip .
+   ?R_RES tmp:hasPages ?eihp .
    ?R_RES tmp:hasEtextVolume ?vl .
    ?R_RES :eTextInInstance ?ie .
    ?ie adm:access ?acc .
    ?ie adm:status ?st .
+   ?ei tmp:etextIsPaginated ?eip .
+   ?ei tmp:hasPages ?eihp .
   }
 where {
   { 
     ?R_RES ?p ?o .
     BIND (?R_RES as ?s)
-  } union {
-    ?R_RES bdo:eTextInInstance  ?ie .
-    ?ie ?iep ?ieo .
   } union {
     ?R_RES :eTextForInstance ?mw .
     ?mw skos:prefLabel ?mwpl .
@@ -49,17 +49,33 @@ where {
     # add
     ?vl :eTextVolumeForImageGroup ?R_RES . 
   } union {
-    ?R_RES :eTextInInstance ?ie .
+    # case of UT, VE or IE
+    {
+      ?R_RES :eTextInInstance ?ie .
+    } union {
+      ?R_RES :volumeOf ?ie .
+      ?ie a :EtextInstance .
+    } union {
+      ?R_RES a :EtextInstance .
+      BIND(?R_RES as ?ie)
+    }
+    ?ie ?iep ?ieo .
     ?ieadm adm:adminAbout ?ie ;
            adm:access ?acc ;
            adm:status ?st .
+    BIND(exists {?ie :instanceHasVolume ?v . ?v :volumePagesTotal ?vpt . FILTER(?vpt > 0)} as ?eihp)
   } union {
     # in the image viewer, this query is called with the image group as R_RES, ex: bdr:I1KG15042
     ?R_RES :volumeOf ?w .
-    ?w :instanceHasReproduction ?ie .
+    ?w a :ImageInstance ;
+       :instanceHasReproduction ?ie .
     ?ie a :EtextInstance .
+    ?ie ?iep ?ieo .
     ?ieadm adm:adminAbout ?ie ;
            adm:access ?acc ;
            adm:status ?st .
+    # BIND(exists {?ie :instanceHasVolume ?v . ?v :volumePagesTotal ?vpt . FILTER(?vpt > 0)} as ?eihp)
+    # we currently assume it's always true, doing this request would require reimporting the openpecha stuff
+    BIND(true as ?eihp)
   }
 } 
