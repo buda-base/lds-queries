@@ -44,7 +44,8 @@ where {
   } union {
     BIND(
       exists {?R_RES :eTextInInstance ?ie . ?ie :instanceReproductionOf ?w . ?w a :ImageInstance } || 
-      exists {?R_RES :volumeOf ?w . ?w :instanceHasReproduction ?ie . } as ?eip)
+      exists {?R_RES :volumeOf ?w . ?w :instanceHasReproduction ?ie . } ||
+      exists {?R_RES :volumeOf ?ie . ?w :instanceHasReproduction ?ie ; a :ImageInstance } as ?eip)
   } union {
     # add
     ?vl :eTextVolumeForImageGroup ?R_RES . 
