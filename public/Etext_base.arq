@@ -63,7 +63,7 @@ where {
     ?ieadm adm:adminAbout ?ie ;
            adm:access ?acc ;
            adm:status ?st .
-    BIND(exists {?ie :instanceHasVolume ?v . ?v :volumePagesTotal ?vpt . FILTER(?vpt > 0)} as ?eihp || exists {?ie :instanceReproductionOf ?w . ?w a :ImageInstance } as ?eihp)
+    BIND(exists {?ie :instanceHasVolume ?v . ?v :volumePagesTotal ?vpt . FILTER(?vpt > 0)} || exists {?ie :instanceReproductionOf ?w . ?w a :ImageInstance } as ?eihp)
   } union {
     # in the image viewer, this query is called with the image group as R_RES, ex: bdr:I1KG15042
     ?R_RES :volumeOf ?w .
