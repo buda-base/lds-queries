@@ -12,6 +12,7 @@ construct {
     ?R_RES ?resp ?reso .
     ?adm ?admp ?admo .
     ?ig ?igp ?igo .
+    ?wig ?wigp ?wigo .
     ?mw ?mwp ?mwo .
     ?o :outlineOf ?R_RES .
 } where {
@@ -32,5 +33,10 @@ construct {
       ?o :outlineOf ?mw .
       ?oadm adm:adminAbout ?o ;
             adm:status bda:StatusReleased .
+   } union {
+      # add volumes
+      ?R_RES :instanceReproductionOf ?w .
+      ?w :instanceHasVolume ?wig .
+      ?wig ?wigp ?wigo .
    }
 }
