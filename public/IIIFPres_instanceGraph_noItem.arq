@@ -55,6 +55,7 @@ where {
   } union {
     ?R_RES :virtualLinkTo?/:contentLocation ?loc .
     ?loc :contentLocationInstance ?iinstance .
+    ?iinstance a :ImageInstance .
     ?loc :contentLocationVolume ?bvol .
     ?iinstance :instanceHasVolume ?vol .
     ?vol :volumeNumber ?bvol .
