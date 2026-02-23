@@ -1,0 +1,21 @@
+#QueryScope=ImageGroup
+#QueryReturnType=Graph
+#QueryResults=(used by BEC) info on a volume
+#QueryParams=R_RES
+#QueryUrl=/BEC_volInfo?R_RES=bdr:I0886
+
+#param.R_RES.type=URI
+#param.R_RES.subtype=:ImageGroup
+#param.R_RES.desc=the URI of the image group being investigated
+
+construct 
+{
+  ?R_RES tmp:mw_id ?mw ;
+         tmp:wa_id ?wa ;
+         ?p ?o .
+} where {
+  ?R_RES ?p ?o .
+  ?r :instanceHasVolume ?R_RES .
+  ?r :instanceReproductionOf ?mw .
+  ?mw :instanceOf ?wa .
+}
