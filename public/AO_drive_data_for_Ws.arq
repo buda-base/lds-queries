@@ -25,11 +25,21 @@ CONSTRUCT
     # Same for the author, entity score and language
     ?inDLDw tmp:author ?author .
     ?author skos:prefLabel ?agentL .
+    # volume count
+    ?inDLDw tmp:nbVols ?nbvols .
 }
 
 WHERE 
 
 {
+    {
+      SELECT ?inDLDw (COUNT(?i) AS ?nbvols)
+      WHERE {
+        VALUES (?inDLDw) { ?R_RES_LIST }
+        ?inDLDw :instanceHasVolume ?i
+      }
+      GROUP BY ?inDLDw
+    }
     {
       VALUES (?inDLDw) { ?R_RES_LIST }
       ?inDLDw a :ImageInstance .
