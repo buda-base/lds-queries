@@ -14,8 +14,14 @@ construct
          tmp:wa_id ?wa ;
          ?p ?o .
 } where {
-  ?R_RES ?p ?o .
-  ?r :instanceHasVolume ?R_RES .
-  ?r :instanceReproductionOf ?mw .
-  ?mw :instanceOf ?wa .
+  {
+    ?R_RES ?p ?o .
+    ?r :instanceHasVolume ?R_RES .
+    ?r :instanceReproductionOf ?mw .
+  } union {
+    ?R_RES ?p ?o .
+    ?r :instanceHasVolume ?R_RES .
+    ?r :instanceReproductionOf ?mw .
+    ?mw :instanceOf ?wa .
+  }
 }
